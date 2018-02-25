@@ -110,6 +110,9 @@ AM_PROG_CC_C_O
 AC_HEADER_STDC
 AC_CHECK_HEADERS([assert.h string.h])
 
+dnl This is used by CCTests.
+AC_CHECK_HEADERS([unistd.h])
+
 AC_CACHE_SAVE
 
 dnl page
@@ -120,6 +123,9 @@ dnl AC_FUNC_MEMCMP
 dnl AC_CHECK_FUNCS([memmove memset strerror])
 dnl AC_CHECK_FUNCS([mmap munmap msync mremap madvise mlock munlock mlockall munlockall mprotect])
 dnl AC_CHECK_FUNCS([getenv])
+
+dnl This is used by CCTests.
+AC_CHECK_FUNCS([isatty])
 
 AC_CACHE_SAVE
 

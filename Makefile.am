@@ -40,21 +40,48 @@ libccpathnames_la_LDFLAGS	= -version-info $(ccpathnames_CURRENT):$(ccpathnames_R
 libccpathnames_la_SOURCES	= \
 	src/ccpathnames.h		\
 	src/ccpathnames-internals.h	\
-	src/ccpathnames-version.c
+	src/ccpathnames-version.c	\
+	src/ccpathnames-core.c
+
+#page
+#### libraries
+
+check_LTLIBRARIES	= libcctests.la
+libcctests_la_CPPFLAGS	= $(CCEXCEPTIONS_CFLAGS) \
+	-Dcctests_VERSION_INTERFACE_STRING='"0.0.0"'	\
+	-Dcctests_VERSION_INTERFACE_CURRENT=0		\
+	-Dcctests_VERSION_INTERFACE_REVISION=0		\
+	-Dcctests_VERSION_INTERFACE_AGE=0
+libcctests_la_LDFLAGS	= $(CCEXCEPTIONS_LIBS)
+libcctests_la_SOURCES	= \
+	cctests/cctests.h			\
+	cctests/cctests-internals.h		\
+	cctests/cctests-version.c		\
+	cctests/cctests-conditions.c		\
+	cctests/cctests-exception-handlers.c	\
+	cctests/cctests-system.c		\
+	cctests/cctests-driver.c		\
+	cctests/cctests-assertions.c		\
+	cctests/cctests-process.c		\
+	cctests/cctests-helpers.c
 
 #page
 #### tests
 
 check_PROGRAMS	= \
-	tests/version
+	tests/version		\
+	tests/core
 
 TESTS				= $(check_PROGRAMS)
 
-ccpathnames_tests_cppflags	= -I$(srcdir)/src $(CCEXCEPTIONS_CFLAGS)
-ccpathnames_tests_ldadd		= libccpathnames.la $(CCEXCEPTIONS_LIBS)
+ccpathnames_tests_cppflags	= -I$(srcdir)/src $(CCEXCEPTIONS_CFLAGS) -I$(srcdir)/cctests
+ccpathnames_tests_ldadd		= libccpathnames.la $(CCEXCEPTIONS_LIBS) libcctests.la
 
 tests_version_CPPFLAGS		= $(ccpathnames_tests_cppflags)
 tests_version_LDADD		= $(ccpathnames_tests_ldadd)
+
+tests_core_CPPFLAGS		= $(ccpathnames_tests_cppflags)
+tests_core_LDADD		= $(ccpathnames_tests_ldadd)
 
 installcheck-local: $(TESTS)
 	@for f in $(TESTS); do $(builddir)/$$f; done
