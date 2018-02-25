@@ -1,0 +1,12 @@
+              |-----handy-ruler-----------------------------------------------|
+@PACKAGE_NAME@: @PACKAGE_NAME@ @PACKAGE_VERSION@
+@PACKAGE_NAME@:
+@PACKAGE_NAME@: This package installs a C11 language library implementing Unix
+@PACKAGE_NAME@: pathnames manipulation functions.
+@PACKAGE_NAME@:
+@PACKAGE_NAME@: This package  supports POSIX platforms.  This package depends
+@PACKAGE_NAME@: on the package CCExceptions, at least version 0.6.4-devel.3.
+@PACKAGE_NAME@:
+@PACKAGE_NAME@:
+@PACKAGE_NAME@:
+@PACKAGE_NAME@:
