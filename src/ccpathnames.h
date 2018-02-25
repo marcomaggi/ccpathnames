@@ -109,6 +109,144 @@ ccptn_decl int		ccptn_version_interface_age	(void);
 
 
 /** --------------------------------------------------------------------
+ ** Type definitions.
+ ** ----------------------------------------------------------------- */
+
+typedef struct ccptn_t			ccptn_t;
+typedef struct ccptn_segment_t		ccptn_segment_t;
+
+typedef void ccptn_final_fun_t (ccptn_t * P);
+
+/* This struct represents a full pathname. */
+struct ccptn_t {
+  /* Finalisation function  for this  struct instance.  It  releases all
+     the dynamic resources associated to this instance. */
+  ccptn_final_fun_t *	final;
+
+  struct {
+    /* True if  this pathname  has been  normalised (to  remove multiple
+       slashes and the like). */
+    int			normalised: 1;
+
+    /* True  if  this  pathname  has  been normalised  with  a  call  to
+       "realpath()". */
+    int			realpath: 1;
+  };
+
+  /* The number  of characters  in the "buf"  array, *not*  counting the
+     terminating zero. */
+  size_t		len;
+
+  /* Pointer to the ASCIIZ string representing the pathname. */
+  char *		buf;
+};
+
+/* This struct represents a segment in a pathname.  Given the pathname:
+ *
+ *    /path/to/file.ext
+ *
+ * the segments are the strings:
+ *
+ *    path
+ *    to
+ *    file.ext
+ *
+ * This struct is meant to reference  a portion of data from an instance
+ * of "ccptn_t".
+ */
+struct ccptn_segment_t {
+  /* The number of characters in the "buf" array representing a segment
+     of pathname. */
+  size_t		len;
+
+  /* Pointer to  the first character  in an ASCII string  representing a
+     pathname's  segment.    In  general,   this  string  is   not  zero
+     terminated. */
+  char const *		buf;
+};
+
+/* This  struct represents  the extension  of a  segment in  a pathname.
+ * Given the pathname:
+ *
+ *    /path/to/file.ext
+ *
+ * the last segment is the strings:
+ *
+ *    file.ext
+ *
+ * and its extension is the string "ext";
+ *
+ * This struct is meant to reference  a portion of data from an instance
+ * of "ccptn_t".
+ */
+struct ccptn_extension_t {
+  /* The  number of  characters  in the  "buf"  array representing  the
+     extension in a pathname's segment. */
+  size_t		len;
+
+  /* Pointer to  the first character  in an ASCII string  representing a
+     pathname's segment's extension.  In general this string is not zero
+     terminated. */
+  char const *		buf;
+};
+
+
+/** --------------------------------------------------------------------
+ ** Core functions.
+ ** ----------------------------------------------------------------- */
+
+__attribute__((__nonnull__(1),__always_inline__))
+static inline void
+ccptn_final (ccptn_t * P)
+{
+  if (P->final) {
+    P->final(P);
+  }
+}
+
+ccptn_decl ccptn_t * ccptn_init_nodup_asciiz (cce_destination_t L, ccptn_t * P, char const * pathname)
+  __attribute__((__returns_nonnull__,__nonnull__(1,2)));
+
+ccptn_decl ccptn_t * ccptn_init_dup_asciiz (cce_destination_t L, ccptn_t * P, char const * pathname)
+  __attribute__((__returns_nonnull__,__nonnull__(1,2)));
+
+ccptn_decl ccptn_t * ccptn_new_nodup_asciiz (cce_destination_t L, char const * pathname)
+  __attribute__((__returns_nonnull__,__nonnull__(1,2)));
+
+ccptn_decl ccptn_t * ccptn_new_dup_asciiz (cce_destination_t L, char const * pathname)
+  __attribute__((__returns_nonnull__,__nonnull__(1,2)));
+
+
+/** --------------------------------------------------------------------
+ ** Predicates.
+ ** ----------------------------------------------------------------- */
+
+__attribute__((__nonnull__(1),__always_inline__,__pure__))
+static inline bool
+ccptn_is_absolute (ccptn_t const * const P)
+{
+  return ('/' == P->buf[0])? true : false;
+}
+
+__attribute__((__nonnull__(1),__always_inline__,__pure__))
+static inline bool
+ccptn_is_relative (ccptn_t const * const P)
+{
+  return (! ccptn_is_absolute(P));
+}
+
+__attribute__((__nonnull__(1),__always_inline__,__pure__))
+static inline bool
+ccptn_is_realpath (ccptn_t const * const P)
+{
+  return (P->realpath)? true : false;
+}
+
+//ccptn_decl void ccptn_final (ccptn_t * P);
+
+
+
+/** --------------------------------------------------------------------
  ** Done.
  ** ----------------------------------------------------------------- */
 

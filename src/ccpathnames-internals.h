@@ -36,6 +36,7 @@
 #  include <config.h>
 #endif
 #include "ccpathnames.h"
+#include <string.h>
 
 
 /** --------------------------------------------------------------------
