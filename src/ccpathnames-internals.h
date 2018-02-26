@@ -32,6 +32,9 @@
  ** Headers.
  ** ----------------------------------------------------------------- */
 
+#undef _XOPEN_SOURCE
+#define _XOPEN_SOURCE		500
+
 #include "ccpathnames.h"
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
