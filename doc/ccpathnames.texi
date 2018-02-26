@@ -56,7 +56,7 @@ implementing Unix pathnames manipulation functions.
 This package supports @posix{} platforms.  This package depends on the package CCExceptions, at
 least version @value{CCEXCEPTIONS_VERSION}.
 
-The package is distributed under the terms of the @gnu{} Lesser General Public License (@gpl{}).
+The package is distributed under the terms of the @gnu{} Lesser General Public License (@lgpl{}).
 
 The latest release can be downloaded from:
 
@@ -126,6 +126,10 @@ included in the section entitled ``@gnu{} Free Documentation License''.
 @menu
 * overview::                    Overview of the package.
 * version::                     Version functions.
+* typedefs::                    Type definitions.
+* ctors::                       Constructing pathname representations.
+* predicates::                  Pathname predicates.
+* accessors::                   Pathname accessors.
 * utils::                       Utility definitions.
 
 Appendices
@@ -214,6 +218,189 @@ Return an integer representing the library interface current revision number.
 
 @deftypefun int ccptn_version_interface_age (void)
 Return an integer representing the library interface current age.
+@end deftypefun
+
+@c page
+@node typedefs
+@chapter Type definitions
+
+
+@deftp {Struct Typedef} ccptn_t
+Structure representing a Unix pathname.  All the fields are opaque.  All the instances of this type
+are immutable.
+
+The pathname is internally represented with an @asciiz{} string.  All the octets in the range
+@math{[1, 255]} are valid for the pathname.  A pathname is never empty: it always contains at least
+one octet.
+
+Instances of this type include a pointer function referencing a finalisation function appropriate
+for the internal data.  We can always release the resources associated to an instance of
+@objtype{ccptn_t} by applying to it the function @cfunc{ccptn_final}.
+@end deftp
+
+@c page
+@node ctors
+@chapter Constructing pathname representations
+
+
+@deftypefun {ccptn_t *} ccptn_new_nodup_asciiz (cce_destination_t @var{L}, char const * @var{pathname})
+Allocate a new @objtype{ccptn_t} instance initialising it with data from the @asciiz{} string
+@var{pathname}, return a pointer to it.  If an error occurs: raise an exception by performing a
+non--local exit to to @var{L}.
+
+The data is @strong{not} duplicated: the returned @objtype{ccptn_t} references @var{pathname}
+itself.  Memory is allocated with @cfunc{malloc}.  The finalisation function registered in the
+instance will release the @code{struct} itself, but not the data buffer.
+
+As usage example see the following code:
+
+@example
+cce_location_t        L[1];
+
+if (cce_location(L)) @{
+  cce_run_error_handlers_raise(L, upper_L);
+@} else @{
+  char const *  pathname = "/path/to/file.exit";
+  ccptn_t *     P;
+
+  P = ccptn_new_nodup_asciiz(L, pathname);
+  printf("%s\n", ccptn_asciiz(P));
+  ccptn_final(P);
+  cce_run_cleanup_handlers(L);
+@}
+@end example
+@end deftypefun
+
+
+@deftypefun {ccptn_t *} ccptn_new_dup_asciiz (cce_destination_t @var{L}, char const * @var{pathname})
+Allocate a new @objtype{ccptn_t} instance initialising it with data from the @asciiz{} string
+@var{pathname}, return a pointer to it.  If an error occurs: raise an exception by performing a
+non--local exit to to @var{L}.
+
+The data @strong{is} duplicated: the returned @objtype{ccptn_t} includes a copy of the data from
+@var{pathname}.  Memory is allocated with @cfunc{malloc}.  The finalisation function registered in
+the instance will release the @code{struct} itself, and the data buffer.
+
+As usage example see the following code:
+
+@example
+cce_location_t        L[1];
+
+if (cce_location(L)) @{
+  cce_run_error_handlers_raise(L, upper_L);
+@} else @{
+  char const *  pathname = "/path/to/file.exit";
+  ccptn_t *     P;
+
+  P = ccptn_new_dup_asciiz(L, pathname);
+  printf("%s\n", ccptn_asciiz(P));
+  ccptn_final(P);
+
+  cce_run_cleanup_handlers(L);
+@}
+@end example
+@end deftypefun
+
+
+@deftypefun {ccptn_t *} ccptn_init_nodup_asciiz (cce_destination_t @var{L}, ccptn_t * @var{P}, char const * @var{pathname})
+Initialise an already allocated @objtype{ccptn_t} instance with data from the @asciiz{} string
+@var{pathname}.  If an error occurs: raise an exception by performing a non--local exit to to
+@var{L}.
+
+The data is @strong{not} duplicated: the instance references @var{pathname} itself.  Memory is
+allocated with @cfunc{malloc}.  The finalisation function registered in the instance will do
+nothing.
+
+As usage example see the following code:
+
+@example
+cce_location_t        L[1];
+
+if (cce_location(L)) @{
+  cce_run_error_handlers_raise(L, upper_L);
+@} else @{
+  char const *  pathname = "/path/to/file.exit";
+  ccptn_t       P[1];
+
+  ccptn_init_nodup_asciiz(L, P, pathname);
+  printf("%s\n", ccptn_asciiz(P));
+  ccptn_final(P);
+
+  cce_run_cleanup_handlers(L);
+@}
+@end example
+@end deftypefun
+
+
+@deftypefun {ccptn_t *} ccptn_init_dup_asciiz (cce_destination_t @var{L}, ccptn_t * @var{P}, char const * @var{pathname})
+Initialise an already allocated @objtype{ccptn_t} instance with data from the @asciiz{} string
+@var{pathname}.  If an error occurs: raise an exception by performing a non--local exit to to
+@var{L}.
+
+The data @strong{is} duplicated: the instance includes a copy of the data from @var{pathname}.
+Memory is allocated with @cfunc{malloc}.  The finalisation function registered in the instance will
+release the data area but not the @code{struct} itself.
+
+As usage example see the following code:
+
+@example
+cce_location_t        L[1];
+
+if (cce_location(L)) @{
+  cce_run_error_handlers_raise(L, upper_L);
+@} else @{
+  char const *  pathname = "/path/to/file.exit";
+  ccptn_t       P[1];
+
+  ccptn_init_dup_asciiz(L, P, pathname);
+  printf("%s\n", ccptn_asciiz(P));
+  ccptn_final(P);
+
+  cce_run_cleanup_handlers(L);
+@}
+@end example
+@end deftypefun
+
+
+@deftypefun void ccptn_final (ccptn_t * @var{P})
+Release all the resources associated to the referenced instance of @objtype{ccptn_t}.
+@end deftypefun
+
+@c page
+@node predicates
+@chapter Pathname predicates
+
+
+@deftypefun bool ccptn_is_absolute (ccptn_t const * @var{P})
+Return @ctrue{} if @var{P} represents an absolute pathname; otherwise return @cfalse{}.  A pathname
+is absolute if its first octet is the @ascii{} representation of @samp{/}.
+@end deftypefun
+
+
+@deftypefun bool ccptn_is_relative (ccptn_t const * @var{P})
+Return @ctrue{} if @var{P} represents a relative pathname; otherwise return @cfalse{}.  A pathname
+is relative if its first octet is @strong{not} the @ascii{} representation of @samp{/}.
+@end deftypefun
+
+
+@deftypefun bool ccptn_is_realpath (ccptn_t const * @var{P})
+Return @ctrue{} if @var{P} is the result of a call to the system function @cfunc{realpath};
+otherwise return @cfalse{}.
+@end deftypefun
+
+@c page
+@node accessors
+@chapter Pathname accessors
+
+
+@deftypefun {char const *} ccptn_asciiz (ccptn_t const * @var{P})
+Return a pointer to an @asciiz{} representation of the pathname.
+@end deftypefun
+
+
+@deftypefun size_t ccptn_asciiz (ccptn_t const * @var{P})
+Return the number of octets in the pathname representation, @strong{not} including the terminating
+zero.
 @end deftypefun
 
 @c page

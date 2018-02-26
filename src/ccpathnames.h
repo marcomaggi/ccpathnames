@@ -199,9 +199,7 @@ __attribute__((__nonnull__(1),__always_inline__))
 static inline void
 ccptn_final (ccptn_t * P)
 {
-  if (P->final) {
-    P->final(P);
-  }
+  P->final(P);
 }
 
 ccptn_decl ccptn_t * ccptn_init_nodup_asciiz (cce_destination_t L, ccptn_t * P, char const * pathname)
@@ -215,6 +213,25 @@ ccptn_decl ccptn_t * ccptn_new_nodup_asciiz (cce_destination_t L, char const * p
 
 ccptn_decl ccptn_t * ccptn_new_dup_asciiz (cce_destination_t L, char const * pathname)
   __attribute__((__returns_nonnull__,__nonnull__(1,2)));
+
+
+/** --------------------------------------------------------------------
+ ** Accessors.
+ ** ----------------------------------------------------------------- */
+
+__attribute__((__nonnull__(1),__always_inline__,__pure__,__returns_nonnull__))
+static inline char const *
+ccptn_asciiz (ccptn_t const * const P)
+{
+  return (P->buf);
+}
+
+__attribute__((__nonnull__(1),__always_inline__,__pure__))
+static inline size_t
+ccptn_len (ccptn_t const * const P)
+{
+  return (P->len);
+}
 
 
 /** --------------------------------------------------------------------
@@ -241,9 +258,6 @@ ccptn_is_realpath (ccptn_t const * const P)
 {
   return (P->realpath)? true : false;
 }
-
-//ccptn_decl void ccptn_final (ccptn_t * P);
-
 
 
 /** --------------------------------------------------------------------

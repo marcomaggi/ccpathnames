@@ -100,6 +100,12 @@ ccptn_new_dup_asciiz (cce_destination_t L, char const * pathname)
 
 /* ------------------------------------------------------------------ */
 
+__attribute__((__nonnull__(1)))
+static void
+ccptn_final_nodup_asciiz (ccptn_t * P CCPTN_UNUSED)
+{
+}
+
 ccptn_t *
 ccptn_init_nodup_asciiz (cce_destination_t L CCPTN_UNUSED, ccptn_t * P, char const * pathname)
 /* Initialise an already allocated "ccptn_t" instance with data from the
@@ -109,7 +115,7 @@ ccptn_init_nodup_asciiz (cce_destination_t L CCPTN_UNUSED, ccptn_t * P, char con
  * The finalisation function registered in the instance will do nothing.
  */
 {
-  P->final	= NULL;
+  P->final	= ccptn_final_nodup_asciiz;
   P->len	= strlen(pathname);
   P->normalised	= 0;
   P->realpath	= 0;
@@ -128,7 +134,7 @@ ccptn_final_dup_asciiz (ccptn_t * P)
 
 ccptn_t *
 ccptn_init_dup_asciiz (cce_destination_t L, ccptn_t * P, char const * pathname)
-/* Allocate a new "ccptn_t" instance  initialising it with data from the
+/* Initialise an already allocted "ccptn_t"  instance with data from the
  * ASCIIZ  string "pathname".   The data  *is* duplicated:  the instance
  * includes a copy of the data from "pathname".
  *
