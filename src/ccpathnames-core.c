@@ -154,4 +154,33 @@ ccptn_init_dup_asciiz (cce_destination_t L, ccptn_t * P, char const * pathname)
   return P;
 }
 
+
+/** --------------------------------------------------------------------
+ ** Exception handlers.
+ ** ----------------------------------------------------------------- */
+
+__attribute__((nonnull(1,2)))
+static void
+ccptn_handler_ptn_function (const cce_condition_t * C CCE_UNUSED, cce_handler_t * H)
+{
+  ccptn_final(H->pointer);
+  if (0) { fprintf(stderr, "%s: done releasing '%p'\n", __func__, (void *)(H->pointer)); }
+}
+
+void
+ccptn_cleanup_handler_ptn_init (cce_location_t * L, cce_handler_t * H, ccptn_t * P)
+{
+  H->function	= ccptn_handler_ptn_function;
+  H->pointer	= P;
+  cce_register_cleanup_handler(L, H);
+}
+
+void
+ccptn_error_handler_ptn_init (cce_location_t * L, cce_handler_t * H, ccptn_t * P)
+{
+  H->function	= ccptn_handler_ptn_function;
+  H->pointer	= P;
+  cce_register_error_handler(L, H);
+}
+
 /* end of file */

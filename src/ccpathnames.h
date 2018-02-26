@@ -191,15 +191,8 @@ struct ccptn_extension_t {
 
 
 /** --------------------------------------------------------------------
- ** Core functions.
+ ** Constructors and destructors.
  ** ----------------------------------------------------------------- */
-
-__attribute__((__nonnull__(1),__always_inline__))
-static inline void
-ccptn_final (ccptn_t * P)
-{
-  P->final(P);
-}
 
 ccptn_decl ccptn_t * ccptn_init_nodup_asciiz (cce_destination_t L, ccptn_t * P, char const * pathname)
   __attribute__((__returns_nonnull__,__nonnull__(1,2)));
@@ -212,6 +205,28 @@ ccptn_decl ccptn_t * ccptn_new_nodup_asciiz (cce_destination_t L, char const * p
 
 ccptn_decl ccptn_t * ccptn_new_dup_asciiz (cce_destination_t L, char const * pathname)
   __attribute__((__returns_nonnull__,__nonnull__(1,2)));
+
+/* ------------------------------------------------------------------ */
+
+__attribute__((__nonnull__(1),__always_inline__))
+static inline void
+ccptn_final (ccptn_t * P)
+{
+  P->final(P);
+}
+
+/* ------------------------------------------------------------------ */
+
+ccptn_decl void ccptn_cleanup_handler_ptn_init (cce_destination_t L, cce_handler_t * H, ccptn_t * P)
+  __attribute__((__nonnull__(1,2,3)));
+
+ccptn_decl void ccptn_error_handler_ptn_init (cce_destination_t L, cce_handler_t * H, ccptn_t * P)
+  __attribute__((__nonnull__(1,2,3)));
+
+#define ccptn_handler_ptn_init(L,H,P)					\
+  _Generic((H),								\
+	   cce_cleanup_handler_t	*: ccptn_cleanup_handler_ptn_init, \
+	   cce_error_handler_t		*: ccptn_error_handler_ptn_init)(L,&(H->handler),P)
 
 
 /** --------------------------------------------------------------------

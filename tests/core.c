@@ -104,6 +104,29 @@ test_1_4 (cce_destination_t upper_L)
   }
 }
 
+/* ------------------------------------------------------------------ */
+
+void
+test_1_5 (cce_destination_t upper_L)
+/* Test for "ccptn_handler_ptn_init()". */
+{
+  cce_location_t	L[1];
+  cce_cleanup_handler_t	P_H[1];
+
+  if (cce_location(L)) {
+    cce_run_error_handlers_raise(L, upper_L);
+  } else {
+    static char const *	pathname = "/path/to/file.exit";
+    ccptn_t *		P;
+
+    P = ccptn_new_nodup_asciiz(L, pathname);
+    ccptn_handler_ptn_init(L, P_H, P);
+    if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
+
+    cce_run_cleanup_handlers(L);
+  }
+}
+
 
 /** --------------------------------------------------------------------
  ** Predicates.
@@ -244,12 +267,13 @@ main (int argc CCPTN_UNUSED, const char *const argv[])
 
   cctests_init("file system");
   {
-    cctests_begin_group("constructors");
+    cctests_begin_group("constructors and destructors");
     {
       cctests_run(test_1_1);
       cctests_run(test_1_2);
       cctests_run(test_1_3);
       cctests_run(test_1_4);
+      cctests_run(test_1_5);
     }
     cctests_end_group();
 
