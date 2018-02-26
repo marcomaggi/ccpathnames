@@ -162,6 +162,10 @@ the GNU Project software can be found here:
 
 			 <https://www.gnu.org/>
 
+the package CCExceptions is available at:
+
+	     <https://github.com/marcomaggi/ccexceptions/>
+
 
 D. Badges and static analysis
 -----------------------------
@@ -188,7 +192,7 @@ open source coding projects.  We can find this project's dashboard at:
        <https://scan.coverity.com/projects/marcomaggi-ccpathnames>
 
   Usage of this service is implemented with make rules; see the relevant
-section in the file "Makefile.am".  To access the service a unique token
+psection in the file "Makefile.am".  To access the service a unique token
 is needed: this token is private and is owned by the current maintainer.
 
 
