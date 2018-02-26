@@ -85,7 +85,6 @@ extern "C" {
  ** ----------------------------------------------------------------- */
 
 #include <ccexceptions.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 
@@ -126,11 +125,11 @@ struct ccptn_t {
   struct {
     /* True if  this pathname  has been  normalised (to  remove multiple
        slashes and the like). */
-    int			normalised: 1;
+    unsigned int	normalised: 1;
 
     /* True  if  this  pathname  has  been normalised  with  a  call  to
        "realpath()". */
-    int			realpath: 1;
+    unsigned int	realpath: 1;
   };
 
   /* The number  of characters  in the "buf"  array, *not*  counting the
@@ -258,6 +257,14 @@ ccptn_is_realpath (ccptn_t const * const P)
 {
   return (P->realpath)? true : false;
 }
+
+
+/** --------------------------------------------------------------------
+ ** Manipulation.
+ ** ----------------------------------------------------------------- */
+
+ccptn_decl ccptn_t * ccptn_realpath (cce_destination_t L, ccptn_t const * P)
+  __attribute__((__nonnull__(1,2),__returns_nonnull__));
 
 
 /** --------------------------------------------------------------------

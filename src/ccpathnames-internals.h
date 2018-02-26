@@ -1,7 +1,7 @@
 /*
   Part of: CCPathnames
   Contents: private header file
-  Date: Thu Mar  1, 2012
+  Date: Feb 26, 2018
 
   Abstract
 
@@ -32,10 +32,10 @@
  ** Headers.
  ** ----------------------------------------------------------------- */
 
+#include "ccpathnames.h"
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
-#include "ccpathnames.h"
 #include <string.h>
 
 

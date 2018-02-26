@@ -1,6 +1,6 @@
 /*
   Part of: CCPathnames
-  Contents: version functions
+  Contents: manipulation functions
   Date: Feb 26, 2018
 
   Abstract
@@ -29,27 +29,41 @@
  ** ----------------------------------------------------------------- */
 
 #include "ccpathnames-internals.h"
+#include <stdlib.h>
+#ifdef HAVE_ERRNO_H
+#  include <errno.h>
+#endif
+#ifdef HAVE_LIMITS_H
+#  include <limits.h>
+#endif
+#ifdef HAVE_UNISTD_H
+#  include <unistd.h>
+#endif
 
 
-char const *
-ccptn_version_string (void)
+/** --------------------------------------------------------------------
+ ** Normalisation.
+ ** ----------------------------------------------------------------- */
+
+#ifdef HAVE_REALPATH
+ccptn_t *
+ccptn_realpath (cce_destination_t L, ccptn_t const * const P)
 {
-  return ccpathnames_VERSION_INTERFACE_STRING;
+  char		RP[PATH_MAX + 1];
+  char const *	rv;
+
+  errno = 0;
+  rv = realpath(ccptn_asciiz(P), RP);
+  if (NULL != rv) {
+    ccptn_t *	Q = ccptn_new_dup_asciiz(L, RP);
+
+    Q->realpath		= (int)1;
+    Q->normalised	= (int)1;
+    return Q;
+  } else {
+    cce_raise(L, cce_condition_new_errno_clear());
+  }
 }
-int
-ccptn_version_interface_current (void)
-{
-  return ccpathnames_VERSION_INTERFACE_CURRENT;
-}
-int
-ccptn_version_interface_revision (void)
-{
-  return ccpathnames_VERSION_INTERFACE_REVISION;
-}
-int
-ccptn_version_interface_age (void)
-{
-  return ccpathnames_VERSION_INTERFACE_AGE;
-}
+#endif
 
 /* end of file */

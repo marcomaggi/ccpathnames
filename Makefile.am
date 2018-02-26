@@ -41,7 +41,8 @@ libccpathnames_la_SOURCES	= \
 	src/ccpathnames.h		\
 	src/ccpathnames-internals.h	\
 	src/ccpathnames-version.c	\
-	src/ccpathnames-core.c
+	src/ccpathnames-core.c		\
+	src/ccpathnames-manipulation.c
 
 #page
 #### libraries

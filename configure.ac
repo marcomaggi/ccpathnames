@@ -93,7 +93,6 @@ dnl page
 #### basic system inspection
 
 AC_LANG([C])
-dnl AC_PROG_CC
 AC_PROG_CC_C99
 AX_CHECK_COMPILE_FLAG([-std=c11],[],[AC_MSG_ERROR([*** Compiler does not support -std=c11])],[-pedantic])
 
@@ -108,21 +107,14 @@ AC_SUBST(AX_CFLAGS)
 AM_PROG_AS
 AM_PROG_CC_C_O
 AC_HEADER_STDC
-AC_CHECK_HEADERS([assert.h string.h])
-
-dnl This is used by CCTests.
-AC_CHECK_HEADERS([unistd.h])
+AC_CHECK_HEADERS([assert.h string.h limits.h errno.h unistd.h])
 
 AC_CACHE_SAVE
 
 dnl page
 #### checks for library functions
 
-dnl AC_FUNC_MALLOC
-dnl AC_FUNC_MEMCMP
-dnl AC_CHECK_FUNCS([memmove memset strerror])
-dnl AC_CHECK_FUNCS([mmap munmap msync mremap madvise mlock munlock mlockall munlockall mprotect])
-dnl AC_CHECK_FUNCS([getenv])
+AC_CHECK_FUNCS([realpath])
 
 dnl This is used by CCTests.
 AC_CHECK_FUNCS([isatty])

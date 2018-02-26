@@ -192,7 +192,7 @@ test_2_2_2 (cce_destination_t upper_L)
 /* ------------------------------------------------------------------ */
 
 void
-test_2_3_1 (cce_destination_t upper_L)
+test_2_3 (cce_destination_t upper_L)
 /* Test for "ccptn_is_realpath()". */
 {
   cce_location_t	L[1];
@@ -232,7 +232,7 @@ main (void)
       cctests_run(test_2_1_2);
       cctests_run(test_2_2_1);
       cctests_run(test_2_2_2);
-      cctests_run(test_2_3_1);
+      cctests_run(test_2_3);
     }
     cctests_end_group();
   }

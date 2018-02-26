@@ -398,7 +398,7 @@ Return a pointer to an @asciiz{} representation of the pathname.
 @end deftypefun
 
 
-@deftypefun size_t ccptn_asciiz (ccptn_t const * @var{P})
+@deftypefun size_t ccptn_len (ccptn_t const * @var{P})
 Return the number of octets in the pathname representation, @strong{not} including the terminating
 zero.
 @end deftypefun
