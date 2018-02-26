@@ -409,7 +409,7 @@ zero.
 @chapter Pathname manipulations
 
 
-@deftypefun ccptn_t * ccptn_realpath (cce_destination_t L, ccptn_t const * P)
+@deftypefun ccptn_t * ccptn_realpath (cce_destination_t @var{L}, ccptn_t const * @var{P})
 Build and return a new pathname instance representing the result of applying the standard
 @cfunc{realpath} to the pathname represented by @var{P}.  If an error occurs: raise an exception by
 performing a non--local exit to to @var{L}.
