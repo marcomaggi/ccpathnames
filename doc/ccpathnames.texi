@@ -262,7 +262,7 @@ cce_location_t        L[1];
 if (cce_location(L)) @{
   cce_run_error_handlers_raise(L, upper_L);
 @} else @{
-  char const *  pathname = "/path/to/file.exit";
+  char const *  pathname = "/path/to/file.ext";
   ccptn_t *     P;
 
   P = ccptn_new_nodup_asciiz(L, pathname);
@@ -291,7 +291,7 @@ cce_location_t        L[1];
 if (cce_location(L)) @{
   cce_run_error_handlers_raise(L, upper_L);
 @} else @{
-  char const *  pathname = "/path/to/file.exit";
+  char const *  pathname = "/path/to/file.ext";
   ccptn_t *     P;
 
   P = ccptn_new_dup_asciiz(L, pathname);
@@ -321,7 +321,7 @@ cce_location_t        L[1];
 if (cce_location(L)) @{
   cce_run_error_handlers_raise(L, upper_L);
 @} else @{
-  char const *  pathname = "/path/to/file.exit";
+  char const *  pathname = "/path/to/file.ext";
   ccptn_t       P[1];
 
   ccptn_init_nodup_asciiz(L, P, pathname);
@@ -351,7 +351,7 @@ cce_location_t        L[1];
 if (cce_location(L)) @{
   cce_run_error_handlers_raise(L, upper_L);
 @} else @{
-  char const *  pathname = "/path/to/file.exit";
+  char const *  pathname = "/path/to/file.ext";
   ccptn_t       P[1];
 
   ccptn_init_dup_asciiz(L, P, pathname);
@@ -394,6 +394,27 @@ The macro expands into a call to @cfunc{ccptn_cleanup_handler_ptn_init}.
 The macro expands into a call to @cfunc{ccptn_error_handler_ptn_init}.
 @end table
 @end deftypefn
+
+
+As usage example of the exception handler, see the following code:
+
+@example
+cce_location_t        L[1];
+cce_cleanup_handler_t P_H[1];
+
+if (cce_location(L)) @{
+  cce_run_error_handlers_final(L);
+@} else @{
+  char const *  pathname = "/path/to/file.ext";
+  ccptn_t *     P;
+
+  P = ccptn_new_nodup_asciiz(L, pathname);
+  ccptn_handler_ptn_init(L, P_H, P);
+
+  printf("%s\n", ccptn_asciiz(P));
+  cce_run_cleanup_handlers(L);
+@}
+@end example
 
 @c page
 @node predicates

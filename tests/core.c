@@ -33,7 +33,7 @@ test_1_1 (cce_destination_t upper_L)
   if (cce_location(L)) {
     cce_run_error_handlers_raise(L, upper_L);
   } else {
-    static char const *	pathname = "/path/to/file.exit";
+    static char const *	pathname = "/path/to/file.ext";
     ccptn_t *		P;
 
     P = ccptn_new_nodup_asciiz(L, pathname);
@@ -53,7 +53,7 @@ test_1_2 (cce_destination_t upper_L)
   if (cce_location(L)) {
     cce_run_error_handlers_raise(L, upper_L);
   } else {
-    static char const *	pathname = "/path/to/file.exit";
+    static char const *	pathname = "/path/to/file.ext";
     ccptn_t *		P;
 
     P = ccptn_new_dup_asciiz(L, pathname);
@@ -73,7 +73,7 @@ test_1_3 (cce_destination_t upper_L)
   if (cce_location(L)) {
     cce_run_error_handlers_raise(L, upper_L);
   } else {
-    static char const *	pathname = "/path/to/file.exit";
+    static char const *	pathname = "/path/to/file.ext";
     ccptn_t		P[1];
 
     ccptn_init_nodup_asciiz(L, P, pathname);
@@ -93,7 +93,7 @@ test_1_4 (cce_destination_t upper_L)
   if (cce_location(L)) {
     cce_run_error_handlers_raise(L, upper_L);
   } else {
-    static char const *	pathname = "/path/to/file.exit";
+    static char const *	pathname = "/path/to/file.ext";
     ccptn_t		P[1];
 
     ccptn_init_dup_asciiz(L, P, pathname);
@@ -116,7 +116,7 @@ test_1_5 (cce_destination_t upper_L)
   if (cce_location(L)) {
     cce_run_error_handlers_raise(L, upper_L);
   } else {
-    static char const *	pathname = "/path/to/file.exit";
+    static char const *	pathname = "/path/to/file.ext";
     ccptn_t *		P;
 
     P = ccptn_new_nodup_asciiz(L, pathname);
@@ -141,7 +141,7 @@ test_2_1_1 (cce_destination_t upper_L)
   if (cce_location(L)) {
     cce_run_error_handlers_raise(L, upper_L);
   } else {
-    static char const *	pathname = "/path/to/file.exit";
+    static char const *	pathname = "/path/to/file.ext";
     ccptn_t *		P;
 
     P = ccptn_new_nodup_asciiz(L, pathname);
@@ -161,7 +161,7 @@ test_2_1_2 (cce_destination_t upper_L)
   if (cce_location(L)) {
     cce_run_error_handlers_raise(L, upper_L);
   } else {
-    static char const *	pathname = "./path/to/file.exit";
+    static char const *	pathname = "./path/to/file.ext";
     ccptn_t *		P;
 
     P = ccptn_new_nodup_asciiz(L, pathname);
@@ -183,7 +183,7 @@ test_2_2_1 (cce_destination_t upper_L)
   if (cce_location(L)) {
     cce_run_error_handlers_raise(L, upper_L);
   } else {
-    static char const *	pathname = "/path/to/file.exit";
+    static char const *	pathname = "/path/to/file.ext";
     ccptn_t *		P;
 
     P = ccptn_new_nodup_asciiz(L, pathname);
@@ -203,7 +203,7 @@ test_2_2_2 (cce_destination_t upper_L)
   if (cce_location(L)) {
     cce_run_error_handlers_raise(L, upper_L);
   } else {
-    static char const *	pathname = "./path/to/file.exit";
+    static char const *	pathname = "./path/to/file.ext";
     ccptn_t *		P;
 
     P = ccptn_new_nodup_asciiz(L, pathname);
@@ -225,7 +225,7 @@ test_2_3_1 (cce_destination_t upper_L)
   if (cce_location(L)) {
     cce_run_error_handlers_raise(L, upper_L);
   } else {
-    static char const *	pathname = "/path/to/file.exit";
+    static char const *	pathname = "/path/to/file.ext";
     ccptn_t *		P;
 
     P = ccptn_new_nodup_asciiz(L, pathname);
