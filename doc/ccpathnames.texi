@@ -130,6 +130,7 @@ included in the section entitled ``@gnu{} Free Documentation License''.
 * ctors::                       Constructing pathname representations.
 * predicates::                  Pathname predicates.
 * accessors::                   Pathname accessors.
+* manipulations::               Pathname manipulations.
 * utils::                       Utility definitions.
 
 Appendices
@@ -402,6 +403,20 @@ Return a pointer to an @asciiz{} representation of the pathname.
 Return the number of octets in the pathname representation, @strong{not} including the terminating
 zero.
 @end deftypefun
+
+@c page
+@node manipulations
+@chapter Pathname manipulations
+
+
+@deftypefun ccptn_t * ccptn_realpath (cce_destination_t L, ccptn_t const * P)
+Build and return a new pathname instance representing the result of applying the standard
+@cfunc{realpath} to the pathname represented by @var{P}.  If an error occurs: raise an exception by
+performing a non--local exit to to @var{L}.
+
+Notice that the pathname has to exist for this function to succeed.
+@end deftypefun
+
 
 @c page
 @node utils
