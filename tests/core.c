@@ -17,6 +17,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+static char const * progname;
+
 
 /** --------------------------------------------------------------------
  ** Constructors.
@@ -192,7 +194,7 @@ test_2_2_2 (cce_destination_t upper_L)
 /* ------------------------------------------------------------------ */
 
 void
-test_2_3 (cce_destination_t upper_L)
+test_2_3_1 (cce_destination_t upper_L)
 /* Test for "ccptn_is_realpath()". */
 {
   cce_location_t	L[1];
@@ -211,10 +213,35 @@ test_2_3 (cce_destination_t upper_L)
   }
 }
 
+void
+test_2_3_2 (cce_destination_t upper_L)
+/* Test for "ccptn_is_realpath()". */
+{
+  cce_location_t	L[1];
+
+  if (cce_location(L)) {
+    cce_run_error_handlers_raise(L, upper_L);
+  } else {
+    char const *	pathname = progname;
+    ccptn_t *		P;
+    ccptn_t *		Q;
+
+    P = ccptn_new_nodup_asciiz(L, pathname);
+    Q = ccptn_realpath(L, P);
+    cctests_assert(L, false == ccptn_is_realpath(P));
+    cctests_assert(L, true  == ccptn_is_realpath(Q));
+    ccptn_final(P);
+
+    cce_run_cleanup_handlers(L);
+  }
+}
+
 
 int
-main (void)
+main (int argc CCPTN_UNUSED, const char *const argv[])
 {
+  progname = argv[0];
+
   cctests_init("file system");
   {
     cctests_begin_group("constructors");
@@ -232,7 +259,8 @@ main (void)
       cctests_run(test_2_1_2);
       cctests_run(test_2_2_1);
       cctests_run(test_2_2_2);
-      cctests_run(test_2_3);
+      cctests_run(test_2_3_1);
+      cctests_run(test_2_3_2);
     }
     cctests_end_group();
   }
