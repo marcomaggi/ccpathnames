@@ -33,9 +33,7 @@ test_1_1 (cce_destination_t upper_L)
 /* Test for "ccptn_new_concat()". */
 {
   cce_location_t	L[1];
-  cce_cleanup_handler_t	P1_H[1];
-  cce_cleanup_handler_t	P2_H[1];
-  cce_cleanup_handler_t	R_H[1];
+  cce_cleanup_handler_t	P1_H[1], P2_H[1], R_H[1];
 
   if (cce_location(L)) {
     cce_run_error_handlers_raise(L, upper_L);
@@ -247,20 +245,23 @@ test_3_1 (cce_destination_t upper_L)
 {
 #ifdef HAVE_REALPATH
   cce_location_t	L[1];
+  cce_cleanup_handler_t	P_H[1], R_H[1];
 
   if (cce_location(L)) {
     cce_run_error_handlers_raise(L, upper_L);
   } else {
     char const *	pathname = progname;
     ccptn_t *		P;
-    ccptn_t *		Q;
+    ccptn_t *		R;
 
     P = ccptn_new_nodup_asciiz(L, pathname);
-    Q = ccptn_new_realpath(L, P);
+    ccptn_handler_ptn_init(L, P_H, P);
+
+    R = ccptn_new_realpath(L, P);
+    ccptn_handler_ptn_init(L, R_H, R);
+
     cctests_assert(L, false == ccptn_is_realpath(P));
-    cctests_assert(L, true  == ccptn_is_realpath(Q));
-    ccptn_final(P);
-    ccptn_final(Q);
+    cctests_assert(L, true  == ccptn_is_realpath(R));
 
     cce_run_cleanup_handlers(L);
   }
@@ -273,19 +274,22 @@ test_3_2 (cce_destination_t upper_L)
 {
 #ifdef HAVE_REALPATH
   cce_location_t	L[1];
+  cce_cleanup_handler_t	P_H[1], R_H[1];
 
   if (cce_location(L)) {
     cce_run_error_handlers_raise(L, upper_L);
   } else {
     char const *	pathname = progname;
-    ccptn_t		*P, Q[1];
+    ccptn_t		*P, R[1];
 
     P = ccptn_new_nodup_asciiz(L, pathname);
-    ccptn_init_realpath(L, Q, P);
+    ccptn_handler_ptn_init(L, P_H, P);
+
+    ccptn_init_realpath(L, R, P);
+    ccptn_handler_ptn_init(L, R_H, R);
+
     cctests_assert(L, false == ccptn_is_realpath(P));
-    cctests_assert(L, true  == ccptn_is_realpath(Q));
-    ccptn_final(P);
-    ccptn_final(Q);
+    cctests_assert(L, true  == ccptn_is_realpath(R));
 
     cce_run_cleanup_handlers(L);
   }
@@ -316,6 +320,7 @@ main (int argc CCPTN_UNUSED, const char *const argv[])
     cctests_begin_group("normalisation");
     {
       cctests_run(test_3_1);
+      cctests_run(test_3_2);
     }
     cctests_end_group();
 

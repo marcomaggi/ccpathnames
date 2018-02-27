@@ -578,6 +578,30 @@ Build and return a new pathname instance representing the result of applying the
 performing a non--local exit to to @var{L}.
 
 Notice that the pathname has to exist for this function to succeed.
+
+As usage example, see the following code.
+
+@example
+cce_location_t          L[1];
+cce_cleanup_handler_t   P_H[1], Q_H[1];
+
+if (cce_location(L)) @{
+  cce_run_error_handlers_final(L);
+@} else @{
+  char const *  pathname = "/path/to/file.ext";
+  ccptn_t       *P, *Q;
+
+  P = ccptn_new_nodup_asciiz(L, pathname);
+  ccptn_handler_ptn_init(L, P_H, P);
+
+  Q = ccptn_new_realpath(L, P);
+  ccptn_handler_ptn_init(L, Q_H, Q);
+
+  /* do something with Q */
+
+  cce_run_cleanup_handlers(L);
+@}
+@end example
 @end deftypefun
 
 
@@ -587,6 +611,30 @@ Initialise the already allocated instance @var{R} representing the result of app
 occurs: raise an exception by performing a non--local exit to to @var{L}.
 
 Notice that the pathname has to exist for this function to succeed.
+
+As usage example, see the following code.
+
+@example
+cce_location_t          L[1];
+cce_cleanup_handler_t   P_H[1], Q_H[1];
+
+if (cce_location(L)) @{
+  cce_run_error_handlers_final(L);
+@} else @{
+  char const *  pathname = "/path/to/file.ext";
+  ccptn_t       *P, R[1];
+
+  P = ccptn_new_nodup_asciiz(L, pathname);
+  ccptn_handler_ptn_init(L, P_H, P);
+
+  ccptn_init_realpath(L, R, P);
+  ccptn_handler_ptn_init(L, R_H, R);
+
+  /* do something with R */
+
+  cce_run_cleanup_handlers(L);
+@}
+@end example
 @end deftypefun
 
 
@@ -594,6 +642,30 @@ Notice that the pathname has to exist for this function to succeed.
 Build and return a new pathname instance representing the result of concatenating the @var{prefix}
 and the @var{suffix}.  If an error occurs: raise an exception by performing a non--local exit to to
 @var{L}.
+
+@example
+cce_location_t        L[1];
+cce_cleanup_handler_t P1_H[1], P2_H[1], R_H[1];
+
+if (cce_location(L)) @{
+  cce_run_error_handlers_final(L);
+@} else @{
+  char const * pathname_1 = "/path/to";
+  char const * pathname_2 = "file.ext";
+  ccptn_t      *P1, *P2, *R;
+
+  P1 = ccptn_new_nodup_asciiz(L, pathname_1);
+  ccptn_handler_ptn_init(L, P1_H, P1);
+
+  P2 = ccptn_new_nodup_asciiz(L, pathname_2);
+  ccptn_handler_ptn_init(L, P2_H, P2);
+
+  R = ccptn_new_concat(L, P1, P2);
+  ccptn_handler_ptn_init(L, R_H, R);
+
+  cce_run_cleanup_handlers(L);
+@}
+@end example
 @end deftypefun
 
 
