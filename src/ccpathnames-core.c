@@ -55,14 +55,20 @@ ccptn_new_nodup_asciiz (cce_destination_t L, char const * pathname)
  * struct itself, but not the data buffer.
  */
 {
-  ccptn_t *	P = cce_sys_malloc(L, sizeof(ccptn_t));
+  size_t	len = strlen(pathname);
 
-  P->final	= ccptn_delete_nodup_asciiz;
-  P->len	= strlen(pathname);
-  P->normalised	= 0;
-  P->realpath	= 0;
-  P->buf	= (char *)pathname;
-  return P;
+  if (CCPTN_PATH_MAX < len) {
+    cce_raise(L, ccptn_condition_new_exceeded_length());
+  } else {
+    ccptn_t *	P = cce_sys_malloc(L, sizeof(ccptn_t));
+
+    P->final		= ccptn_delete_nodup_asciiz;
+    P->len		= len;
+    P->normalised	= 0;
+    P->realpath		= 0;
+    P->buf		= (char *)pathname;
+    return P;
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -85,17 +91,22 @@ ccptn_new_dup_asciiz (cce_destination_t L, char const * pathname)
  */
 {
   size_t	len = strlen(pathname);
-  ccptn_t *	P;
 
-  P		= cce_sys_malloc(L, sizeof(ccptn_t) + len + 1);
-  P->final	= ccptn_delete_dup_asciiz;
-  P->len	= len;
-  P->normalised	= 0;
-  P->realpath	= 0;
-  P->buf	= (char *)(((uint8_t *)P) + sizeof(ccptn_t));
-  strncpy(P->buf, pathname, len);
-  P->buf[len]	= '\0';
-  return P;
+  if (CCPTN_PATH_MAX < len) {
+    cce_raise(L, ccptn_condition_new_exceeded_length());
+  } else {
+    ccptn_t *	P;
+
+    P			= cce_sys_malloc(L, sizeof(ccptn_t) + len + 1);
+    P->final		= ccptn_delete_dup_asciiz;
+    P->len		= len;
+    P->normalised	= 0;
+    P->realpath		= 0;
+    P->buf		= (char *)(((uint8_t *)P) + sizeof(ccptn_t));
+    strncpy(P->buf, pathname, len);
+    P->buf[len]		= '\0';
+    return P;
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -115,12 +126,18 @@ ccptn_init_nodup_asciiz (cce_destination_t L CCPTN_UNUSED, ccptn_t * P, char con
  * The finalisation function registered in the instance will do nothing.
  */
 {
-  P->final	= ccptn_final_nodup_asciiz;
-  P->len	= strlen(pathname);
-  P->normalised	= 0;
-  P->realpath	= 0;
-  P->buf	= (char *)pathname;
-  return P;
+  size_t	len = strlen(pathname);
+
+  if (CCPTN_PATH_MAX < len) {
+    cce_raise(L, ccptn_condition_new_exceeded_length());
+  } else {
+    P->final		= ccptn_final_nodup_asciiz;
+    P->len		= strlen(pathname);
+    P->normalised	= 0;
+    P->realpath		= 0;
+    P->buf		= (char *)pathname;
+    return P;
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -144,14 +161,18 @@ ccptn_init_dup_asciiz (cce_destination_t L, ccptn_t * P, char const * pathname)
 {
   size_t	len = strlen(pathname);
 
-  P->final	= ccptn_final_dup_asciiz;
-  P->len	= len;
-  P->normalised	= 0;
-  P->realpath	= 0;
-  P->buf	= cce_sys_malloc(L, len + 1);
-  strncpy(P->buf, pathname, len);
-  P->buf[len]	= '\0';
-  return P;
+  if (CCPTN_PATH_MAX < len) {
+    cce_raise(L, ccptn_condition_new_exceeded_length());
+  } else {
+    P->final	= ccptn_final_dup_asciiz;
+    P->len	= len;
+    P->normalised	= 0;
+    P->realpath	= 0;
+    P->buf	= cce_sys_malloc(L, len + 1);
+    strncpy(P->buf, pathname, len);
+    P->buf[len]	= '\0';
+    return P;
+  }
 }
 
 

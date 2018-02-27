@@ -47,21 +47,36 @@
 
 #ifdef HAVE_REALPATH
 ccptn_t *
-ccptn_realpath (cce_destination_t L, ccptn_t const * const P)
+ccptn_realpath (cce_destination_t upper_L, ccptn_t const * const P)
 {
-  char		RP[PATH_MAX + 1];
-  char const *	rv;
+  cce_location_t	L[1];
+  cce_cleanup_handler_t	rv_H[1];
 
-  errno = 0;
-  rv = realpath(ccptn_asciiz(P), RP);
-  if (NULL != rv) {
-    ccptn_t *	Q = ccptn_new_dup_asciiz(L, RP);
-
-    Q->realpath		= (int)1;
-    Q->normalised	= (int)1;
-    return Q;
+  if (cce_location(L)) {
+    cce_run_error_handlers_raise(L, upper_L);
   } else {
-    cce_raise(L, cce_condition_new_errno_clear());
+    char const *	rv;
+
+    errno = 0;
+    rv = realpath(ccptn_asciiz(P), NULL);
+    if (NULL == rv) {
+      cce_raise(L, cce_condition_new_errno_clear());
+    } else {
+      cce_handler_malloc_init(L, rv_H, (void *)rv);
+      {
+	size_t	len = strlen(rv);
+	if (CCPTN_PATH_MAX < len) {
+	  cce_raise(L, ccptn_condition_new_exceeded_length());
+	} else {
+	  ccptn_t *	Q = ccptn_new_dup_asciiz(L, rv);
+
+	  Q->realpath	= 1;
+	  Q->normalised	= 1;
+	  cce_run_cleanup_handlers(L);
+	  return Q;
+	}
+      }
+    }
   }
 }
 #endif
@@ -81,8 +96,8 @@ ccptn_append (cce_destination_t L, ccptn_t const * prefix, ccptn_t const * suffi
      for the slash separator. */
   result_len	= ccptn_len(prefix) + ccptn_len(suffix) + 1;
 
-  if (PATH_MAX < result_len) {
-    cce_raise(L, ccptn_condition_new_invalid_pathname());
+  if (CCPTN_PATH_MAX < result_len) {
+    cce_raise(L, ccptn_condition_new_exceeded_length());
   } else {
     /* This array must hold the whole pathname plus the terminating zero
        octet. */

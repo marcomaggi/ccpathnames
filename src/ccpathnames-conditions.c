@@ -88,13 +88,68 @@ ccptn_condition_is_invalid_pathname (cce_condition_t const * C)
 
 
 /** --------------------------------------------------------------------
+ ** Condition objects: maximum pathname length exceeded.
+ ** ----------------------------------------------------------------- */
+
+static cce_condition_static_message_fun_t	ccptn_condition_static_message_exceeded_length;
+
+static ccptn_descriptor_exceeded_length_t ccptn_descriptor_exceeded_length_stru = {
+  /* This  "parent" field  is  set below  by  the module  initialisation
+     function. */
+  .descriptor.parent		= NULL,
+  .descriptor.delete		= NULL,
+  .descriptor.final		= NULL,
+  .descriptor.static_message	= ccptn_condition_static_message_exceeded_length
+};
+
+ccptn_descriptor_exceeded_length_t const * const ccptn_descriptor_exceeded_length_ptr = &ccptn_descriptor_exceeded_length_stru;
+
+/* This is  the single  instance of  the "invalid  pathname" exceptional
+   condition.  It is used by "cce_raise()" and "cce_retry()". */
+static ccptn_condition_exceeded_length_t const ccptn_condition_exceeded_length_stru = {
+  .runtime_error.error.root.condition.descriptor = &(ccptn_descriptor_exceeded_length_stru.descriptor)
+};
+
+ccptn_condition_exceeded_length_t const * const ccptn_condition_exceeded_length_ptr = &ccptn_condition_exceeded_length_stru;
+
+/* ------------------------------------------------------------------ */
+
+char const *
+ccptn_condition_static_message_exceeded_length (cce_condition_t const * C CCPTN_UNUSED)
+{
+  return "the operation would exceed maximum pathname length";
+}
+
+/* ------------------------------------------------------------------ */
+
+void
+ccptn_condition_init_exceeded_length (ccptn_condition_exceeded_length_t * C)
+{
+  cce_condition_init_runtime_error(&(C->runtime_error));
+}
+
+cce_condition_t const *
+ccptn_condition_new_exceeded_length (void)
+{
+  return (cce_condition_t const *) ccptn_condition_exceeded_length_ptr;
+}
+
+bool
+ccptn_condition_is_exceeded_length (cce_condition_t const * C)
+{
+  return cce_is_condition(C, &(ccptn_descriptor_exceeded_length_ptr->descriptor));
+}
+
+
+/** --------------------------------------------------------------------
  ** Module initialisation.
  ** ----------------------------------------------------------------- */
 
 void
 ccptn_init (void)
 {
-  ccptn_descriptor_invalid_pathname_stru.descriptor.parent = &(cce_descriptor_runtime_error_ptr->descriptor);
+  ccptn_descriptor_invalid_pathname_stru.descriptor.parent	= &(cce_descriptor_runtime_error_ptr->descriptor);
+  ccptn_descriptor_exceeded_length_stru.descriptor.parent	= &(cce_descriptor_runtime_error_ptr->descriptor);
 }
 
 /* end of file */

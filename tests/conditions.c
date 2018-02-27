@@ -59,6 +59,31 @@ test_1_1 (cce_destination_t upper_L)
 }
 
 
+/** --------------------------------------------------------------------
+ ** Condition objects: invalid operations.
+ ** ----------------------------------------------------------------- */
+
+void
+test_2_1 (cce_destination_t upper_L)
+/* Test for "ccptn_condition_exceeded_length_t". */
+{
+  cce_location_t	L[1];
+
+  if (cce_location(L)) {
+    if (1) { fprintf(stderr, "%s: %s\n", __func__, cce_condition_static_message(cce_condition(L))); }
+    if (cce_condition_is_runtime_error(cce_condition(L))
+	&& ccptn_condition_is_exceeded_length(cce_condition(L))) {
+      cce_run_cleanup_handlers_final(L);
+    } else {
+      cce_run_cleanup_handlers_raise(L, upper_L);
+    }
+  } else {
+    cce_raise(L, cce_condition(ccptn_condition_new_exceeded_length()));
+    cce_run_cleanup_handlers(L);
+  }
+}
+
+
 int
 main (void)
 {
@@ -69,6 +94,12 @@ main (void)
     cctests_begin_group("invalid pathname");
     {
       cctests_run(test_1_1);
+    }
+    cctests_end_group();
+
+    cctests_begin_group("invalid operations");
+    {
+      cctests_run(test_2_1);
     }
     cctests_end_group();
   }
