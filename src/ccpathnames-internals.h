@@ -46,7 +46,14 @@
  ** Preprocessor macros.
  ** ----------------------------------------------------------------- */
 
-#define CCPTN_PATH_MAX		(2 * 4096)
+/* We can customise this value at package configuration time using, for example:
+ *
+ *   $ ./configure CPPFLAGS='-DCCPTN_PATH_MAX=8192'
+ *
+ */
+#ifndef CCPTN_PATH_MAX
+#  define CCPTN_PATH_MAX	4096
+#endif
 
 
 /** --------------------------------------------------------------------
