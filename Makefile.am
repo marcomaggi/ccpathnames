@@ -41,6 +41,7 @@ libccpathnames_la_SOURCES	= \
 	src/ccpathnames.h		\
 	src/ccpathnames-internals.h	\
 	src/ccpathnames-version.c	\
+	src/ccpathnames-conditions.c	\
 	src/ccpathnames-core.c		\
 	src/ccpathnames-manipulation.c
 
@@ -71,7 +72,9 @@ libcctests_la_SOURCES	= \
 
 check_PROGRAMS	= \
 	tests/version		\
-	tests/core
+	tests/conditions	\
+	tests/core		\
+	tests/manipulations
 
 TESTS				= $(check_PROGRAMS)
 
@@ -81,8 +84,16 @@ ccpathnames_tests_ldadd		= libccpathnames.la $(CCEXCEPTIONS_LIBS) libcctests.la
 tests_version_CPPFLAGS		= $(ccpathnames_tests_cppflags)
 tests_version_LDADD		= $(ccpathnames_tests_ldadd)
 
+tests_conditions_CPPFLAGS	= $(ccpathnames_tests_cppflags)
+tests_conditions_LDADD		= $(ccpathnames_tests_ldadd)
+
 tests_core_CPPFLAGS		= $(ccpathnames_tests_cppflags)
 tests_core_LDADD		= $(ccpathnames_tests_ldadd)
+
+tests_manipulations_CPPFLAGS	= $(ccpathnames_tests_cppflags)
+tests_manipulations_LDADD	= $(ccpathnames_tests_ldadd)
+
+## --------------------------------------------------------------------
 
 installcheck-local: $(TESTS)
 	@for f in $(TESTS); do $(builddir)/$$f; done

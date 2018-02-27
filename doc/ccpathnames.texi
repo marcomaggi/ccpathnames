@@ -126,6 +126,8 @@ included in the section entitled ``@gnu{} Free Documentation License''.
 @menu
 * overview::                    Overview of the package.
 * version::                     Version functions.
+* init::                        Library initialisation.
+* conditions::                  Exceptional condition objects.
 * typedefs::                    Type definitions.
 * ctors::                       Constructing pathname representations.
 * dtors::                       Destructing pathname representations.
@@ -163,6 +165,9 @@ least version @value{CCEXCEPTIONS_VERSION}.
 @value{PACKAGE} installs the single header file @file{ccpathnames.h}.  All the function names in the
 @api{} are prefixed with @code{ccptn_}; all the preprocessor symbol names are prefixed with
 @code{CCPTN_}; all the type names are prefixed with @code{ccptn_} and suffixed with @code{_t}.
+
+Notice that, before using the library, we need to call the global initialisation function
+@cfunc{ccptn_init}.
 
 @menu
 * overview linking::            Linking code with the library.
@@ -220,6 +225,72 @@ Return an integer representing the library interface current revision number.
 
 @deftypefun int ccptn_version_interface_age (void)
 Return an integer representing the library interface current age.
+@end deftypefun
+
+@c page
+@node init
+@chapter Library initialisation
+
+
+@deftypefun void ccptn_init (void)
+Initialises the internal structures of the library.  It is fine to call this function multiple
+times.
+
+@quotation
+@strong{NOTE} This function is defined with the @gcc{} attribute @code{constructor}, so, when the
+library is built with @gcc{}: it will be called automatically by the library initialisation code.
+@end quotation
+@end deftypefun
+
+@c page
+@node conditions
+@chapter Exceptional condition objects
+
+
+@menu
+* conditions invalid::          Invalid pathname condition object.
+@end menu
+
+@c page
+@node conditions invalid
+@section Invalid pathname condition object
+
+
+The @dfn{invalid pathname exceptional--condition object} has the purpose of describing an
+exceptional condition caused by attempting to use an invalid pathname.
+
+There should be only one @emph{invalid pathname} condition object: the one predefined by
+@value{PACKAGE}.
+
+All the following definitions are accessible from the header file @file{ccexceptions.h}.
+
+
+@deftp {Struct Typedef} ccptn_descriptor_invalid_pathname_t
+Structure type representing the descriptor for @emph{invalid pathname} condition objects.  This
+descriptor has @objtype{cce_descriptor_runtime_error_t} as parent descriptor.
+@end deftp
+
+
+@deftp {Struct Typedef} ccptn_condition_invalid_pathname_t
+Structure type representing an @emph{invalid pathname} condition object.
+@end deftp
+
+
+@deftypefun void ccptn_condition_init_invalid_pathname (ccptn_condition_invalid_pathname_t * @var{C})
+Initialise an already allocated condition object.  This function exists to allow sub--typing from
+@objtype{ccptn_condition_invalid_pathname_t}.
+@end deftypefun
+
+
+@deftypefun {cce_condition_t const *} ccptn_condition_new_invalid_pathname (void)
+Return a pointer to the statically allocated structure representing the single @emph{invalid
+pathname} condition object.
+@end deftypefun
+
+
+@deftypefun bool ccptn_is_condition_invalid_pathname (cce_condition_t const * @var{C})
+Return @ctrue{} if @var{C} is an @emph{invalid pathname} condition object; otherwise return
+@cfalse{}.
 @end deftypefun
 
 @c page

@@ -1,11 +1,11 @@
 /*
   Part of: CCPathnames
-  Contents: test for version functions
+  Contents: test for core functions
   Date: Feb 25, 2018
 
   Abstract
 
-	Test file for version functions.
+	Test file for core functions.
 
   Copyright (C) 2018 Marco Maggi <marco.maggi-ipsu@poste.it>
 
@@ -265,7 +265,9 @@ main (int argc CCPTN_UNUSED, const char *const argv[])
 {
   progname = argv[0];
 
-  cctests_init("file system");
+  ccptn_init();
+
+  cctests_init("core functions");
   {
     cctests_begin_group("constructors and destructors");
     {

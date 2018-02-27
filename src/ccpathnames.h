@@ -108,6 +108,39 @@ ccptn_decl int		ccptn_version_interface_age	(void);
 
 
 /** --------------------------------------------------------------------
+ ** Initialisation.
+ ** ----------------------------------------------------------------- */
+
+ccptn_decl void ccptn_init (void)
+  __attribute__((constructor));
+
+
+/** --------------------------------------------------------------------
+ ** Condition objects: invalid pathname.
+ ** ----------------------------------------------------------------- */
+
+typedef struct ccptn_descriptor_invalid_pathname_t	ccptn_descriptor_invalid_pathname_t;
+typedef struct ccptn_condition_invalid_pathname_t	ccptn_condition_invalid_pathname_t;
+
+struct ccptn_descriptor_invalid_pathname_t {
+  cce_descriptor_t	descriptor;
+};
+
+struct ccptn_condition_invalid_pathname_t {
+  cce_condition_runtime_error_t	runtime_error;
+};
+
+ccptn_decl void ccptn_condition_init_invalid_pathname (ccptn_condition_invalid_pathname_t * C)
+  __attribute__((__nonnull__(1)));
+
+ccptn_decl cce_condition_t const * ccptn_condition_new_invalid_pathname (void)
+  __attribute__((__returns_nonnull__));
+
+ccptn_decl bool ccptn_condition_is_invalid_pathname (cce_condition_t const * C)
+  __attribute__((__nonnull__(1)));
+
+
+/** --------------------------------------------------------------------
  ** Type definitions.
  ** ----------------------------------------------------------------- */
 
@@ -280,6 +313,9 @@ ccptn_is_realpath (ccptn_t const * const P)
 
 ccptn_decl ccptn_t * ccptn_realpath (cce_destination_t L, ccptn_t const * P)
   __attribute__((__nonnull__(1,2),__returns_nonnull__));
+
+ccptn_decl ccptn_t * ccptn_append (cce_destination_t L, ccptn_t const * prefix, ccptn_t const * suffix)
+  __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
 
 
 /** --------------------------------------------------------------------

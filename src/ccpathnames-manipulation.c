@@ -66,4 +66,35 @@ ccptn_realpath (cce_destination_t L, ccptn_t const * const P)
 }
 #endif
 
+
+/** --------------------------------------------------------------------
+ ** Composition.
+ ** ----------------------------------------------------------------- */
+
+ccptn_t *
+ccptn_append (cce_destination_t L, ccptn_t const * prefix, ccptn_t const * suffix)
+{
+  ccptn_t *	result;
+  size_t	result_len;
+
+  /* The resulting  length is the sum  of the original length,  plus one
+     for the slash separator. */
+  result_len	= ccptn_len(prefix) + ccptn_len(suffix) + 1;
+
+  if (PATH_MAX < result_len) {
+    cce_raise(L, ccptn_condition_new_invalid_pathname());
+  } else {
+    /* This array must hold the whole pathname plus the terminating zero
+       octet. */
+    char	result_pathname[result_len + 1];
+
+    strncpy(result_pathname, ccptn_asciiz(prefix), ccptn_len(prefix));
+    result_pathname[ccptn_len(prefix)] = '/';
+    strncpy(result_pathname + ccptn_len(prefix) + 1, ccptn_asciiz(suffix), ccptn_len(suffix));
+    result_pathname[result_len] = '\0';
+    result	= ccptn_new_dup_asciiz(L, result_pathname);
+  }
+  return result;
+}
+
 /* end of file */
