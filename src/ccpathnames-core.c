@@ -64,6 +64,7 @@ ccptn_new_nodup_asciiz (cce_destination_t L, char const * pathname)
 
     P->final		= ccptn_delete_nodup_asciiz;
     P->len		= len;
+    P->absolute		= ('/' == *pathname)? 1 : 0;
     P->normalised	= 0;
     P->realpath		= 0;
     P->buf		= (char *)pathname;
@@ -100,6 +101,7 @@ ccptn_new_dup_asciiz (cce_destination_t L, char const * pathname)
     P			= cce_sys_malloc(L, sizeof(ccptn_t) + len + 1);
     P->final		= ccptn_delete_dup_asciiz;
     P->len		= len;
+    P->absolute		= ('/' == *pathname)? 1 : 0;
     P->normalised	= 0;
     P->realpath		= 0;
     P->buf		= (char *)(((uint8_t *)P) + sizeof(ccptn_t));
@@ -133,6 +135,7 @@ ccptn_init_nodup_asciiz (cce_destination_t L CCPTN_UNUSED, ccptn_t * P, char con
   } else {
     P->final		= ccptn_final_nodup_asciiz;
     P->len		= strlen(pathname);
+    P->absolute		= ('/' == *pathname)? 1 : 0;
     P->normalised	= 0;
     P->realpath		= 0;
     P->buf		= (char *)pathname;
@@ -164,13 +167,14 @@ ccptn_init_dup_asciiz (cce_destination_t L, ccptn_t * P, char const * pathname)
   if (CCPTN_PATH_MAX < len) {
     cce_raise(L, ccptn_condition_new_exceeded_length());
   } else {
-    P->final	= ccptn_final_dup_asciiz;
-    P->len	= len;
+    P->final		= ccptn_final_dup_asciiz;
+    P->len		= len;
+    P->absolute		= ('/' == *pathname)? 1 : 0;
     P->normalised	= 0;
-    P->realpath	= 0;
-    P->buf	= cce_sys_malloc(L, len + 1);
+    P->realpath		= 0;
+    P->buf		= cce_sys_malloc(L, len + 1);
     strncpy(P->buf, pathname, len);
-    P->buf[len]	= '\0';
+    P->buf[len]		= '\0';
     return P;
   }
 }

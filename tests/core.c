@@ -16,6 +16,9 @@
 #include "cctests.h"
 #include <stdio.h>
 #include <stdlib.h>
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
 
 static char const * progname;
 
@@ -240,6 +243,7 @@ void
 test_2_3_2 (cce_destination_t upper_L)
 /* Test for "ccptn_is_realpath()". */
 {
+#ifdef HAVE_REALPATH
   cce_location_t	L[1];
 
   if (cce_location(L)) {
@@ -250,13 +254,15 @@ test_2_3_2 (cce_destination_t upper_L)
     ccptn_t *		Q;
 
     P = ccptn_new_nodup_asciiz(L, pathname);
-    Q = ccptn_realpath(L, P);
+    Q = ccptn_new_realpath(L, P);
     cctests_assert(L, false == ccptn_is_realpath(P));
     cctests_assert(L, true  == ccptn_is_realpath(Q));
     ccptn_final(P);
+    ccptn_final(Q);
 
     cce_run_cleanup_handlers(L);
   }
+#endif
 }
 
 

@@ -181,6 +181,11 @@ struct ccptn_t {
   ccptn_final_fun_t *	final;
 
   struct {
+    /* True if  this pathname is absolute;  false if it is  relative.  A
+       pathname  is   absolute  if   its  first   octet  is   the  ASCII
+       representation of the slash character. */
+    unsigned int	absolute: 1;
+
     /* True if  this pathname  has been  normalised (to  remove multiple
        slashes and the like). */
     unsigned int	normalised: 1;
@@ -314,14 +319,21 @@ __attribute__((__nonnull__(1),__always_inline__,__pure__))
 static inline bool
 ccptn_is_absolute (ccptn_t const * const P)
 {
-  return ('/' == P->buf[0])? true : false;
+  return (P->absolute)? true : false;
 }
 
 __attribute__((__nonnull__(1),__always_inline__,__pure__))
 static inline bool
 ccptn_is_relative (ccptn_t const * const P)
 {
-  return (! ccptn_is_absolute(P));
+  return (P->absolute)? false : true;
+}
+
+__attribute__((__nonnull__(1),__always_inline__,__pure__))
+static inline bool
+ccptn_is_normalised (ccptn_t const * const P)
+{
+  return (P->normalised)? true : false;
 }
 
 __attribute__((__nonnull__(1),__always_inline__,__pure__))
@@ -336,11 +348,17 @@ ccptn_is_realpath (ccptn_t const * const P)
  ** Manipulation.
  ** ----------------------------------------------------------------- */
 
-ccptn_decl ccptn_t * ccptn_realpath (cce_destination_t L, ccptn_t const * P)
+ccptn_decl ccptn_t * ccptn_new_realpath (cce_destination_t L, ccptn_t const * P)
   __attribute__((__nonnull__(1,2),__returns_nonnull__));
 
-ccptn_decl ccptn_t * ccptn_append (cce_destination_t L, ccptn_t const * prefix, ccptn_t const * suffix)
+ccptn_decl ccptn_t * ccptn_init_realpath (cce_destination_t upper_L, ccptn_t * R, ccptn_t const * const P)
   __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
+
+ccptn_decl ccptn_t * ccptn_new_concat (cce_destination_t L, ccptn_t const * prefix, ccptn_t const * suffix)
+  __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
+
+ccptn_decl ccptn_t * ccptn_init_concat (cce_destination_t L, ccptn_t * result, ccptn_t const * prefix, ccptn_t const * suffix)
+  __attribute__((__nonnull__(1,2,3,4),__returns_nonnull__));
 
 
 /** --------------------------------------------------------------------

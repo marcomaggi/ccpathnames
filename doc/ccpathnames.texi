@@ -572,7 +572,7 @@ zero.
 @chapter Pathname manipulations
 
 
-@deftypefun ccptn_t * ccptn_realpath (cce_destination_t @var{L}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_new_realpath (cce_destination_t @var{L}, ccptn_t const * @var{P})
 Build and return a new pathname instance representing the result of applying the standard
 @cfunc{realpath} to the pathname represented by @var{P}.  If an error occurs: raise an exception by
 performing a non--local exit to to @var{L}.
@@ -580,6 +580,28 @@ performing a non--local exit to to @var{L}.
 Notice that the pathname has to exist for this function to succeed.
 @end deftypefun
 
+
+@deftypefun {ccptn_t *} ccptn_init_realpath (cce_destination_t @var{L}, ccptn_t * @var{R}, ccptn_t const * @var{P})
+Initialise the already allocated instance @var{R} representing the result of applying the standard
+@cfunc{realpath} to the pathname represented by @var{P}.  Return @var{R} itself.  If an error
+occurs: raise an exception by performing a non--local exit to to @var{L}.
+
+Notice that the pathname has to exist for this function to succeed.
+@end deftypefun
+
+
+@deftypefun {ccptn_t *} ccptn_new_concat (cce_destination_t @var{L}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
+Build and return a new pathname instance representing the result of concatenating the @var{prefix}
+and the @var{suffix}.  If an error occurs: raise an exception by performing a non--local exit to to
+@var{L}.
+@end deftypefun
+
+
+@deftypefun {ccptn_t *} ccptn_init_concat (cce_destination_t @var{L}, ccptn_t * @var{result}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
+Initialise the already allocated instance @var{result} with the representation of the concatenation
+between the @var{prefix} and the @var{suffix}.  Return @var{result} itself.  If an error occurs:
+raise an exception by performing a non--local exit to to @var{L}.
+@end deftypefun
 
 @c page
 @node utils

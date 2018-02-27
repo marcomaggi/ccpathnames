@@ -47,7 +47,7 @@
 
 #ifdef HAVE_REALPATH
 ccptn_t *
-ccptn_realpath (cce_destination_t upper_L, ccptn_t const * const P)
+ccptn_new_realpath (cce_destination_t upper_L, ccptn_t const * const P)
 {
   cce_location_t	L[1];
   cce_cleanup_handler_t	rv_H[1];
@@ -79,6 +79,39 @@ ccptn_realpath (cce_destination_t upper_L, ccptn_t const * const P)
     }
   }
 }
+
+ccptn_t *
+ccptn_init_realpath (cce_destination_t upper_L, ccptn_t * R, ccptn_t const * const P)
+{
+  cce_location_t	L[1];
+  cce_cleanup_handler_t	rv_H[1];
+
+  if (cce_location(L)) {
+    cce_run_error_handlers_raise(L, upper_L);
+  } else {
+    char const *	rv;
+
+    errno = 0;
+    rv = realpath(ccptn_asciiz(P), NULL);
+    if (NULL == rv) {
+      cce_raise(L, cce_condition_new_errno_clear());
+    } else {
+      cce_handler_malloc_init(L, rv_H, (void *)rv);
+      {
+	size_t	len = strlen(rv);
+	if (CCPTN_PATH_MAX < len) {
+	  cce_raise(L, ccptn_condition_new_exceeded_length());
+	} else {
+	  ccptn_init_dup_asciiz(L, R, rv);
+	  R->realpath	= 1;
+	  R->normalised	= 1;
+	  cce_run_cleanup_handlers(L);
+	  return R;
+	}
+      }
+    }
+  }
+}
 #endif
 
 
@@ -87,29 +120,122 @@ ccptn_realpath (cce_destination_t upper_L, ccptn_t const * const P)
  ** ----------------------------------------------------------------- */
 
 ccptn_t *
-ccptn_append (cce_destination_t L, ccptn_t const * prefix, ccptn_t const * suffix)
+ccptn_new_concat (cce_destination_t L, ccptn_t const * prefix, ccptn_t const * suffix)
 {
-  ccptn_t *	result;
-  size_t	result_len;
+  bool		prefix_is_absolute = ccptn_is_absolute(prefix);
+  bool		suffix_is_absolute = ccptn_is_absolute(suffix);
+  size_t	R_len;
 
   /* The resulting  length is the sum  of the original length,  plus one
      for the slash separator. */
-  result_len	= ccptn_len(prefix) + ccptn_len(suffix) + 1;
+  R_len	= ccptn_len(prefix) + ccptn_len(suffix);
+  /* If  the  suffix   is  absolute:  its  first  octet   is  the  ASCII
+     representation of the  slash separator; otherwise we  must insert a
+     separator. */
+  if (! suffix_is_absolute) {
+    ++R_len;
+  }
 
-  if (CCPTN_PATH_MAX < result_len) {
+  if (CCPTN_PATH_MAX < R_len) {
     cce_raise(L, ccptn_condition_new_exceeded_length());
   } else {
     /* This array must hold the whole pathname plus the terminating zero
        octet. */
-    char	result_pathname[result_len + 1];
+    char	R_pathname[R_len + 1];
+    char *	ptr = R_pathname;
 
-    strncpy(result_pathname, ccptn_asciiz(prefix), ccptn_len(prefix));
-    result_pathname[ccptn_len(prefix)] = '/';
-    strncpy(result_pathname + ccptn_len(prefix) + 1, ccptn_asciiz(suffix), ccptn_len(suffix));
-    result_pathname[result_len] = '\0';
-    result	= ccptn_new_dup_asciiz(L, result_pathname);
+    /* Copy the prefix. */
+    {
+      size_t	len = ccptn_len(prefix);
+
+      strncpy(ptr, ccptn_asciiz(prefix), len);
+      ptr += len;
+    }
+
+    /* Insert a separator if needed. */
+    if (! suffix_is_absolute) {
+      *ptr = '/';
+      ++ptr;
+    }
+
+    /* Copy the suffix and add the terminating zero. */
+    {
+      size_t	len = ccptn_len(suffix);
+
+      strncpy(ptr, ccptn_asciiz(suffix), len);
+      ptr += len;
+      *ptr = '\0';
+    }
+
+    /* Build and return the resulting pathname. */
+    {
+      ccptn_t *		R;
+      R              = ccptn_new_dup_asciiz(L, R_pathname);
+      R->absolute    = prefix_is_absolute;
+      R->normalised  = (ccptn_is_normalised(prefix) && ccptn_is_normalised(suffix))? 1 : 0;
+      R->realpath    = 0;
+      return R;
+    }
   }
-  return result;
+}
+
+ccptn_t *
+ccptn_init_concat (cce_destination_t L, ccptn_t * R, ccptn_t const * prefix, ccptn_t const * suffix)
+{
+  bool		prefix_is_absolute = ccptn_is_absolute(prefix);
+  bool		suffix_is_absolute = ccptn_is_absolute(suffix);
+  size_t	R_len;
+
+  /* The resulting  length is the sum  of the original length,  plus one
+     for the slash separator. */
+  R_len	= ccptn_len(prefix) + ccptn_len(suffix);
+  /* If  the  suffix   is  absolute:  its  first  octet   is  the  ASCII
+     representation of the  slash separator; otherwise we  must insert a
+     separator. */
+  if (! suffix_is_absolute) {
+    ++R_len;
+  }
+
+  if (CCPTN_PATH_MAX < R_len) {
+    cce_raise(L, ccptn_condition_new_exceeded_length());
+  } else {
+    /* This array must hold the whole pathname plus the terminating zero
+       octet. */
+    char	R_pathname[R_len + 1];
+    char *	ptr = R_pathname;
+
+    /* Copy the prefix. */
+    {
+      size_t	len = ccptn_len(prefix);
+
+      strncpy(ptr, ccptn_asciiz(prefix), len);
+      ptr += len;
+    }
+
+    /* Insert a separator if needed. */
+    if (! suffix_is_absolute) {
+      *ptr = '/';
+      ++ptr;
+    }
+
+    /* Copy the suffix and add the terminating zero. */
+    {
+      size_t	len = ccptn_len(suffix);
+
+      strncpy(ptr, ccptn_asciiz(suffix), len);
+      ptr += len;
+      *ptr = '\0';
+    }
+
+    /* Build and return the resulting pathname. */
+    {
+      ccptn_init_dup_asciiz(L, R, R_pathname);
+      R->absolute    = prefix_is_absolute;
+      R->normalised  = (ccptn_is_normalised(prefix) && ccptn_is_normalised(suffix))? 1 : 0;
+      R->realpath    = 0;
+      return R;
+    }
+  }
 }
 
 /* end of file */
