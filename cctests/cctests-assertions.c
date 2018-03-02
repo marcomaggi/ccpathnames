@@ -7,7 +7,7 @@
 
 
 
-  Copyright (C) 2017 Marco Maggi <marco.maggi-ipsu@poste.it>
+  Copyright (C) 2017, 2018 Marco Maggi <marco.maggi-ipsu@poste.it>
 
   This program is  free software: you can redistribute  it and/or modify
   it  under the  terms  of  the GNU  Lesser  General  Public License  as
@@ -29,6 +29,7 @@
  ** ----------------------------------------------------------------- */
 
 #include "cctests-internals.h"
+#include <string.h>
 
 
 void
@@ -40,6 +41,14 @@ cctests_p_assert (cce_destination_t L, char const * const expr, bool const resul
 	    filename, funcname, linenum, expr);
     cce_raise(L, cctests_condition_new_assertion(L, expr, filename, funcname, linenum));
   }
+}
+
+void
+cctests_p_assert_asciiz (cce_destination_t L, char const * expected, char const * result,
+			 char const * const expr,
+			 char const * const filename, char const * const funcname, int const linenum)
+{
+  cctests_p_assert(L, expr, 0 == strcmp(expected, result), filename, funcname, linenum);
 }
 
 /* end of file */
