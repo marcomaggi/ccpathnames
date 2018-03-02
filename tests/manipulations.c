@@ -240,7 +240,7 @@ test_2_3 (cce_destination_t upper_L)
  ** ----------------------------------------------------------------- */
 
 void
-test_3_1 (cce_destination_t upper_L)
+test_3_1_1 (cce_destination_t upper_L)
 /* Test for "ccptn_new_realpath()". */
 {
 #ifdef HAVE_REALPATH
@@ -269,7 +269,7 @@ test_3_1 (cce_destination_t upper_L)
 }
 
 void
-test_3_2 (cce_destination_t upper_L)
+test_3_1_2 (cce_destination_t upper_L)
 /* Test for "ccptn_init_realpath()". */
 {
 #ifdef HAVE_REALPATH
@@ -296,6 +296,266 @@ test_3_2 (cce_destination_t upper_L)
 #endif
 }
 
+/* ------------------------------------------------------------------ */
+
+void
+test_3_2_1 (cce_destination_t upper_L)
+/* Test for "ccptn_new_normalise()": normal pathname. */
+{
+  cce_location_t	L[1];
+  cce_cleanup_handler_t	P_H[1], R_H[1];
+
+  if (cce_location(L)) {
+    cce_run_error_handlers_raise(L, upper_L);
+  } else {
+    char const *	pathname = "/";
+    ccptn_t *		P;
+    ccptn_t *		R;
+
+    P = ccptn_new_nodup_asciiz(L, pathname);
+    ccptn_handler_ptn_init(L, P_H, P);
+
+    R = ccptn_new_normalise(L, P);
+    ccptn_handler_ptn_init(L, R_H, R);
+
+    cctests_assert(L, 0 == strcmp(pathname, ccptn_asciiz(R)));
+
+    cce_run_cleanup_handlers(L);
+  }
+}
+
+void
+test_3_2_2 (cce_destination_t upper_L)
+/* Test for "ccptn_new_normalise()": normal pathname. */
+{
+  cce_location_t	L[1];
+  cce_cleanup_handler_t	P_H[1], R_H[1];
+
+  if (cce_location(L)) {
+    cce_run_error_handlers_raise(L, upper_L);
+  } else {
+    char const *	pathname = "/path/to/file.ext";
+    ccptn_t *		P;
+    ccptn_t *		R;
+
+    P = ccptn_new_nodup_asciiz(L, pathname);
+    ccptn_handler_ptn_init(L, P_H, P);
+
+    R = ccptn_new_normalise(L, P);
+    ccptn_handler_ptn_init(L, R_H, R);
+
+    cctests_assert(L, 0 == strcmp(pathname, ccptn_asciiz(R)));
+
+    cce_run_cleanup_handlers(L);
+  }
+}
+
+void
+test_3_2_3 (cce_destination_t upper_L)
+/* Test for "ccptn_new_normalise()": multiple slashes. */
+{
+  cce_location_t	L[1];
+  cce_cleanup_handler_t	P_H[1], R_H[1];
+
+  if (cce_location(L)) {
+    cce_run_error_handlers_raise(L, upper_L);
+  } else {
+    char const *	pathname = "/path///to////file.ext";
+    ccptn_t *		P;
+    ccptn_t *		R;
+
+    P = ccptn_new_nodup_asciiz(L, pathname);
+    ccptn_handler_ptn_init(L, P_H, P);
+
+    R = ccptn_new_normalise(L, P);
+    ccptn_handler_ptn_init(L, R_H, R);
+
+    cctests_assert(L, 0 == strcmp("/path/to/file.ext", ccptn_asciiz(R)));
+
+    cce_run_cleanup_handlers(L);
+  }
+}
+
+
+void
+test_3_2_4 (cce_destination_t upper_L)
+/* Test for "ccptn_new_normalise()": multiple slashes at the end. */
+{
+  cce_location_t	L[1];
+  cce_cleanup_handler_t	P_H[1], R_H[1];
+
+  if (cce_location(L)) {
+    cce_run_error_handlers_raise(L, upper_L);
+  } else {
+    char const *	pathname = "/path/to/dir///";
+    ccptn_t *		P;
+    ccptn_t *		R;
+
+    P = ccptn_new_nodup_asciiz(L, pathname);
+    ccptn_handler_ptn_init(L, P_H, P);
+
+    R = ccptn_new_normalise(L, P);
+    ccptn_handler_ptn_init(L, R_H, R);
+
+    cctests_assert(L, 0 == strcmp("/path/to/dir", ccptn_asciiz(R)));
+
+    cce_run_cleanup_handlers(L);
+  }
+}
+
+void
+test_3_2_5 (cce_destination_t upper_L)
+/* Test for "ccptn_new_normalise()": single-dot components. */
+{
+  cce_location_t	L[1];
+  cce_cleanup_handler_t	P_H[1], R_H[1];
+
+  if (cce_location(L)) {
+    cce_run_error_handlers_raise(L, upper_L);
+  } else {
+    char const *	pathname = "/path/./to/././file.ext";
+    ccptn_t *		P;
+    ccptn_t *		R;
+
+    P = ccptn_new_nodup_asciiz(L, pathname);
+    ccptn_handler_ptn_init(L, P_H, P);
+
+    R = ccptn_new_normalise(L, P);
+    ccptn_handler_ptn_init(L, R_H, R);
+
+    cctests_assert(L, 0 == strcmp("/path/to/file.ext", ccptn_asciiz(R)));
+
+    cce_run_cleanup_handlers(L);
+  }
+}
+
+void
+test_3_2_6 (cce_destination_t upper_L)
+/* Test for "ccptn_new_normalise()": single-dot components at the end. */
+{
+  cce_location_t	L[1];
+  cce_cleanup_handler_t	P_H[1], R_H[1];
+
+  if (cce_location(L)) {
+    cce_run_error_handlers_raise(L, upper_L);
+  } else {
+    char const *	pathname = "/path/to/dir/.";
+    ccptn_t *		P;
+    ccptn_t *		R;
+
+    P = ccptn_new_nodup_asciiz(L, pathname);
+    ccptn_handler_ptn_init(L, P_H, P);
+
+    R = ccptn_new_normalise(L, P);
+    ccptn_handler_ptn_init(L, R_H, R);
+
+    if (0) {
+      ccptn_print(L, stderr, R);
+      fprintf(stderr, "\n");
+    }
+
+    cctests_assert_asciiz(L, "/path/to/dir", ccptn_asciiz(R));
+
+    cce_run_cleanup_handlers(L);
+  }
+}
+
+void
+test_3_2_7 (cce_destination_t upper_L)
+/* Test for "ccptn_new_normalise()": single-dot components at the end as
+   the only segment after a slash. */
+{
+  cce_location_t	L[1];
+  cce_cleanup_handler_t	P_H[1], R_H[1];
+
+  if (cce_location(L)) {
+    cce_run_error_handlers_raise(L, upper_L);
+  } else {
+    char const *	pathname = "/.";
+    ccptn_t *		P;
+    ccptn_t *		R;
+
+    P = ccptn_new_nodup_asciiz(L, pathname);
+    ccptn_handler_ptn_init(L, P_H, P);
+
+    R = ccptn_new_normalise(L, P);
+    ccptn_handler_ptn_init(L, R_H, R);
+
+    if (0) {
+      ccptn_print(L, stderr, R);
+      fprintf(stderr, "\n");
+    }
+
+    cctests_assert_asciiz(L, "/", ccptn_asciiz(R));
+
+    cce_run_cleanup_handlers(L);
+  }
+}
+
+void
+test_3_2_8 (cce_destination_t upper_L)
+/* Test  for  "ccptn_new_normalise()":   single-dot  components  at  the
+   end. */
+{
+  cce_location_t	L[1];
+  cce_cleanup_handler_t	P_H[1], R_H[1];
+
+  if (cce_location(L)) {
+    cce_run_error_handlers_raise(L, upper_L);
+  } else {
+    char const *	pathname = "a/.";
+    ccptn_t *		P;
+    ccptn_t *		R;
+
+    P = ccptn_new_nodup_asciiz(L, pathname);
+    ccptn_handler_ptn_init(L, P_H, P);
+
+    R = ccptn_new_normalise(L, P);
+    ccptn_handler_ptn_init(L, R_H, R);
+
+    if (0) {
+      ccptn_print(L, stderr, R);
+      fprintf(stderr, "\n");
+    }
+
+    cctests_assert_asciiz(L, "a", ccptn_asciiz(R));
+
+    cce_run_cleanup_handlers(L);
+  }
+}
+
+void
+test_3_2_9 (cce_destination_t upper_L)
+/* Test for  "ccptn_new_normalise()": single-dot  component as  the full
+   pathname. */
+{
+  cce_location_t	L[1];
+  cce_cleanup_handler_t	P_H[1], R_H[1];
+
+  if (cce_location(L)) {
+    cce_run_error_handlers_raise(L, upper_L);
+  } else {
+    char const *	pathname = ".";
+    ccptn_t *		P;
+    ccptn_t *		R;
+
+    P = ccptn_new_nodup_asciiz(L, pathname);
+    ccptn_handler_ptn_init(L, P_H, P);
+
+    R = ccptn_new_normalise(L, P);
+    ccptn_handler_ptn_init(L, R_H, R);
+
+    if (0) {
+      ccptn_print(L, stderr, R);
+      fprintf(stderr, "\n");
+    }
+
+    cctests_assert_asciiz(L, ".", ccptn_asciiz(R));
+
+    cce_run_cleanup_handlers(L);
+  }
+}
+
 
 int
 main (int argc CCPTN_UNUSED, const char *const argv[])
@@ -319,8 +579,17 @@ main (int argc CCPTN_UNUSED, const char *const argv[])
 
     cctests_begin_group("normalisation");
     {
-      cctests_run(test_3_1);
-      cctests_run(test_3_2);
+      cctests_run(test_3_1_1);
+      cctests_run(test_3_1_2);
+      cctests_run(test_3_2_1);
+      cctests_run(test_3_2_2);
+      cctests_run(test_3_2_3);
+      cctests_run(test_3_2_4);
+      cctests_run(test_3_2_5);
+      cctests_run(test_3_2_6);
+      cctests_run(test_3_2_7);
+      cctests_run(test_3_2_8);
+      cctests_run(test_3_2_9);
     }
     cctests_end_group();
 

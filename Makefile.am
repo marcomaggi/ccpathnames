@@ -43,7 +43,9 @@ libccpathnames_la_SOURCES	= \
 	src/ccpathnames-version.c	\
 	src/ccpathnames-conditions.c	\
 	src/ccpathnames-core.c		\
-	src/ccpathnames-manipulation.c
+	src/ccpathnames-manipulation.c	\
+	src/ccpathnames-components.c	\
+	src/ccpathnames-input-output.c
 
 #page
 #### libraries
@@ -74,7 +76,8 @@ check_PROGRAMS	= \
 	tests/version		\
 	tests/conditions	\
 	tests/core		\
-	tests/manipulations
+	tests/manipulations	\
+	tests/components
 
 TESTS				= $(check_PROGRAMS)
 
@@ -92,6 +95,9 @@ tests_core_LDADD		= $(ccpathnames_tests_ldadd)
 
 tests_manipulations_CPPFLAGS	= $(ccpathnames_tests_cppflags)
 tests_manipulations_LDADD	= $(ccpathnames_tests_ldadd)
+
+tests_components_CPPFLAGS	= $(ccpathnames_tests_cppflags)
+tests_components_LDADD		= $(ccpathnames_tests_ldadd)
 
 ## --------------------------------------------------------------------
 

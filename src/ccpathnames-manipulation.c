@@ -42,7 +42,7 @@
 
 
 /** --------------------------------------------------------------------
- ** Normalisation.
+ ** Normalisation: realpath.
  ** ----------------------------------------------------------------- */
 
 #ifdef HAVE_REALPATH
@@ -113,6 +113,185 @@ ccptn_init_realpath (cce_destination_t upper_L, ccptn_t * R, ccptn_t const * con
   }
 }
 #endif
+
+
+/** --------------------------------------------------------------------
+ ** Normalisation: normalise.
+ ** ----------------------------------------------------------------- */
+
+ccptn_t *
+ccptn_new_normalise (cce_destination_t L, ccptn_t const * const P)
+{
+  size_t const		P_len = ccptn_len(P);
+  char			one[P_len];
+  size_t		one_len;
+
+  /* Remove multiple slash characters.  Remove the last octet if it is a
+     slash. */
+  {
+    char const * const	beg = ccptn_asciiz(P);
+    char const * const	end = beg + P_len;
+    char const *	in = beg;
+    char *		ou = one;
+
+    while (in < end) {
+      if ('/' == *in) {
+	/* Skip repeated slashes. */
+	while ((in < end) && ('/' == *in)) {
+	  ++in;
+	}
+	if ((in < end) || ((beg + 1) == in)) {
+	  /* Either  the  slash is  not  the  last  octet in  the  input
+	     pathname, or a single slash is the whole pathname.  Store a
+	     single slash in the output. */
+	  *ou++ = '/';
+	}
+      } else {
+	*ou++ = *in++;
+      }
+    }
+
+    *ou = '\0';
+    one_len = ou - one;
+  }
+
+  /* Remove single dot segments. */
+  if ((1 == one_len) && ('.' == one[0])) {
+    /* The full pathname is a single-dot component. */
+    ccptn_t *	R = ccptn_new_dup_asciiz(L, one);
+    R->normalised = 1;
+    return R;
+  } else {
+    char const * const	beg = one;
+    char const * const	end = beg + one_len;
+    char		two[one_len];
+    char const *	in = beg;
+    char *		ou = two;
+
+    while (in < end) {
+      if ('/' == *in) {
+	/* Copy the slash to the output. */
+	*ou++ = *in++;
+      } else {
+	ccptn_segment_t	S = ccptn_segment_next(in, end - in);
+
+	if (ccptn_segment_is_dot(S)) {
+	  /* Skip this segment.  If after the dot there is a slash: skip
+	     the slash too. */
+	  ++in;
+	  if ((in < end) && ('/' == *in)) {
+	    ++in;
+	  }
+	} else {
+	  /* Copy the segment to the output. */
+	  strncpy(ou, S.ptr, S.len);
+	  in += S.len;
+	  ou += S.len;
+	}
+      }
+    }
+    /* Here it may be that the  last octet represents a slash: remove it
+       if it is not the first octet in the pathname. */
+    if (((two + 1) < ou) && ('/' == *(ou-1))) {
+      --ou;
+    }
+
+    *ou = '\0';
+    if (0) { fprintf(stderr, "%s: out=%s\n", __func__, two); }
+    {
+      ccptn_t *	R = ccptn_new_dup_asciiz(L, two);
+      R->normalised = 1;
+      return R;
+    }
+  }
+}
+
+ccptn_t *
+ccptn_init_normalise (cce_destination_t L, ccptn_t * R, ccptn_t const * const P)
+{
+  size_t const		P_len = ccptn_len(P);
+  char			one[P_len];
+  size_t		one_len;
+
+  /* Remove multiple slash characters.  Remove the last octet if it is a
+     slash. */
+  {
+    char const * const	beg = ccptn_asciiz(P);
+    char const * const	end = beg + P_len;
+    char const *	in = beg;
+    char *		ou = one;
+
+    while (in < end) {
+      if ('/' == *in) {
+	/* Skip repeated slashes. */
+	while ((in < end) && ('/' == *in)) {
+	  ++in;
+	}
+	if ((in < end) || ((beg + 1) == in)) {
+	  /* Either  the  slash is  not  the  last  octet in  the  input
+	     pathname, or a single slash is the whole pathname.  Store a
+	     single slash in the output. */
+	  *ou++ = '/';
+	}
+      } else {
+	*ou++ = *in++;
+      }
+    }
+
+    *ou = '\0';
+    one_len = ou - one;
+  }
+
+  /* Remove single dot segments. */
+  if ((1 == one_len) && ('.' == one[0])) {
+    /* The full pathname is a single-dot component. */
+    ccptn_init_dup_asciiz(L, R, one);
+    R->normalised = 1;
+    return R;
+  } else {
+    char const * const	beg = one;
+    char const * const	end = beg + one_len;
+    char		two[one_len];
+    char const *	in = beg;
+    char *		ou = two;
+
+    while (in < end) {
+      if ('/' == *in) {
+	/* Copy the slash to the output. */
+	*ou++ = *in++;
+      } else {
+	ccptn_segment_t	S = ccptn_segment_next(in, end - in);
+
+	if (ccptn_segment_is_dot(S)) {
+	  /* Skip this segment.  If after the dot there is a slash: skip
+	     the slash too. */
+	  ++in;
+	  if ((in < end) && ('/' == *in)) {
+	    ++in;
+	  }
+	} else {
+	  /* Copy the segment to the output. */
+	  strncpy(ou, S.ptr, S.len);
+	  in += S.len;
+	  ou += S.len;
+	}
+      }
+    }
+    /* Here it may be that the  last octet represents a slash: remove it
+       if it is not the first octet in the pathname. */
+    if (((two + 1) < ou) && ('/' == *(ou-1))) {
+      --ou;
+    }
+
+    *ou = '\0';
+    if (0) { fprintf(stderr, "%s: out=%s\n", __func__, two); }
+    {
+      ccptn_init_dup_asciiz(L, R, one);
+      R->normalised = 1;
+      return R;
+    }
+  }
+}
 
 
 /** --------------------------------------------------------------------

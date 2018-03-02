@@ -134,6 +134,9 @@ included in the section entitled ``@gnu{} Free Documentation License''.
 * predicates::                  Pathname predicates.
 * accessors::                   Pathname accessors.
 * manipulations::               Pathname manipulations.
+* io::                          Pathname input/output.
+* segments::                    Manipulating segments.
+* extensions::                  Manipulating extensions.
 * utils::                       Utility definitions.
 
 Appendices
@@ -250,6 +253,7 @@ library is built with @gcc{}: it will be called automatically by the library ini
 @menu
 * conditions invalid::          Invalid pathname condition object.
 * conditions length::           Maximum pathname length exceeded.
+* conditions normalised::       Normalised pathname required.
 @end menu
 
 @c page
@@ -333,6 +337,49 @@ length} condition object.
 
 @deftypefun bool ccptn_is_condition_exceeded_length (cce_condition_t const * @var{C})
 Return @ctrue{} if @var{C} is an @emph{exceeded length} condition object; otherwise return
+@cfalse{}.
+@end deftypefun
+
+@c page
+@node conditions normalised
+@section Normalised pathname required
+
+
+The @dfn{normalised pathname exceptional--condition object} has the purpose of describing an
+exceptional condition caused by attempting an operation on a pathname that is @strong{not}
+normalised, while the operation requires that it is.
+
+There should be only one @emph{normalised pathname} condition object: the one predefined by
+@value{PACKAGE}.
+
+All the following definitions are accessible from the header file @file{ccexceptions.h}.
+
+
+@deftp {Struct Typedef} ccptn_descriptor_normalised_pathname_t
+Structure type representing the descriptor for @emph{normalised pathname} condition objects.  This
+descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.
+@end deftp
+
+
+@deftp {Struct Typedef} ccptn_condition_normalised_pathname_t
+Structure type representing an @emph{normalised pathname} condition object.
+@end deftp
+
+
+@deftypefun void ccptn_condition_init_normalised_pathname (ccptn_condition_normalised_pathname_t * @var{C})
+Initialise an already allocated condition object.  This function exists to allow sub--typing from
+@objtype{ccptn_condition_normalised_pathname_t}.
+@end deftypefun
+
+
+@deftypefun {cce_condition_t const *} ccptn_condition_new_normalised_pathname (void)
+Return a pointer to the statically allocated structure representing the single @emph{normalised
+pathname} condition object.
+@end deftypefun
+
+
+@deftypefun bool ccptn_is_condition_normalised_pathname (cce_condition_t const * @var{C})
+Return @ctrue{} if @var{C} is an @emph{normalised pathname} condition object; otherwise return
 @cfalse{}.
 @end deftypefun
 
@@ -572,6 +619,17 @@ zero.
 @chapter Pathname manipulations
 
 
+@menu
+* manipulations realpath::      Obtaining the real pathname.
+* manipulations normalise::     Normalising pathnames.
+* manipulations concat::        Concatenating pathnames.
+@end menu
+
+@c page
+@node manipulations realpath
+@section Obtaining the real pathname
+
+
 @deftypefun {ccptn_t *} ccptn_new_realpath (cce_destination_t @var{L}, ccptn_t const * @var{P})
 Build and return a new pathname instance representing the result of applying the standard
 @cfunc{realpath} to the pathname represented by @var{P}.  If an error occurs: raise an exception by
@@ -637,6 +695,48 @@ if (cce_location(L)) @{
 @end example
 @end deftypefun
 
+@c page
+@node manipulations normalise
+@section Normalising pathnames
+
+
+A normalised pathname: has no multiple slashes; does not terminate with a slash; has not single--dot
+components; has the double--dot components removed as much as possible.  Examples:
+
+@example
+/                       @result{} /
+file.ext                @result{} file.ext
+/path/to/file.ext       @result{} /path/to/file.ext
+//                      @result{} /
+/path///to///file.ext   @result{} /path/to/file.ext
+/path/to/dir/           @result{} /path/to/dir
+/path/to/././file.ext   @result{} /path/to/file.ext
+/path/to/.              @result{} /path/to
+/.                      @result{} /
+.                       @result{} .
+/path/to/../file.ext    @result{} /path/file.ext
+/path/../../to/file.ext @result{} ../to/file.ext
+..                      @result{} ..
+/..                     @error{} invalid pathname
+@end example
+
+
+@deftypefun {ccptn_t *} ccptn_new_normalise (cce_destination_t @var{L}, ccptn_t const * @var{P})
+Build and return a new pathname instance representing the normalisation of @var{P}.  If an error
+occurs: raise an exception by performing a non--local exit to to @var{L}.
+@end deftypefun
+
+
+@deftypefun {ccptn_t *} ccptn_init_normalise (cce_destination_t @var{L}, ccptn_t * @var{R}, ccptn_t const * @var{P})
+Initialise an already allocated pathname instance, referenced by @var{R}, with the representation of
+the normalisation of @var{P}.  If an error occurs: raise an exception by performing a non--local
+exit to to @var{L}.
+@end deftypefun
+
+@c page
+@node manipulations concat
+@section Concatenating pathnames
+
 
 @deftypefun {ccptn_t *} ccptn_new_concat (cce_destination_t @var{L}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
 Build and return a new pathname instance representing the result of concatenating the @var{prefix}
@@ -673,6 +773,124 @@ if (cce_location(L)) @{
 Initialise the already allocated instance @var{result} with the representation of the concatenation
 between the @var{prefix} and the @var{suffix}.  Return @var{result} itself.  If an error occurs:
 raise an exception by performing a non--local exit to to @var{L}.
+@end deftypefun
+
+@c page
+@node io
+@chapter Pathname input/output
+
+
+@deftypefun void ccptn_print (cce_destination_t @var{L}, FILE * @var{stream}, ccptn_t const * @var{P})
+Print the pathname to @var{stream}; do not flush the stream.  If an error occurs: raise an exception
+by performing a non--local exit to @var{L}.
+@end deftypefun
+
+@c page
+@node segments
+@chapter Manipulating segments
+
+
+@deftp {Struct Typedef} ccptn_segment_t
+This @code{struct} represents a segment in a pathname; this struct does not own the referenced
+memory.  Given the pathname:
+
+@example
+/path/to/file.ext
+@end example
+
+@noindent
+the segments are the strings:
+
+@example
+path
+to
+file.ext
+@end example
+
+@noindent
+notice that the slash separators are @strong{excluded}.  This type has the following fields:
+
+@table @code
+@item size_t len
+The number of octets in the @code{ptr} array representing a segment of pathname.
+
+@item char const * ptr
+Pointer to the first octet in an @ascii{} string representing a pathname's segment.  In general, it
+is @strong{not} an @asciiz{} string: it is not zero terminated.
+@end table
+@end deftp
+
+
+@deftypefun bool ccptn_segment_is_empty (ccptn_segment_t @var{S})
+Return @ctrue{} if @var{S} is empty; otherwise return @cfalse{}.
+@end deftypefun
+
+
+@deftypefun bool ccptn_segment_is_dot (ccptn_segment_t @var{S})
+Return @ctrue{} if @var{S} represents a single dot: @samp{.}; otherwise return @cfalse{}.
+@end deftypefun
+
+
+@deftypefun bool ccptn_segment_is_double_dot (ccptn_segment_t @var{S})
+Return @ctrue{} if @var{S} represents a double dot: @samp{..}; otherwise return @cfalse{}.
+@end deftypefun
+
+
+@deftypefun ccptn_segment_t ccptn_segment_next (char const * @var{ptr}, size_t @var{len})
+Given a pointer @var{ptr} to an @ascii{} string of at least @var{len} octets: return a segment
+@code{struct} referencing the octects up to, but not including, the first slash character or the end
+of the string.  The returned segment does @strong{not} include a terminating zero octet.
+@end deftypefun
+
+
+@deftypefun void ccptn_segment_print (cce_destination_t @var{L}, FILE * @var{stream}, ccptn_segment_t @var{S})
+Print the segment to @var{stream}; do not flush the stream.  If an error occurs: raise an exception
+by performing a non--local exit to @var{L}.
+@end deftypefun
+
+@c page
+@node extensions
+@chapter Manipulating extensions
+
+
+@deftp {Struct Typedef} ccptn_extension_t
+This @code{struct} represents the extension of a segment in a pathname; this struct does not own the
+referenced memory.  Given the pathname:
+
+@example
+/path/to/file.ext
+@end example
+
+@noindent
+the last segment is the string @samp{file.ext} and its extension is the string @samp{.ext},
+@strong{including} the leading dot.
+
+This type has the following fields:
+
+@table @code
+@item size_t len
+The number of octets in the @code{ptr} array representing the extension in a pathname's segment.
+
+@item char const * ptr
+Pointer to the first octet in an @ascii{} string representing a pathname's segment's extension.  In
+general this string is @strong{not} zero terminated.
+@end table
+@end deftp
+
+
+@deftypefun bool ccptn_extension_is_empty (ccptn_extension_t @var{E})
+Return @ctrue{} if @var{E} is empty; otherwise return @cfalse{}.
+@end deftypefun
+
+
+@deftypefun bool ccptn_extension_equal (ccptn_extension_t @vari{E}, ccptn_extension_t @varii{E})
+Return @ctrue{} if the extensions are equal octet by octet; otherwise return @cfalse{}.
+@end deftypefun
+
+
+@deftypefun void ccptn_extension_print (cce_destination_t @var{L}, FILE * @var{stream}, ccptn_extension_t @var{E})
+Print the extension to @var{stream}; do not flush the stream.  If an error occurs: raise an
+exception by performing a non--local exit to @var{L}.
 @end deftypefun
 
 @c page

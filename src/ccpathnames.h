@@ -5,7 +5,8 @@
 
   Abstract
 
-
+	This is the  public header file of the  package CCPathnames.  It
+	must be included in all the source files that use the library.
 
   Copyright (C) 2018 Marco Maggi <marco.maggi-ipsu@poste.it>
 
@@ -141,7 +142,7 @@ ccptn_decl bool ccptn_condition_is_invalid_pathname (cce_condition_t const * C)
 
 
 /** --------------------------------------------------------------------
- ** Condition objects: invalid pathname.
+ ** Condition objects: resulting pathname would exceed maximum length.
  ** ----------------------------------------------------------------- */
 
 typedef struct ccptn_descriptor_exceeded_length_t	ccptn_descriptor_exceeded_length_t;
@@ -166,11 +167,37 @@ ccptn_decl bool ccptn_condition_is_exceeded_length (cce_condition_t const * C)
 
 
 /** --------------------------------------------------------------------
+ ** Condition objects: invalid pathname.
+ ** ----------------------------------------------------------------- */
+
+typedef struct ccptn_descriptor_normalised_pathname_t	ccptn_descriptor_normalised_pathname_t;
+typedef struct ccptn_condition_normalised_pathname_t	ccptn_condition_normalised_pathname_t;
+
+struct ccptn_descriptor_normalised_pathname_t {
+  cce_descriptor_t	descriptor;
+};
+
+struct ccptn_condition_normalised_pathname_t {
+  cce_condition_runtime_error_t	runtime_error;
+};
+
+ccptn_decl void ccptn_condition_init_normalised_pathname (ccptn_condition_normalised_pathname_t * C)
+  __attribute__((__nonnull__(1)));
+
+ccptn_decl cce_condition_t const * ccptn_condition_new_normalised_pathname (void)
+  __attribute__((__returns_nonnull__));
+
+ccptn_decl bool ccptn_condition_is_normalised_pathname (cce_condition_t const * C)
+  __attribute__((__nonnull__(1)));
+
+
+/** --------------------------------------------------------------------
  ** Type definitions.
  ** ----------------------------------------------------------------- */
 
 typedef struct ccptn_t			ccptn_t;
 typedef struct ccptn_segment_t		ccptn_segment_t;
+typedef struct ccptn_extension_t	ccptn_extension_t;
 
 typedef void ccptn_final_fun_t (ccptn_t * P);
 
@@ -195,7 +222,7 @@ struct ccptn_t {
     unsigned int	realpath: 1;
   };
 
-  /* The number  of characters  in the "buf"  array, *not*  counting the
+  /* The  number  of octets  in  the  "buf"  array, *not*  counting  the
      terminating zero. */
   size_t		len;
 
@@ -203,7 +230,8 @@ struct ccptn_t {
   char *		buf;
 };
 
-/* This struct represents a segment in a pathname.  Given the pathname:
+/* This struct represents a segment in  a pathname; this struct does not
+ * own the referenced memory.  Given the pathname:
  *
  *    /path/to/file.ext
  *
@@ -213,48 +241,44 @@ struct ccptn_t {
  *    to
  *    file.ext
  *
- * This struct is meant to reference  a portion of data from an instance
- * of "ccptn_t".
+ * In general, it is *not* an ASCIIZ string: it is not zero terminated.
  */
 struct ccptn_segment_t {
-  /* The number of characters in the "buf" array representing a segment
-     of pathname. */
+  /* The number of  octets in the "ptr" array representing  a segment of
+     pathname. */
   size_t		len;
 
-  /* Pointer to  the first character  in an ASCII string  representing a
+  /* Pointer  to the  first  octet  in an  ASCII  string representing  a
      pathname's  segment.    In  general,   this  string  is   not  zero
      terminated. */
-  char const *		buf;
+  char const *		ptr;
 };
 
-/* This  struct represents  the extension  of a  segment in  a pathname.
- * Given the pathname:
+/* This struct represents the extension of a segment in a pathname; this
+ * struct does not own the referenced memory.  Given the pathname:
  *
  *    /path/to/file.ext
  *
- * the last segment is the strings:
+ * the last segment is the string:
  *
  *    file.ext
  *
- * and its extension is the string "ext";
- *
- * This struct is meant to reference  a portion of data from an instance
- * of "ccptn_t".
+ * and its extension is the string ".ext", including the leading dot.
  */
 struct ccptn_extension_t {
-  /* The  number of  characters  in the  "buf"  array representing  the
-     extension in a pathname's segment. */
+  /* The number of octets in  the "ptr" array representing the extension
+     in a pathname's segment. */
   size_t		len;
 
-  /* Pointer to  the first character  in an ASCII string  representing a
-     pathname's segment's extension.  In general this string is not zero
-     terminated. */
-  char const *		buf;
+  /* Pointer  to the  first  octet  in an  ASCII  string representing  a
+     pathname's segment's  extension.  In  general this string  is *not*
+     zero terminated. */
+  char const *		ptr;
 };
 
 
 /** --------------------------------------------------------------------
- ** Constructors and destructors.
+ ** Pathnames: constructors and destructors.
  ** ----------------------------------------------------------------- */
 
 ccptn_decl ccptn_t * ccptn_init_nodup_asciiz (cce_destination_t L, ccptn_t * P, char const * pathname)
@@ -293,7 +317,7 @@ ccptn_decl void ccptn_error_handler_ptn_init (cce_destination_t L, cce_handler_t
 
 
 /** --------------------------------------------------------------------
- ** Accessors.
+ ** Pathnames: accessors.
  ** ----------------------------------------------------------------- */
 
 __attribute__((__nonnull__(1),__always_inline__,__pure__,__returns_nonnull__))
@@ -312,7 +336,7 @@ ccptn_len (ccptn_t const * const P)
 
 
 /** --------------------------------------------------------------------
- ** Predicates.
+ ** Pathnames: predicates.
  ** ----------------------------------------------------------------- */
 
 __attribute__((__nonnull__(1),__always_inline__,__pure__))
@@ -345,20 +369,89 @@ ccptn_is_realpath (ccptn_t const * const P)
 
 
 /** --------------------------------------------------------------------
- ** Manipulation.
+ ** Pathnames: manipulation.
  ** ----------------------------------------------------------------- */
 
 ccptn_decl ccptn_t * ccptn_new_realpath (cce_destination_t L, ccptn_t const * P)
   __attribute__((__nonnull__(1,2),__returns_nonnull__));
 
-ccptn_decl ccptn_t * ccptn_init_realpath (cce_destination_t upper_L, ccptn_t * R, ccptn_t const * const P)
+ccptn_decl ccptn_t * ccptn_init_realpath (cce_destination_t L, ccptn_t * R, ccptn_t const * const P)
   __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
+
+/* ------------------------------------------------------------------ */
+
+ccptn_decl ccptn_t * ccptn_new_normalise (cce_destination_t L, ccptn_t const * const P)
+  __attribute__((__nonnull__(1,2)));
+
+ccptn_decl ccptn_t * ccptn_init_normalise (cce_destination_t L, ccptn_t * R, ccptn_t const * const P)
+  __attribute__((__nonnull__(1,2,3)));
+
+/* ------------------------------------------------------------------ */
 
 ccptn_decl ccptn_t * ccptn_new_concat (cce_destination_t L, ccptn_t const * prefix, ccptn_t const * suffix)
   __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
 
 ccptn_decl ccptn_t * ccptn_init_concat (cce_destination_t L, ccptn_t * result, ccptn_t const * prefix, ccptn_t const * suffix)
   __attribute__((__nonnull__(1,2,3,4),__returns_nonnull__));
+
+
+/** --------------------------------------------------------------------
+ ** Pathnames: components.
+ ** ----------------------------------------------------------------- */
+
+ccptn_decl ccptn_extension_t ccptn_extension (cce_destination_t L, ccptn_t const * P)
+  __attribute__((__nonnull__(1,2)));
+
+ccptn_decl ccptn_t * ccptn_rootname (cce_destination_t L, ccptn_t const * P)
+  __attribute__((__nonnull__(1,2)));
+
+ccptn_decl ccptn_t * ccptn_dirname (cce_destination_t L, ccptn_t const * P)
+  __attribute__((__nonnull__(1,2)));
+
+ccptn_decl ccptn_t * ccptn_tailname (cce_destination_t L, ccptn_t const * P)
+  __attribute__((__nonnull__(1,2)));
+
+
+/** --------------------------------------------------------------------
+ ** Pathnames: input/output.
+ ** ----------------------------------------------------------------- */
+
+ccptn_decl void ccptn_print (cce_destination_t L, FILE * stream, ccptn_t const * P)
+  __attribute__((__nonnull__(1,2,3)));
+
+
+/** --------------------------------------------------------------------
+ ** Segments.
+ ** ----------------------------------------------------------------- */
+
+ccptn_decl bool ccptn_segment_is_empty (ccptn_segment_t S)
+  __attribute__((__pure__));
+
+ccptn_decl bool ccptn_segment_is_dot (ccptn_segment_t S)
+  __attribute__((__pure__));
+
+ccptn_decl bool ccptn_segment_is_double_dot (ccptn_segment_t S)
+  __attribute__((__pure__));
+
+ccptn_decl ccptn_segment_t ccptn_segment_next (char const * ptr, size_t len)
+  __attribute__((__nonnull__(1)));
+
+ccptn_decl void ccptn_segment_print (cce_destination_t L, FILE * stream, ccptn_segment_t S)
+  __attribute__((__nonnull__(1,2)));
+
+
+/** --------------------------------------------------------------------
+ ** Extensions.
+ ** ----------------------------------------------------------------- */
+
+ccptn_decl bool ccptn_extension_is_empty (ccptn_extension_t E)
+  __attribute__((__pure__));
+
+ccptn_decl bool ccptn_extension_equal (ccptn_extension_t E1, ccptn_extension_t E2)
+  __attribute__((__pure__));
+
+ccptn_decl void ccptn_extension_print (cce_destination_t L, FILE * stream, ccptn_extension_t E)
+  __attribute__((__nonnull__(1,2)));
 
 
 /** --------------------------------------------------------------------

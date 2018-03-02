@@ -142,6 +142,60 @@ ccptn_condition_is_exceeded_length (cce_condition_t const * C)
 
 
 /** --------------------------------------------------------------------
+ ** Condition objects: invalid pathname.
+ ** ----------------------------------------------------------------- */
+
+static cce_condition_static_message_fun_t	ccptn_condition_static_message_normalised_pathname;
+
+static ccptn_descriptor_normalised_pathname_t ccptn_descriptor_normalised_pathname_stru = {
+  /* This  "parent" field  is  set below  by  the module  initialisation
+     function. */
+  .descriptor.parent		= &(ccptn_descriptor_invalid_pathname_stru.descriptor),
+  .descriptor.delete		= NULL,
+  .descriptor.final		= NULL,
+  .descriptor.static_message	= ccptn_condition_static_message_normalised_pathname
+};
+
+ccptn_descriptor_normalised_pathname_t const * const ccptn_descriptor_normalised_pathname_ptr = &ccptn_descriptor_normalised_pathname_stru;
+
+/* This is  the single  instance of  the "invalid  pathname" exceptional
+   condition.  It is used by "cce_raise()" and "cce_retry()". */
+static ccptn_condition_normalised_pathname_t const ccptn_condition_normalised_pathname_stru = {
+  .runtime_error.error.root.condition.descriptor = &(ccptn_descriptor_normalised_pathname_stru.descriptor)
+};
+
+ccptn_condition_normalised_pathname_t const * const ccptn_condition_normalised_pathname_ptr = &ccptn_condition_normalised_pathname_stru;
+
+/* ------------------------------------------------------------------ */
+
+char const *
+ccptn_condition_static_message_normalised_pathname (cce_condition_t const * C CCPTN_UNUSED)
+{
+  return "normalised file system pathname is required";
+}
+
+/* ------------------------------------------------------------------ */
+
+void
+ccptn_condition_init_normalised_pathname (ccptn_condition_normalised_pathname_t * C)
+{
+  cce_condition_init_runtime_error(&(C->runtime_error));
+}
+
+cce_condition_t const *
+ccptn_condition_new_normalised_pathname (void)
+{
+  return (cce_condition_t const *) ccptn_condition_normalised_pathname_ptr;
+}
+
+bool
+ccptn_condition_is_normalised_pathname (cce_condition_t const * C)
+{
+  return cce_is_condition(C, &(ccptn_descriptor_normalised_pathname_ptr->descriptor));
+}
+
+
+/** --------------------------------------------------------------------
  ** Module initialisation.
  ** ----------------------------------------------------------------- */
 
