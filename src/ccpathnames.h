@@ -386,6 +386,16 @@ ccptn_decl ccptn_t * ccptn_new_normalise (cce_destination_t L, ccptn_t const * c
 ccptn_decl ccptn_t * ccptn_init_normalise (cce_destination_t L, ccptn_t * R, ccptn_t const * const P)
   __attribute__((__nonnull__(1,2,3)));
 
+ccptn_decl size_t ccptn_normal_pass_remove_useless_slashes (char * output_ptr, char const * const input_ptr, size_t const input_len)
+  __attribute__((__nonnull__(1,2)));
+
+ccptn_decl size_t ccptn_normal_pass_remove_single_dot_segments (char * output_ptr, char const * const input_ptr, size_t const input_len)
+  __attribute__((__nonnull__(1,2)));
+
+ccptn_decl size_t ccptn_normal_pass_remove_double_dot_segments (cce_destination_t L, char * output_ptr,
+								char const * const input_ptr, size_t const input_len)
+  __attribute__((__nonnull__(1,2,3)));
+
 /* ------------------------------------------------------------------ */
 
 ccptn_decl ccptn_t * ccptn_new_concat (cce_destination_t L, ccptn_t const * prefix, ccptn_t const * suffix)

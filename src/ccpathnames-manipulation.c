@@ -119,11 +119,10 @@ ccptn_init_realpath (cce_destination_t upper_L, ccptn_t * R, ccptn_t const * con
  ** Normalisation: helper functions.
  ** ----------------------------------------------------------------- */
 
-__attribute__((__nonnull__(1,2)))
-static size_t
-normalise_remove_useless_slashes (char * output_ptr, char const * const input_ptr, size_t const input_len)
+size_t
+ccptn_normal_pass_remove_useless_slashes (char * output_ptr, char const * const input_ptr, size_t const input_len)
 /* Copy  a  pathname  from  "input_ptr"  to  "output_ptr"  performing  a
-   normalisation pass it in the process: removal of multiple slashes and
+   normalisation pass  in the process:  removal of multiple  slashes and
    terminating slashes.
 
    The array referenced  by "input_ptr" must represent  an ASCIIZ string
@@ -132,7 +131,7 @@ normalise_remove_useless_slashes (char * output_ptr, char const * const input_pt
    octets wide.
 
    Return  the  number of  octets  stored  in  the array  referenced  by
-   "output_ptr", terminating null excluded. */
+   "output_ptr", terminating zero excluded. */
 {
   char const * const	end = input_ptr + input_len;
   char const *		in  = input_ptr;
@@ -159,11 +158,10 @@ normalise_remove_useless_slashes (char * output_ptr, char const * const input_pt
   return (ou - output_ptr);
 }
 
-__attribute__((__nonnull__(1,2)))
-static size_t
-normalise_remove_single_dot_segments (char * output_ptr, char const * const input_ptr, size_t const input_len)
+size_t
+ccptn_normal_pass_remove_single_dot_segments (char * output_ptr, char const * const input_ptr, size_t const input_len)
 /* Copy  a  pathname  from  "input_ptr"  to  "output_ptr"  performing  a
-   normalisation pass it in the process: removal of single-dot segments.
+   normalisation pass in the process: removal of single-dot segments.
 
    The array referenced  by "input_ptr" must represent  an ASCIIZ string
    with  at least  "input_len" octets,  terminating zero  excluded.  The
@@ -171,7 +169,7 @@ normalise_remove_single_dot_segments (char * output_ptr, char const * const inpu
    octets wide.
 
    Return  the  number of  octets  stored  in  the array  referenced  by
-   "output_ptr", terminating null excluded. */
+   "output_ptr", terminating zero excluded. */
 {
   if (IS_SINGLE_DOT(input_ptr, input_len)) {
     /* The full pathname is a single-dot component. */
@@ -219,11 +217,11 @@ normalise_remove_single_dot_segments (char * output_ptr, char const * const inpu
   }
 }
 
-__attribute__((__nonnull__(1,2,3)))
-static size_t
-normalise_remove_double_dot_segments (cce_destination_t L, char * output_ptr, char const * const input_ptr, size_t const input_len)
+size_t
+ccptn_normal_pass_remove_double_dot_segments (cce_destination_t L, char * output_ptr, char const * const input_ptr, size_t const input_len)
 /* Copy  a  pathname  from  "input_ptr"  to  "output_ptr"  performing  a
-   normalisation pass it in the process: removal of double-dot segments.
+   normalisation pass in the process: removal of double-dot segments and
+   the segments before them.
 
    The array referenced  by "input_ptr" must represent  an ASCIIZ string
    with  at least  "input_len" octets,  terminating zero  excluded.  The
@@ -231,7 +229,7 @@ normalise_remove_double_dot_segments (cce_destination_t L, char * output_ptr, ch
    octets wide.
 
    Return  the  number of  octets  stored  in  the array  referenced  by
-   "output_ptr", terminating null excluded. */
+   "output_ptr", terminating zero excluded. */
 {
   char const * const	end = input_ptr + input_len;
   char const *		in  = input_ptr;
@@ -317,12 +315,12 @@ ccptn_new_normalise (cce_destination_t L, ccptn_t const * const P)
 {
   char		one[1 + ccptn_len(P)];
   size_t	one_len;
-  one_len = normalise_remove_useless_slashes(one, ccptn_asciiz(P), ccptn_len(P));
+  one_len = ccptn_normal_pass_remove_useless_slashes(one, ccptn_asciiz(P), ccptn_len(P));
   {
     char	two[1 + one_len];
     size_t	two_len;
-    two_len = normalise_remove_single_dot_segments(two, one, one_len);
-    one_len = normalise_remove_double_dot_segments(L, one, two, two_len);
+    two_len = ccptn_normal_pass_remove_single_dot_segments(two, one, one_len);
+    one_len = ccptn_normal_pass_remove_double_dot_segments(L, one, two, two_len);
     if (0) { fprintf(stderr, "%s: out=%s\n", __func__, one); }
     {
       ccptn_t *	R = ccptn_new_dup_asciiz(L, one);
@@ -337,12 +335,12 @@ ccptn_init_normalise (cce_destination_t L, ccptn_t * R, ccptn_t const * const P)
 {
   char		one[1 + ccptn_len(P)];
   size_t	one_len;
-  one_len = normalise_remove_useless_slashes(one, ccptn_asciiz(P), ccptn_len(P));
+  one_len = ccptn_normal_pass_remove_useless_slashes(one, ccptn_asciiz(P), ccptn_len(P));
   {
     char	two[1 + one_len];
     size_t	two_len;
-    two_len = normalise_remove_single_dot_segments(two, one, one_len);
-    one_len = normalise_remove_double_dot_segments(L, one, two, two_len);
+    two_len = ccptn_normal_pass_remove_single_dot_segments(two, one, one_len);
+    one_len = ccptn_normal_pass_remove_double_dot_segments(L, one, two, two_len);
     if (0) { fprintf(stderr, "%s: out=%s\n", __func__, one); }
     {
       ccptn_init_dup_asciiz(L, R, one);

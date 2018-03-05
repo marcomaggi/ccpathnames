@@ -733,6 +733,50 @@ the normalisation of @var{P}.  If an error occurs: raise an exception by perform
 exit to to @var{L}.
 @end deftypefun
 
+@c ------------------------------------------------------------------------
+
+@subsubheading Low level functions
+
+
+@deftypefun size_t ccptn_normal_pass_remove_useless_slashes (char * @var{output_ptr}, char const * @var{input_ptr}, size_t @var{input_len})
+Copy a pathname from @var{input_ptr} to @var{output_ptr} performing a normalisation pass in the
+process: removal of multiple slashes and terminating slashes.
+
+The array referenced by @var{input_ptr} must represent an @asciiz{} string with at least
+@var{input_len} octets, terminating zero excluded.  The array referenced by @var{output_ptr} must be
+at least @code{1 + @var{input_len}} octets wide.
+
+Return the number of octets stored in the array referenced by @var{output_ptr}, terminating zero
+excluded.
+@end deftypefun
+
+
+@deftypefun size_t ccptn_normal_pass_remove_single_dot_segments (char * @var{output_ptr}, char const * @var{input_ptr}, size_t @var{input_len})
+Copy a pathname from @var{input_ptr} to @var{output_ptr} performing a normalisation pass in the
+process: removal of single--dot segments.
+
+The array referenced by @var{input_ptr} must represent an @asciiz{} string with at least
+@var{input_len} octets, terminating zero excluded.  The array referenced by @var{output_ptr} must be
+at least @code{1 + @var{input_len}} octets wide.
+
+Return the number of octets stored in the array referenced by @var{output_ptr}, terminating zero
+excluded.
+@end deftypefun
+
+
+@deftypefun size_t ccptn_normal_pass_remove_double_dot_segments (cce_destination_t @var{L}, char * @var{output_ptr}, char const * @var{input_ptr}, size_t @var{input_len})
+Copy a pathname from @var{input_ptr} to @var{output_ptr} performing a normalisation pass in the
+process: removal of double--dot segments and the segments before them.
+
+The array referenced by @var{input_ptr} must represent an @asciiz{} string with at least
+@var{input_len} octets, terminating zero excluded.  The array referenced by @var{output_ptr} must be
+at least @code{1 + @var{input_len}} octets wide.
+
+If successful: return the number of octets stored in the array referenced by @var{output_ptr},
+terminating zero excluded.  If the a double--dot segment has not segment before: raise an exception
+by performing a non--local exit to @var{L}.
+@end deftypefun
+
 @c page
 @node manipulations concat
 @section Concatenating pathnames
