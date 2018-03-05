@@ -266,15 +266,26 @@ ccptn_normal_pass_remove_double_dot_segments (cce_destination_t L, char * output
     if ((3 == (next - in)) && ('/' == in[0]) && ('.' == in[1]) && ('.' == in[2])) {
       /* Yes,  the next  segment is  a slash+double-dot,  "/..": in  the
 	 output, step back to the previous segment. */
-      in = next;
       if (output_ptr != ou) {
 	do {
 	  --ou;
 	} while ((ou > output_ptr) && ('/' != *ou));
+	in = next;
       } else {
-	/* We are still  at the beginning: there is  no previous segment
-	   to remove, raise an exception. */
-	cce_raise(L, ccptn_condition_new_invalid_pathname());
+	/* We are at  the beginning of the output: there  is no previous
+	   segment to remove.  If the  input pathname is absolute: raise
+	   an exception, there is no way to normalise the input.  If the
+	   input pathname is relative:  copy the double-dot (without the
+	   leading  slash)  to  the  output  and move  on  to  the  next
+	   segment. */
+	if ('/' != *input_ptr) {
+	  ++in;
+	  while (in < next) {
+	    *ou++ = *in++;
+	  }
+	} else {
+	  cce_raise(L, ccptn_condition_new_invalid_pathname());
+	}
       }
     } else {
       /* This is a normal segment: copy it to the output. */
