@@ -121,7 +121,7 @@ ccptn_init_realpath (cce_destination_t upper_L, ccptn_t * R, ccptn_t const * con
 
 __attribute__((__nonnull__(1,2)))
 static size_t
-normalise_remove_multiple_slashes (char * output_ptr, char const * input_ptr, size_t input_len)
+normalise_remove_useless_slashes (char * output_ptr, char const * const input_ptr, size_t const input_len)
 /* Copy  a  pathname  from  "input_ptr"  to  "output_ptr"  performing  a
    normalisation pass it in the process: removal of multiple slashes and
    terminating slashes.
@@ -161,7 +161,7 @@ normalise_remove_multiple_slashes (char * output_ptr, char const * input_ptr, si
 
 __attribute__((__nonnull__(1,2)))
 static size_t
-normalise_remove_single_dot_segments (char * output_ptr, char const * input_ptr, size_t input_len)
+normalise_remove_single_dot_segments (char * output_ptr, char const * const input_ptr, size_t const input_len)
 /* Copy  a  pathname  from  "input_ptr"  to  "output_ptr"  performing  a
    normalisation pass it in the process: removal of single-dot segments.
 
@@ -173,7 +173,7 @@ normalise_remove_single_dot_segments (char * output_ptr, char const * input_ptr,
    Return  the  number of  octets  stored  in  the array  referenced  by
    "output_ptr", terminating null excluded. */
 {
-  if ((1 == input_len) && ('.' == input_ptr[0])) {
+  if (IS_SINGLE_DOT(input_ptr, input_len)) {
     /* The full pathname is a single-dot component. */
     output_ptr[0] = '.';
     output_ptr[1] = '\0';
@@ -188,9 +188,11 @@ normalise_remove_single_dot_segments (char * output_ptr, char const * input_ptr,
 	/* Copy the slash to the output. */
 	*ou++ = *in++;
       } else {
+	size_t	in_len = ccptn_segment_size_of_next (in, end - in);
+
 	ccptn_segment_t	S = ccptn_segment_next(in, end - in);
 
-	if (ccptn_segment_is_dot(S)) {
+	if (IS_SINGLE_DOT(in, in_len)) {
 	  /* Skip this segment.  If after the dot there is a slash: skip
 	     the slash too. */
 	  ++in;
@@ -199,9 +201,9 @@ normalise_remove_single_dot_segments (char * output_ptr, char const * input_ptr,
 	  }
 	} else {
 	  /* Copy the segment to the output. */
-	  strncpy(ou, S.ptr, S.len);
-	  in += S.len;
-	  ou += S.len;
+	  for (size_t i=0; i<S.len; ++i) {
+	    *ou++ = *in++;
+	  }
 	}
       }
     }
@@ -217,6 +219,94 @@ normalise_remove_single_dot_segments (char * output_ptr, char const * input_ptr,
   }
 }
 
+__attribute__((__nonnull__(1,2,3)))
+static size_t
+normalise_remove_double_dot_segments (cce_destination_t L, char * output_ptr, char const * const input_ptr, size_t const input_len)
+/* Copy  a  pathname  from  "input_ptr"  to  "output_ptr"  performing  a
+   normalisation pass it in the process: removal of double-dot segments.
+
+   The array referenced  by "input_ptr" must represent  an ASCIIZ string
+   with  at least  "input_len" octets,  terminating zero  excluded.  The
+   array referenced  by "output_ptr"  must be at  least "1  + input_len"
+   octets wide.
+
+   Return  the  number of  octets  stored  in  the array  referenced  by
+   "output_ptr", terminating null excluded. */
+{
+  char const * const	end = input_ptr + input_len;
+  char const *		in  = input_ptr;
+  char *		ou  = output_ptr;
+
+  while (in < end) {
+    /* Set "next" to point to the slash after this segment or the end of
+     * input.  For example:
+     *
+     *    /path/to/file.ext
+     *    ^    ^
+     *    in   next
+     */
+    char const *	next = in;
+    if ('/' == *next) {
+      ++next;
+    }
+    while (('/' != *next) && (next < end)) {
+      ++next;
+    }
+
+    if (0) {
+      fprintf(stderr, "%s: in=", __func__);
+      fwrite(in, 1, (end - in), stderr);
+      fprintf(stderr, ", output_ptr=");
+      fwrite(output_ptr, 1, (ou - output_ptr), stderr);
+      fprintf(stderr, ", next=");
+      fwrite(in, 1, (next - in), stderr);
+      fprintf(stderr, "\n");
+    }
+
+    /* Now "next" points  to a slash octet  or to the end  of input.  Is
+       there a slash+double-dot between "in" and "next"? */
+    if ((3 == (next - in)) && ('/' == in[0]) && ('.' == in[1]) && ('.' == in[2])) {
+      /* Yes,  the next  segment is  a slash+double-dot,  "/..": in  the
+	 output, step back to the previous segment. */
+      in = next;
+      if (output_ptr != ou) {
+	do {
+	  --ou;
+	} while ((ou > output_ptr) && ('/' != *ou));
+      } else {
+	/* We are still  at the beginning: there is  no previous segment
+	   to remove, raise an exception. */
+	cce_raise(L, ccptn_condition_new_invalid_pathname());
+      }
+    } else {
+      /* This is a normal segment: copy it to the output. */
+      while (in < next) {
+	*ou++ = *in++;
+      }
+    }
+
+  }
+
+  if (0) {
+    fprintf(stderr, "%s: in=", __func__);
+    fwrite(in, 1, (end - in), stderr);
+    fprintf(stderr, ", output_ptr=");
+    fwrite(output_ptr, 1, (ou - output_ptr), stderr);
+    fprintf(stderr, "\n");
+  }
+
+  /* Have we removed all the segments in the pathname? */
+  if (output_ptr == ou) {
+    /* Yes,  we have.   If the  input pathname  is absolute:  the output
+       pathname is a  single slash.  If the input  pathname is relative:
+       the output pathname is a single dot. */
+    *ou++ = ('/' == *input_ptr)? '/' : '.';
+  }
+  *ou = '\0';
+  if (0) { fprintf(stderr, "%s: output_ptr=%s, len=%lu\n", __func__, output_ptr, strlen(output_ptr)); }
+  return (ou - output_ptr);
+}
+
 
 /** --------------------------------------------------------------------
  ** Normalisation: pathname normalisation.
@@ -227,15 +317,15 @@ ccptn_new_normalise (cce_destination_t L, ccptn_t const * const P)
 {
   char		one[1 + ccptn_len(P)];
   size_t	one_len;
-
-  one_len = normalise_remove_multiple_slashes(one, ccptn_asciiz(P), ccptn_len(P));
+  one_len = normalise_remove_useless_slashes(one, ccptn_asciiz(P), ccptn_len(P));
   {
     char	two[1 + one_len];
-
-    normalise_remove_single_dot_segments(two, one, one_len);
-    if (0) { fprintf(stderr, "%s: out=%s\n", __func__, two); }
+    size_t	two_len;
+    two_len = normalise_remove_single_dot_segments(two, one, one_len);
+    one_len = normalise_remove_double_dot_segments(L, one, two, two_len);
+    if (0) { fprintf(stderr, "%s: out=%s\n", __func__, one); }
     {
-      ccptn_t *	R = ccptn_new_dup_asciiz(L, two);
+      ccptn_t *	R = ccptn_new_dup_asciiz(L, one);
       R->normalised = 1;
       return R;
     }
@@ -247,15 +337,15 @@ ccptn_init_normalise (cce_destination_t L, ccptn_t * R, ccptn_t const * const P)
 {
   char		one[1 + ccptn_len(P)];
   size_t	one_len;
-
-  one_len = normalise_remove_multiple_slashes(one, ccptn_asciiz(P), ccptn_len(P));
+  one_len = normalise_remove_useless_slashes(one, ccptn_asciiz(P), ccptn_len(P));
   {
     char	two[1 + one_len];
-
-    normalise_remove_single_dot_segments(two, one, one_len);
-    if (0) { fprintf(stderr, "%s: out=%s\n", __func__, two); }
+    size_t	two_len;
+    two_len = normalise_remove_single_dot_segments(two, one, one_len);
+    one_len = normalise_remove_double_dot_segments(L, one, two, two_len);
+    if (0) { fprintf(stderr, "%s: out=%s\n", __func__, one); }
     {
-      ccptn_init_dup_asciiz(L, R, two);
+      ccptn_init_dup_asciiz(L, R, one);
       R->normalised = 1;
       return R;
     }

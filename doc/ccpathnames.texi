@@ -843,6 +843,13 @@ of the string.  The returned segment does @strong{not} include a terminating zer
 @end deftypefun
 
 
+@deftypefun size_t ccptn_segment_size_of_next (char const * @var{in}, size_t @var{len})
+Given a pointer @var{in} to an @ascii{} string of at least @var{len} octets: return the number of
+octets between the one referenced by @var{in} (included) and the first slash octet (excluded);
+return @var{len} itself if no slash is found.
+@end deftypefun
+
+
 @deftypefun void ccptn_segment_print (cce_destination_t @var{L}, FILE * @var{stream}, ccptn_segment_t @var{S})
 Print the segment to @var{stream}; do not flush the stream.  If an error occurs: raise an exception
 by performing a non--local exit to @var{L}.

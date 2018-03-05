@@ -436,6 +436,9 @@ ccptn_decl bool ccptn_segment_is_double_dot (ccptn_segment_t S)
 ccptn_decl ccptn_segment_t ccptn_segment_next (char const * ptr, size_t len)
   __attribute__((__nonnull__(1)));
 
+ccptn_decl size_t ccptn_segment_size_of_next (char const * in, size_t len)
+  __attribute__((__nonnull__(1)));
+
 ccptn_decl void ccptn_segment_print (cce_destination_t L, FILE * stream, ccptn_segment_t S)
   __attribute__((__nonnull__(1,2)));
 

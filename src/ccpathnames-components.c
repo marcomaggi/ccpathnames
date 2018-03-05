@@ -107,6 +107,24 @@ ccptn_segment_next (char const * const in, size_t const len)
   }
 }
 
+size_t
+ccptn_segment_size_of_next (char const * const in, size_t const len)
+/* Given a  pointer "in" to  an ASCII string  of at least  "len" octets:
+   return  the number  of  octets  between the  one  referenced by  "in"
+   (included) and the first slash  octet (excluded); return "len" itself
+   if no slash is found. */
+{
+  char const *	ptr = in;
+  char const *	end = in + len;
+
+  for (size_t i=0; i<len; ++i) {
+    if ('/' == ptr[i]) {
+      return i;
+    }
+  }
+  return len;
+}
+
 
 /** --------------------------------------------------------------------
  ** Extensions.

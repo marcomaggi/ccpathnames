@@ -46,6 +46,26 @@
  ** Preprocessor macros.
  ** ----------------------------------------------------------------- */
 
+/* Evaluate to true  if PTR references an array of  ASCII characters, of
+   LEN octets, representing a single-dot segment. */
+#define IS_SINGLE_DOT(PTR,LEN)		\
+  ((1 == (LEN)) && ('.' == (PTR)[0]))
+
+/* Evaluate to true  if PTR references an array of  ASCII characters, of
+   LEN octets, representing a double-dot segment. */
+#define IS_DOUBLE_DOT(PTR,LEN)		\
+  ((2 == (LEN)) && ('.' == (PTR)[0]) && ('.' == (PTR)[1]))
+
+/* Evaluate to true  if PTR references an array of  ASCII characters, of
+   LEN octets, representing a slash followed by a double-dot segment. */
+#define IS_SLASH_DOUBLE_DOT(PTR,LEN)	\
+  ((3 == (LEN)) && ('/' == (PTR)[0]) && ('.' == (PTR)[1]) && ('.' == (PTR)[2]))
+
+
+/** --------------------------------------------------------------------
+ ** Constants.
+ ** ----------------------------------------------------------------- */
+
 /* We can customise this value at package configuration time using, for example:
  *
  *   $ ./configure CPPFLAGS='-DCCPTN_PATH_MAX=8192'
@@ -54,13 +74,6 @@
 #ifndef CCPTN_PATH_MAX
 #  define CCPTN_PATH_MAX	4096
 #endif
-
-
-/** --------------------------------------------------------------------
- ** Constants.
- ** ----------------------------------------------------------------- */
-
-
 
 
 /** --------------------------------------------------------------------
