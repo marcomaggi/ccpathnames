@@ -179,7 +179,34 @@ ccptn_normal_pass_remove_single_dot_segments (char * output_ptr, char const * co
   char const *		in  = input_ptr;
   char *		ou  = output_ptr;
 
+  /* In this loop  we copy normal segments from  INPUT_PTR to OUTPUT_PTR
+   * in  chunks including  the leading  slash.  For  example, given  the
+   * input:
+   *
+   *    /path/to/file.ext
+   *
+   * we copy it to the output in the three chunks:
+   *
+   *    /path
+   *    /to
+   *    /file.ext
+   *
+   * only when a chunk is "/.." we do something different.
+   */
   while (in < end) {
+    /* Set NEXT to point  to the slash after this segment  or the end of
+     * input.  For example:
+     *
+     *    /path/to/file.ext
+     *    ^    ^
+     *    in   next
+     *
+     * another example:
+     *
+     *    path/to/file.ext
+     *    ^   ^
+     *    in  next
+     */
     char const *	next = in;
     if ('/' == *next) {
       ++next;
@@ -198,6 +225,7 @@ ccptn_normal_pass_remove_single_dot_segments (char * output_ptr, char const * co
       fprintf(stderr, "\n");
     }
 
+    /* Now NEXT points to a slash octet or to the end of input.  */
     if ((1 == (next - in)) && ('.' == in[1])) {
       /* The next chunk is a single-dot: ".".  Skip it. */
       in = next;
