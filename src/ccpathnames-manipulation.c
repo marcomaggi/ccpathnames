@@ -173,50 +173,92 @@ ccptn_normal_pass_remove_single_dot_segments (char * output_ptr, char const * co
    Return  the  number of  octets  stored  in  the array  referenced  by
    "output_ptr", terminating zero excluded. */
 {
-  if (IS_SINGLE_DOT(input_ptr, input_len)) {
-    /* The full pathname is a single-dot component. */
-    output_ptr[0] = '.';
-    output_ptr[1] = '\0';
-    return 1;
-  } else {
-    char const * const	end = input_ptr + input_len;
-    char const *	in  = input_ptr;
-    char *		ou  = output_ptr;
+#undef VERBOSE
+#define VERBOSE		0
+  char const * const	end = input_ptr + input_len;
+  char const *		in  = input_ptr;
+  char *		ou  = output_ptr;
 
-    while (in < end) {
-      if ('/' == *in) {
-	/* Copy the slash to the output. */
+  while (in < end) {
+    char const *	next = in;
+    if ('/' == *next) {
+      ++next;
+    }
+    while (('/' != *next) && (next < end)) {
+      ++next;
+    }
+
+    if (VERBOSE) {
+      fprintf(stderr, "%s: in=", __func__);
+      fwrite(in, 1, (end - in), stderr);
+      fprintf(stderr, ", output_ptr=");
+      fwrite(output_ptr, 1, (ou - output_ptr), stderr);
+      fprintf(stderr, ", next=");
+      fwrite(in, 1, (next - in), stderr);
+      fprintf(stderr, "\n");
+    }
+
+    if ((1 == (next - in)) && ('.' == in[1])) {
+      /* The next chunk is a single-dot: ".".  Skip it. */
+      in = next;
+    } else if ((2 == (next - in)) && ('/' == in[0]) && ('.' == in[1])) {
+      /* The next chunk is a slash+single-dot: "/.".  Skip it. */
+      in = next;
+    } else {
+      /* No, the next segment is  *not* a slash+single-dot: copy it to
+	 the output. */
+      while (in < next) {
 	*ou++ = *in++;
-      } else {
-	size_t	in_len = ccptn_segment_size_of_next (in, end - in);
-
-	ccptn_segment_t	S = ccptn_segment_next(in, end - in);
-
-	if (IS_SINGLE_DOT(in, in_len)) {
-	  /* Skip this segment.  If after the dot there is a slash: skip
-	     the slash too. */
-	  ++in;
-	  if ((in < end) && ('/' == *in)) {
-	    ++in;
-	  }
-	} else {
-	  /* Copy the segment to the output. */
-	  for (size_t i=0; i<S.len; ++i) {
-	    *ou++ = *in++;
-	  }
-	}
       }
     }
-    /* Here it may be that the  last octet represents a slash: remove it
-       if it is not the first octet in the pathname. */
-    if (((output_ptr + 1) < ou) && ('/' == *(ou-1))) {
-      --ou;
-    }
-
-    *ou = '\0';
-    if (0) { fprintf(stderr, "%s: out=%s\n", __func__, output_ptr); }
-    return (ou - output_ptr);
   }
+
+  /* Have we removed all the segments in the pathname? */
+  if (output_ptr == ou) {
+    /* Yes,  we have.   If the  input pathname  is absolute:  the output
+       pathname is a  single slash.  If the input  pathname is relative:
+       the output pathname is a single dot. */
+    *ou++ = ('/' == *input_ptr)? '/' : '.';
+  } else {
+    /* Let's  see  some  examples of  relative  pathnames  normalisation
+     * resulting from the code until now:
+     *
+     *    "./path"		=> "./path"
+     *    "./path/file.ext"	=> "./path/file.ext"
+     *
+     * We want  to remove  the useless  leading dots,  fine; but  if the
+     * input pathname has a directory  part: we want the output pathname
+     * to  have  a  directory  part  too;  we  do  *not*  want  to  turn
+     * "./file.ext" into "file.ext".
+     *
+     * So here we check if there is  a leading dot and we remove it only
+     * if there is another directory part after it.
+     */
+    if ((2 < (ou - output_ptr)) && ('.' == output_ptr[0]) && ('/' == output_ptr[1])) {
+      /* There is a leading dot followed by a slash. */
+      char const *	slash_ptr;
+      for (slash_ptr = output_ptr + 2; slash_ptr < ou; ++slash_ptr) {
+	if ('/' == *slash_ptr) {
+	  break;
+	}
+      }
+      if (slash_ptr < ou) {
+	/* There  is  another  directory  part after  the  leading  dot.
+	   Remove the leading dot. */
+	memmove(output_ptr, output_ptr + 2, (ou - output_ptr));
+	ou -= 2;
+      }
+    }
+  }
+
+  *ou = '\0';
+
+  if (VERBOSE) {
+    fprintf(stderr, "%s: final in=", __func__);
+    fwrite(in, 1, (end - in), stderr);
+    fprintf(stderr, ", output_ptr=%s, len=%lu\n", output_ptr, strlen(output_ptr));
+  }
+  return (ou - output_ptr);
 }
 
 size_t
@@ -234,17 +276,39 @@ ccptn_normal_pass_remove_double_dot_segments (cce_destination_t L, char * output
    Return  the  number of  octets  stored  in  the array  referenced  by
    "output_ptr", terminating zero excluded. */
 {
+#undef VERBOSE
+#define VERBOSE		0
   char const * const	end = input_ptr + input_len;
   char const *		in  = input_ptr;
   char *		ou  = output_ptr;
 
+  /* In this loop  we copy normal segments from  INPUT_PTR to OUTPUT_PTR
+   * in  chunks including  the leading  slash.  For  example, given  the
+   * input:
+   *
+   *    /path/to/file.ext
+   *
+   * we copy it to the output in the three chunks:
+   *
+   *    /path
+   *    /to
+   *    /file.ext
+   *
+   * only when a chunk is "/.." we do something different.
+   */
   while (in < end) {
-    /* Set "next" to point to the slash after this segment or the end of
+    /* Set NEXT to point  to the slash after this segment  or the end of
      * input.  For example:
      *
      *    /path/to/file.ext
      *    ^    ^
      *    in   next
+     *
+     * another example:
+     *
+     *    path/to/file.ext
+     *    ^   ^
+     *    in  next
      */
     char const *	next = in;
     if ('/' == *next) {
@@ -254,7 +318,7 @@ ccptn_normal_pass_remove_double_dot_segments (cce_destination_t L, char * output
       ++next;
     }
 
-    if (0) {
+    if (VERBOSE) {
       fprintf(stderr, "%s: in=", __func__);
       fwrite(in, 1, (end - in), stderr);
       fprintf(stderr, ", output_ptr=");
@@ -314,14 +378,6 @@ ccptn_normal_pass_remove_double_dot_segments (cce_destination_t L, char * output
 
   }
 
-  if (0) {
-    fprintf(stderr, "%s: in=", __func__);
-    fwrite(in, 1, (end - in), stderr);
-    fprintf(stderr, ", output_ptr=");
-    fwrite(output_ptr, 1, (ou - output_ptr), stderr);
-    fprintf(stderr, "\n");
-  }
-
   /* Have we removed all the segments in the pathname? */
   if (output_ptr == ou) {
     /* Yes,  we have.   If the  input pathname  is absolute:  the output
@@ -330,7 +386,12 @@ ccptn_normal_pass_remove_double_dot_segments (cce_destination_t L, char * output
     *ou++ = ('/' == *input_ptr)? '/' : '.';
   }
   *ou = '\0';
-  if (0) { fprintf(stderr, "%s: output_ptr=%s, len=%lu\n", __func__, output_ptr, strlen(output_ptr)); }
+
+  if (VERBOSE) {
+    fprintf(stderr, "%s: final in=", __func__);
+    fwrite(in, 1, (end - in), stderr);
+    fprintf(stderr, ", output_ptr=%s, len=%lu\n", output_ptr, strlen(output_ptr));
+  }
   return (ou - output_ptr);
 }
 

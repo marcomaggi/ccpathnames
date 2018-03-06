@@ -349,19 +349,22 @@ NEW_NORMALISE_TEST(test_3_2_7,  "/.",				"/",			false)
 NEW_NORMALISE_TEST(test_3_2_8,  "/path/..",			"/",			false)
 NEW_NORMALISE_TEST(test_3_2_9,  "/path/to/../..",		"/",			false)
 NEW_NORMALISE_TEST(test_3_2_10, "/path/to/../file.ext",		"/path/file.ext",	false)
+NEW_NORMALISE_TEST(test_3_2_11,  "/./././.",			"/",			false)
 
 /* Relative pathnames. */
 NEW_NORMALISE_TEST(test_3_3_1,  "a/.",				"a",			false)
 NEW_NORMALISE_TEST(test_3_3_2,  ".",				".",			false)
 NEW_NORMALISE_TEST(test_3_3_3,  "./",				".",			false)
-NEW_NORMALISE_TEST(test_3_3_4,  "./path",			"path",			false)
-NEW_NORMALISE_TEST(test_3_3_5,  "..",				"..",			false)
-NEW_NORMALISE_TEST(test_3_3_6,  "../path",			"../path",		false)
-NEW_NORMALISE_TEST(test_3_3_7,  "path/..",			".",			false)
-NEW_NORMALISE_TEST(test_3_3_8,  "path/to/../..",		".",			false)
-NEW_NORMALISE_TEST(test_3_3_9,  "path/to/../file.ext",		"path/file.ext",	false)
-NEW_NORMALISE_TEST(test_3_3_10, "path/to/../../../file.ext",	"../file.ext",		false)
-NEW_NORMALISE_TEST(test_3_3_11, "path/../../../file.ext",	"../../file.ext",	false)
+NEW_NORMALISE_TEST(test_3_3_4,  "./path",			"./path",		false)
+NEW_NORMALISE_TEST(test_3_3_5,  "./path/file.ext",		"path/file.ext",	false)
+NEW_NORMALISE_TEST(test_3_3_6,  "..",				"..",			false)
+NEW_NORMALISE_TEST(test_3_3_7,  "../path",			"../path",		false)
+NEW_NORMALISE_TEST(test_3_3_8,  "path/..",			".",			false)
+NEW_NORMALISE_TEST(test_3_3_9,  "path/to/../..",		".",			false)
+NEW_NORMALISE_TEST(test_3_3_10,  "path/to/../file.ext",		"path/file.ext",	false)
+NEW_NORMALISE_TEST(test_3_3_11, "path/to/../../../file.ext",	"../file.ext",		false)
+NEW_NORMALISE_TEST(test_3_3_12, "path/../../../file.ext",	"../../file.ext",	false)
+NEW_NORMALISE_TEST(test_3_3_13,  "./././.",			".",			false)
 
 /* ------------------------------------------------------------------ */
 
@@ -457,6 +460,7 @@ main (int argc CCPTN_UNUSED, const char *const argv[])
       cctests_run(test_3_2_8);
       cctests_run(test_3_2_9);
       cctests_run(test_3_2_10);
+      cctests_run(test_3_2_11);
 
       cctests_run(test_3_3_1);
       cctests_run(test_3_3_2);
@@ -469,6 +473,8 @@ main (int argc CCPTN_UNUSED, const char *const argv[])
       cctests_run(test_3_3_9);
       cctests_run(test_3_3_10);
       cctests_run(test_3_3_11);
+      cctests_run(test_3_3_12);
+      cctests_run(test_3_3_13);
 
       cctests_run(test_3_4_1);
       cctests_run(test_3_4_2);
