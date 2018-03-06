@@ -161,7 +161,9 @@ ccptn_normal_pass_remove_useless_slashes (char * output_ptr, char const * const 
 size_t
 ccptn_normal_pass_remove_single_dot_segments (char * output_ptr, char const * const input_ptr, size_t const input_len)
 /* Copy  a  pathname  from  "input_ptr"  to  "output_ptr"  performing  a
-   normalisation pass in the process: removal of single-dot segments.
+   normalisation pass  in the  process: removal of  single-dot segments.
+   This     pass      is     meant      to     be      applied     after
+   "ccptn_normal_pass_remove_useless_slashes()".
 
    The array referenced  by "input_ptr" must represent  an ASCIIZ string
    with  at least  "input_len" octets,  terminating zero  excluded.  The
@@ -221,7 +223,8 @@ size_t
 ccptn_normal_pass_remove_double_dot_segments (cce_destination_t L, char * output_ptr, char const * const input_ptr, size_t const input_len)
 /* Copy  a  pathname  from  "input_ptr"  to  "output_ptr"  performing  a
    normalisation pass in the process: removal of double-dot segments and
-   the segments before them.
+   the segments  before them.  This  pass is  meant to be  applied after
+   "ccptn_normal_pass_remove_single_dot_segments()".
 
    The array referenced  by "input_ptr" must represent  an ASCIIZ string
    with  at least  "input_len" octets,  terminating zero  excluded.  The
@@ -261,34 +264,49 @@ ccptn_normal_pass_remove_double_dot_segments (cce_destination_t L, char * output
       fprintf(stderr, "\n");
     }
 
-    /* Now "next" points  to a slash octet  or to the end  of input.  Is
-       there a slash+double-dot between "in" and "next"? */
+    /* Now NEXT  points to  a slash octet  or to the  end of  input.  Is
+       there a slash+double-dot between IN and NEXT? */
     if ((3 == (next - in)) && ('/' == in[0]) && ('.' == in[1]) && ('.' == in[2])) {
-      /* Yes,  the next  segment is  a slash+double-dot,  "/..": in  the
-	 output, step back to the previous segment. */
-      if (output_ptr != ou) {
-	do {
-	  --ou;
-	} while ((ou > output_ptr) && ('/' != *ou));
-	in = next;
-      } else {
-	/* We are at  the beginning of the output: there  is no previous
-	   segment to remove.  If the  input pathname is absolute: raise
-	   an exception, there is no way to normalise the input.  If the
-	   input pathname is relative:  copy the double-dot (without the
-	   leading  slash)  to  the  output  and move  on  to  the  next
-	   segment. */
-	if ('/' != *input_ptr) {
-	  ++in;
-	  while (in < next) {
-	    *ou++ = *in++;
-	  }
+      /* Yes, the next segment is a slash+double-dot: "/..". */
+      if (output_ptr < ou) {
+	/* The  pointer OU  does *not*  reference the  beginning of  the
+	   output: there is a previous segment we can remove by stepping
+	   back the pointer OU. */
+	if ('.' == ou[-1]) {
+	  /* The previous segment is a double-dot one that was left in a
+	     previous   iteration:   do   not  remove   it,   copy   the
+	     slash+double-dot segment to the output. */
+	  in    = next;
+	  *ou++ = '/';
+	  *ou++ = '.';
+	  *ou++ = '.';
 	} else {
+	  /* The  previous segment  is  *not* a  double-dot one:  remove
+	     it. */
+	  do {
+	    --ou;
+	  } while ((ou > output_ptr) && ('/' != *ou));
+	  in = next;
+	}
+      } else {
+	/* The pointer OU references the  beginning of the output: there
+	   is no previous segment to remove. */
+	if ('/' != *input_ptr) {
+	  /* The  input  pathname  is   relative:  copy  the  double-dot
+	     (without the  leading slash) to  the output and move  on to
+	     the next segment.  */
+	  in    = next;
+	  *ou++ = '.';
+	  *ou++ = '.';
+	} else {
+	  /* The input  pathname is absolute: raise  an exception, there
+	     is no way to normalise the input. */
 	  cce_raise(L, ccptn_condition_new_invalid_pathname());
 	}
       }
     } else {
-      /* This is a normal segment: copy it to the output. */
+      /* No, the  next segment  is *not*  a double-dot:  copy it  to the
+	 output. */
       while (in < next) {
 	*ou++ = *in++;
       }

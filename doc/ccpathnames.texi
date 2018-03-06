@@ -753,7 +753,8 @@ excluded.
 
 @deftypefun size_t ccptn_normal_pass_remove_single_dot_segments (char * @var{output_ptr}, char const * @var{input_ptr}, size_t @var{input_len})
 Copy a pathname from @var{input_ptr} to @var{output_ptr} performing a normalisation pass in the
-process: removal of single--dot segments.
+process: removal of single--dot segments.  This pass is meant to be applied after
+@cfunc{ccptn_normal_pass_remove_useless_slashes}.
 
 The array referenced by @var{input_ptr} must represent an @asciiz{} string with at least
 @var{input_len} octets, terminating zero excluded.  The array referenced by @var{output_ptr} must be
@@ -766,7 +767,8 @@ excluded.
 
 @deftypefun size_t ccptn_normal_pass_remove_double_dot_segments (cce_destination_t @var{L}, char * @var{output_ptr}, char const * @var{input_ptr}, size_t @var{input_len})
 Copy a pathname from @var{input_ptr} to @var{output_ptr} performing a normalisation pass in the
-process: removal of double--dot segments and the segments before them.
+process: removal of double--dot segments and the segments before them.  This pass is meant to be
+applied after @cfunc{ccptn_normal_pass_remove_single_dot_segments}.
 
 The array referenced by @var{input_ptr} must represent an @asciiz{} string with at least
 @var{input_len} octets, terminating zero excluded.  The array referenced by @var{output_ptr} must be

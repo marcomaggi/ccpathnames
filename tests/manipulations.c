@@ -361,6 +361,7 @@ NEW_NORMALISE_TEST(test_3_3_7,  "path/..",			".",			false)
 NEW_NORMALISE_TEST(test_3_3_8,  "path/to/../..",		".",			false)
 NEW_NORMALISE_TEST(test_3_3_9,  "path/to/../file.ext",		"path/file.ext",	false)
 NEW_NORMALISE_TEST(test_3_3_10, "path/to/../../../file.ext",	"../file.ext",		false)
+NEW_NORMALISE_TEST(test_3_3_11, "path/../../../file.ext",	"../../file.ext",	false)
 
 /* ------------------------------------------------------------------ */
 
@@ -467,6 +468,7 @@ main (int argc CCPTN_UNUSED, const char *const argv[])
       cctests_run(test_3_3_8);
       cctests_run(test_3_3_9);
       cctests_run(test_3_3_10);
+      cctests_run(test_3_3_11);
 
       cctests_run(test_3_4_1);
       cctests_run(test_3_4_2);
