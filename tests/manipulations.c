@@ -51,7 +51,7 @@ test_1_1 (cce_destination_t upper_L)
     R = ccptn_new_concat(L, P1, P2);
     ccptn_handler_ptn_init(L, R_H, R);
 
-    if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(R)); }
+    if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(R)); }
 
     cctests_assert_asciiz(L, "/path/to/file.ext", ccptn_asciiz(R));
 
@@ -156,7 +156,7 @@ test_2_1 (cce_destination_t upper_L)
     ccptn_init_concat(L, R, P1, P2);
     ccptn_handler_ptn_init(L, R_H, R);
 
-    if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(R)); }
+    if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(R)); }
 
     cctests_assert_asciiz(L, "/path/to/file.ext", ccptn_asciiz(R));
 
@@ -338,38 +338,77 @@ test_3_1_2 (cce_destination_t upper_L)
     }									\
   }
 
-/* Absolute pathnames. */
-NEW_NORMALISE_TEST(test_3_2_1,  "/",				"/",			false)
-NEW_NORMALISE_TEST(test_3_2_2,  "/path/to/file.ext",		"/path/to/file.ext",	false)
-NEW_NORMALISE_TEST(test_3_2_3,  "/path///to////file.ext",	"/path/to/file.ext",	false)
-NEW_NORMALISE_TEST(test_3_2_4,  "/path/to/dir///",		"/path/to/dir",		false)
-NEW_NORMALISE_TEST(test_3_2_5,  "/path/./to/././file.ext",	"/path/to/file.ext",	false)
-NEW_NORMALISE_TEST(test_3_2_6,  "/path/to/dir/.",		"/path/to/dir",		false)
-NEW_NORMALISE_TEST(test_3_2_7,  "/.",				"/",			false)
-NEW_NORMALISE_TEST(test_3_2_8,  "/path/..",			"/",			false)
-NEW_NORMALISE_TEST(test_3_2_9,  "/path/to/../..",		"/",			false)
-NEW_NORMALISE_TEST(test_3_2_10, "/path/to/../file.ext",		"/path/file.ext",	false)
-NEW_NORMALISE_TEST(test_3_2_11,  "/./././.",			"/",			false)
+/* ------------------------------------------------------------------ */
 
-/* Relative pathnames. */
-NEW_NORMALISE_TEST(test_3_3_1,  "a/.",				"a",			false)
-NEW_NORMALISE_TEST(test_3_3_2,  ".",				".",			false)
-NEW_NORMALISE_TEST(test_3_3_3,  "./",				".",			false)
-NEW_NORMALISE_TEST(test_3_3_4,  "./path",			"./path",		false)
-NEW_NORMALISE_TEST(test_3_3_5,  "./path/file.ext",		"path/file.ext",	false)
-NEW_NORMALISE_TEST(test_3_3_6,  "..",				"..",			false)
-NEW_NORMALISE_TEST(test_3_3_7,  "../path",			"../path",		false)
-NEW_NORMALISE_TEST(test_3_3_8,  "path/..",			".",			false)
-NEW_NORMALISE_TEST(test_3_3_9,  "path/to/../..",		".",			false)
-NEW_NORMALISE_TEST(test_3_3_10,  "path/to/../file.ext",		"path/file.ext",	false)
-NEW_NORMALISE_TEST(test_3_3_11, "path/to/../../../file.ext",	"../file.ext",		false)
-NEW_NORMALISE_TEST(test_3_3_12, "path/../../../file.ext",	"../../file.ext",	false)
-NEW_NORMALISE_TEST(test_3_3_13,  "./././.",			".",			false)
+/* Absolute pathnames: already normalised pathnames. */
+NEW_NORMALISE_TEST(test_3_2_1_1,	"/",				"/",			false)
+NEW_NORMALISE_TEST(test_3_2_1_2,	"/file.ext",			"/file.ext",		false)
+NEW_NORMALISE_TEST(test_3_2_1_3,	"/path/to/file.ext",		"/path/to/file.ext",	false)
+
+/* Relative pathnames: already normalised pathnames. */
+NEW_NORMALISE_TEST(test_3_2_2_1,	".",				".",			false)
+NEW_NORMALISE_TEST(test_3_2_2_2,	"file.ext",			"file.ext",		false)
+NEW_NORMALISE_TEST(test_3_2_2_3,	"path/to/file.ext",		"path/to/file.ext",	false)
+
+/* ------------------------------------------------------------------ */
+
+/* Absolute pathnames: useless slashes removal. */
+NEW_NORMALISE_TEST(test_3_2_3_1,	"/path///to////file.ext",	"/path/to/file.ext",	false)
+NEW_NORMALISE_TEST(test_3_2_3_2,	"/path/to/dir///",		"/path/to/dir/",	false)
+
+/* Relative pathnames: useless slashes removal. */
+NEW_NORMALISE_TEST(test_3_2_4_1,	"path///to////file.ext",	"path/to/file.ext",	false)
+NEW_NORMALISE_TEST(test_3_2_4_2,	"path/to/dir///",		"path/to/dir/",		false)
+
+/* ------------------------------------------------------------------ */
+
+/* Absolute pathnames: single-dot removal. */
+NEW_NORMALISE_TEST(test_3_2_5_1,	"/path/./to/././file.ext",	"/path/to/file.ext",	false)
+NEW_NORMALISE_TEST(test_3_2_5_2,	"/path/to/dir/.",		"/path/to/dir/",	false)
+NEW_NORMALISE_TEST(test_3_2_5_3,	"/.",				"/",			false)
+NEW_NORMALISE_TEST(test_3_2_5_4,	"/./././.",			"/",			false)
+
+/* Relative pathnames: single-dot removal. */
+NEW_NORMALISE_TEST(test_3_2_6_1,	"./",				".",			false)
+NEW_NORMALISE_TEST(test_3_2_6_2,	"./.",				".",			false)
+NEW_NORMALISE_TEST(test_3_2_6_3,	"./././.",			".",			false)
+NEW_NORMALISE_TEST(test_3_2_6_4,	"path/",			"path/",		false)
+NEW_NORMALISE_TEST(test_3_2_6_5,	"path/.",			"path/",		false)
+NEW_NORMALISE_TEST(test_3_2_6_6,	"./path",			"./path",		false)
+NEW_NORMALISE_TEST(test_3_2_6_7,	"./path/file.ext",		"path/file.ext",	false)
+NEW_NORMALISE_TEST(test_3_2_6_8,	"./file.ext",			"./file.ext",		false)
+NEW_NORMALISE_TEST(test_3_2_6_9,	"./path/to/file.ext",		"path/to/file.ext",	false)
+NEW_NORMALISE_TEST(test_3_2_6_10,	"./path///to////file.ext",	"path/to/file.ext",	false)
+NEW_NORMALISE_TEST(test_3_2_6_11,	"./path/to/dir///",		"path/to/dir/",		false)
+
+/* ------------------------------------------------------------------ */
+
+/* Absolute pathnames: double-dot removal. */
+NEW_NORMALISE_TEST(test_3_2_7_1,	"/path/..",			"/",			false)
+NEW_NORMALISE_TEST(test_3_2_7_2,	"/path/to/../..",		"/",			false)
+NEW_NORMALISE_TEST(test_3_2_7_3,	"/path/to/../file.ext",		"/path/file.ext",	false)
+
+/* Relative pathnames: double-dot removal. */
+NEW_NORMALISE_TEST(test_3_2_8_1,	"..",				"..",			false)
+NEW_NORMALISE_TEST(test_3_2_8_2,	"../",				"..",			false)
+NEW_NORMALISE_TEST(test_3_2_8_3,	"../path",			"../path",		false)
+NEW_NORMALISE_TEST(test_3_2_8_4,	"path/..",			".",			false)
+NEW_NORMALISE_TEST(test_3_2_8_5,	"./path/..",			".",			false)
+NEW_NORMALISE_TEST(test_3_2_8_6,	"path/to/../..",		".",			false)
+NEW_NORMALISE_TEST(test_3_2_8_7,	"./path/to/../..",		".",			false)
+NEW_NORMALISE_TEST(test_3_2_8_8,	"path/../file.ext",		"./file.ext",		false)
+NEW_NORMALISE_TEST(test_3_2_8_9,	"./path/../file.ext",		"./file.ext",		false)
+NEW_NORMALISE_TEST(test_3_2_8_10,	"path/to/../file.ext",		"path/file.ext",	false)
+NEW_NORMALISE_TEST(test_3_2_8_11,	"./path/to/../file.ext",	"path/file.ext",	false)
+NEW_NORMALISE_TEST(test_3_2_8_12,	"path/to/../../../file.ext",	"../file.ext",		false)
+NEW_NORMALISE_TEST(test_3_2_8_13,	"./path/to/../../../file.ext",	"../file.ext",		false)
+NEW_NORMALISE_TEST(test_3_2_8_14,	"path/../../../file.ext",	"../../file.ext",	false)
+NEW_NORMALISE_TEST(test_3_2_8_15,	"./path/../../../file.ext",	"../../file.ext",	false)
 
 /* ------------------------------------------------------------------ */
 
 void
-test_3_4_1 (cce_destination_t upper_L)
+test_3_2_9_1 (cce_destination_t upper_L)
 /* Test for "ccptn_new_normalise()".  Invalid pathname. */
 {
   cce_location_t	L[1];
@@ -397,7 +436,7 @@ test_3_4_1 (cce_destination_t upper_L)
 }
 
 void
-test_3_4_2 (cce_destination_t upper_L)
+test_3_2_9_2 (cce_destination_t upper_L)
 /* Test for "ccptn_new_normalise()".  Invalid pathname. */
 {
   cce_location_t	L[1];
@@ -450,34 +489,68 @@ main (int argc CCPTN_UNUSED, const char *const argv[])
       cctests_run(test_3_1_1);
       cctests_run(test_3_1_2);
 
-      cctests_run(test_3_2_1);
-      cctests_run(test_3_2_2);
-      cctests_run(test_3_2_3);
-      cctests_run(test_3_2_4);
-      cctests_run(test_3_2_5);
-      cctests_run(test_3_2_6);
-      cctests_run(test_3_2_7);
-      cctests_run(test_3_2_8);
-      cctests_run(test_3_2_9);
-      cctests_run(test_3_2_10);
-      cctests_run(test_3_2_11);
+      /* Absolute pathnames: already normalised pathnames. */
+      cctests_run(test_3_2_1_1);
+      cctests_run(test_3_2_1_2);
+      cctests_run(test_3_2_1_3);
 
-      cctests_run(test_3_3_1);
-      cctests_run(test_3_3_2);
-      cctests_run(test_3_3_3);
-      cctests_run(test_3_3_4);
-      cctests_run(test_3_3_5);
-      cctests_run(test_3_3_6);
-      cctests_run(test_3_3_7);
-      cctests_run(test_3_3_8);
-      cctests_run(test_3_3_9);
-      cctests_run(test_3_3_10);
-      cctests_run(test_3_3_11);
-      cctests_run(test_3_3_12);
-      cctests_run(test_3_3_13);
+      /* Relative pathnames: already normalised pathnames. */
+      cctests_run(test_3_2_2_1);
+      cctests_run(test_3_2_2_2);
+      cctests_run(test_3_2_2_3);
 
-      cctests_run(test_3_4_1);
-      cctests_run(test_3_4_2);
+      /* Absolute pathnames: useless slashes removal. */
+      cctests_run(test_3_2_3_1);
+      cctests_run(test_3_2_3_2);
+
+      /* Relative pathnames: useless slashes removal. */
+      cctests_run(test_3_2_4_1);
+      cctests_run(test_3_2_4_2);
+
+      /* Absolute pathnames: single-dot removal. */
+      cctests_run(test_3_2_5_1);
+      cctests_run(test_3_2_5_2);
+      cctests_run(test_3_2_5_3);
+      cctests_run(test_3_2_5_4);
+
+      /* Relative pathnames: single-dot removal. */
+      cctests_run(test_3_2_6_1);
+      cctests_run(test_3_2_6_2);
+      cctests_run(test_3_2_6_3);
+      cctests_run(test_3_2_6_4);
+      cctests_run(test_3_2_6_5);
+      cctests_run(test_3_2_6_6);
+      cctests_run(test_3_2_6_7);
+      cctests_run(test_3_2_6_8);
+      cctests_run(test_3_2_6_9);
+      cctests_run(test_3_2_6_10);
+      cctests_run(test_3_2_6_11);
+
+      /* Absolute pathnames: double-dot removal. */
+      cctests_run(test_3_2_7_1);
+      cctests_run(test_3_2_7_2);
+      cctests_run(test_3_2_7_3);
+
+      /* Relative pathnames: double-dot removal. */
+      cctests_run(test_3_2_8_1);
+      cctests_run(test_3_2_8_2);
+      cctests_run(test_3_2_8_3);
+      cctests_run(test_3_2_8_4);
+      cctests_run(test_3_2_8_5);
+      cctests_run(test_3_2_8_6);
+      cctests_run(test_3_2_8_7);
+      cctests_run(test_3_2_8_8);
+      cctests_run(test_3_2_8_9);
+      cctests_run(test_3_2_8_10);
+      cctests_run(test_3_2_8_11);
+      cctests_run(test_3_2_8_12);
+      cctests_run(test_3_2_8_13);
+      cctests_run(test_3_2_8_14);
+      cctests_run(test_3_2_8_15);
+
+      /* Invalid pathnames. */
+      cctests_run(test_3_2_9_1);
+      cctests_run(test_3_2_9_2);
     }
     cctests_end_group();
 

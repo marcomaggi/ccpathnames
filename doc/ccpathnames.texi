@@ -720,6 +720,25 @@ file.ext                @result{} file.ext
 /..                     @error{} invalid pathname
 @end example
 
+Some notes on the normalisation:
+
+@itemize
+@item
+We do not want to remove an ending slash octet, unless the whole pathname is @file{./} or
+@file{../}.  This is because a pathname like @file{a/b/} is meant to represent a directory, while
+@file{a/b} can represent a non--directory too.
+
+@item
+We do not want to fully remove a directory part.  This is because @file{./file.ext} may represent an
+executable file in the current directory, while @file{file.ext} may represent an executable pathname
+in any of the directories selected by the value in the environment variable @env{PATH}.  So we want
+the following normalisations:
+
+@example
+../path/file.ext        @result{} ./file.ext
+@end example
+@end itemize
+
 
 @deftypefun {ccptn_t *} ccptn_new_normalise (cce_destination_t @var{L}, ccptn_t const * @var{P})
 Build and return a new pathname instance representing the normalisation of @var{P}.  If an error
@@ -740,7 +759,7 @@ exit to to @var{L}.
 
 @deftypefun size_t ccptn_normal_pass_remove_useless_slashes (char * @var{output_ptr}, char const * @var{input_ptr}, size_t @var{input_len})
 Copy a pathname from @var{input_ptr} to @var{output_ptr} performing a normalisation pass in the
-process: removal of multiple slashes and terminating slashes.
+process: removal of multiple slashes.
 
 The array referenced by @var{input_ptr} must represent an @asciiz{} string with at least
 @var{input_len} octets, terminating zero excluded.  The array referenced by @var{output_ptr} must be
