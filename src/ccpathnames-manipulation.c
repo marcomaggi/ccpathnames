@@ -71,6 +71,12 @@
 #define IS_STANDALONE_SINGLE_DOT_SLASH(IN,END)	\
   (((END) == (2+(IN))) && ('.' == (IN)[0]) && ('/' == (IN)[1]))
 
+/* Given an ASCII string referenced by IN and terminating at pointer END
+   excluded: evaluate  to true if  the string has 2  octets representing
+   the pathname "/."; otherwise evaluate to false. */
+#define IS_STANDALONE_SLASH_SINGLE_DOT(IN,END)	\
+  (((END) == (2+(IN))) && ('/' == (IN)[0]) && ('.' == (IN)[1]))
+
 /* ------------------------------------------------------------------ */
 
 /* Given an ASCII string referenced by IN and terminating at pointer END
@@ -84,6 +90,12 @@
    the pathname "../"; otherwise evaluate to false. */
 #define IS_STANDALONE_DOUBLE_DOT_SLASH(IN,END)	\
   (((END) == (3+(IN))) && ('.' == (IN)[0]) && ('.' == (IN)[1]) && ('/' == (IN)[2]))
+
+/* Given an ASCII string referenced by IN and terminating at pointer END
+   excluded: evaluate  to true if  the string has 3  octets representing
+   the pathname "/.."; otherwise evaluate to false. */
+#define IS_STANDALONE_SLASH_DOUBLE_DOT(IN,END)	\
+  (((END) == (3+(IN))) && ('/' == (IN)[0]) && ('.' == (IN)[1]) && ('.' == (IN)[2]))
 
 /* ------------------------------------------------------------------ */
 
@@ -489,8 +501,8 @@ ccptn_normal_pass_remove_double_dot_segments (cce_destination_t L, char * output
     in    += 2;
     *ou++ = '.';
     *ou++ = '.';
-    if (end == in) {
-      /* The input is a standalone double-dot "..". */
+    if ((end == in) || IS_STANDALONE_SLASH(in, end)) {
+      /* The input is a standalone double-dot ".." or "../". */
       goto done;
     }
   } else if (INPUT_IS_RELATIVE(input_ptr)) {
@@ -583,7 +595,16 @@ ccptn_normal_pass_remove_double_dot_segments (cce_destination_t L, char * output
 	  in = next;
 	  ou = (char *)prev;
 	  /* We  must handle  the case  of  first segment  removal in  a
-	   * relative pathname.  We want the following normalisations:
+	   * pathname.
+	   *
+	   * When  the  pathname  is  absolute, we  want  the  following
+	   * normalisations:
+	   *
+	   *	"/path/../to/file.ext"	=> "/to/file.ext"
+	   *	"/path/.."		=> "/"
+	   *
+	   * When  the  pathname  is  relative, we  want  the  following
+	   * normalisations:
 	   *
 	   *	"path/../to/file.ext"	=> "to/file.ext"
 	   *	"path/../file.ext"	=> "./file.ext"
@@ -596,42 +617,62 @@ ccptn_normal_pass_remove_double_dot_segments (cce_destination_t L, char * output
 	   *
 	   * where the output has become  an absolute pathname or has no
 	   * directory part anymore.
-	   *
-	   * We  do it  by recognising  if: after  removing the  leading
-	   * "path" in the output, we are at the beginning of the input.
 	   */
-	  if (INPUT_IS_RELATIVE(input_ptr) && (output_ptr == ou)) {
-	    if (end == in) {
-	      /* We are  at the end  of the relative input  pathname: we
-	       * have removed  the whole  output pathname.  This  is the
-	       * case of:
-	       *
-	       *	"path/.."	=> "."
-	       */
-	      *ou++ = '.';
-	    } else if (IS_STANDALONE_SLASH(in, end)) {
-	      /* The next input segment is an ending slash.  This is the
-	       * case of:
-	       *
-	       *	"path/../"	=> "."
-	       */
-	      ++in;
-	      *ou++ = '.';
-	    } else {
-	      /* Skip the slash in the input:  we do not want to copy it
-		 into the output. */
-	      ++in;
-	      /* If the next  segment is an ending  double-dot: live the
-		 output alone. */
-	      if ((2 == (end - in)) && ('.' == in[0]) && ('.' == in[1])) {
-	      }
-	      /* If the next  segment has a slash in it:  it does have a
-		 directory  part,   so  we   leave  the   output  alone.
-		 Otherwise it  has no directory  part then: we  insert a
-		 dot+slash in the output. */
-	      else if (end == find_next_slash_or_end(in, end)) {
-		*ou++ = '.';
+	  if (output_ptr == ou) {
+	    if (INPUT_IS_ABSOLUTE(input_ptr)) {
+	      if (end == in) {
+		/* The  pathname is  absolute  and we  have removed  the
+		 * whole input.  This is the case of:
+		 *
+		 *	"/path/.."	=> "/"
+		 */
 		*ou++ = '/';
+	      }
+	    } else {
+	      if (end == in) {
+		/* We are at the end  of the relative input pathname and
+		 * we have  removed the whole output  pathname.  This is
+		 * the case of:
+		 *
+		 *	"path/.."	=> "."
+		 */
+		*ou++ = '.';
+	      } else if (IS_STANDALONE_SLASH(in, end)) {
+		/* In the  relative input pathname: the  next segment is
+		 * an ending slash and we  have removed the whole output
+		 * pathname.  This is the case of:
+		 *
+		 *	"path/../"	=> "."
+		 */
+		++in;
+		*ou++ = '.';
+	      } else if (IS_STANDALONE_SLASH_SINGLE_DOT(in, end)) {
+		/* In the  relative input pathname: the  next segment is
+		 * an ending "/."  and we  have removed the whole output
+		 * pathname.  This is the case of:
+		 *
+		 *	"path/../."	=> "."
+		 */
+		in    = end;
+		*ou++ = '.';
+	      } else if (IS_STANDALONE_SLASH_DOUBLE_DOT(in, end)) {
+		/* In the  relative input pathname: the  next segment is
+		 * an ending "/.."  and we have removed the whole output
+		 * pathname.  This is the case of:
+		 *
+		 *	"path/../.."	=> ".."
+		 */
+		in    = end;
+		*ou++ = '.';
+		*ou++ = '.';
+	      } else if (end == find_next_slash_or_end(1+in, end)) {
+		/* The rest of the relative input pathname has no slash in
+		 * it and we have removed the whole output pathname.  This
+		 * is the case of:
+		 *
+		 *	"path/../file.ext"	=> "./file.ext"
+		 */
+		*ou++ = '.';
 	      }
 	    }
 	  }
@@ -661,19 +702,6 @@ ccptn_normal_pass_remove_double_dot_segments (cce_destination_t L, char * output
 	}
       }
     }
-  }
-
-  /* Have we removed all the segments in the pathname? */
-  if (output_ptr == ou) {
-    /* Yes,  we have.   If the  input pathname  is absolute:  the output
-       pathname is a  single slash.  If the input  pathname is relative:
-       the output pathname is a single dot. */
-    *ou++ = ('/' == *input_ptr)? '/' : '.';
-  }
-  /* If  the whole  pathname  is a  double-dot+slash  "../", remove  the
-     ending slash. */
-  else if ((3 == (ou - output_ptr)) && ('/' == ou[-1]) && ('.' == ou[-2]) && ('.' == ou[-3])) {
-    --ou;
   }
 
 done:
