@@ -41,20 +41,21 @@
 #  include <unistd.h>
 #endif
 
-#define INLINE	__attribute__((__always_inline__,__nonnull__(1))) static inline
+#define INLINE1	__attribute__((__always_inline__,__nonnull__(1))) static inline
+#define INLINE2	__attribute__((__always_inline__,__nonnull__(1,2))) static inline
 
 
 /** --------------------------------------------------------------------
  ** Helpers.
  ** ----------------------------------------------------------------- */
 
-INLINE bool
+INLINE1 bool
 INPUT_IS_RELATIVE (char const * const input_ptr)
 {
   return ('/' != *input_ptr);
 }
 
-INLINE bool
+INLINE1 bool
 INPUT_IS_ABSOLUTE (char const * const input_ptr)
 {
   return ('/' == *input_ptr);
@@ -62,7 +63,7 @@ INPUT_IS_ABSOLUTE (char const * const input_ptr)
 
 /* ------------------------------------------------------------------ */
 
-INLINE bool
+INLINE2 bool
 IS_STANDALONE_SLASH (char const * const in, char const * const end)
 /* Given an ASCII string referenced by IN and terminating at pointer END
    excluded: evaluate to true if the string has 1 octet representing the
@@ -73,7 +74,7 @@ IS_STANDALONE_SLASH (char const * const in, char const * const end)
 
 /* ------------------------------------------------------------------ */
 
-INLINE bool
+INLINE2 bool
 IS_STANDALONE_SINGLE_DOT (char const * const in, char const * const end)
 /* Given an ASCII string referenced by IN and terminating at pointer END
    excluded: evaluate to true if the string has 1 octet representing the
@@ -82,7 +83,7 @@ IS_STANDALONE_SINGLE_DOT (char const * const in, char const * const end)
   return ((end == (1+in)) && ('.' == in[0]));
 }
 
-INLINE bool
+INLINE2 bool
 IS_STANDALONE_SINGLE_DOT_SLASH (char const * const in, char const * const end)
 /* Given an ASCII string referenced by IN and terminating at pointer END
    excluded: evaluate  to true if  the string has 2  octets representing
@@ -91,7 +92,7 @@ IS_STANDALONE_SINGLE_DOT_SLASH (char const * const in, char const * const end)
   return ((end == (2+in)) && ('.' == in[0]) && ('/' == in[1]));
 }
 
-INLINE bool
+INLINE2 bool
 IS_STANDALONE_SLASH_SINGLE_DOT (char const * const in, char const * const end)
 /* Given an ASCII string referenced by IN and terminating at pointer END
    excluded: evaluate  to true if  the string has 2  octets representing
@@ -102,7 +103,7 @@ IS_STANDALONE_SLASH_SINGLE_DOT (char const * const in, char const * const end)
 
 /* ------------------------------------------------------------------ */
 
-INLINE bool
+INLINE2 bool
 IS_STANDALONE_DOUBLE_DOT (char const * const in, char const * const end)
 /* Given an ASCII string referenced by IN and terminating at pointer END
    excluded: evaluate  to true if  the string has 2  octets representing
@@ -111,7 +112,7 @@ IS_STANDALONE_DOUBLE_DOT (char const * const in, char const * const end)
   return ((end == (2+in)) && ('.' == in[0]) && ('.' == in[1]));
 }
 
-INLINE bool
+INLINE2 bool
 IS_STANDALONE_DOUBLE_DOT_SLASH (char const * const in, char const * const end)
 /* Given an ASCII string referenced by IN and terminating at pointer END
    excluded: evaluate  to true if  the string has 3  octets representing
@@ -120,7 +121,7 @@ IS_STANDALONE_DOUBLE_DOT_SLASH (char const * const in, char const * const end)
   return ((end == (3+in)) && ('.' == in[0]) && ('.' == in[1]) && ('/' == in[2]));
 }
 
-INLINE bool
+INLINE2 bool
 IS_STANDALONE_SLASH_DOUBLE_DOT (char const * const in, char const * const end)
 /* Given an ASCII string referenced by IN and terminating at pointer END
    excluded: evaluate  to true if  the string has 3  octets representing
@@ -131,7 +132,7 @@ IS_STANDALONE_SLASH_DOUBLE_DOT (char const * const in, char const * const end)
 
 /* ------------------------------------------------------------------ */
 
-INLINE bool
+INLINE2 bool
 BEGINS_WITH_SINGLE_DOT_SLASH (char const * const in, char const * const end)
 /* Given an ASCII string referenced by IN and terminating at pointer END
    excluded: evaluate  to true  if the string  begins with  the pathname
@@ -140,7 +141,7 @@ BEGINS_WITH_SINGLE_DOT_SLASH (char const * const in, char const * const end)
   return ((end > (1+in)) && ('.' == in[0]) && ('/' == in[1]));
 }
 
-INLINE bool
+INLINE2 bool
 BEGINS_WITH_SLASH_SINGLE_DOT (char const * const in, char const * const end)
 /* Given an ASCII string referenced by IN and terminating at pointer END
    excluded: evaluate  to true  if the string  begins with  the pathname
@@ -151,7 +152,7 @@ BEGINS_WITH_SLASH_SINGLE_DOT (char const * const in, char const * const end)
 
 /* ------------------------------------------------------------------ */
 
-INLINE bool
+INLINE2 bool
 BEGINS_WITH_DOUBLE_DOT (char const * const in, char const * const end)
 /* Given an ASCII string referenced by IN and terminating at pointer END
    excluded: evaluate  to true  if the string  begins with  the pathname
@@ -160,7 +161,7 @@ BEGINS_WITH_DOUBLE_DOT (char const * const in, char const * const end)
   return ((end > (1+in)) && ('.' == in[0]) && ('.' == in[1]));
 }
 
-INLINE bool
+INLINE2 bool
 BEGINS_WITH_SLASH_DOUBLE_DOT (char const * const in, char const * const end)
 /* Given an ASCII string referenced by IN and terminating at pointer END
    excluded: evaluate  to true  if the string  begins with  the pathname
