@@ -599,6 +599,12 @@ Return @ctrue{} if @var{P} is the result of a call to the system function @cfunc
 otherwise return @cfalse{}.
 @end deftypefun
 
+
+@deftypefun bool ccptn_is_normalised (ccptn_t const * @var{P})
+Return @ctrue{} if @var{P} is the result of a call to one of the normalisation functions; otherwise
+return @cfalse{}.
+@end deftypefun
+
 @c page
 @node accessors
 @chapter Pathname accessors

@@ -261,7 +261,10 @@ test_3_1_1 (cce_destination_t upper_L)
     ccptn_handler_ptn_init(L, R_H, R);
 
     cctests_assert(L, false == ccptn_is_realpath(P));
+    cctests_assert(L, false == ccptn_is_normalised(P));
+
     cctests_assert(L, true  == ccptn_is_realpath(R));
+    cctests_assert(L, true  == ccptn_is_normalised(R));
 
     cce_run_cleanup_handlers(L);
   }
@@ -289,7 +292,10 @@ test_3_1_2 (cce_destination_t upper_L)
     ccptn_handler_ptn_init(L, R_H, R);
 
     cctests_assert(L, false == ccptn_is_realpath(P));
+    cctests_assert(L, false == ccptn_is_normalised(P));
+
     cctests_assert(L, true  == ccptn_is_realpath(R));
+    cctests_assert(L, true  == ccptn_is_normalised(R));
 
     cce_run_cleanup_handlers(L);
   }
@@ -333,6 +339,7 @@ test_3_1_2 (cce_destination_t upper_L)
       }									\
 									\
       cctests_assert_asciiz(L, EXPECTED_PATHNAME, ccptn_asciiz(R));	\
+      cctests_assert(L, true == ccptn_is_normalised(R));		\
 									\
       cce_run_cleanup_handlers(L);					\
     }									\
