@@ -860,8 +860,6 @@ ccptn_new_concat (cce_destination_t L, ccptn_t const * prefix, ccptn_t const * s
       ccptn_t *		R;
       R              = ccptn_new_dup_asciiz(L, R_pathname);
       R->absolute    = prefix_is_absolute;
-      R->normalised  = (ccptn_is_normalised(prefix) && ccptn_is_normalised(suffix))? 1 : 0;
-      R->realpath    = 0;
       return R;
     }
   }
@@ -919,8 +917,6 @@ ccptn_init_concat (cce_destination_t L, ccptn_t * R, ccptn_t const * prefix, ccp
     {
       ccptn_init_dup_asciiz(L, R, R_pathname);
       R->absolute    = prefix_is_absolute;
-      R->normalised  = (ccptn_is_normalised(prefix) && ccptn_is_normalised(suffix))? 1 : 0;
-      R->realpath    = 0;
       return R;
     }
   }
