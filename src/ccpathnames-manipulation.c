@@ -762,8 +762,9 @@ done:
  ** Normalisation: pathname normalisation.
  ** ----------------------------------------------------------------- */
 
-ccptn_t *
-ccptn_new_normalise (cce_destination_t L, ccptn_t const * const P)
+__attribute__((__nonnull__(1,3),__returns_nonnull__))
+static ccptn_t *
+ptn_normalise (cce_destination_t L, ccptn_t * const R, ccptn_t const * const P)
 {
   char		one[1 + ccptn_len(P)];
   size_t	one_len;
@@ -773,33 +774,28 @@ ccptn_new_normalise (cce_destination_t L, ccptn_t const * const P)
     size_t	two_len;
     two_len = ccptn_normal_pass_remove_single_dot_segments(two, one, one_len);
     one_len = ccptn_normal_pass_remove_double_dot_segments(L, one, two, two_len);
-    if (0) { fprintf(stderr, "%s: out=%s\n", __func__, one); }
-    {
-      ccptn_t *	R = ccptn_new_dup_asciiz(L, one);
+    if (R) {
+      ccptn_init_dup_asciiz(L, R, one);
       R->normalised = 1;
       return R;
+    } else {
+      ccptn_t *	Q = ccptn_new_dup_asciiz(L, one);
+      Q->normalised = 1;
+      return Q;
     }
   }
 }
 
 ccptn_t *
-ccptn_init_normalise (cce_destination_t L, ccptn_t * R, ccptn_t const * const P)
+ccptn_new_normalise (cce_destination_t L, ccptn_t const * const P)
 {
-  char		one[1 + ccptn_len(P)];
-  size_t	one_len;
-  one_len = ccptn_normal_pass_remove_useless_slashes(one, ccptn_asciiz(P), ccptn_len(P));
-  {
-    char	two[1 + one_len];
-    size_t	two_len;
-    two_len = ccptn_normal_pass_remove_single_dot_segments(two, one, one_len);
-    one_len = ccptn_normal_pass_remove_double_dot_segments(L, one, two, two_len);
-    if (0) { fprintf(stderr, "%s: out=%s\n", __func__, one); }
-    {
-      ccptn_init_dup_asciiz(L, R, one);
-      R->normalised = 1;
-      return R;
-    }
-  }
+  return ptn_normalise(L, NULL, P);
+}
+
+ccptn_t *
+ccptn_init_normalise (cce_destination_t L, ccptn_t * const R, ccptn_t const * const P)
+{
+  return ptn_normalise(L, R, P);
 }
 
 
