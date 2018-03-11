@@ -809,7 +809,7 @@ ccptn_init_normalise (cce_destination_t L, ccptn_t * R, ccptn_t const * const P)
 
 __attribute__((__nonnull__(1,3,4),__returns_nonnull__))
 static ccptn_t *
-ptn_concat (cce_destination_t L, ccptn_t * R, ccptn_t const * prefix, ccptn_t const * suffix)
+ptn_concat (cce_destination_t L, ccptn_t * const R, ccptn_t const * const prefix, ccptn_t const * const suffix)
 {
   bool		prefix_is_absolute = ccptn_is_absolute(prefix);
   bool		suffix_is_absolute = ccptn_is_absolute(suffix);
@@ -875,13 +875,13 @@ ptn_concat (cce_destination_t L, ccptn_t * R, ccptn_t const * prefix, ccptn_t co
 }
 
 ccptn_t *
-ccptn_new_concat (cce_destination_t L, ccptn_t const * prefix, ccptn_t const * suffix)
+ccptn_new_concat (cce_destination_t L, ccptn_t const * const prefix, ccptn_t const * const suffix)
 {
   return ptn_concat(L, NULL, prefix, suffix);
 }
 
 ccptn_t *
-ccptn_init_concat (cce_destination_t L, ccptn_t * R, ccptn_t const * prefix, ccptn_t const * suffix)
+ccptn_init_concat (cce_destination_t L, ccptn_t * R, ccptn_t const * const prefix, ccptn_t const * const suffix)
 {
   return ptn_concat(L, R, prefix, suffix);
 }
