@@ -223,8 +223,9 @@ skip_repeated_slashes_or_end (char const * in, char const * const end)
  ** ----------------------------------------------------------------- */
 
 #ifdef HAVE_REALPATH
-ccptn_t *
-ccptn_new_realpath (cce_destination_t upper_L, ccptn_t const * const P)
+__attribute__((__nonnull__(1,3),__returns_nonnull__))
+static ccptn_t *
+ptn_realpath (cce_destination_t upper_L, ccptn_t * volatile R, ccptn_t const * const P)
 {
   cce_location_t	L[1];
   cce_cleanup_handler_t	rv_H[1];
@@ -245,41 +246,11 @@ ccptn_new_realpath (cce_destination_t upper_L, ccptn_t const * const P)
 	if (CCPTN_PATH_MAX < len) {
 	  cce_raise(L, ccptn_condition_new_exceeded_length());
 	} else {
-	  ccptn_t *	Q = ccptn_new_dup_asciiz(L, rv);
-
-	  Q->realpath	= 1;
-	  Q->normalised	= 1;
-	  cce_run_cleanup_handlers(L);
-	  return Q;
-	}
-      }
-    }
-  }
-}
-
-ccptn_t *
-ccptn_init_realpath (cce_destination_t upper_L, ccptn_t * R, ccptn_t const * const P)
-{
-  cce_location_t	L[1];
-  cce_cleanup_handler_t	rv_H[1];
-
-  if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
-  } else {
-    char const *	rv;
-
-    errno = 0;
-    rv = realpath(ccptn_asciiz(P), NULL);
-    if (NULL == rv) {
-      cce_raise(L, cce_condition_new_errno_clear());
-    } else {
-      cce_handler_malloc_init(L, rv_H, (void *)rv);
-      {
-	size_t	len = strlen(rv);
-	if (CCPTN_PATH_MAX < len) {
-	  cce_raise(L, ccptn_condition_new_exceeded_length());
-	} else {
-	  ccptn_init_dup_asciiz(L, R, rv);
+	  if (R) {
+	    ccptn_init_dup_asciiz(L, R, rv);
+	  } else {
+	    R = ccptn_new_dup_asciiz(L, rv);
+	  }
 	  R->realpath	= 1;
 	  R->normalised	= 1;
 	  cce_run_cleanup_handlers(L);
@@ -288,6 +259,18 @@ ccptn_init_realpath (cce_destination_t upper_L, ccptn_t * R, ccptn_t const * con
       }
     }
   }
+}
+
+ccptn_t *
+ccptn_new_realpath (cce_destination_t L, ccptn_t const * const P)
+{
+  return ptn_realpath(L, NULL, P);
+}
+
+ccptn_t *
+ccptn_init_realpath (cce_destination_t L, ccptn_t * R, ccptn_t const * const P)
+{
+  return ptn_realpath(L, R, P);
 }
 #endif
 
