@@ -56,7 +56,7 @@ implementing Unix pathnames manipulation functions.
 This package supports @posix{} platforms.  This package depends on the package CCExceptions, at
 least version @value{CCEXCEPTIONS_VERSION}.
 
-The package is distributed under the terms of the @gnu{} Lesser General Public License (@lgpl{}).
+This package is distributed under the terms of the @gnu{} Lesser General Public License (@lgpl{}).
 
 The latest release can be downloaded from:
 
@@ -162,8 +162,9 @@ Indexes
 This document describes version @value{VERSION} of @value{PACKAGE}, a C11 language library
 implementing Unix pathnames manipulation functions.
 
-This package supports @posix{} platforms.  This package depends on the package CCExceptions, at
-least version @value{CCEXCEPTIONS_VERSION}.
+This package supports @posix{} platforms.  This package depends on the package
+@url{https://github.com/marcomaggi/ccexceptions/, CCExceptions}, at least version
+@value{CCEXCEPTIONS_VERSION}.
 
 @value{PACKAGE} installs the single header file @file{ccpathnames.h}.  All the function names in the
 @api{} are prefixed with @code{ccptn_}; all the preprocessor symbol names are prefixed with
