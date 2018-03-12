@@ -85,6 +85,13 @@ MM_LIBTOOL_LIBRARY_VERSIONS([ccpathnames],1,0,0)
 dnl page
 #### external libraries
 
+dnl Testing presence of pkg-config
+AC_MSG_CHECKING([availability of pkg-config m4 macros])
+AS_IF([test m4_ifdef([PKG_CHECK_MODULES],[yes],[no]) == yes],
+  [AC_MSG_RESULT([yes])],
+  [AC_MSG_RESULT([no])
+   AC_MSG_ERROR([pkg-config is required.  See pkg-config.freedesktop.org])])
+
 PKG_CHECK_MODULES([CCEXCEPTIONS],[ccexceptions >= 0.6.4])
 
 AC_CACHE_SAVE
