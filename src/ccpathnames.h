@@ -199,13 +199,13 @@ typedef struct ccptn_t			ccptn_t;
 typedef struct ccptn_segment_t		ccptn_segment_t;
 typedef struct ccptn_extension_t	ccptn_extension_t;
 
-typedef void ccptn_final_fun_t (ccptn_t * P);
+typedef void ccptn_delete_fun_t (ccptn_t * P);
 
 /* This struct represents a full pathname. */
 struct ccptn_t {
   /* Finalisation function  for this  struct instance.  It  releases all
      the dynamic resources associated to this instance. */
-  ccptn_final_fun_t *	final;
+  ccptn_delete_fun_t *	delete;
 
   struct {
     /* True if  this pathname is absolute;  false if it is  relative.  A
@@ -297,9 +297,9 @@ ccptn_decl ccptn_t * ccptn_new_dup_asciiz (cce_destination_t L, char const * pat
 
 __attribute__((__nonnull__(1),__always_inline__))
 static inline void
-ccptn_final (ccptn_t * P)
+ccptn_delete (ccptn_t * P)
 {
-  P->final(P);
+  P->delete(P);
 }
 
 /* ------------------------------------------------------------------ */

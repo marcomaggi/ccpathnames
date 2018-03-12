@@ -115,7 +115,6 @@ ccptn_segment_size_of_next (char const * const in, size_t const len)
    if no slash is found. */
 {
   char const *	ptr = in;
-  char const *	end = in + len;
 
   for (size_t i=0; i<len; ++i) {
     if ('/' == ptr[i]) {

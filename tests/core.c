@@ -41,7 +41,7 @@ test_1_1 (cce_destination_t upper_L)
 
     P = ccptn_new_nodup_asciiz(L, pathname);
     if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
-    ccptn_final(P);
+    ccptn_delete(P);
 
     cce_run_cleanup_handlers(L);
   }
@@ -61,7 +61,7 @@ test_1_2 (cce_destination_t upper_L)
 
     P = ccptn_new_dup_asciiz(L, pathname);
     if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
-    ccptn_final(P);
+    ccptn_delete(P);
 
     cce_run_cleanup_handlers(L);
   }
@@ -81,7 +81,7 @@ test_1_3 (cce_destination_t upper_L)
 
     ccptn_init_nodup_asciiz(L, P, pathname);
     if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
-    ccptn_final(P);
+    ccptn_delete(P);
 
     cce_run_cleanup_handlers(L);
   }
@@ -101,7 +101,7 @@ test_1_4 (cce_destination_t upper_L)
 
     ccptn_init_dup_asciiz(L, P, pathname);
     if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
-    ccptn_final(P);
+    ccptn_delete(P);
 
     cce_run_cleanup_handlers(L);
   }
@@ -149,7 +149,7 @@ test_2_1_1 (cce_destination_t upper_L)
 
     P = ccptn_new_nodup_asciiz(L, pathname);
     cctests_assert(L, true == ccptn_is_absolute(P));
-    ccptn_final(P);
+    ccptn_delete(P);
 
     cce_run_cleanup_handlers(L);
   }
@@ -169,7 +169,7 @@ test_2_1_2 (cce_destination_t upper_L)
 
     P = ccptn_new_nodup_asciiz(L, pathname);
     cctests_assert(L, false == ccptn_is_absolute(P));
-    ccptn_final(P);
+    ccptn_delete(P);
 
     cce_run_cleanup_handlers(L);
   }
@@ -191,7 +191,7 @@ test_2_2_1 (cce_destination_t upper_L)
 
     P = ccptn_new_nodup_asciiz(L, pathname);
     cctests_assert(L, false == ccptn_is_relative(P));
-    ccptn_final(P);
+    ccptn_delete(P);
 
     cce_run_cleanup_handlers(L);
   }
@@ -211,7 +211,7 @@ test_2_2_2 (cce_destination_t upper_L)
 
     P = ccptn_new_nodup_asciiz(L, pathname);
     cctests_assert(L, true == ccptn_is_relative(P));
-    ccptn_final(P);
+    ccptn_delete(P);
 
     cce_run_cleanup_handlers(L);
   }
@@ -233,7 +233,7 @@ test_2_3_1 (cce_destination_t upper_L)
 
     P = ccptn_new_nodup_asciiz(L, pathname);
     cctests_assert(L, false == ccptn_is_realpath(P));
-    ccptn_final(P);
+    ccptn_delete(P);
 
     cce_run_cleanup_handlers(L);
   }
@@ -257,8 +257,8 @@ test_2_3_2 (cce_destination_t upper_L)
     Q = ccptn_new_realpath(L, P);
     cctests_assert(L, false == ccptn_is_realpath(P));
     cctests_assert(L, true  == ccptn_is_realpath(Q));
-    ccptn_final(P);
-    ccptn_final(Q);
+    ccptn_delete(P);
+    ccptn_delete(Q);
 
     cce_run_cleanup_handlers(L);
   }

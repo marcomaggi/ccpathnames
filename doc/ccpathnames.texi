@@ -399,7 +399,7 @@ one octet.
 
 Instances of this type include a pointer function referencing a finalisation function appropriate
 for the internal data.  We can always release the resources associated to an instance of
-@objtype{ccptn_t} by applying to it the function @cfunc{ccptn_final}.
+@objtype{ccptn_t} by applying to it the function @cfunc{ccptn_delete}.
 @end deftp
 
 @c page
@@ -429,7 +429,7 @@ if (cce_location(L)) @{
 
   P = ccptn_new_nodup_asciiz(L, pathname);
   printf("%s\n", ccptn_asciiz(P));
-  ccptn_final(P);
+  ccptn_delete(P);
   cce_run_cleanup_handlers(L);
 @}
 @end example
@@ -458,7 +458,7 @@ if (cce_location(L)) @{
 
   P = ccptn_new_dup_asciiz(L, pathname);
   printf("%s\n", ccptn_asciiz(P));
-  ccptn_final(P);
+  ccptn_delete(P);
 
   cce_run_cleanup_handlers(L);
 @}
@@ -488,7 +488,7 @@ if (cce_location(L)) @{
 
   ccptn_init_nodup_asciiz(L, P, pathname);
   printf("%s\n", ccptn_asciiz(P));
-  ccptn_final(P);
+  ccptn_delete(P);
 
   cce_run_cleanup_handlers(L);
 @}
@@ -518,7 +518,7 @@ if (cce_location(L)) @{
 
   ccptn_init_dup_asciiz(L, P, pathname);
   printf("%s\n", ccptn_asciiz(P));
-  ccptn_final(P);
+  ccptn_delete(P);
 
   cce_run_cleanup_handlers(L);
 @}
@@ -530,7 +530,7 @@ if (cce_location(L)) @{
 @chapter Destructing pathname representations
 
 
-@deftypefun void ccptn_final (ccptn_t * @var{P})
+@deftypefun void ccptn_delete (ccptn_t * @var{P})
 Release all the resources associated to the referenced instance of @objtype{ccptn_t}.
 @end deftypefun
 
