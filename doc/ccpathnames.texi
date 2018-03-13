@@ -417,7 +417,7 @@ The pathname is internally represented with an @asciiz{} string.  All the octets
 @math{[1, 255]} are valid for the pathname.  A pathname is never empty: it always contains at least
 one octet.
 
-Instances of this type include a pointer function referencing a finalisation function appropriate
+Instances of this type include a pointer to function referencing a finalisation function appropriate
 for the internal data.  We can always release the resources associated to an instance of
 @objtype{ccptn_t} by applying to it the function @cfunc{ccptn_delete}.
 @end deftp
@@ -442,7 +442,7 @@ As usage example see the following code:
 cce_location_t        L[1];
 
 if (cce_location(L)) @{
-  cce_run_error_handlers_raise(L, upper_L);
+  cce_run_error_handlers_final(L);
 @} else @{
   char const *  pathname = "/path/to/file.ext";
   ccptn_t *     P;
@@ -471,7 +471,7 @@ As usage example see the following code:
 cce_location_t        L[1];
 
 if (cce_location(L)) @{
-  cce_run_error_handlers_raise(L, upper_L);
+  cce_run_error_handlers_final(L);
 @} else @{
   char const *  pathname = "/path/to/file.ext";
   ccptn_t *     P;
@@ -501,7 +501,7 @@ As usage example see the following code:
 cce_location_t        L[1];
 
 if (cce_location(L)) @{
-  cce_run_error_handlers_raise(L, upper_L);
+  cce_run_error_handlers_final(L);
 @} else @{
   char const *  pathname = "/path/to/file.ext";
   ccptn_t       P[1];
@@ -531,7 +531,7 @@ As usage example see the following code:
 cce_location_t        L[1];
 
 if (cce_location(L)) @{
-  cce_run_error_handlers_raise(L, upper_L);
+  cce_run_error_handlers_final(L);
 @} else @{
   char const *  pathname = "/path/to/file.ext";
   ccptn_t       P[1];
@@ -553,6 +553,14 @@ if (cce_location(L)) @{
 @deftypefun void ccptn_delete (ccptn_t * @var{P})
 Release all the resources associated to the referenced instance of @objtype{ccptn_t}.
 @end deftypefun
+
+@c ------------------------------------------------------------------------
+
+@subsubheading Using exception handlers
+
+
+@value{PACKAGE} is linked to the CCExceptions library to handle errors by raising exceptions; we can
+use exception handlers to release @objtype{ccptn_t} instances upon exiting a local context.
 
 
 @deftypefun void ccptn_cleanup_handler_ptn_init (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t * @var{P})
