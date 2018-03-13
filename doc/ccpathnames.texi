@@ -630,8 +630,8 @@ otherwise return @cfalse{}.
 
 
 @deftypefun bool ccptn_is_normalised (ccptn_t const * @var{P})
-Return @ctrue{} if @var{P} is the result of a call to one of the normalisation functions; otherwise
-return @cfalse{}.
+Return @ctrue{} if @var{P} is the result of either a call to the system function @cfunc{realpath} or
+to one of the normalisation functions; otherwise return @cfalse{}.
 @end deftypefun
 
 @c page
@@ -666,7 +666,7 @@ zero.
 
 
 @deftypefun {ccptn_t *} ccptn_new_realpath (cce_destination_t @var{L}, ccptn_t const * @var{P})
-Build and return a new pathname instance representing the result of applying the standard
+Build and return a new @objtype{ccptn_t} instance representing the result of applying the standard
 @cfunc{realpath} to the pathname represented by @var{P}.  If an error occurs: raise an exception by
 performing a non--local exit to to @var{L}.
 
@@ -699,9 +699,10 @@ if (cce_location(L)) @{
 
 
 @deftypefun {ccptn_t *} ccptn_init_realpath (cce_destination_t @var{L}, ccptn_t * @var{R}, ccptn_t const * @var{P})
-Initialise the already allocated instance @var{R} representing the result of applying the standard
-@cfunc{realpath} to the pathname represented by @var{P}.  Return @var{R} itself.  If an error
-occurs: raise an exception by performing a non--local exit to to @var{L}.
+Initialise the already allocated @objtype{ccptn_t} instance, referenced by @var{R}, representing the
+result of applying the standard @cfunc{realpath} to the pathname represented by @var{P}.  Return
+@var{R} itself.  If an error occurs: raise an exception by performing a non--local exit to to
+@var{L}.
 
 Notice that the pathname has to exist for this function to succeed.
 
