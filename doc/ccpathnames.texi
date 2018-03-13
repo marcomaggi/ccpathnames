@@ -736,8 +736,8 @@ if (cce_location(L)) @{
 @section Normalising pathnames
 
 
-A normalised pathname: has no multiple slashes; does not terminate with a slash; has not single--dot
-components; has the double--dot components removed as much as possible.  Examples:
+A normalised pathname: has no multiple slashes; has no useless terminating slash; has no useless
+single--dot components; has the double--dot components removed as much as possible.  Examples:
 
 @example
 /                       @result{} /
@@ -745,7 +745,7 @@ file.ext                @result{} file.ext
 /path/to/file.ext       @result{} /path/to/file.ext
 //                      @result{} /
 /path///to///file.ext   @result{} /path/to/file.ext
-/path/to/dir/           @result{} /path/to/dir
+/path/to/dir/           @result{} /path/to/dir/
 /path/to/././file.ext   @result{} /path/to/file.ext
 /path/to/.              @result{} /path/to
 /.                      @result{} /
@@ -771,21 +771,22 @@ in any of the directories selected by the value in the environment variable @env
 the following normalisations:
 
 @example
+./file.ext              @result{} ./file.ext
 ../path/file.ext        @result{} ./file.ext
 @end example
 @end itemize
 
 
 @deftypefun {ccptn_t *} ccptn_new_normalise (cce_destination_t @var{L}, ccptn_t const * @var{P})
-Build and return a new pathname instance representing the normalisation of @var{P}.  If an error
-occurs: raise an exception by performing a non--local exit to to @var{L}.
+Build and return a new instance of @objtype{ccptn_t} representing the normalisation of @var{P}.  If
+an error occurs: raise an exception by performing a non--local exit to to @var{L}.
 @end deftypefun
 
 
 @deftypefun {ccptn_t *} ccptn_init_normalise (cce_destination_t @var{L}, ccptn_t * @var{R}, ccptn_t const * @var{P})
-Initialise an already allocated pathname instance, referenced by @var{R}, with the representation of
-the normalisation of @var{P}.  If an error occurs: raise an exception by performing a non--local
-exit to to @var{L}.
+Initialise an already allocated instance of @objtype{ccptn_t}, referenced by @var{R}, with the
+representation of the normalisation of @var{P}.  If an error occurs: raise an exception by
+performing a non--local exit to to @var{L}.
 @end deftypefun
 
 @c ------------------------------------------------------------------------
@@ -830,8 +831,8 @@ The array referenced by @var{input_ptr} must represent an @asciiz{} string with 
 at least @code{1 + @var{input_len}} octets wide.
 
 If successful: return the number of octets stored in the array referenced by @var{output_ptr},
-terminating zero excluded.  If the a double--dot segment has not segment before: raise an exception
-by performing a non--local exit to @var{L}.
+terminating zero excluded.  If a double--dot segment has no segment before, representing an invalid
+pathname: raise an exception by performing a non--local exit to @var{L}.
 @end deftypefun
 
 @c page
@@ -840,9 +841,9 @@ by performing a non--local exit to @var{L}.
 
 
 @deftypefun {ccptn_t *} ccptn_new_concat (cce_destination_t @var{L}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
-Build and return a new pathname instance representing the result of concatenating the @var{prefix}
-and the @var{suffix}.  If an error occurs: raise an exception by performing a non--local exit to to
-@var{L}.
+Build and return a new instance of @objtype{ccptn_t} representing the result of concatenating the
+@var{prefix} and the @var{suffix}.  If an error occurs: raise an exception by performing a
+non--local exit to to @var{L}.
 
 @example
 cce_location_t        L[1];
@@ -855,13 +856,9 @@ if (cce_location(L)) @{
   char const * pathname_2 = "file.ext";
   ccptn_t      *P1, *P2, *R;
 
-  P1 = ccptn_new_nodup_asciiz(L, pathname_1);
-  ccptn_handler_ptn_init(L, P1_H, P1);
-
-  P2 = ccptn_new_nodup_asciiz(L, pathname_2);
-  ccptn_handler_ptn_init(L, P2_H, P2);
-
-  R = ccptn_new_concat(L, P1, P2);
+  P1 = ccptn_new_nodup_asciiz_guarded(L, P1_H, pathname_1);
+  P2 = ccptn_new_nodup_asciiz_guarded(L, P2_H, pathname_2);
+  R  = ccptn_new_concat(L, P1, P2);
   ccptn_handler_ptn_init(L, R_H, R);
 
   cce_run_cleanup_handlers(L);
@@ -870,10 +867,10 @@ if (cce_location(L)) @{
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_init_concat (cce_destination_t @var{L}, ccptn_t * @var{result}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
-Initialise the already allocated instance @var{result} with the representation of the concatenation
-between the @var{prefix} and the @var{suffix}.  Return @var{result} itself.  If an error occurs:
-raise an exception by performing a non--local exit to to @var{L}.
+@deftypefun {ccptn_t *} ccptn_init_concat (cce_destination_t @var{L}, ccptn_t * @var{R}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
+Initialise the already allocated instance of @objtype{ccptn_t}, referenced by @var{R}, with the
+representation of the concatenation between the @var{prefix} and the @var{suffix}.  Return @var{R}
+itself.  If an error occurs: raise an exception by performing a non--local exit to to @var{L}.
 @end deftypefun
 
 @c page
