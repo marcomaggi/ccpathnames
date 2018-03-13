@@ -167,6 +167,31 @@ ccptn_decl bool ccptn_condition_is_exceeded_length (cce_condition_t const * C)
 
 
 /** --------------------------------------------------------------------
+ ** Condition objects: resulting pathname would exceed maximum length.
+ ** ----------------------------------------------------------------- */
+
+typedef struct ccptn_descriptor_zero_length_t	ccptn_descriptor_zero_length_t;
+typedef struct ccptn_condition_zero_length_t	ccptn_condition_zero_length_t;
+
+struct ccptn_descriptor_zero_length_t {
+  cce_descriptor_t	descriptor;
+};
+
+struct ccptn_condition_zero_length_t {
+  cce_condition_runtime_error_t	runtime_error;
+};
+
+ccptn_decl void ccptn_condition_init_zero_length (ccptn_condition_zero_length_t * C)
+  __attribute__((__nonnull__(1)));
+
+ccptn_decl cce_condition_t const * ccptn_condition_new_zero_length (void)
+  __attribute__((__returns_nonnull__));
+
+ccptn_decl bool ccptn_condition_is_zero_length (cce_condition_t const * C)
+  __attribute__((__nonnull__(1)));
+
+
+/** --------------------------------------------------------------------
  ** Condition objects: invalid pathname.
  ** ----------------------------------------------------------------- */
 
@@ -566,6 +591,26 @@ ccptn_decl bool ccptn_extension_equal (ccptn_extension_t E1, ccptn_extension_t E
 
 ccptn_decl void ccptn_extension_print (cce_destination_t L, FILE * stream, ccptn_extension_t E)
   __attribute__((__nonnull__(1,2)));
+
+
+/** --------------------------------------------------------------------
+ ** Exception handlers.
+ ** ----------------------------------------------------------------- */
+
+#define ccptn_handler_init(L,H,X)					\
+  _Generic((H),								\
+	   cce_cleanup_handler_t *:					\
+	   _Generic((X),						\
+		    ccptn_t *: ccptn_cleanup_handler_ptn_init,		\
+		    ccptn_t * const: ccptn_cleanup_handler_ptn_init,	\
+		    ccptn_t const *: ccptn_cleanup_handler_ptn_init,	\
+		    ccptn_t const * const: ccptn_cleanup_handler_ptn_init), \
+	   cce_error_handler_t   *:					\
+	   _Generic((X),						\
+		    ccptn_t *: ccptn_error_handler_ptn_init,		\
+		    ccptn_t * const: ccptn_error_handler_ptn_init,	\
+		    ccptn_t const *: ccptn_error_handler_ptn_init,	\
+		    ccptn_t const * const: ccptn_error_handler_ptn_init))(L,&(H->handler),X)
 
 
 /** --------------------------------------------------------------------

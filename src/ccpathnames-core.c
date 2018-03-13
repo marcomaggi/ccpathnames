@@ -59,7 +59,7 @@ ccptn_new_nodup_asciiz (cce_destination_t L, char const * pathname)
 
   if (CCPTN_PATH_MAX < len) {
     cce_raise(L, ccptn_condition_new_exceeded_length());
-  } else {
+  } else if (0 < len) {
     ccptn_t *	P = cce_sys_malloc(L, sizeof(ccptn_t));
 
     P->delete		= delete_for_ccptn_new_nodup_asciiz;
@@ -69,6 +69,8 @@ ccptn_new_nodup_asciiz (cce_destination_t L, char const * pathname)
     P->realpath		= 0;
     P->buf		= (char *)pathname;
     return P;
+  } else {
+    cce_raise(L, ccptn_condition_new_zero_length());
   }
 }
 
@@ -95,7 +97,7 @@ ccptn_new_dup_asciiz (cce_destination_t L, char const * pathname)
 
   if (CCPTN_PATH_MAX < len) {
     cce_raise(L, ccptn_condition_new_exceeded_length());
-  } else {
+  } else if (0 < len) {
     ccptn_t *	P;
 
     P			= cce_sys_malloc(L, sizeof(ccptn_t) + len + 1);
@@ -108,6 +110,8 @@ ccptn_new_dup_asciiz (cce_destination_t L, char const * pathname)
     strncpy(P->buf, pathname, len);
     P->buf[len]		= '\0';
     return P;
+  } else {
+    cce_raise(L, ccptn_condition_new_zero_length());
   }
 }
 
@@ -132,7 +136,7 @@ ccptn_init_nodup_asciiz (cce_destination_t L CCPTN_UNUSED, ccptn_t * P, char con
 
   if (CCPTN_PATH_MAX < len) {
     cce_raise(L, ccptn_condition_new_exceeded_length());
-  } else {
+  } else if (0 < len) {
     P->delete		= delete_for_ccptn_nit_nodup_asciiz;
     P->len		= strlen(pathname);
     P->absolute		= ('/' == *pathname)? 1 : 0;
@@ -140,6 +144,8 @@ ccptn_init_nodup_asciiz (cce_destination_t L CCPTN_UNUSED, ccptn_t * P, char con
     P->realpath		= 0;
     P->buf		= (char *)pathname;
     return P;
+  } else {
+    cce_raise(L, ccptn_condition_new_zero_length());
   }
 }
 
@@ -166,7 +172,7 @@ ccptn_init_dup_asciiz (cce_destination_t L, ccptn_t * P, char const * pathname)
 
   if (CCPTN_PATH_MAX < len) {
     cce_raise(L, ccptn_condition_new_exceeded_length());
-  } else {
+  } else if (0 < len) {
     P->delete		= delete_for_ccptn_init_dup_asciiz;
     P->len		= len;
     P->absolute		= ('/' == *pathname)? 1 : 0;
@@ -176,6 +182,8 @@ ccptn_init_dup_asciiz (cce_destination_t L, ccptn_t * P, char const * pathname)
     strncpy(P->buf, pathname, len);
     P->buf[len]		= '\0';
     return P;
+  } else {
+    cce_raise(L, ccptn_condition_new_zero_length());
   }
 }
 
