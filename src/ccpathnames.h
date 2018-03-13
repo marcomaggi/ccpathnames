@@ -317,6 +317,107 @@ ccptn_decl void ccptn_error_handler_ptn_init (cce_destination_t L, cce_handler_t
 
 
 /** --------------------------------------------------------------------
+ ** Pathnames: guarded constructors.
+ ** ----------------------------------------------------------------- */
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3,4)))
+static inline ccptn_t *
+ccptn_init_nodup_asciiz_guarded_error (cce_destination_t L, ccptn_t * P, cce_handler_t * P_H, char const * pathname)
+{
+  ccptn_init_nodup_asciiz(L, P, pathname);
+  ccptn_error_handler_ptn_init(L, P_H, P);
+  return P;
+}
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3,4)))
+static inline ccptn_t *
+ccptn_init_dup_asciiz_guarded_error (cce_destination_t L, ccptn_t * P, cce_handler_t * P_H, char const * pathname)
+{
+  ccptn_init_dup_asciiz(L, P, pathname);
+  ccptn_error_handler_ptn_init(L, P_H, P);
+  return P;
+}
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
+static inline ccptn_t *
+ccptn_new_nodup_asciiz_guarded_error (cce_destination_t L, cce_handler_t * P_H, char const * pathname)
+{
+  ccptn_t *	R = ccptn_new_nodup_asciiz(L, pathname);
+  ccptn_error_handler_ptn_init(L, P_H, R);
+  return R;
+}
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
+static inline ccptn_t *
+ccptn_new_dup_asciiz_guarded_error (cce_destination_t L, cce_handler_t * P_H, char const * pathname)
+{
+  ccptn_t *	R = ccptn_new_dup_asciiz(L, pathname);
+  ccptn_error_handler_ptn_init(L, P_H, R);
+  return R;
+}
+
+/* ------------------------------------------------------------------ */
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3,4)))
+static inline ccptn_t *
+ccptn_init_nodup_asciiz_guarded_cleanup (cce_destination_t L, ccptn_t * P, cce_handler_t * P_H, char const * pathname)
+{
+  ccptn_init_nodup_asciiz(L, P, pathname);
+  ccptn_cleanup_handler_ptn_init(L, P_H, P);
+  return P;
+}
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3,4)))
+static inline ccptn_t *
+ccptn_init_dup_asciiz_guarded_cleanup (cce_destination_t L, ccptn_t * P, cce_handler_t * P_H, char const * pathname)
+{
+  ccptn_init_dup_asciiz(L, P, pathname);
+  ccptn_cleanup_handler_ptn_init(L, P_H, P);
+  return P;
+}
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
+static inline ccptn_t *
+ccptn_new_nodup_asciiz_guarded_cleanup (cce_destination_t L, cce_handler_t * P_H, char const * pathname)
+{
+  ccptn_t *	R = ccptn_new_nodup_asciiz(L, pathname);
+  ccptn_cleanup_handler_ptn_init(L, P_H, R);
+  return R;
+}
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
+static inline ccptn_t *
+ccptn_new_dup_asciiz_guarded_cleanup (cce_destination_t L, cce_handler_t * P_H, char const * pathname)
+{
+  ccptn_t *	R = ccptn_new_dup_asciiz(L, pathname);
+  ccptn_cleanup_handler_ptn_init(L, P_H, R);
+  return R;
+}
+
+/* ------------------------------------------------------------------ */
+
+#define ccptn_init_nodup_asciiz_guarded(L,P,H,PATHNAME)		\
+  _Generic((H),								\
+	   cce_cleanup_handler_t	*: ccptn_init_nodup_asciiz_guarded_cleanup, \
+	   cce_error_handler_t		*: ccptn_init_nodup_asciiz_guarded_error)(L,P,&(H->handler),PATHNAME)
+
+#define ccptn_init_dup_asciiz_guarded(L,P,H,PATHNAME)		\
+  _Generic((H),								\
+	   cce_cleanup_handler_t	*: ccptn_init_dup_asciiz_guarded_cleanup, \
+	   cce_error_handler_t		*: ccptn_init_dup_asciiz_guarded_error)(L,P,&(H->handler),PATHNAME)
+
+#define ccptn_new_nodup_asciiz_guarded(L,H,PATHNAME)		\
+  _Generic((H),								\
+	   cce_cleanup_handler_t	*: ccptn_new_nodup_asciiz_guarded_cleanup, \
+	   cce_error_handler_t		*: ccptn_new_nodup_asciiz_guarded_error)(L,&(H->handler),PATHNAME)
+
+#define ccptn_new_dup_asciiz_guarded(L,H,PATHNAME)		\
+  _Generic((H),								\
+	   cce_cleanup_handler_t	*: ccptn_new_dup_asciiz_guarded_cleanup, \
+	   cce_error_handler_t		*: ccptn_new_dup_asciiz_guarded_error)(L,&(H->handler),PATHNAME)
+
+
+/** --------------------------------------------------------------------
  ** Pathnames: accessors.
  ** ----------------------------------------------------------------- */
 

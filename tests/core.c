@@ -40,9 +40,11 @@ test_1_1 (cce_destination_t upper_L)
     ccptn_t *		P;
 
     P = ccptn_new_nodup_asciiz(L, pathname);
-    if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
+    {
+      if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
+      cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
+    }
     ccptn_delete(P);
-
     cce_run_cleanup_handlers(L);
   }
 }
@@ -60,9 +62,11 @@ test_1_2 (cce_destination_t upper_L)
     ccptn_t *		P;
 
     P = ccptn_new_dup_asciiz(L, pathname);
-    if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
+    {
+      if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
+      cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
+    }
     ccptn_delete(P);
-
     cce_run_cleanup_handlers(L);
   }
 }
@@ -80,9 +84,11 @@ test_1_3 (cce_destination_t upper_L)
     ccptn_t		P[1];
 
     ccptn_init_nodup_asciiz(L, P, pathname);
-    if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
+    {
+      if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
+      cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
+    }
     ccptn_delete(P);
-
     cce_run_cleanup_handlers(L);
   }
 }
@@ -100,7 +106,10 @@ test_1_4 (cce_destination_t upper_L)
     ccptn_t		P[1];
 
     ccptn_init_dup_asciiz(L, P, pathname);
-    if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
+    {
+      if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
+      cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
+    }
     ccptn_delete(P);
 
     cce_run_cleanup_handlers(L);
@@ -124,8 +133,10 @@ test_1_5 (cce_destination_t upper_L)
 
     P = ccptn_new_nodup_asciiz(L, pathname);
     ccptn_handler_ptn_init(L, P_H, P);
-    if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
-
+    {
+      if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
+      cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
+    }
     cce_run_cleanup_handlers(L);
   }
 }
@@ -266,6 +277,236 @@ test_2_3_2 (cce_destination_t upper_L)
 }
 
 
+/** --------------------------------------------------------------------
+ ** Guarded constructors.
+ ** ----------------------------------------------------------------- */
+
+void
+test_3_1 (cce_destination_t upper_L)
+/* Test for "ccptn_new_nodup_asciiz_guarded()", cleanup handler. */
+{
+  cce_location_t	L[1];
+  cce_cleanup_handler_t	P_H[1];
+
+  if (cce_location(L)) {
+    cce_run_error_handlers_raise(L, upper_L);
+  } else {
+    static char const *	pathname = "/path/to/file.ext";
+    ccptn_t *		P;
+
+    P = ccptn_new_nodup_asciiz_guarded(L, P_H, pathname);
+    cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
+    if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
+
+    cce_run_cleanup_handlers(L);
+  }
+}
+
+void
+test_3_2 (cce_destination_t upper_L)
+/* Test for "ccptn_new_dup_asciiz_guarded()", cleanup handler. */
+{
+  cce_location_t	L[1];
+  cce_cleanup_handler_t	P_H[1];
+
+  if (cce_location(L)) {
+    cce_run_error_handlers_raise(L, upper_L);
+  } else {
+    static char const *	pathname = "/path/to/file.ext";
+    ccptn_t *		P;
+
+    P = ccptn_new_dup_asciiz_guarded(L, P_H, pathname);
+    cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
+    if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
+
+    cce_run_cleanup_handlers(L);
+  }
+}
+
+void
+test_3_3 (cce_destination_t upper_L)
+/* Test for "ccptn_init_nodup_asciiz_guarded()", cleanup handler. */
+{
+  cce_location_t	L[1];
+  cce_cleanup_handler_t	P_H[1];
+
+  if (cce_location(L)) {
+    cce_run_error_handlers_raise(L, upper_L);
+  } else {
+    static char const *	pathname = "/path/to/file.ext";
+    ccptn_t		P[1];
+
+    ccptn_init_nodup_asciiz_guarded(L, P, P_H, pathname);
+    cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
+    if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
+
+    cce_run_cleanup_handlers(L);
+  }
+}
+
+void
+test_3_4 (cce_destination_t upper_L)
+/* Test for "ccptn_init_dup_asciiz_guarded()", cleanup handler. */
+{
+  cce_location_t	L[1];
+  cce_cleanup_handler_t	P_H[1];
+
+  if (cce_location(L)) {
+    cce_run_error_handlers_raise(L, upper_L);
+  } else {
+    static char const *	pathname = "/path/to/file.ext";
+    ccptn_t		P[1];
+
+    ccptn_init_dup_asciiz_guarded(L, P, P_H, pathname);
+    cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
+    if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
+
+    cce_run_cleanup_handlers(L);
+  }
+}
+
+/* ------------------------------------------------------------------ */
+
+void
+test_4_1 (cce_destination_t upper_L)
+/* Test for "ccptn_new_nodup_asciiz_guarded()", error handler. */
+{
+  static char const * const	pathname = "/path/to/file.ext";
+  cce_location_t		L[1];
+  cce_cleanup_handler_t		Q_H[1];
+
+  if (cce_location(L)) {
+    cce_run_error_handlers_raise(L, upper_L);
+  } else {
+    ccptn_t *		Q;
+
+    {
+      cce_location_t		inner_L[1];
+      cce_error_handler_t	P_H[1];
+
+      if (cce_location(inner_L)) {
+	cce_run_error_handlers_raise(inner_L, L);
+      } else {
+	ccptn_t *		P;
+
+	P = ccptn_new_nodup_asciiz_guarded(inner_L, P_H, pathname);
+	cctests_assert_asciiz(inner_L, pathname, ccptn_asciiz(P));
+	if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
+	Q = P;
+	cce_run_cleanup_handlers(inner_L);
+      }
+    }
+    ccptn_handler_ptn_init(L, Q_H, Q);
+    cctests_assert_asciiz(L, pathname, ccptn_asciiz(Q));
+    cce_run_error_handlers(L);
+  }
+}
+
+void
+test_4_2 (cce_destination_t upper_L)
+/* Test for "ccptn_new_dup_asciiz_guarded()", error handler. */
+{
+  static char const * const	pathname = "/path/to/file.ext";
+  cce_location_t		L[1];
+  cce_cleanup_handler_t		Q_H[1];
+
+  if (cce_location(L)) {
+    cce_run_error_handlers_raise(L, upper_L);
+  } else {
+    ccptn_t *		Q;
+    {
+      cce_location_t		inner_L[1];
+      cce_error_handler_t	P_H[1];
+
+      if (cce_location(inner_L)) {
+	cce_run_error_handlers_raise(inner_L, L);
+      } else {
+	ccptn_t *		P;
+
+	P = ccptn_new_dup_asciiz_guarded(inner_L, P_H, pathname);
+	cctests_assert_asciiz(inner_L, pathname, ccptn_asciiz(P));
+	if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
+	Q = P;
+	cce_run_cleanup_handlers(inner_L);
+      }
+    }
+    ccptn_handler_ptn_init(L, Q_H, Q);
+    cctests_assert_asciiz(L, pathname, ccptn_asciiz(Q));
+    cce_run_error_handlers(L);
+  }
+}
+
+void
+test_4_3 (cce_destination_t upper_L)
+/* Test for "ccptn_init_nodup_asciiz_guarded()", error handler. */
+{
+  static char const * const	pathname = "/path/to/file.ext";
+  cce_location_t		L[1];
+  cce_cleanup_handler_t		Q_H[1];
+
+  if (cce_location(L)) {
+    cce_run_error_handlers_raise(L, upper_L);
+  } else {
+    ccptn_t	Q[1];
+
+    {
+      cce_location_t		inner_L[1];
+      cce_error_handler_t	P_H[1];
+
+      if (cce_location(inner_L)) {
+	cce_run_error_handlers_raise(inner_L, L);
+      } else {
+	ccptn_t		P[1];
+
+	ccptn_init_nodup_asciiz_guarded(inner_L, P, P_H, pathname);
+	cctests_assert_asciiz(inner_L, pathname, ccptn_asciiz(P));
+	if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
+	Q[0] = P[0];
+	cce_run_cleanup_handlers(inner_L);
+      }
+    }
+    ccptn_handler_ptn_init(L, Q_H, Q);
+    cctests_assert_asciiz(L, pathname, ccptn_asciiz(Q));
+    cce_run_error_handlers(L);
+  }
+}
+
+void
+test_4_4 (cce_destination_t upper_L)
+/* Test for "ccptn_init_dup_asciiz_guarded()", error handler. */
+{
+  static char const * const	pathname = "/path/to/file.ext";
+  cce_location_t		L[1];
+  cce_cleanup_handler_t		Q_H[1];
+
+  if (cce_location(L)) {
+    cce_run_error_handlers_raise(L, upper_L);
+  } else {
+    ccptn_t	Q[1];
+
+    {
+      cce_location_t		inner_L[1];
+      cce_error_handler_t	P_H[1];
+
+      if (cce_location(inner_L)) {
+	cce_run_error_handlers_raise(inner_L, L);
+      } else {
+	ccptn_t		P[1];
+
+	ccptn_init_dup_asciiz_guarded(inner_L, P, P_H, pathname);
+	cctests_assert_asciiz(inner_L, pathname, ccptn_asciiz(P));
+	if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
+	Q[0] = P[0];
+	cce_run_cleanup_handlers(inner_L);
+      }
+    }
+    ccptn_handler_ptn_init(L, Q_H, Q);
+    cctests_assert_asciiz(L, pathname, ccptn_asciiz(Q));
+    cce_run_error_handlers(L);
+  }
+}
+
+
 int
 main (int argc CCPTN_UNUSED, const char *const argv[])
 {
@@ -293,6 +534,19 @@ main (int argc CCPTN_UNUSED, const char *const argv[])
       cctests_run(test_2_2_2);
       cctests_run(test_2_3_1);
       cctests_run(test_2_3_2);
+    }
+    cctests_end_group();
+
+    cctests_begin_group("guarded constructors");
+    {
+      cctests_run(test_3_1);
+      cctests_run(test_3_2);
+      cctests_run(test_3_3);
+      cctests_run(test_3_4);
+      cctests_run(test_4_1);
+      cctests_run(test_4_2);
+      cctests_run(test_4_3);
+      cctests_run(test_4_4);
     }
     cctests_end_group();
   }

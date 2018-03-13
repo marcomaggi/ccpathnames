@@ -40,7 +40,7 @@
 
 __attribute__((__nonnull__(1)))
 static void
-ccptn_delete_nodup_asciiz (ccptn_t * P)
+delete_for_ccptn_new_nodup_asciiz (ccptn_t * P)
 {
   free(P);
 }
@@ -62,7 +62,7 @@ ccptn_new_nodup_asciiz (cce_destination_t L, char const * pathname)
   } else {
     ccptn_t *	P = cce_sys_malloc(L, sizeof(ccptn_t));
 
-    P->delete		= ccptn_delete_nodup_asciiz;
+    P->delete		= delete_for_ccptn_new_nodup_asciiz;
     P->len		= len;
     P->absolute		= ('/' == *pathname)? 1 : 0;
     P->normalised	= 0;
@@ -76,7 +76,7 @@ ccptn_new_nodup_asciiz (cce_destination_t L, char const * pathname)
 
 __attribute__((__nonnull__(1)))
 static void
-ccptn_delete_dup_asciiz (ccptn_t * P)
+delete_for_ccptn_new_dup_asciiz (ccptn_t * P)
 {
   free(P);
 }
@@ -99,7 +99,7 @@ ccptn_new_dup_asciiz (cce_destination_t L, char const * pathname)
     ccptn_t *	P;
 
     P			= cce_sys_malloc(L, sizeof(ccptn_t) + len + 1);
-    P->delete		= ccptn_delete_dup_asciiz;
+    P->delete		= delete_for_ccptn_new_dup_asciiz;
     P->len		= len;
     P->absolute		= ('/' == *pathname)? 1 : 0;
     P->normalised	= 0;
@@ -115,7 +115,7 @@ ccptn_new_dup_asciiz (cce_destination_t L, char const * pathname)
 
 __attribute__((__nonnull__(1)))
 static void
-ccptn_final_nodup_asciiz (ccptn_t * P CCPTN_UNUSED)
+delete_for_ccptn_nit_nodup_asciiz (ccptn_t * P CCPTN_UNUSED)
 {
 }
 
@@ -133,7 +133,7 @@ ccptn_init_nodup_asciiz (cce_destination_t L CCPTN_UNUSED, ccptn_t * P, char con
   if (CCPTN_PATH_MAX < len) {
     cce_raise(L, ccptn_condition_new_exceeded_length());
   } else {
-    P->delete		= ccptn_final_nodup_asciiz;
+    P->delete		= delete_for_ccptn_nit_nodup_asciiz;
     P->len		= strlen(pathname);
     P->absolute		= ('/' == *pathname)? 1 : 0;
     P->normalised	= 0;
@@ -147,7 +147,7 @@ ccptn_init_nodup_asciiz (cce_destination_t L CCPTN_UNUSED, ccptn_t * P, char con
 
 __attribute__((__nonnull__(1)))
 static void
-ccptn_final_dup_asciiz (ccptn_t * P)
+delete_for_ccptn_init_dup_asciiz (ccptn_t * P)
 {
   free(P->buf);
 }
@@ -167,7 +167,7 @@ ccptn_init_dup_asciiz (cce_destination_t L, ccptn_t * P, char const * pathname)
   if (CCPTN_PATH_MAX < len) {
     cce_raise(L, ccptn_condition_new_exceeded_length());
   } else {
-    P->delete		= ccptn_final_dup_asciiz;
+    P->delete		= delete_for_ccptn_init_dup_asciiz;
     P->len		= len;
     P->absolute		= ('/' == *pathname)? 1 : 0;
     P->normalised	= 0;

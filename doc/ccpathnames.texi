@@ -131,6 +131,7 @@ included in the section entitled ``@gnu{} Free Documentation License''.
 * typedefs::                    Type definitions.
 * ctors::                       Constructing pathname representations.
 * dtors::                       Destructing pathname representations.
+* guarded::                     Guarded constructors.
 * predicates::                  Pathname predicates.
 * accessors::                   Pathname accessors.
 * manipulations::               Pathname manipulations.
@@ -605,6 +606,125 @@ if (cce_location(L)) @{
   cce_run_cleanup_handlers(L);
 @}
 @end example
+
+@c page
+@node guarded
+@chapter Guarded constructors
+
+
+@subsubheading Constructors with error handlers
+
+
+@deftypefun {ccptn_t *} ccptn_init_nodup_asciiz_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{P}, cce_handler_t * @var{H}, char const * @var{pathname})
+Like @cfunc{ccptn_init_nodup_asciiz}, but register the resulting @objtype{ccptn_t} to be released by
+the error handler @var{H}.
+@end deftypefun
+
+
+@deftypefun {ccptn_t *} ccptn_init_dup_asciiz_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{P}, cce_handler_t * @var{H}, char const * @var{pathname})
+Like @cfunc{ccptn_init_dup_asciiz}, but register the resulting @objtype{ccptn_t} to be released by
+the error handler @var{H}.
+@end deftypefun
+
+
+@deftypefun {ccptn_t *} ccptn_new_nodup_asciiz_guarded_error (cce_destination_t @var{L}, cce_handler_t * @var{H}, char const * @var{pathname})
+Like @cfunc{ccptn_new_nodup_asciiz}, but register the resulting @objtype{ccptn_t} to be released by
+the error handler @var{H}.
+@end deftypefun
+
+
+@deftypefun {ccptn_t *} ccptn_new_dup_asciiz_guarded_error (cce_destination_t @var{L}, cce_handler_t * @var{H}, char const * @var{pathname})
+Like @cfunc{ccptn_new_dup_asciiz}, but register the resulting @objtype{ccptn_t} to be released by
+the error handler @var{H}.
+@end deftypefun
+
+@c ------------------------------------------------------------------------
+
+@subsubheading Constructors with cleanup handlers
+
+
+@deftypefun {ccptn_t *} ccptn_init_nodup_asciiz_guarded_cleanup (cce_destination_t @var{L}, ccptn_t * @var{P}, cce_handler_t * @var{H}, char const * @var{pathname})
+Like @cfunc{ccptn_init_nodup_asciiz}, but register the resulting @objtype{ccptn_t} to be released by
+the cleanup handler @var{H}.
+@end deftypefun
+
+
+@deftypefun {ccptn_t *} ccptn_init_dup_asciiz_guarded_cleanup (cce_destination_t @var{L}, ccptn_t * @var{P}, cce_handler_t * @var{H}, char const * @var{pathname})
+Like @cfunc{ccptn_init_dup_asciiz}, but register the resulting @objtype{ccptn_t} to be released by
+the cleanup handler @var{H}.
+@end deftypefun
+
+
+@deftypefun {ccptn_t *} ccptn_new_nodup_asciiz_guarded_cleanup (cce_destination_t @var{L}, cce_handler_t * @var{H}, char const * @var{pathname})
+Like @cfunc{ccptn_new_nodup_asciiz}, but register the resulting @objtype{ccptn_t} to be released by
+the cleanup handler @var{H}.
+@end deftypefun
+
+
+@deftypefun {ccptn_t *} ccptn_new_dup_asciiz_guarded_cleanup (cce_destination_t @var{L}, cce_handler_t * @var{H}, char const * @var{pathname})
+Like @cfunc{ccptn_new_dup_asciiz}, but register the resulting @objtype{ccptn_t} to be released by
+the cleanup handler @var{H}.
+@end deftypefun
+
+@c ------------------------------------------------------------------------
+
+@subsubheading Generic guarded constructors
+
+
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_nodup_asciiz_guarded (cce_destination_t @var{L}, ccptn_t * P, cce_handler_t * @var{H}, char const * @var{pathname})
+This macro uses @code{_Generic} to dispatch the expansion according to the type of @var{H}; if the
+type is a pointer to:
+
+@table @code
+@item cce_cleanup_handler_t
+The macro expands into a call to @cfunc{ccptn_init_nodup_asciiz_guarded_cleanup}.
+
+@item cce_error_handler_t
+The macro expands into a call to @cfunc{ccptn_init_nodup_asciiz_guarded_error}.
+@end table
+@end deftypefn
+
+
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_dup_asciiz_guarded (cce_destination_t @var{L}, ccptn_t * P, cce_handler_t * @var{H}, char const * @var{pathname})
+This macro uses @code{_Generic} to dispatch the expansion according to the type of @var{H}; if the
+type is a pointer to:
+
+@table @code
+@item cce_cleanup_handler_t
+The macro expands into a call to @cfunc{ccptn_init_dup_asciiz_guarded_cleanup}.
+
+@item cce_error_handler_t
+The macro expands into a call to @cfunc{ccptn_init_dup_asciiz_guarded_error}.
+@end table
+@end deftypefn
+
+
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_nodup_asciiz_guarded (cce_destination_t @var{L}, cce_handler_t * @var{H}, char const * @var{pathname})
+This macro uses @code{_Generic} to dispatch the expansion according to the type of @var{H}; if the
+type is a pointer to:
+
+@table @code
+@item cce_cleanup_handler_t
+The macro expands into a call to @cfunc{ccptn_new_nodup_asciiz_guarded_cleanup}.
+
+@item cce_error_handler_t
+The macro expands into a call to @cfunc{ccptn_new_nodup_asciiz_guarded_error}.
+@end table
+@end deftypefn
+
+
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_dup_asciiz_guarded (cce_destination_t @var{L}, cce_handler_t * @var{H}, char const * @var{pathname})
+This macro uses @code{_Generic} to dispatch the expansion according to the type of @var{H}; if the
+type is a pointer to:
+
+@table @code
+@item cce_cleanup_handler_t
+The macro expands into a call to @cfunc{ccptn_new_dup_asciiz_guarded_cleanup}.
+
+@item cce_error_handler_t
+The macro expands into a call to @cfunc{ccptn_new_dup_asciiz_guarded_error}.
+@end table
+@end deftypefn
 
 @c page
 @node predicates
