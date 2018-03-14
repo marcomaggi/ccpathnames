@@ -135,6 +135,7 @@ included in the section entitled ``@gnu{} Free Documentation License''.
 * predicates::                  Pathname predicates.
 * accessors::                   Pathname accessors.
 * manipulations::               Pathname manipulations.
+* components::                  Pathname components.
 * io::                          Pathname input/output.
 * segments::                    Manipulating segments.
 * extensions::                  Manipulating extensions.
@@ -277,6 +278,9 @@ library is built with @gcc{}: it will be called automatically by the library ini
 * conditions length::           Maximum pathname length exceeded.
 * conditions zero::             Zero-length pathname.
 * conditions normalised::       Normalised pathname required.
+* conditions no dirname::       Directory part is missing.
+* conditions no filename::      Filename is missing.
+* conditions no rootname::      Rootname is missing.
 @end menu
 
 @c page
@@ -447,6 +451,157 @@ Return @ctrue{} if @var{C} is an @emph{normalised pathname} condition object; ot
 @end deftypefun
 
 @c page
+@node conditions no dirname
+@section Directory part is missing
+
+
+The @dfn{no dirname exceptional--condition object} has the purpose of describing an exceptional
+condition caused by attempting an operation on a pathname that has no directory part, when this is
+required.  The dirname is the pathname representing the input pathname with the last segment
+stripped.  Examples:
+
+@example
+"/path/to/file.ext"     @result{} "/path/to"
+"/path/to/dir/"         @result{} "/path/to"
+"file.ext"              @error{} no dirname
+"."                     @result{} ".."
+".."                    @error{} no dirname
+@end example
+
+There should be only one @emph{no dirname} condition object: the one predefined by @value{PACKAGE}.
+
+All the following definitions are accessible from the header file @file{ccexceptions.h}.
+
+
+@deftp {Struct Typedef} ccptn_descriptor_no_dirname_t
+Structure type representing the descriptor for @emph{no dirname} condition objects.  This descriptor
+has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.
+@end deftp
+
+
+@deftp {Struct Typedef} ccptn_condition_no_dirname_t
+Structure type representing an @emph{no dirname} condition object.
+@end deftp
+
+
+@deftypefun void ccptn_condition_init_no_dirname (ccptn_condition_no_dirname_t * @var{C})
+Initialise an already allocated condition object.  This function exists to allow sub--typing from
+@objtype{ccptn_condition_no_dirname_t}.
+@end deftypefun
+
+
+@deftypefun {cce_condition_t const *} ccptn_condition_new_no_dirname (void)
+Return a pointer to the statically allocated structure representing the single @emph{no dirname}
+condition object.
+@end deftypefun
+
+
+@deftypefun bool ccptn_is_condition_no_dirname (cce_condition_t const * @var{C})
+Return @ctrue{} if @var{C} is an @emph{no dirname} condition object; otherwise return @cfalse{}.
+@end deftypefun
+
+@c page
+@node conditions no filename
+@section Filename is missing
+
+
+The @dfn{no filename exceptional--condition object} has the purpose of describing an exceptional
+condition caused by attempting an operation on a pathname that has no filename part, when this is
+required.  The filename is the relative pathname representing the last segment if it does not
+represent a directory.  Examples:
+
+@example
+"/path/to/file.ext"     @result{} "file.ext"
+"/path/to/dir/"         @error{} no filename
+"file.ext"              @result{} "file.ext"
+"."                     @error{} no filename
+".."                    @error{} no filename
+@end example
+
+There should be only one @emph{no filename} condition object: the one predefined by @value{PACKAGE}.
+
+All the following definitions are accessible from the header file @file{ccexceptions.h}.
+
+
+@deftp {Struct Typedef} ccptn_descriptor_no_filename_t
+Structure type representing the descriptor for @emph{no filename} condition objects.  This
+descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.
+@end deftp
+
+
+@deftp {Struct Typedef} ccptn_condition_no_filename_t
+Structure type representing an @emph{no filename} condition object.
+@end deftp
+
+
+@deftypefun void ccptn_condition_init_no_filename (ccptn_condition_no_filename_t * @var{C})
+Initialise an already allocated condition object.  This function exists to allow sub--typing from
+@objtype{ccptn_condition_no_filename_t}.
+@end deftypefun
+
+
+@deftypefun {cce_condition_t const *} ccptn_condition_new_no_filename (void)
+Return a pointer to the statically allocated structure representing the single @emph{no filename}
+condition object.
+@end deftypefun
+
+
+@deftypefun bool ccptn_is_condition_no_filename (cce_condition_t const * @var{C})
+Return @ctrue{} if @var{C} is an @emph{no filename} condition object; otherwise return @cfalse{}.
+@end deftypefun
+
+@c page
+@node conditions no rootname
+@section Rootname is missing
+
+
+The @dfn{no rootname exceptional--condition object} has the purpose of describing an exceptional
+condition caused by attempting an operation on a pathname that has no rootname part, when this is
+required.  The rootname is a pathname with the extension of the last segment stripped.  Examples:
+
+@example
+"/path/to/file.ext"     @result{} "/path/to/file"
+"/path/to/file"         @result{} "/path/to/file"
+"/path/to/dir/"         @result{} "/path/to/dir"
+"file.ext"              @result{} "file.ext"
+".fvwmrc"               @result{} ".fvwmrc"
+"."                     @error{} missing rootname
+".."                    @error{} missing rootname
+@end example
+
+There should be only one @emph{no rootname} condition object: the one predefined by @value{PACKAGE}.
+
+All the following definitions are accessible from the header file @file{ccexceptions.h}.
+
+
+@deftp {Struct Typedef} ccptn_descriptor_no_rootname_t
+Structure type representing the descriptor for @emph{no rootname} condition objects.  This
+descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.
+@end deftp
+
+
+@deftp {Struct Typedef} ccptn_condition_no_rootname_t
+Structure type representing an @emph{no rootname} condition object.
+@end deftp
+
+
+@deftypefun void ccptn_condition_init_no_rootname (ccptn_condition_no_rootname_t * @var{C})
+Initialise an already allocated condition object.  This function exists to allow sub--typing from
+@objtype{ccptn_condition_no_rootname_t}.
+@end deftypefun
+
+
+@deftypefun {cce_condition_t const *} ccptn_condition_new_no_rootname (void)
+Return a pointer to the statically allocated structure representing the single @emph{no rootname}
+condition object.
+@end deftypefun
+
+
+@deftypefun bool ccptn_is_condition_no_rootname (cce_condition_t const * @var{C})
+Return @ctrue{} if @var{C} is an @emph{no rootname} condition object; otherwise return @cfalse{}.
+@end deftypefun
+
+@c page
 @node typedefs
 @chapter Type definitions
 
@@ -467,6 +622,16 @@ for the internal data.  We can always release the resources associated to an ins
 @c page
 @node ctors
 @chapter Constructing pathname representations
+
+
+@menu
+* ctors asciiz::                Pathnames from @asciiz{} strings.
+* ctors ascii::                 Pathnames from @ascii{} strings.
+@end menu
+
+@c page
+@node ctors asciiz
+@section Pathnames from @asciiz{} strings
 
 
 @deftypefun {ccptn_t *} ccptn_new_nodup_asciiz (cce_destination_t @var{L}, char const * @var{pathname})
@@ -579,6 +744,70 @@ if (cce_location(L)) @{
   ccptn_t       P[1];
 
   ccptn_init_dup_asciiz(L, P, pathname);
+  printf("%s\n", ccptn_asciiz(P));
+  ccptn_delete(P);
+
+  cce_run_cleanup_handlers(L);
+@}
+@end example
+@end deftypefun
+
+@c page
+@node ctors ascii
+@section Pathnames from @ascii{} strings
+
+
+@deftypefun {ccptn_t *} ccptn_new_dup_ascii (cce_destination_t @var{L}, char const * @var{pathname}, size_t @var{len})
+Allocate a new @objtype{ccptn_t} instance initialising it with data from the @ascii{} string
+@var{pathname} which holds @var{len} octets without terminating zero, return a pointer to it.  If an
+error occurs: raise an exception by performing a non--local exit to to @var{L}.
+
+The data @strong{is} duplicated: the returned @objtype{ccptn_t} includes a copy of the data from
+@var{pathname}.  Memory is allocated with @cfunc{malloc}.  The finalisation function registered in
+the instance will release the @code{struct} itself, and the data buffer.
+
+As usage example see the following code:
+
+@example
+cce_location_t        L[1];
+
+if (cce_location(L)) @{
+  cce_run_error_handlers_final(L);
+@} else @{
+  char const *  pathname = "/path/to/file.ext";
+  ccptn_t *     P;
+
+  P = ccptn_new_dup_ascii(L, pathname, strlen(pathname));
+  printf("%s\n", ccptn_asciiz(P));
+  ccptn_delete(P);
+
+  cce_run_cleanup_handlers(L);
+@}
+@end example
+@end deftypefun
+
+
+@deftypefun {ccptn_t *} ccptn_init_dup_ascii (cce_destination_t @var{L}, ccptn_t * @var{P}, char const * @var{pathname}, size_t @var{len})
+Initialise an already allocated @objtype{ccptn_t} instance with data from the @ascii{} string
+@var{pathname} which holds @var{len} octets without terminating zero.  If an error occurs: raise an
+exception by performing a non--local exit to to @var{L}.
+
+The data @strong{is} duplicated: the instance includes a copy of the data from @var{pathname}.
+Memory is allocated with @cfunc{malloc}.  The finalisation function registered in the instance will
+release the data area but not the @code{struct} itself.
+
+As usage example see the following code:
+
+@example
+cce_location_t        L[1];
+
+if (cce_location(L)) @{
+  cce_run_error_handlers_final(L);
+@} else @{
+  char const *  pathname = "/path/to/file.ext";
+  ccptn_t       P[1];
+
+  ccptn_init_dup_ascii(L, P, pathname, strlen(pathname));
   printf("%s\n", ccptn_asciiz(P));
   ccptn_delete(P);
 
@@ -1033,6 +1262,459 @@ Initialise the already allocated instance of @objtype{ccptn_t}, referenced by @v
 representation of the concatenation between the @var{prefix} and the @var{suffix}.  Return @var{R}
 itself.  If an error occurs: raise an exception by performing a non--local exit to to @var{L}.
 @end deftypefun
+
+@c page
+@node components
+@chapter Pathname components
+
+
+@menu
+* components extensions::       Extracting pathname extensions.
+* components rootnames::        Extracting pathname rootnames.
+* components dirnames::         Extracting pathname dirnames.
+* components tailnames::        Extracting pathname tailnames.
+* components filenames::        Extracting pathname filenames.
+@end menu
+
+@c page
+@node components extensions
+@section Extracting pathname extensions
+
+
+An @dfn{extension} is the last portion of the last segment in an input pathname following the last
+dot, but only if it is not the whole segment.  Examples:
+
+@example
+"/path/to/file.ext"     => ".ext"
+"/path/to/file"         => ""
+"/path/to/dir/"         => ""
+"/path/to/dir.ext/"     => ".ext"
+"file.ext"              => ".ext"
+".fvwmrc"               => ""
+"."                     => ""
+".."                    => ""
+@end example
+
+Extension extraction is possible only for an input pathname that has been previously normalised; if
+the input is not normalised: the functions below will raise an exception of type
+@objtype{ccptn_condition_normalised_pathname_t}.
+
+
+@deftypefun ccptn_extension_t ccptn_extension (cce_destination_t @var{L}, ccptn_t const * @var{P})
+Find the extension of the last segment in the input pathname referenced by @var{P} and return an
+instance of @objtype{ccptn_extension_t} representing it; the returned value references the section
+of data in the input pathname and so it is valid data only while the input pathname exists.  If an
+error occurs: raise an exception by performing a non--local exit to @var{L}.
+
+If the input pathname has no extension: the returned value represents the empty string by having the
+length field to zero, while the pointer field references the terminating zero in the @asciiz{}
+representation of the input pathname.
+@end deftypefun
+
+@c page
+@node components rootnames
+@section Extracting pathname rootnames
+
+
+The @dfn{rootname} of an input pathname is a pathname representing the input with the extension of
+the last segment stripped.  Examples:
+
+@example
+"/path/to/file.ext"     => "/path/to/file"
+"/path/to/file"         => "/path/to/file"
+"/path/to/dir/"         => "/path/to/dir"
+"file.ext"              => "file.ext"
+".fvwmrc"               => ".fvwmrc"
+"."                     --> error
+".."                    --> error
+@end example
+
+It is an error to attempt rootname extraction from an input pathname that has no rootname; in this
+case the functions below will raise an exception of type @objtype{ccptn_condition_no_rootname_t}.
+
+Rootname extraction is possible only for an input pathname that has been previously normalised; if
+the input is not normalised: the functions below will raise an exception of type
+@objtype{ccptn_condition_normalised_pathname_t}.
+
+
+@deftypefun {ccptn_t *} ccptn_new_rootname (cce_destination_t @var{L}, ccptn_t const * @var{P})
+Build and return a new instance of @objtype{ccptn_t} representing the rootname of the input pathname
+referenced by @var{P}.  If an error occurs: raise an exception by performing a non--local exit to
+@var{L}.
+@end deftypefun
+
+
+@deftypefun {ccptn_t *} ccptn_new_rootname (cce_destination_t @var{L}, ccptn_t * @var{R}, ccptn_t const * @var{P})
+Initialise an already allocated instance of @objtype{ccptn_t}, referenced by @var{R}, representing
+the rootname of the input pathname referenced by @var{P}.  If an error occurs: raise an exception by
+performing a non--local exit to @var{L}.
+@end deftypefun
+
+@c ------------------------------------------------------------------------
+
+@subsubheading Guarded functions for error handlers
+
+
+@deftypefun {ccptn_t *} ccptn_new_rootname_guarded_error (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+Like @cfunc{ccptn_new_rootname}, but register the resulting instance of @objtype{ccptn_t} to be
+released by the error handler referenced by @var{H}.
+@end deftypefun
+
+
+@deftypefun {ccptn_t *} ccptn_init_rootname_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+Like @cfunc{ccptn_init_rootname}, but register the resulting instance of @objtype{ccptn_t} to be
+released by the error handler referenced by @var{H}.
+@end deftypefun
+
+@c ------------------------------------------------------------------------
+
+@subsubheading Guarded functions for cleanup handlers
+
+
+@deftypefun {ccptn_t *} ccptn_new_rootname_guarded_cleanup (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+Like @cfunc{ccptn_new_rootname}, but register the resulting instance of @objtype{ccptn_t} to be
+released by the cleanup handler referenced by @var{H}.
+@end deftypefun
+
+
+@deftypefun {ccptn_t *} ccptn_init_rootname_guarded_cleanup (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+Like @cfunc{ccptn_init_rootname}, but register the resulting instance of @objtype{ccptn_t} to be
+released by the cleanup handler referenced by @var{H}.
+@end deftypefun
+
+@c ------------------------------------------------------------------------
+
+@subsubheading Generic preprocessor macros
+
+
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_rootname_guarded (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
+type is a pointer to:
+
+@table @code
+@item cce_cleanup_handler_t
+The macro expands into a call to @cfunc{ccptn_new_rootname_guarded_cleanup}.
+
+@item cce_error_handler_t
+The macro expands into a call to @cfunc{ccptn_new_rootname_guarded_error}.
+@end table
+@end deftypefn
+
+
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_rootname_guarded (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
+type is a pointer to:
+
+@table @code
+@item cce_cleanup_handler_t
+The macro expands into a call to @cfunc{ccptn_init_rootname_guarded_cleanup}.
+
+@item cce_error_handler_t
+The macro expands into a call to @cfunc{ccptn_init_rootname_guarded_error}.
+@end table
+@end deftypefn
+
+@c page
+@node components dirnames
+@section Extracting pathname dirnames
+
+
+The @dfn{dirname} is the pathname representing the input pathname with the last segment stripped.
+Examples:
+
+@example
+"/path/to/file.ext"     @result{} "/path/to"
+"/path/to/dir/"         @result{} "/path/to"
+"file.ext"              @error{} no dirname
+"."                     @result{} ".."
+".."                    @error{} no dirname
+@end example
+
+It is an error to attempt dirname extraction from an input pathname that has no dirname; in this
+case the functions below will raise an exception of type @objtype{ccptn_condition_no_dirname_t}.
+
+Dirname extraction is possible only for an input pathname that has been previously normalised; if
+the input is not normalised: the functions below will raise an exception of type
+@objtype{ccptn_condition_normalised_pathname_t}.
+
+
+@deftypefun {ccptn_t *} ccptn_new_dirname (cce_destination_t @var{L}, ccptn_t const * @var{P})
+Build and return a new instance of @objtype{ccptn_t} representing the dirname of the input pathname
+referenced by @var{P}.  If an error occurs: raise an exception by performing a non--local exit to
+@var{L}.
+@end deftypefun
+
+
+@deftypefun {ccptn_t *} ccptn_new_dirname (cce_destination_t @var{L}, ccptn_t * @var{R}, ccptn_t const * @var{P})
+Initialise an already allocated instance of @objtype{ccptn_t}, referenced by @var{R}, representing
+the dirname of the input pathname referenced by @var{P}.  If an error occurs: raise an exception by
+performing a non--local exit to @var{L}.
+@end deftypefun
+
+@c ------------------------------------------------------------------------
+
+@subsubheading Guarded functions for error handlers
+
+
+@deftypefun {ccptn_t *} ccptn_new_dirname_guarded_error (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+Like @cfunc{ccptn_new_dirname}, but register the resulting instance of @objtype{ccptn_t} to be
+released by the error handler referenced by @var{H}.
+@end deftypefun
+
+
+@deftypefun {ccptn_t *} ccptn_init_dirname_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+Like @cfunc{ccptn_init_dirname}, but register the resulting instance of @objtype{ccptn_t} to be
+released by the error handler referenced by @var{H}.
+@end deftypefun
+
+@c ------------------------------------------------------------------------
+
+@subsubheading Guarded functions for cleanup handlers
+
+
+@deftypefun {ccptn_t *} ccptn_new_dirname_guarded_cleanup (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+Like @cfunc{ccptn_new_dirname}, but register the resulting instance of @objtype{ccptn_t} to be
+released by the cleanup handler referenced by @var{H}.
+@end deftypefun
+
+
+@deftypefun {ccptn_t *} ccptn_init_dirname_guarded_cleanup (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+Like @cfunc{ccptn_init_dirname}, but register the resulting instance of @objtype{ccptn_t} to be
+released by the cleanup handler referenced by @var{H}.
+@end deftypefun
+
+@c ------------------------------------------------------------------------
+
+@subsubheading Generic preprocessor macros
+
+
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_dirname_guarded (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
+type is a pointer to:
+
+@table @code
+@item cce_cleanup_handler_t
+The macro expands into a call to @cfunc{ccptn_new_dirname_guarded_cleanup}.
+
+@item cce_error_handler_t
+The macro expands into a call to @cfunc{ccptn_new_dirname_guarded_error}.
+@end table
+@end deftypefn
+
+
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_dirname_guarded (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
+type is a pointer to:
+
+@table @code
+@item cce_cleanup_handler_t
+The macro expands into a call to @cfunc{ccptn_init_dirname_guarded_cleanup}.
+
+@item cce_error_handler_t
+The macro expands into a call to @cfunc{ccptn_init_dirname_guarded_error}.
+@end table
+@end deftypefn
+
+@c page
+@node components tailnames
+@section Extracting pathname tailnames
+
+
+The @dfn{tailname} is the relative pathname representing the last segment of an input pathname.
+Examples:
+
+@example
+"/path/to/file.ext"     @result{} "file.ext"
+"/path/to/dir/"         @result{} "dir/"
+"file.ext"              @result{} "file.ext"
+"."                     @result{} "."
+".."                    @result{} ".."
+@end example
+
+Every pathname has a tailname.
+
+Tailname extraction is possible only for an input pathname that has been previously normalised; if
+the input is not normalised: the functions below will raise an exception of type
+@objtype{ccptn_condition_normalised_pathname_t}.
+
+
+@deftypefun {ccptn_t *} ccptn_new_tailname (cce_destination_t @var{L}, ccptn_t const * @var{P})
+Build and return a new instance of @objtype{ccptn_t} representing the tailname of the input pathname
+referenced by @var{P}.  If an error occurs: raise an exception by performing a non--local exit to
+@var{L}.
+@end deftypefun
+
+
+@deftypefun {ccptn_t *} ccptn_new_tailname (cce_destination_t @var{L}, ccptn_t * @var{R}, ccptn_t const * @var{P})
+Initialise an already allocated instance of @objtype{ccptn_t}, referenced by @var{R}, representing
+the tailname of the input pathname referenced by @var{P}.  If an error occurs: raise an exception by
+performing a non--local exit to @var{L}.
+@end deftypefun
+
+@c ------------------------------------------------------------------------
+
+@subsubheading Guarded functions for error handlers
+
+
+@deftypefun {ccptn_t *} ccptn_new_tailname_guarded_error (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+Like @cfunc{ccptn_new_tailname}, but register the resulting instance of @objtype{ccptn_t} to be
+released by the error handler referenced by @var{H}.
+@end deftypefun
+
+
+@deftypefun {ccptn_t *} ccptn_init_tailname_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+Like @cfunc{ccptn_init_tailname}, but register the resulting instance of @objtype{ccptn_t} to be
+released by the error handler referenced by @var{H}.
+@end deftypefun
+
+@c ------------------------------------------------------------------------
+
+@subsubheading Guarded functions for cleanup handlers
+
+
+@deftypefun {ccptn_t *} ccptn_new_tailname_guarded_cleanup (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+Like @cfunc{ccptn_new_tailname}, but register the resulting instance of @objtype{ccptn_t} to be
+released by the cleanup handler referenced by @var{H}.
+@end deftypefun
+
+
+@deftypefun {ccptn_t *} ccptn_init_tailname_guarded_cleanup (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+Like @cfunc{ccptn_init_tailname}, but register the resulting instance of @objtype{ccptn_t} to be
+released by the cleanup handler referenced by @var{H}.
+@end deftypefun
+
+@c ------------------------------------------------------------------------
+
+@subsubheading Generic preprocessor macros
+
+
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_tailname_guarded (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
+type is a pointer to:
+
+@table @code
+@item cce_cleanup_handler_t
+The macro expands into a call to @cfunc{ccptn_new_tailname_guarded_cleanup}.
+
+@item cce_error_handler_t
+The macro expands into a call to @cfunc{ccptn_new_tailname_guarded_error}.
+@end table
+@end deftypefn
+
+
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_tailname_guarded (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
+type is a pointer to:
+
+@table @code
+@item cce_cleanup_handler_t
+The macro expands into a call to @cfunc{ccptn_init_tailname_guarded_cleanup}.
+
+@item cce_error_handler_t
+The macro expands into a call to @cfunc{ccptn_init_tailname_guarded_error}.
+@end table
+@end deftypefn
+
+@c page
+@node components filenames
+@section Extracting pathname filenames
+
+
+The @dfn{filename} is the relative pathname representing the last segment of an input pathname, if
+it does not represent a directory.  Examples:
+
+@example
+"/path/to/file.ext"     @result{} "file.ext"
+"/path/to/dir/"         @error{} no filename
+"file.ext"              @result{} "file.ext"
+"."                     @error{} no filename
+".."                    @error{} no filename
+@end example
+
+It is an error to attempt filename extraction from an input pathname that has no filename; in this
+case the functions below will raise an exception of type @objtype{ccptn_condition_no_filename_t}.
+
+Filename extraction is possible only for an input pathname that has been previously normalised; if
+the input is not normalised: the functions below will raise an exception of type
+@objtype{ccptn_condition_normalised_pathname_t}.
+
+
+@deftypefun {ccptn_t *} ccptn_new_filename (cce_destination_t @var{L}, ccptn_t const * @var{P})
+Build and return a new instance of @objtype{ccptn_t} representing the filename of the input pathname
+referenced by @var{P}.  If an error occurs: raise an exception by performing a non--local exit to
+@var{L}.
+@end deftypefun
+
+
+@deftypefun {ccptn_t *} ccptn_new_filename (cce_destination_t @var{L}, ccptn_t * @var{R}, ccptn_t const * @var{P})
+Initialise an already allocated instance of @objtype{ccptn_t}, referenced by @var{R}, representing
+the filename of the input pathname referenced by @var{P}.  If an error occurs: raise an exception by
+performing a non--local exit to @var{L}.
+@end deftypefun
+
+@c ------------------------------------------------------------------------
+
+@subsubheading Guarded functions for error handlers
+
+
+@deftypefun {ccptn_t *} ccptn_new_filename_guarded_error (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+Like @cfunc{ccptn_new_filename}, but register the resulting instance of @objtype{ccptn_t} to be
+released by the error handler referenced by @var{H}.
+@end deftypefun
+
+
+@deftypefun {ccptn_t *} ccptn_init_filename_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+Like @cfunc{ccptn_init_filename}, but register the resulting instance of @objtype{ccptn_t} to be
+released by the error handler referenced by @var{H}.
+@end deftypefun
+
+@c ------------------------------------------------------------------------
+
+@subsubheading Guarded functions for cleanup handlers
+
+
+@deftypefun {ccptn_t *} ccptn_new_filename_guarded_cleanup (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+Like @cfunc{ccptn_new_filename}, but register the resulting instance of @objtype{ccptn_t} to be
+released by the cleanup handler referenced by @var{H}.
+@end deftypefun
+
+
+@deftypefun {ccptn_t *} ccptn_init_filename_guarded_cleanup (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+Like @cfunc{ccptn_init_filename}, but register the resulting instance of @objtype{ccptn_t} to be
+released by the cleanup handler referenced by @var{H}.
+@end deftypefun
+
+@c ------------------------------------------------------------------------
+
+@subsubheading Generic preprocessor macros
+
+
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_filename_guarded (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
+type is a pointer to:
+
+@table @code
+@item cce_cleanup_handler_t
+The macro expands into a call to @cfunc{ccptn_new_filename_guarded_cleanup}.
+
+@item cce_error_handler_t
+The macro expands into a call to @cfunc{ccptn_new_filename_guarded_error}.
+@end table
+@end deftypefn
+
+
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_filename_guarded (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
+type is a pointer to:
+
+@table @code
+@item cce_cleanup_handler_t
+The macro expands into a call to @cfunc{ccptn_init_filename_guarded_cleanup}.
+
+@item cce_error_handler_t
+The macro expands into a call to @cfunc{ccptn_init_filename_guarded_error}.
+@end table
+@end deftypefn
 
 @c page
 @node io

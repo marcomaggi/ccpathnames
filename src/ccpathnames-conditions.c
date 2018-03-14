@@ -196,7 +196,7 @@ ccptn_condition_is_zero_length (cce_condition_t const * C)
 
 
 /** --------------------------------------------------------------------
- ** Condition objects: invalid pathname.
+ ** Condition objects: normalised pathname.
  ** ----------------------------------------------------------------- */
 
 static cce_condition_static_message_fun_t	ccptn_condition_static_message_normalised_pathname;
@@ -215,7 +215,7 @@ ccptn_descriptor_normalised_pathname_t const * const ccptn_descriptor_normalised
 /* This is  the single  instance of  the "invalid  pathname" exceptional
    condition.  It is used by "cce_raise()" and "cce_retry()". */
 static ccptn_condition_normalised_pathname_t const ccptn_condition_normalised_pathname_stru = {
-  .runtime_error.error.root.condition.descriptor = &(ccptn_descriptor_normalised_pathname_stru.descriptor)
+  .invalid_pathname.runtime_error.error.root.condition.descriptor = &(ccptn_descriptor_normalised_pathname_stru.descriptor)
 };
 
 ccptn_condition_normalised_pathname_t const * const ccptn_condition_normalised_pathname_ptr = &ccptn_condition_normalised_pathname_stru;
@@ -233,7 +233,7 @@ ccptn_condition_static_message_normalised_pathname (cce_condition_t const * C CC
 void
 ccptn_condition_init_normalised_pathname (ccptn_condition_normalised_pathname_t * C)
 {
-  cce_condition_init_runtime_error(&(C->runtime_error));
+  ccptn_condition_init_invalid_pathname(&(C->invalid_pathname));
 }
 
 cce_condition_t const *
@@ -250,6 +250,168 @@ ccptn_condition_is_normalised_pathname (cce_condition_t const * C)
 
 
 /** --------------------------------------------------------------------
+ ** Condition objects: pathname with no dirname.
+ ** ----------------------------------------------------------------- */
+
+static cce_condition_static_message_fun_t	ccptn_condition_static_message_no_dirname;
+
+static ccptn_descriptor_no_dirname_t ccptn_descriptor_no_dirname_stru = {
+  /* This  "parent" field  is  set below  by  the module  initialisation
+     function. */
+  .descriptor.parent		= &(ccptn_descriptor_invalid_pathname_stru.descriptor),
+  .descriptor.delete		= NULL,
+  .descriptor.final		= NULL,
+  .descriptor.static_message	= ccptn_condition_static_message_no_dirname
+};
+
+ccptn_descriptor_no_dirname_t const * const ccptn_descriptor_no_dirname_ptr = &ccptn_descriptor_no_dirname_stru;
+
+/* This  is  the  single  instance   of  the  "no  dirname"  exceptional
+   condition.  It is used by "cce_raise()" and "cce_retry()". */
+static ccptn_condition_no_dirname_t const ccptn_condition_no_dirname_stru = {
+  .invalid_pathname.runtime_error.error.root.condition.descriptor = &(ccptn_descriptor_no_dirname_stru.descriptor)
+};
+
+ccptn_condition_no_dirname_t const * const ccptn_condition_no_dirname_ptr = &ccptn_condition_no_dirname_stru;
+
+/* ------------------------------------------------------------------ */
+
+char const *
+ccptn_condition_static_message_no_dirname (cce_condition_t const * C CCPTN_UNUSED)
+{
+  return "input pathname has no directory part";
+}
+
+/* ------------------------------------------------------------------ */
+
+void
+ccptn_condition_init_no_dirname (ccptn_condition_no_dirname_t * C)
+{
+  ccptn_condition_init_invalid_pathname(&(C->invalid_pathname));
+}
+
+cce_condition_t const *
+ccptn_condition_new_no_dirname (void)
+{
+  return (cce_condition_t const *) ccptn_condition_no_dirname_ptr;
+}
+
+bool
+ccptn_condition_is_no_dirname (cce_condition_t const * C)
+{
+  return cce_is_condition(C, &(ccptn_descriptor_no_dirname_ptr->descriptor));
+}
+
+
+/** --------------------------------------------------------------------
+ ** Condition objects: pathname with no filename.
+ ** ----------------------------------------------------------------- */
+
+static cce_condition_static_message_fun_t	ccptn_condition_static_message_no_filename;
+
+static ccptn_descriptor_no_filename_t ccptn_descriptor_no_filename_stru = {
+  /* This  "parent" field  is  set below  by  the module  initialisation
+     function. */
+  .descriptor.parent		= &(ccptn_descriptor_invalid_pathname_stru.descriptor),
+  .descriptor.delete		= NULL,
+  .descriptor.final		= NULL,
+  .descriptor.static_message	= ccptn_condition_static_message_no_filename
+};
+
+ccptn_descriptor_no_filename_t const * const ccptn_descriptor_no_filename_ptr = &ccptn_descriptor_no_filename_stru;
+
+/* This  is  the  single  instance  of  the  "no  filename"  exceptional
+   condition.  It is used by "cce_raise()" and "cce_retry()". */
+static ccptn_condition_no_filename_t const ccptn_condition_no_filename_stru = {
+  .invalid_pathname.runtime_error.error.root.condition.descriptor = &(ccptn_descriptor_no_filename_stru.descriptor)
+};
+
+ccptn_condition_no_filename_t const * const ccptn_condition_no_filename_ptr = &ccptn_condition_no_filename_stru;
+
+/* ------------------------------------------------------------------ */
+
+char const *
+ccptn_condition_static_message_no_filename (cce_condition_t const * C CCPTN_UNUSED)
+{
+  return "input pathname has no filename part";
+}
+
+/* ------------------------------------------------------------------ */
+
+void
+ccptn_condition_init_no_filename (ccptn_condition_no_filename_t * C)
+{
+  ccptn_condition_init_invalid_pathname(&(C->invalid_pathname));
+}
+
+cce_condition_t const *
+ccptn_condition_new_no_filename (void)
+{
+  return (cce_condition_t const *) ccptn_condition_no_filename_ptr;
+}
+
+bool
+ccptn_condition_is_no_filename (cce_condition_t const * C)
+{
+  return cce_is_condition(C, &(ccptn_descriptor_no_filename_ptr->descriptor));
+}
+
+
+/** --------------------------------------------------------------------
+ ** Condition objects: pathname with no rootname.
+ ** ----------------------------------------------------------------- */
+
+static cce_condition_static_message_fun_t	ccptn_condition_static_message_no_rootname;
+
+static ccptn_descriptor_no_rootname_t ccptn_descriptor_no_rootname_stru = {
+  /* This  "parent" field  is  set below  by  the module  initialisation
+     function. */
+  .descriptor.parent		= &(ccptn_descriptor_invalid_pathname_stru.descriptor),
+  .descriptor.delete		= NULL,
+  .descriptor.final		= NULL,
+  .descriptor.static_message	= ccptn_condition_static_message_no_rootname
+};
+
+ccptn_descriptor_no_rootname_t const * const ccptn_descriptor_no_rootname_ptr = &ccptn_descriptor_no_rootname_stru;
+
+/* This  is  the  single  instance  of  the  "no  rootname"  exceptional
+   condition.  It is used by "cce_raise()" and "cce_retry()". */
+static ccptn_condition_no_rootname_t const ccptn_condition_no_rootname_stru = {
+  .invalid_pathname.runtime_error.error.root.condition.descriptor = &(ccptn_descriptor_no_rootname_stru.descriptor)
+};
+
+ccptn_condition_no_rootname_t const * const ccptn_condition_no_rootname_ptr = &ccptn_condition_no_rootname_stru;
+
+/* ------------------------------------------------------------------ */
+
+char const *
+ccptn_condition_static_message_no_rootname (cce_condition_t const * C CCPTN_UNUSED)
+{
+  return "input pathname has no rootname part";
+}
+
+/* ------------------------------------------------------------------ */
+
+void
+ccptn_condition_init_no_rootname (ccptn_condition_no_rootname_t * C)
+{
+  ccptn_condition_init_invalid_pathname(&(C->invalid_pathname));
+}
+
+cce_condition_t const *
+ccptn_condition_new_no_rootname (void)
+{
+  return (cce_condition_t const *) ccptn_condition_no_rootname_ptr;
+}
+
+bool
+ccptn_condition_is_no_rootname (cce_condition_t const * C)
+{
+  return cce_is_condition(C, &(ccptn_descriptor_no_rootname_ptr->descriptor));
+}
+
+
+/** --------------------------------------------------------------------
  ** Module initialisation.
  ** ----------------------------------------------------------------- */
 
@@ -258,6 +420,7 @@ ccptn_init (void)
 {
   ccptn_descriptor_invalid_pathname_stru.descriptor.parent	= &(cce_descriptor_runtime_error_ptr->descriptor);
   ccptn_descriptor_exceeded_length_stru.descriptor.parent	= &(cce_descriptor_runtime_error_ptr->descriptor);
+  ccptn_descriptor_zero_length_stru.descriptor.parent		= &(cce_descriptor_runtime_error_ptr->descriptor);
 }
 
 /* end of file */

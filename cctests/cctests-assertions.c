@@ -57,4 +57,18 @@ cctests_p_assert_asciiz (cce_destination_t L, char const * expected, char const 
   }
 }
 
+void
+cctests_p_assert_ascii (cce_destination_t L, char const * expected, char const * result, size_t result_len,
+			char const * const expr,
+			char const * const filename, char const * const funcname, int const linenum)
+{
+  if ((strlen(expected) != result_len) || (0 != strncmp(expected, result, result_len))) {
+    fprintf(cctests_log_stream, "CCTests: %s: %s: line %d: assertion failure: %s\n",
+	    filename, funcname, linenum, expr);
+    fprintf(cctests_log_stream, "\texpected: %s\n", expected);
+    fprintf(cctests_log_stream, "\tresult:   %s\n", result);
+    cce_raise(L, cctests_condition_new_assertion(L, expr, filename, funcname, linenum));
+  }
+}
+
 /* end of file */

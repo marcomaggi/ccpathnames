@@ -35,7 +35,7 @@
 
 
 /** --------------------------------------------------------------------
- ** Constructor functions.
+ ** Constructor functions: ASCIIZ input.
  ** ----------------------------------------------------------------- */
 
 __attribute__((__nonnull__(1)))
@@ -174,6 +174,84 @@ ccptn_init_dup_asciiz (cce_destination_t L, ccptn_t * P, char const * pathname)
     cce_raise(L, ccptn_condition_new_exceeded_length());
   } else if (0 < len) {
     P->delete		= delete_for_ccptn_init_dup_asciiz;
+    P->len		= len;
+    P->absolute		= ('/' == *pathname)? 1 : 0;
+    P->normalised	= 0;
+    P->realpath		= 0;
+    P->buf		= cce_sys_malloc(L, len + 1);
+    strncpy(P->buf, pathname, len);
+    P->buf[len]		= '\0';
+    return P;
+  } else {
+    cce_raise(L, ccptn_condition_new_zero_length());
+  }
+}
+
+
+/** --------------------------------------------------------------------
+ ** Constructor functions: ASCII input.
+ ** ----------------------------------------------------------------- */
+
+__attribute__((__nonnull__(1)))
+static void
+delete_for_ccptn_new_dup_ascii (ccptn_t * P)
+{
+  free(P);
+}
+
+ccptn_t *
+ccptn_new_dup_ascii (cce_destination_t L, char const * pathname, size_t len)
+/* Allocate a new "ccptn_t" instance  initialising it with data from the
+ * ASCII string "pathname" which  holds "len" octets without terminating
+ * zero.  The  data *is* duplicated:  the returned "ccptn_t"  includes a
+ * copy of the data from "pathname".
+ *
+ * The finalisation function registered in the instance will release the
+ * struct itself, and the data buffer.
+ */
+{
+  if (CCPTN_PATH_MAX < len) {
+    cce_raise(L, ccptn_condition_new_exceeded_length());
+  } else if (0 < len) {
+    ccptn_t *	P = cce_sys_malloc(L, sizeof(ccptn_t) + len + 1);
+    P->delete		= delete_for_ccptn_new_dup_ascii;
+    P->len		= len;
+    P->absolute		= ('/' == *pathname)? 1 : 0;
+    P->normalised	= 0;
+    P->realpath		= 0;
+    P->buf		= (char *)(((uint8_t *)P) + sizeof(ccptn_t));
+    strncpy(P->buf, pathname, len);
+    P->buf[len]		= '\0';
+    return P;
+  } else {
+    cce_raise(L, ccptn_condition_new_zero_length());
+  }
+}
+
+/* ------------------------------------------------------------------ */
+
+__attribute__((__nonnull__(1)))
+static void
+delete_for_ccptn_init_dup_ascii (ccptn_t * P)
+{
+  free(P->buf);
+}
+
+ccptn_t *
+ccptn_init_dup_ascii (cce_destination_t L, ccptn_t * P, char const * pathname, size_t len)
+/* Initialise an already allocted "ccptn_t"  instance with data from the
+ * ASCII string "pathname" which  holds "len" octets without terminating
+ * zero.  The data *is* duplicated: the  instance includes a copy of the
+ * data from "pathname".
+ *
+ * The finalisation function registered in the instance will release the
+ * data area but not the struct itself.
+ */
+{
+  if (CCPTN_PATH_MAX < len) {
+    cce_raise(L, ccptn_condition_new_exceeded_length());
+  } else if (0 < len) {
+    P->delete		= delete_for_ccptn_init_dup_ascii;
     P->len		= len;
     P->absolute		= ('/' == *pathname)? 1 : 0;
     P->normalised	= 0;

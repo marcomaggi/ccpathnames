@@ -627,6 +627,18 @@ cctests_decl void cctests_p_assert_asciiz (cce_destination_t L, char const * exp
 			  "cctests_assert_asciiz(" #L ", " #EXPECTED ", " #RESULT ")", \
 			  __FILE__, __func__, __LINE__)
 
+/* ------------------------------------------------------------------ */
+
+cctests_decl void cctests_p_assert_ascii (cce_destination_t L, char const * expected, char const * result, size_t result_len,
+					  char const * expr,
+					  char const * filename, char const * funcname, int linenum)
+  __attribute__((__nonnull__(1,2,3,5,6,7)));
+
+#define cctests_assert_ascii(L,EXPECTED,RESULT,RESULT_LEN)		\
+  cctests_p_assert_ascii(L, EXPECTED, RESULT, RESULT_LEN,		\
+			 "cctests_assert_ascii(" #L ", " #EXPECTED ", " #RESULT ")", \
+			 __FILE__, __func__, __LINE__)
+
 
 /** --------------------------------------------------------------------
  ** Calling a function in a subprocess.

@@ -23,7 +23,6 @@
   License along  with this library; if  not, write to  the Free Software
   Foundation, Inc.,  59 Temple Place,  Suite 330, Boston,  MA 02111-1307
   USA.
-
 */
 
 
@@ -33,41 +32,10 @@
 
 #include "ccpathnames-internals.h"
 
-static ccptn_extension_t const	empty_extension = {
-  .ptr = NULL,
-  .len = 0
-};
-
-static ccptn_segment_t const	empty_segment = {
-  .ptr = NULL,
-  .len = 0
-};
-
 
 /** --------------------------------------------------------------------
  ** Segments.
  ** ----------------------------------------------------------------- */
-
-bool
-ccptn_segment_is_empty (ccptn_segment_t S)
-/* Return true if the segment is an empty string. */
-{
-  return (0 == S.len)? true : false;
-}
-
-bool
-ccptn_segment_is_dot (ccptn_segment_t S)
-/* Return true if the segment is a single dot: ".". */
-{
-  return ((1 == S.len) && ('.' == *(S.ptr)))? true : false;
-}
-
-bool
-ccptn_segment_is_double_dot (ccptn_segment_t S)
-/* Return true if the segment is a double dot: "..". */
-{
-  return ((2 == S.len) && ('.' == S.ptr[0]) && ('.' == S.ptr[1]))? true : false;
-}
 
 void
 ccptn_segment_print (cce_destination_t L, FILE * stream, ccptn_segment_t S)
@@ -130,16 +98,9 @@ ccptn_segment_size_of_next (char const * const in, size_t const len)
  ** ----------------------------------------------------------------- */
 
 bool
-ccptn_extension_is_empty (ccptn_extension_t E)
-/* Return true if the extension is an empty string. */
-{
-  return (0 == E.len)? true : false;
-}
-
-bool
 ccptn_extension_equal (ccptn_extension_t E1, ccptn_extension_t E2)
 {
-  return ((E1.len == E2.len) && (0 == strncmp(E1.ptr, E2.ptr, E1.len))) ? true : false;
+  return ((E1.len == E2.len) && (0 == strncmp(E1.ptr, E2.ptr, E1.len)));
 }
 
 void
@@ -163,49 +124,51 @@ static ccptn_segment_t
 ccptn_asciiz_find_last_segment (char const * beg, size_t const len)
 {
   char const *	end = beg + len;
+  char const *	ptr = --end;
 
-  if ('/' == *end) {
-    /* The last octet in the pathname is the ASCII representation of the
-       slash separator; the last segment is empty. */
-    return empty_segment;
-  } else {
-    /* Here we  know that the  last octet in  the pathname is  *not* the
-       ASCII representation of the slash separator. */
+  /* If the  last octet in the  pathname is the ASCII  representation of
+   * the  slash separator:  step back.   We want  the following  segment
+   * extraction:
+   *
+   *	"/path/to/dir.ext/"	=> "dir.ext"
+   */
+  if ('/' == *ptr) {
+    --ptr;
+  }
 
-    /* Find the first slash separator starting from the end. */
-    for (char const * ptr = --end; beg <= ptr; --ptr) {
-      if ('/' == *ptr) {
-	/* "ptr"  is  at  the  beginning  of  the  last  component,  slash
-	   included. */
-	ccptn_segment_t	S = {
-	  .ptr	= 1+ptr,
-	  .len	= end - ptr
-	};
-	return S;
-      } else {
-
-      }
-    }
-
-    /* If we are  here: no slash was found in  the pathname, starting from
-       the end; it means the whole pathname is the last segment. */
-    {
+  /* Find the first slash separator starting from the end. */
+  for (; beg <= ptr; --ptr) {
+    if ('/' == *ptr) {
+      /* "ptr"  is  at  the  beginning  of  the  last  component,  slash
+	 included. */
       ccptn_segment_t	S = {
-	.ptr	= beg,
-	.len	= len
+	.ptr	= 1+ptr,
+	.len	= end - ptr
       };
       return S;
+    } else {
+
     }
+  }
+
+  /* If we are  here: no slash was found in  the pathname, starting from
+     the end; it means the whole pathname is the last segment. */
+  {
+    ccptn_segment_t	S = {
+      .ptr	= beg,
+      .len	= len
+    };
+    return S;
   }
 }
 
 
 /** --------------------------------------------------------------------
- ** Extension and rootname.
+ ** Pathname components: extension.
  ** ----------------------------------------------------------------- */
 
 ccptn_extension_t
-ccptn_extension (cce_destination_t L, ccptn_t const * P)
+ccptn_extension (cce_destination_t L, ccptn_t const * const P)
 {
   if (ccptn_is_normalised(P)) {
     ccptn_segment_t	S = ccptn_asciiz_find_last_segment(ccptn_asciiz(P), ccptn_len(P));
@@ -213,7 +176,11 @@ ccptn_extension (cce_destination_t L, ccptn_t const * P)
     if (ccptn_segment_is_dot(S) ||
 	ccptn_segment_is_double_dot(S) ||
 	ccptn_segment_is_empty(S)) {
-      return empty_extension;
+      ccptn_extension_t	E = {
+	.len	= 0,
+	.ptr	= ccptn_asciiz(P) + ccptn_len(P)
+      };
+      return E;
     } else {
       char const *	beg = S.ptr;
       char const *	end = beg + S.len;
@@ -223,25 +190,67 @@ ccptn_extension (cce_destination_t L, ccptn_t const * P)
 	if ('.' == *ptr) {
 	  /* Found the last dot in the segment. */
 	  if (ptr == beg) {
-	    /* The  dot  is  the  first  octet:  this  pathname  has  no
-	       extension.  It is a dotfile like: ".fvwmrc". */
-	    return empty_extension;
+	    /* The  dot is  the first  octet in  the last  segment: this
+	       pathname  has  no  extension.   It  is  a  dotfile  like:
+	       ".fvwmrc". */
+	    break;
 	  } else if ('/' == *(ptr - 1)) {
 	    /* The dot is the first octet right after a slash separator:
 	       this pathname  has no extension.   It is a  dotfile like:
 	       "/home/marco/.fvwmrc". */
-	    return empty_extension;
+	    break;
 	  } else {
-	    /* Found an actual extension. */
 	    ccptn_extension_t	E = {
 	      .ptr = ptr,
-	      .len = end - ptr
+	      /* If  the input  pathname  ends with  a  slash: do  *not*
+		 include it in the extension. */
+	      .len = (('/' == *(end-1))? (end-1) : end) - ptr
 	    };
 	    return E;
 	  }
 	}
       }
-      return empty_extension;
+
+      /* No dot found in the last segment.  Return an empty extension. */
+      {
+	ccptn_extension_t	E = {
+	  .len	= 0,
+	  .ptr	= ccptn_asciiz(P) + ccptn_len(P)
+	};
+	return E;
+      }
+    }
+  } else {
+    cce_raise(L, ccptn_condition_new_normalised_pathname());
+  }
+}
+
+
+/** --------------------------------------------------------------------
+ ** Pathname components: rootname.
+ ** ----------------------------------------------------------------- */
+
+__attribute__((__returns_nonnull__,__nonnull__(1,3)))
+static ccptn_t *
+ptn_rootname (cce_destination_t L, ccptn_t * const R, ccptn_t const * const P)
+{
+  if (ccptn_is_normalised(P)) {
+    ccptn_extension_t	E = ccptn_extension(L, P);
+
+    if (ccptn_extension_is_empty(E)) {
+      cce_raise(L, ccptn_condition_new_no_rootname());
+    } else {
+      char const * const	beg = ccptn_asciiz(P);
+
+      if (R) {
+	ccptn_init_dup_ascii(L, R, beg, E.ptr - beg);
+	R->normalised	= 1;
+	return R;
+      } else {
+	ccptn_t *	Q = ccptn_new_dup_ascii(L, beg, E.ptr - beg);
+	Q->normalised	= 1;
+	return Q;
+      }
     }
   } else {
     cce_raise(L, ccptn_condition_new_normalised_pathname());
@@ -249,12 +258,308 @@ ccptn_extension (cce_destination_t L, ccptn_t const * P)
 }
 
 ccptn_t *
-ccptn_rootname (cce_destination_t L CCPTN_UNUSED, ccptn_t const * P CCPTN_UNUSED)
-/* Build and return a new  pathname representing the input pathname with
-   the exclusion  of the last  segment's extension; the dot  leading the
-   extension is excluded from the returned pathname. */
+ccptn_new_rootname (cce_destination_t L, ccptn_t const * P)
+/* Build  and  return  a  new instance  of  "ccptn_t"  representing  the
+ * rootname of the  input pathname referenced by P.   The input pathname
+ * must be normalised.
+ *
+ * The rootname is the pathname representing the input pathname with the
+ * extension of the last segment stripped.  Examples:
+ *
+ *	"/path/to/file.ext"	=> "/path/to/file"
+ *	"/path/to/file"		=> "/path/to/file"
+ *	"/path/to/dir/"		=> "/path/to/dir"
+ *	"file.ext"		=> "file.ext"
+ *	".fvwmrc"		=> ".fvwmrc"
+ *	"."			--> error
+ *	".."			--> error
+ */
 {
-  return NULL;
+  return ptn_rootname(L, NULL, P);
+}
+
+ccptn_t *
+ccptn_init_rootname (cce_destination_t L, ccptn_t * const R, ccptn_t const * const P)
+/* Initialise an already allocated  instance of "ccptn_t", referenced by
+ * R, with  the rootname  of the  input pathname  referenced by  P.  The
+ * input pathname must be normalised.  Return a R itself.
+ *
+ * The rootname is the pathname representing the input pathname with the
+ * extension of the last segment stripped.  Examples:
+ *
+ *	"/path/to/file.ext"	=> "/path/to/file"
+ *	"/path/to/file"		=> "/path/to/file"
+ *	"/path/to/dir/"		=> "/path/to/dir"
+ *	"file.ext"		=> "file.ext"
+ *	".fvwmrc"		=> ".fvwmrc"
+ *	"."			--> error
+ *	".."			--> error
+ */
+{
+  return ptn_rootname(L, R, P);
+}
+
+
+/** --------------------------------------------------------------------
+ ** Pathname components: dirname.
+ ** ----------------------------------------------------------------- */
+
+__attribute__((__returns_nonnull__,__nonnull__(1,3)))
+static ccptn_t *
+ptn_dirname (cce_destination_t L, ccptn_t * const R, ccptn_t const * const P)
+{
+  if (ccptn_is_normalised(P)) {
+    size_t const	len = ccptn_len(P);
+    char const * const	beg = ccptn_asciiz(P);
+    char const *	ptr = beg + len - 1;
+
+    /* If the pathname is ".": the directory part is "..". */
+    if ((1 == len) && ('.' == *beg)) {
+      if (R) {
+	ccptn_init_dup_asciiz(L, R, "..");
+	R->normalised	= 1;
+	return R;
+      } else {
+	ccptn_t *	Q = ccptn_new_dup_asciiz(L, "..");
+	Q->normalised	= 1;
+	return Q;
+      }
+    }
+    /* If the pathname is "..", it has no dirname. */
+    else if ((2 == len) && ('.' == beg[0]) && ('.' == beg[1])) {
+      cce_raise(L, ccptn_condition_new_no_dirname());
+    } else {
+      /* Skip the trailing slash, if any. */
+      if ('/' == *ptr) {
+	--ptr;
+      }
+
+      /* Find the latest slash. */
+      while ((beg < ptr) && ('/' != *ptr)) {
+	--ptr;
+      }
+
+      if (beg < ptr) {
+	/* If we have found a slash: skip it and build the return value. */
+	++ptr;
+	size_t	rv_len = (len - (ptr - beg));
+	if (R) {
+	  ccptn_init_dup_ascii(L, R, ptr, rv_len);
+	  R->normalised	= 1;
+	  return R;
+	} else {
+	  ccptn_t *	Q = ccptn_new_dup_ascii(L, ptr, rv_len);
+	  Q->normalised	= 1;
+	  return Q;
+	}
+      } else {
+	/* There is no slash: the input pathname has no dirname. */
+	cce_raise(L, ccptn_condition_new_no_dirname());
+      }
+    }
+  } else {
+    cce_raise(L, ccptn_condition_new_normalised_pathname());
+  }
+}
+
+ccptn_t *
+ccptn_new_dirname (cce_destination_t L, ccptn_t const * P)
+/* Build and return a new instance of "ccptn_t" representing the dirname
+ * of the  input pathname referenced by  P.  The input pathname  must be
+ * normalised.
+ *
+ * The dirname is the pathname  representing the input pathname with the
+ * last segment stripped.  Examples:
+ *
+ *	"/path/to/file.ext"	=> "/path/to"
+ *	"/path/to/dir/"		=> "/path/to"
+ *	"file.ext"		--> error
+ *	"."			=> ".."
+ *	".."			--> error
+ */
+{
+  return ptn_dirname(L, NULL, P);
+}
+
+ccptn_t *
+ccptn_init_dirname (cce_destination_t L, ccptn_t * const R, ccptn_t const * const P)
+/* Initialise an already allocated  instance of "ccptn_t", referenced by
+ * R, with the dirname of the input pathname referenced by P.  The input
+ * pathname must be normalised.  Return a R itself.
+ *
+ * The dirname is the pathname  representing the input pathname with the
+ * last segment stripped.  Examples:
+ *
+ *	"/path/to/file.ext"	=> "/path/to"
+ *	"/path/to/dir/"		=> "/path/to"
+ *	"file.ext"		--> error
+ *	"."			=> ".."
+ *	".."			--> error
+ */
+{
+  return ptn_dirname(L, R, P);
+}
+
+
+/** --------------------------------------------------------------------
+ ** Pathname components: tailname.
+ ** ----------------------------------------------------------------- */
+
+__attribute__((__returns_nonnull__,__nonnull__(1,3)))
+static ccptn_t *
+ptn_tailname (cce_destination_t L, ccptn_t * const R, ccptn_t const * const P)
+{
+  if (ccptn_is_normalised(P)) {
+    size_t const	len = ccptn_len(P);
+    char const * const	beg = ccptn_asciiz(P);
+    char const *	ptr = beg + len - 1;
+
+    /* Skip the trailing slash, if any. */
+    if ('/' == *ptr) {
+      --ptr;
+    }
+    /* Find the latest slash. */
+    while ((beg < ptr) && ('/' != *ptr)) {
+      --ptr;
+    }
+
+    /* If we have found a slash: skip it. */
+    if (beg < ptr) {
+      ++ptr;
+    }
+
+    if (R) {
+      ccptn_init_dup_asciiz(L, R, ptr);
+      R->normalised	= 1;
+      return R;
+    } else {
+      ccptn_t *	Q = ccptn_new_dup_asciiz(L, ptr);
+      Q->normalised	= 1;
+      return Q;
+    }
+  } else {
+    cce_raise(L, ccptn_condition_new_normalised_pathname());
+  }
+}
+
+ccptn_t *
+ccptn_new_tailname (cce_destination_t L, ccptn_t const * P)
+/* Build  and  return  a  new instance  of  "ccptn_t"  representing  the
+ * tailname of the  input pathname referenced by P.   The input pathname
+ * must be normalised.
+ *
+ * The tailname is the relative  pathname representing the last segment.
+ * Examples:
+ *
+ *	"/path/to/file.ext"	=> "file.ext"
+ *	"/path/to/dir/"		=> "dir/"
+ *	"file.ext"		=> "file.ext"
+ *	"."			=> "."
+ *	".."			=> ".."
+ */
+{
+  return ptn_tailname(L, NULL, P);
+}
+
+ccptn_t *
+ccptn_init_tailname (cce_destination_t L, ccptn_t * const R, ccptn_t const * const P)
+/* Initialise an already allocated  instance of "ccptn_t", referenced by
+ * R, with  the tailname  of the  input pathname  referenced by  P.  The
+ * input pathname must be normalised.  Return a R itself.
+ *
+ * The tailname is the relative  pathname representing the last segment.
+ * Examples:
+ *
+ *	"/path/to/file.ext"	=> "file.ext"
+ *	"/path/to/dir/"		=> "dir/"
+ *	"file.ext"		=> "file.ext"
+ *	"."			=> "."
+ *	".."			=> ".."
+ */
+{
+  return ptn_tailname(L, R, P);
+}
+
+
+/** --------------------------------------------------------------------
+ ** Pathname components: filename.
+ ** ----------------------------------------------------------------- */
+
+__attribute__((__returns_nonnull__,__nonnull__(1,3)))
+static ccptn_t *
+ptn_filename (cce_destination_t L, ccptn_t * const R, ccptn_t const * const P)
+{
+  if (ccptn_is_normalised(P)) {
+    size_t const	len = ccptn_len(P);
+    char const * const	beg = ccptn_asciiz(P);
+    char const *	ptr = beg + len - 1;
+
+    /* If there  is a  trailing slash: the  input pathname  represents a
+       directory, so there is not filename. */
+    if ('/' == *ptr) {
+      cce_raise(L, ccptn_condition_new_no_filename());
+    }
+
+    /* Find the latest slash. */
+    while ((beg < ptr) && ('/' != *ptr)) {
+      --ptr;
+    }
+
+    /* If we have found a slash: skip it. */
+    if (beg < ptr) {
+      ++ptr;
+    }
+
+    if (R) {
+      ccptn_init_dup_asciiz(L, R, ptr);
+      R->normalised	= 1;
+      return R;
+    } else {
+      ccptn_t *	Q = ccptn_new_dup_asciiz(L, ptr);
+      Q->normalised	= 1;
+      return Q;
+    }
+  } else {
+    cce_raise(L, ccptn_condition_new_normalised_pathname());
+  }
+}
+
+ccptn_t *
+ccptn_new_filename (cce_destination_t L, ccptn_t const * P)
+/* Build  and  return  a  new instance  of  "ccptn_t"  representing  the
+ * filename of the  input pathname referenced by P.   The input pathname
+ * must be normalised.
+ *
+ * The filename is  the relative pathname representing  the last segment
+ * if it does not represent a directory.  Examples:
+ *
+ *	"/path/to/file.ext"	=> "file.ext"
+ *	"/path/to/dir/"		--> error
+ *	"file.ext"		=> "file.ext"
+ *	"."			--> error
+ *	".."			--> error
+ */
+{
+  return ptn_filename(L, NULL, P);
+}
+
+ccptn_t *
+ccptn_init_filename (cce_destination_t L, ccptn_t * const R, ccptn_t const * const P)
+/* Initialise an already allocated  instance of "ccptn_t", referenced by
+ * R, with  the filename  of the  input pathname  referenced by  P.  The
+ * input pathname must be normalised.  Return a R itself.
+ *
+ * The filename is  the relative pathname representing  the last segment
+ * if it does not represent a directory.  Examples:
+ *
+ *	"/path/to/file.ext"	=> "file.ext"
+ *	"/path/to/dir/"		--> error
+ *	"file.ext"		=> "file.ext"
+ *	"."			--> error
+ *	".."			--> error
+ */
+{
+  return ptn_filename(L, R, P);
 }
 
 /* end of file */

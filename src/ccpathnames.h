@@ -203,7 +203,7 @@ struct ccptn_descriptor_normalised_pathname_t {
 };
 
 struct ccptn_condition_normalised_pathname_t {
-  cce_condition_runtime_error_t	runtime_error;
+  ccptn_condition_invalid_pathname_t	invalid_pathname;
 };
 
 ccptn_decl void ccptn_condition_init_normalised_pathname (ccptn_condition_normalised_pathname_t * C)
@@ -213,6 +213,81 @@ ccptn_decl cce_condition_t const * ccptn_condition_new_normalised_pathname (void
   __attribute__((__returns_nonnull__));
 
 ccptn_decl bool ccptn_condition_is_normalised_pathname (cce_condition_t const * C)
+  __attribute__((__nonnull__(1)));
+
+
+/** --------------------------------------------------------------------
+ ** Condition objects: no dirname part when required.
+ ** ----------------------------------------------------------------- */
+
+typedef struct ccptn_descriptor_no_dirname_t	ccptn_descriptor_no_dirname_t;
+typedef struct ccptn_condition_no_dirname_t	ccptn_condition_no_dirname_t;
+
+struct ccptn_descriptor_no_dirname_t {
+  cce_descriptor_t	descriptor;
+};
+
+struct ccptn_condition_no_dirname_t {
+  ccptn_condition_invalid_pathname_t	invalid_pathname;
+};
+
+ccptn_decl void ccptn_condition_init_no_dirname (ccptn_condition_no_dirname_t * C)
+  __attribute__((__nonnull__(1)));
+
+ccptn_decl cce_condition_t const * ccptn_condition_new_no_dirname (void)
+  __attribute__((__returns_nonnull__));
+
+ccptn_decl bool ccptn_condition_is_no_dirname (cce_condition_t const * C)
+  __attribute__((__nonnull__(1)));
+
+
+/** --------------------------------------------------------------------
+ ** Condition objects: no filename part when required.
+ ** ----------------------------------------------------------------- */
+
+typedef struct ccptn_descriptor_no_filename_t	ccptn_descriptor_no_filename_t;
+typedef struct ccptn_condition_no_filename_t	ccptn_condition_no_filename_t;
+
+struct ccptn_descriptor_no_filename_t {
+  cce_descriptor_t	descriptor;
+};
+
+struct ccptn_condition_no_filename_t {
+  ccptn_condition_invalid_pathname_t	invalid_pathname;
+};
+
+ccptn_decl void ccptn_condition_init_no_filename (ccptn_condition_no_filename_t * C)
+  __attribute__((__nonnull__(1)));
+
+ccptn_decl cce_condition_t const * ccptn_condition_new_no_filename (void)
+  __attribute__((__returns_nonnull__));
+
+ccptn_decl bool ccptn_condition_is_no_filename (cce_condition_t const * C)
+  __attribute__((__nonnull__(1)));
+
+
+/** --------------------------------------------------------------------
+ ** Condition objects: no rootname part when required.
+ ** ----------------------------------------------------------------- */
+
+typedef struct ccptn_descriptor_no_rootname_t	ccptn_descriptor_no_rootname_t;
+typedef struct ccptn_condition_no_rootname_t	ccptn_condition_no_rootname_t;
+
+struct ccptn_descriptor_no_rootname_t {
+  cce_descriptor_t	descriptor;
+};
+
+struct ccptn_condition_no_rootname_t {
+  ccptn_condition_invalid_pathname_t	invalid_pathname;
+};
+
+ccptn_decl void ccptn_condition_init_no_rootname (ccptn_condition_no_rootname_t * C)
+  __attribute__((__nonnull__(1)));
+
+ccptn_decl cce_condition_t const * ccptn_condition_new_no_rootname (void)
+  __attribute__((__returns_nonnull__));
+
+ccptn_decl bool ccptn_condition_is_no_rootname (cce_condition_t const * C)
   __attribute__((__nonnull__(1)));
 
 
@@ -320,6 +395,14 @@ ccptn_decl ccptn_t * ccptn_new_dup_asciiz (cce_destination_t L, char const * pat
 
 /* ------------------------------------------------------------------ */
 
+ccptn_decl ccptn_t * ccptn_init_dup_ascii (cce_destination_t L, ccptn_t * P, char const * pathname, size_t len)
+  __attribute__((__returns_nonnull__,__nonnull__(1,2)));
+
+ccptn_decl ccptn_t * ccptn_new_dup_ascii (cce_destination_t L, char const * pathname, size_t len)
+  __attribute__((__returns_nonnull__,__nonnull__(1,2)));
+
+/* ------------------------------------------------------------------ */
+
 __attribute__((__nonnull__(1),__always_inline__))
 static inline void
 ccptn_delete (ccptn_t * P)
@@ -356,28 +439,28 @@ ccptn_init_nodup_asciiz_guarded_error (cce_destination_t L, ccptn_t * P, cce_han
 
 __attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3,4)))
 static inline ccptn_t *
-ccptn_init_dup_asciiz_guarded_error (cce_destination_t L, ccptn_t * P, cce_handler_t * P_H, char const * pathname)
+ccptn_init_dup_asciiz_guarded_error (cce_destination_t L, ccptn_t * R, cce_handler_t * R_H, char const * pathname)
 {
-  ccptn_init_dup_asciiz(L, P, pathname);
-  ccptn_error_handler_ptn_init(L, P_H, P);
-  return P;
-}
-
-__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
-static inline ccptn_t *
-ccptn_new_nodup_asciiz_guarded_error (cce_destination_t L, cce_handler_t * P_H, char const * pathname)
-{
-  ccptn_t *	R = ccptn_new_nodup_asciiz(L, pathname);
-  ccptn_error_handler_ptn_init(L, P_H, R);
+  ccptn_init_dup_asciiz(L, R, pathname);
+  ccptn_error_handler_ptn_init(L, R_H, R);
   return R;
 }
 
 __attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
 static inline ccptn_t *
-ccptn_new_dup_asciiz_guarded_error (cce_destination_t L, cce_handler_t * P_H, char const * pathname)
+ccptn_new_nodup_asciiz_guarded_error (cce_destination_t L, cce_handler_t * R_H, char const * pathname)
+{
+  ccptn_t *	R = ccptn_new_nodup_asciiz(L, pathname);
+  ccptn_error_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
+static inline ccptn_t *
+ccptn_new_dup_asciiz_guarded_error (cce_destination_t L, cce_handler_t * R_H, char const * pathname)
 {
   ccptn_t *	R = ccptn_new_dup_asciiz(L, pathname);
-  ccptn_error_handler_ptn_init(L, P_H, R);
+  ccptn_error_handler_ptn_init(L, R_H, R);
   return R;
 }
 
@@ -385,51 +468,51 @@ ccptn_new_dup_asciiz_guarded_error (cce_destination_t L, cce_handler_t * P_H, ch
 
 __attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3,4)))
 static inline ccptn_t *
-ccptn_init_nodup_asciiz_guarded_cleanup (cce_destination_t L, ccptn_t * P, cce_handler_t * P_H, char const * pathname)
+ccptn_init_nodup_asciiz_guarded_cleanup (cce_destination_t L, ccptn_t * R, cce_handler_t * R_H, char const * pathname)
 {
-  ccptn_init_nodup_asciiz(L, P, pathname);
-  ccptn_cleanup_handler_ptn_init(L, P_H, P);
-  return P;
+  ccptn_init_nodup_asciiz(L, R, pathname);
+  ccptn_cleanup_handler_ptn_init(L, R_H, R);
+  return R;
 }
 
 __attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3,4)))
 static inline ccptn_t *
-ccptn_init_dup_asciiz_guarded_cleanup (cce_destination_t L, ccptn_t * P, cce_handler_t * P_H, char const * pathname)
+ccptn_init_dup_asciiz_guarded_cleanup (cce_destination_t L, ccptn_t * R, cce_handler_t * R_H, char const * pathname)
 {
-  ccptn_init_dup_asciiz(L, P, pathname);
-  ccptn_cleanup_handler_ptn_init(L, P_H, P);
-  return P;
-}
-
-__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
-static inline ccptn_t *
-ccptn_new_nodup_asciiz_guarded_cleanup (cce_destination_t L, cce_handler_t * P_H, char const * pathname)
-{
-  ccptn_t *	R = ccptn_new_nodup_asciiz(L, pathname);
-  ccptn_cleanup_handler_ptn_init(L, P_H, R);
+  ccptn_init_dup_asciiz(L, R, pathname);
+  ccptn_cleanup_handler_ptn_init(L, R_H, R);
   return R;
 }
 
 __attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
 static inline ccptn_t *
-ccptn_new_dup_asciiz_guarded_cleanup (cce_destination_t L, cce_handler_t * P_H, char const * pathname)
+ccptn_new_nodup_asciiz_guarded_cleanup (cce_destination_t L, cce_handler_t * R_H, char const * pathname)
+{
+  ccptn_t *	R = ccptn_new_nodup_asciiz(L, pathname);
+  ccptn_cleanup_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
+static inline ccptn_t *
+ccptn_new_dup_asciiz_guarded_cleanup (cce_destination_t L, cce_handler_t * R_H, char const * pathname)
 {
   ccptn_t *	R = ccptn_new_dup_asciiz(L, pathname);
-  ccptn_cleanup_handler_ptn_init(L, P_H, R);
+  ccptn_cleanup_handler_ptn_init(L, R_H, R);
   return R;
 }
 
 /* ------------------------------------------------------------------ */
 
-#define ccptn_init_nodup_asciiz_guarded(L,P,H,PATHNAME)		\
+#define ccptn_init_nodup_asciiz_guarded(L,R,H,PATHNAME)		\
   _Generic((H),								\
 	   cce_cleanup_handler_t	*: ccptn_init_nodup_asciiz_guarded_cleanup, \
-	   cce_error_handler_t		*: ccptn_init_nodup_asciiz_guarded_error)(L,P,&(H->handler),PATHNAME)
+	   cce_error_handler_t		*: ccptn_init_nodup_asciiz_guarded_error)(L,R,&(H->handler),PATHNAME)
 
-#define ccptn_init_dup_asciiz_guarded(L,P,H,PATHNAME)		\
+#define ccptn_init_dup_asciiz_guarded(L,R,H,PATHNAME)		\
   _Generic((H),								\
 	   cce_cleanup_handler_t	*: ccptn_init_dup_asciiz_guarded_cleanup, \
-	   cce_error_handler_t		*: ccptn_init_dup_asciiz_guarded_error)(L,P,&(H->handler),PATHNAME)
+	   cce_error_handler_t		*: ccptn_init_dup_asciiz_guarded_error)(L,R,&(H->handler),PATHNAME)
 
 #define ccptn_new_nodup_asciiz_guarded(L,H,PATHNAME)		\
   _Generic((H),								\
@@ -495,7 +578,7 @@ ccptn_is_realpath (ccptn_t const * const P)
 
 
 /** --------------------------------------------------------------------
- ** Pathnames: manipulation.
+ ** Pathnames manipulation: realpath.
  ** ----------------------------------------------------------------- */
 
 ccptn_decl ccptn_t * ccptn_new_realpath (cce_destination_t L, ccptn_t const * P)
@@ -506,11 +589,120 @@ ccptn_decl ccptn_t * ccptn_init_realpath (cce_destination_t L, ccptn_t * R, ccpt
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl ccptn_t * ccptn_new_normalise (cce_destination_t L, ccptn_t const * const P)
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
+static inline ccptn_t *
+ccptn_new_realpath_guarded_error (cce_destination_t L, cce_handler_t * const R_H, ccptn_t const * const P)
+{
+  ccptn_t *	R = ccptn_new_realpath(L, P);
+  ccptn_error_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
+static inline ccptn_t *
+ccptn_new_realpath_guarded_cleanup (cce_destination_t L, cce_handler_t * const R_H, ccptn_t const * const P)
+{
+  ccptn_t *	R = ccptn_new_realpath(L, P);
+  ccptn_cleanup_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+/* ------------------------------------------------------------------ */
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3,4)))
+static inline ccptn_t *
+ccptn_init_realpath_guarded_error (cce_destination_t L, ccptn_t * const R, cce_handler_t * const R_H, ccptn_t const * const P)
+{
+  ccptn_init_realpath(L, R, P);
+  ccptn_error_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3,4)))
+static inline ccptn_t *
+ccptn_init_realpath_guarded_cleanup (cce_destination_t L, ccptn_t * const R, cce_handler_t * const R_H, ccptn_t const * const P)
+{
+  ccptn_init_realpath(L, R, P);
+  ccptn_cleanup_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+/* ------------------------------------------------------------------ */
+
+#define ccptn_new_realpath_guarded(L,H,P)				\
+  _Generic((H),								\
+	   cce_cleanup_handler_t	*: ccptn_new_realpath_guarded_cleanup, \
+	   cce_error_handler_t		*: ccptn_new_realpath_guarded_error)(L,&(H->handler),P)
+
+#define ccptn_init_realpath_guarded(L,R,H,P)				\
+  _Generic((H),								\
+	   cce_cleanup_handler_t	*: ccptn_init_realpath_guarded_cleanup, \
+	   cce_error_handler_t		*: ccptn_init_realpath_guarded_error)(L,R,&(H->handler),P)
+
+
+/** --------------------------------------------------------------------
+ ** Pathname manipulation: normalisation.
+ ** ----------------------------------------------------------------- */
+
+ccptn_decl ccptn_t * ccptn_new_normalise (cce_destination_t L, ccptn_t const * P)
   __attribute__((__nonnull__(1,2)));
 
-ccptn_decl ccptn_t * ccptn_init_normalise (cce_destination_t L, ccptn_t * R, ccptn_t const * const P)
+ccptn_decl ccptn_t * ccptn_init_normalise (cce_destination_t L, ccptn_t * R, ccptn_t const * P)
   __attribute__((__nonnull__(1,2,3)));
+
+/* ------------------------------------------------------------------ */
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
+static inline ccptn_t *
+ccptn_new_normalise_guarded_error (cce_destination_t L, cce_handler_t * const R_H, ccptn_t const * const P)
+{
+  ccptn_t *	R = ccptn_new_normalise(L, P);
+  ccptn_error_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
+static inline ccptn_t *
+ccptn_new_normalise_guarded_cleanup (cce_destination_t L, cce_handler_t * const R_H, ccptn_t const * const P)
+{
+  ccptn_t *	R = ccptn_new_normalise(L, P);
+  ccptn_cleanup_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+/* ------------------------------------------------------------------ */
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3,4)))
+static inline ccptn_t *
+ccptn_init_normalise_guarded_error (cce_destination_t L, ccptn_t * const R, cce_handler_t * const R_H, ccptn_t const * const P)
+{
+  ccptn_init_normalise(L, R, P);
+  ccptn_error_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3,4)))
+static inline ccptn_t *
+ccptn_init_normalise_guarded_cleanup (cce_destination_t L, ccptn_t * const R, cce_handler_t * const R_H, ccptn_t const * const P)
+{
+  ccptn_init_normalise(L, R, P);
+  ccptn_cleanup_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+/* ------------------------------------------------------------------ */
+
+#define ccptn_new_normalise_guarded(L,H,P)				\
+  _Generic((H),								\
+	   cce_cleanup_handler_t	*: ccptn_new_normalise_guarded_cleanup, \
+	   cce_error_handler_t		*: ccptn_new_normalise_guarded_error)(L,&(H->handler),P)
+
+#define ccptn_init_normalise_guarded(L,R,H,P)				\
+  _Generic((H),								\
+	   cce_cleanup_handler_t	*: ccptn_init_normalise_guarded_cleanup, \
+	   cce_error_handler_t		*: ccptn_init_normalise_guarded_error)(L,R,&(H->handler),P)
+
+/* ------------------------------------------------------------------ */
 
 ccptn_decl size_t ccptn_normal_pass_remove_useless_slashes (char * output_ptr, char const * const input_ptr, size_t const input_len)
   __attribute__((__nonnull__(1,2)));
@@ -522,7 +714,10 @@ ccptn_decl size_t ccptn_normal_pass_remove_double_dot_segments (cce_destination_
 								char const * const input_ptr, size_t const input_len)
   __attribute__((__nonnull__(1,2,3)));
 
-/* ------------------------------------------------------------------ */
+
+/** --------------------------------------------------------------------
+ ** Pathname manipulation: concatenation.
+ ** ----------------------------------------------------------------- */
 
 ccptn_decl ccptn_t * ccptn_new_concat (cce_destination_t L, ccptn_t const * prefix, ccptn_t const * suffix)
   __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
@@ -530,22 +725,317 @@ ccptn_decl ccptn_t * ccptn_new_concat (cce_destination_t L, ccptn_t const * pref
 ccptn_decl ccptn_t * ccptn_init_concat (cce_destination_t L, ccptn_t * result, ccptn_t const * prefix, ccptn_t const * suffix)
   __attribute__((__nonnull__(1,2,3,4),__returns_nonnull__));
 
+/* ------------------------------------------------------------------ */
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
+static inline ccptn_t *
+ccptn_new_concat_guarded_error (cce_destination_t L, cce_handler_t * const R_H,
+				ccptn_t const * const prefix,
+				ccptn_t const * const suffix)
+{
+  ccptn_t *	R = ccptn_new_concat(L, prefix, suffix);
+  ccptn_error_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
+static inline ccptn_t *
+ccptn_new_concat_guarded_cleanup (cce_destination_t L, cce_handler_t * const R_H,
+				  ccptn_t const * const prefix,
+				  ccptn_t const * const suffix)
+{
+  ccptn_t *	R = ccptn_new_concat(L, prefix, suffix);
+  ccptn_cleanup_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+/* ------------------------------------------------------------------ */
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3,4)))
+static inline ccptn_t *
+ccptn_init_concat_guarded_error (cce_destination_t L, ccptn_t * const R, cce_handler_t * const R_H,
+				 ccptn_t const * const prefix,
+				 ccptn_t const * const suffix)
+{
+  ccptn_init_concat(L, R, prefix, suffix);
+  ccptn_error_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3,4)))
+static inline ccptn_t *
+ccptn_init_concat_guarded_cleanup (cce_destination_t L, ccptn_t * const R, cce_handler_t * const R_H,
+				   ccptn_t const * const prefix,
+				   ccptn_t const * const suffix)
+{
+  ccptn_init_concat(L, R, prefix, suffix);
+  ccptn_cleanup_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+/* ------------------------------------------------------------------ */
+
+#define ccptn_new_concat_guarded(L,H,PREFIX,SUFFIX)			\
+  _Generic((H),								\
+	   cce_cleanup_handler_t	*: ccptn_new_concat_guarded_cleanup, \
+	   cce_error_handler_t		*: ccptn_new_concat_guarded_error)(L,&(H->handler),PREFIX,SUFFIX)
+
+#define ccptn_init_concat_guarded(L,R,H,PREFIX,SUFFIX)			\
+  _Generic((H),								\
+	   cce_cleanup_handler_t	*: ccptn_init_concat_guarded_cleanup, \
+	   cce_error_handler_t		*: ccptn_init_concat_guarded_error)(L,R,&(H->handler),PREFIX,SUFFIX)
+
 
 /** --------------------------------------------------------------------
- ** Pathnames: components.
+ ** Pathname components: extension.
  ** ----------------------------------------------------------------- */
 
 ccptn_decl ccptn_extension_t ccptn_extension (cce_destination_t L, ccptn_t const * P)
   __attribute__((__nonnull__(1,2)));
 
-ccptn_decl ccptn_t * ccptn_rootname (cce_destination_t L, ccptn_t const * P)
+
+/** --------------------------------------------------------------------
+ ** Pathname components: rootname.
+ ** ----------------------------------------------------------------- */
+
+ccptn_decl ccptn_t * ccptn_new_rootname (cce_destination_t L, ccptn_t const * P)
   __attribute__((__nonnull__(1,2)));
 
-ccptn_decl ccptn_t * ccptn_dirname (cce_destination_t L, ccptn_t const * P)
+ccptn_decl ccptn_t * ccptn_init_rootname (cce_destination_t L, ccptn_t * R, ccptn_t const * P)
   __attribute__((__nonnull__(1,2)));
 
-ccptn_decl ccptn_t * ccptn_tailname (cce_destination_t L, ccptn_t const * P)
+/* ------------------------------------------------------------------ */
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
+static inline ccptn_t *
+ccptn_new_rootname_guarded_error (cce_destination_t L, cce_handler_t * const R_H, ccptn_t const * const P)
+{
+  ccptn_t *	R = ccptn_new_rootname(L, P);
+  ccptn_error_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
+static inline ccptn_t *
+ccptn_new_rootname_guarded_cleanup (cce_destination_t L, cce_handler_t * const R_H, ccptn_t const * const P)
+{
+  ccptn_t *	R = ccptn_new_rootname(L, P);
+  ccptn_cleanup_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+#define ccptn_new_rootname_guarded(L,H,P)				\
+  _Generic((H),								\
+	   cce_cleanup_handler_t	*: ccptn_new_rootname_guarded_cleanup, \
+	   cce_error_handler_t		*: ccptn_new_rootname_guarded_error)(L,&(H->handler),P)
+
+/* ------------------------------------------------------------------ */
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3,4)))
+static inline ccptn_t *
+ccptn_init_rootname_guarded_error (cce_destination_t L, ccptn_t * const R, cce_handler_t * const R_H, ccptn_t const * const P)
+{
+  ccptn_init_rootname(L, R, P);
+  ccptn_error_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3,4)))
+static inline ccptn_t *
+ccptn_init_rootname_guarded_cleanup (cce_destination_t L, ccptn_t * const R, cce_handler_t * const R_H, ccptn_t const * const P)
+{
+  ccptn_init_rootname(L, R, P);
+  ccptn_cleanup_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+#define ccptn_init_rootname_guarded(L,R,H,P)				\
+  _Generic((H),								\
+	   cce_cleanup_handler_t	*: ccptn_init_rootname_guarded_cleanup, \
+	   cce_error_handler_t		*: ccptn_init_rootname_guarded_error)(L,R,&(H->handler),P)
+
+
+/** --------------------------------------------------------------------
+ ** Pathname components: dirname.
+ ** ----------------------------------------------------------------- */
+
+ccptn_decl ccptn_t * ccptn_new_dirname (cce_destination_t L, ccptn_t const * P)
   __attribute__((__nonnull__(1,2)));
+
+ccptn_decl ccptn_t * ccptn_init_dirname (cce_destination_t L, ccptn_t * R, ccptn_t const * P)
+  __attribute__((__nonnull__(1,2)));
+
+/* ------------------------------------------------------------------ */
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
+static inline ccptn_t *
+ccptn_new_dirname_guarded_error (cce_destination_t L, cce_handler_t * const R_H, ccptn_t const * const P)
+{
+  ccptn_t *	R = ccptn_new_dirname(L, P);
+  ccptn_error_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
+static inline ccptn_t *
+ccptn_new_dirname_guarded_cleanup (cce_destination_t L, cce_handler_t * const R_H, ccptn_t const * const P)
+{
+  ccptn_t *	R = ccptn_new_dirname(L, P);
+  ccptn_cleanup_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+#define ccptn_new_dirname_guarded(L,H,P)				\
+  _Generic((H),								\
+	   cce_cleanup_handler_t	*: ccptn_new_dirname_guarded_cleanup, \
+	   cce_error_handler_t		*: ccptn_new_dirname_guarded_error)(L,&(H->handler),P)
+
+/* ------------------------------------------------------------------ */
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3,4)))
+static inline ccptn_t *
+ccptn_init_dirname_guarded_error (cce_destination_t L, ccptn_t * const R, cce_handler_t * const R_H, ccptn_t const * const P)
+{
+  ccptn_init_dirname(L, R, P);
+  ccptn_error_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3,4)))
+static inline ccptn_t *
+ccptn_init_dirname_guarded_cleanup (cce_destination_t L, ccptn_t * const R, cce_handler_t * const R_H, ccptn_t const * const P)
+{
+  ccptn_init_dirname(L, R, P);
+  ccptn_cleanup_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+#define ccptn_init_dirname_guarded(L,R,H,P)				\
+  _Generic((H),								\
+	   cce_cleanup_handler_t	*: ccptn_init_dirname_guarded_cleanup, \
+	   cce_error_handler_t		*: ccptn_init_dirname_guarded_error)(L,R,&(H->handler),P)
+
+
+/** --------------------------------------------------------------------
+ ** Pathname components: tailname.
+ ** ----------------------------------------------------------------- */
+
+ccptn_decl ccptn_t * ccptn_new_tailname (cce_destination_t L, ccptn_t const * P)
+  __attribute__((__nonnull__(1,2)));
+
+ccptn_decl ccptn_t * ccptn_init_tailname (cce_destination_t L, ccptn_t * R, ccptn_t const * P)
+  __attribute__((__nonnull__(1,2)));
+
+/* ------------------------------------------------------------------ */
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
+static inline ccptn_t *
+ccptn_new_tailname_guarded_error (cce_destination_t L, cce_handler_t * const R_H, ccptn_t const * const P)
+{
+  ccptn_t *	R = ccptn_new_tailname(L, P);
+  ccptn_error_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
+static inline ccptn_t *
+ccptn_new_tailname_guarded_cleanup (cce_destination_t L, cce_handler_t * const R_H, ccptn_t const * const P)
+{
+  ccptn_t *	R = ccptn_new_tailname(L, P);
+  ccptn_cleanup_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+#define ccptn_new_tailname_guarded(L,H,P)				\
+  _Generic((H),								\
+	   cce_cleanup_handler_t	*: ccptn_new_tailname_guarded_cleanup, \
+	   cce_error_handler_t		*: ccptn_new_tailname_guarded_error)(L,&(H->handler),P)
+
+/* ------------------------------------------------------------------ */
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3,4)))
+static inline ccptn_t *
+ccptn_init_tailname_guarded_error (cce_destination_t L, ccptn_t * const R, cce_handler_t * const R_H, ccptn_t const * const P)
+{
+  ccptn_init_tailname(L, R, P);
+  ccptn_error_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3,4)))
+static inline ccptn_t *
+ccptn_init_tailname_guarded_cleanup (cce_destination_t L, ccptn_t * const R, cce_handler_t * const R_H, ccptn_t const * const P)
+{
+  ccptn_init_tailname(L, R, P);
+  ccptn_cleanup_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+#define ccptn_init_tailname_guarded(L,R,H,P)				\
+  _Generic((H),								\
+	   cce_cleanup_handler_t	*: ccptn_init_tailname_guarded_cleanup, \
+	   cce_error_handler_t		*: ccptn_init_tailname_guarded_error)(L,R,&(H->handler),P)
+
+
+/** --------------------------------------------------------------------
+ ** Pathname components: filename.
+ ** ----------------------------------------------------------------- */
+
+ccptn_decl ccptn_t * ccptn_new_filename (cce_destination_t L, ccptn_t const * P)
+  __attribute__((__nonnull__(1,2)));
+
+ccptn_decl ccptn_t * ccptn_init_filename (cce_destination_t L, ccptn_t * R, ccptn_t const * P)
+  __attribute__((__nonnull__(1,2)));
+
+/* ------------------------------------------------------------------ */
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
+static inline ccptn_t *
+ccptn_new_filename_guarded_error (cce_destination_t L, cce_handler_t * const R_H, ccptn_t const * const P)
+{
+  ccptn_t *	R = ccptn_new_filename(L, P);
+  ccptn_error_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
+static inline ccptn_t *
+ccptn_new_filename_guarded_cleanup (cce_destination_t L, cce_handler_t * const R_H, ccptn_t const * const P)
+{
+  ccptn_t *	R = ccptn_new_filename(L, P);
+  ccptn_cleanup_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+#define ccptn_new_filename_guarded(L,H,P)				\
+  _Generic((H),								\
+	   cce_cleanup_handler_t	*: ccptn_new_filename_guarded_cleanup, \
+	   cce_error_handler_t		*: ccptn_new_filename_guarded_error)(L,&(H->handler),P)
+
+/* ------------------------------------------------------------------ */
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3,4)))
+static inline ccptn_t *
+ccptn_init_filename_guarded_error (cce_destination_t L, ccptn_t * const R, cce_handler_t * const R_H, ccptn_t const * const P)
+{
+  ccptn_init_filename(L, R, P);
+  ccptn_error_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3,4)))
+static inline ccptn_t *
+ccptn_init_filename_guarded_cleanup (cce_destination_t L, ccptn_t * const R, cce_handler_t * const R_H, ccptn_t const * const P)
+{
+  ccptn_init_filename(L, R, P);
+  ccptn_cleanup_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+#define ccptn_init_filename_guarded(L,R,H,P)				\
+  _Generic((H),								\
+	   cce_cleanup_handler_t	*: ccptn_init_filename_guarded_cleanup, \
+	   cce_error_handler_t		*: ccptn_init_filename_guarded_error)(L,R,&(H->handler),P)
 
 
 /** --------------------------------------------------------------------
@@ -560,14 +1050,29 @@ ccptn_decl void ccptn_print (cce_destination_t L, FILE * stream, ccptn_t const *
  ** Segments.
  ** ----------------------------------------------------------------- */
 
-ccptn_decl bool ccptn_segment_is_empty (ccptn_segment_t S)
-  __attribute__((__pure__));
+__attribute__((__always_inline__,__pure__))
+static inline bool
+ccptn_segment_is_empty (ccptn_segment_t S)
+/* Return true if the segment is an empty string. */
+{
+  return (0 == S.len)? true : false;
+}
 
-ccptn_decl bool ccptn_segment_is_dot (ccptn_segment_t S)
-  __attribute__((__pure__));
+__attribute__((__always_inline__,__pure__))
+static inline bool
+ccptn_segment_is_dot (ccptn_segment_t S)
+/* Return true if the segment is a single dot: ".". */
+{
+  return ((1 == S.len) && ('.' == *(S.ptr)))? true : false;
+}
 
-ccptn_decl bool ccptn_segment_is_double_dot (ccptn_segment_t S)
-  __attribute__((__pure__));
+__attribute__((__always_inline__,__pure__))
+static inline bool
+ccptn_segment_is_double_dot (ccptn_segment_t S)
+/* Return true if the segment is a double dot: "..". */
+{
+  return ((2 == S.len) && ('.' == S.ptr[0]) && ('.' == S.ptr[1]))? true : false;
+}
 
 ccptn_decl ccptn_segment_t ccptn_segment_next (char const * ptr, size_t len)
   __attribute__((__nonnull__(1)));
@@ -583,8 +1088,13 @@ ccptn_decl void ccptn_segment_print (cce_destination_t L, FILE * stream, ccptn_s
  ** Extensions.
  ** ----------------------------------------------------------------- */
 
-ccptn_decl bool ccptn_extension_is_empty (ccptn_extension_t E)
-  __attribute__((__pure__));
+__attribute__((__always_inline__,__pure__))
+static inline bool
+ccptn_extension_is_empty (ccptn_extension_t E)
+/* Return true if the extension is an empty string. */
+{
+  return (0 == E.len);
+}
 
 ccptn_decl bool ccptn_extension_equal (ccptn_extension_t E1, ccptn_extension_t E2)
   __attribute__((__pure__));
