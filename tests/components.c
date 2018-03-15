@@ -237,6 +237,44 @@ TEST_NEW_ROOTNAME_NO(test_2_3_1, ".")
 TEST_NEW_ROOTNAME_NO(test_2_3_2, "..")
 TEST_NEW_ROOTNAME_NO(test_2_3_3, "/")
 
+/* ------------------------------------------------------------------ */
+
+void
+test_2_4_1 (cce_destination_t upper_L)
+/* Test for "ccptn_new_rootname_guarded()" with error handler. */
+{
+  cce_location_t	L[1];
+  cce_cleanup_handler_t	P_H[1], Q_H[1], T_H[1];
+
+  if (cce_location(L)) {
+    fprintf(stderr, "%s: exception: %s\n", __func__,
+	    cce_condition_static_message(cce_condition(L)));
+    cce_run_error_handlers_raise(L, upper_L);
+  } else {
+    static char const *	pathname = "/path/to/file.ext";
+    ccptn_t		*P, *Q, *T;
+
+    P = ccptn_new_nodup_asciiz_guarded(L, P_H, pathname);
+    Q = ccptn_new_normalise_guarded(L, Q_H, P);
+    {
+      cce_location_t		inner_L[1];
+      cce_error_handler_t	S_H[1];
+
+      if (cce_location(inner_L)) {
+	cce_run_error_handlers_raise(inner_L, L);
+      } else {
+	ccptn_t *	S = ccptn_new_rootname_guarded(inner_L, S_H, Q);
+	cctests_assert_asciiz(inner_L, "/path/to/file", ccptn_asciiz(S));
+	T = S;
+	cce_run_cleanup_handlers(inner_L);
+      }
+    }
+    ccptn_handler_ptn_init(L, T_H, T);
+    cctests_assert_asciiz(L, "/path/to/file", ccptn_asciiz(T));
+    cce_run_cleanup_handlers(L);
+  }
+}
+
 
 /** --------------------------------------------------------------------
  ** Tailnames.
@@ -355,7 +393,7 @@ TEST_NEW_TAILNAME_NO(test_3_3_1, "/")
 
 void
 test_3_4_1 (cce_destination_t upper_L)
-/* Test for "ccptn_new_tailname_guarded_error()". */
+/* Test for "ccptn_new_tailname_guarded()" with error handler. */
 {
   cce_location_t	L[1];
   cce_cleanup_handler_t	P_H[1], Q_H[1], T_H[1];
@@ -369,10 +407,7 @@ test_3_4_1 (cce_destination_t upper_L)
     ccptn_t		*P, *Q, *T;
 
     P = ccptn_new_nodup_asciiz_guarded(L, P_H, pathname);
-
-    Q = ccptn_new_normalise(L, P);
-    ccptn_handler_ptn_init(L, Q_H, Q);
-
+    Q = ccptn_new_normalise_guarded(L, Q_H, P);
     {
       cce_location_t		inner_L[1];
       cce_error_handler_t	S_H[1];
@@ -386,7 +421,6 @@ test_3_4_1 (cce_destination_t upper_L)
 	cce_run_cleanup_handlers(inner_L);
       }
     }
-
     ccptn_handler_ptn_init(L, T_H, T);
     cctests_assert_asciiz(L, "dir/", ccptn_asciiz(T));
     cce_run_cleanup_handlers(L);
@@ -499,6 +533,45 @@ TEST_INIT_DIRNAME(test_4_2_4, "/",			"/")
 
 TEST_NEW_DIRNAME_NO(test_4_3_1, "file.ext")
 TEST_NEW_DIRNAME_NO(test_4_3_2, "..")
+
+
+/* ------------------------------------------------------------------ */
+
+void
+test_4_4_1 (cce_destination_t upper_L)
+/* Test for "ccptn_new_dirname_guarded()" with error handler. */
+{
+  cce_location_t	L[1];
+  cce_cleanup_handler_t	P_H[1], Q_H[1], T_H[1];
+
+  if (cce_location(L)) {
+    fprintf(stderr, "%s: exception: %s\n", __func__,
+	    cce_condition_static_message(cce_condition(L)));
+    cce_run_error_handlers_raise(L, upper_L);
+  } else {
+    static char const *	pathname = "/path/to/file.ext";
+    ccptn_t		*P, *Q, *T;
+
+    P = ccptn_new_nodup_asciiz_guarded(L, P_H, pathname);
+    Q = ccptn_new_normalise_guarded(L, Q_H, P);
+    {
+      cce_location_t		inner_L[1];
+      cce_error_handler_t	S_H[1];
+
+      if (cce_location(inner_L)) {
+	cce_run_error_handlers_raise(inner_L, L);
+      } else {
+	ccptn_t *	S = ccptn_new_dirname_guarded(inner_L, S_H, Q);
+	cctests_assert_asciiz(inner_L, "/path/to/", ccptn_asciiz(S));
+	T = S;
+	cce_run_cleanup_handlers(inner_L);
+      }
+    }
+    ccptn_handler_ptn_init(L, T_H, T);
+    cctests_assert_asciiz(L, "/path/to/", ccptn_asciiz(T));
+    cce_run_cleanup_handlers(L);
+  }
+}
 
 
 /** --------------------------------------------------------------------
@@ -618,6 +691,45 @@ TEST_NEW_FILENAME_NO(test_5_3_2, "..")
 TEST_NEW_FILENAME_NO(test_5_3_3, "/path/to/dir/")
 TEST_NEW_FILENAME_NO(test_5_3_4, "/")
 
+
+/* ------------------------------------------------------------------ */
+
+void
+test_5_4_1 (cce_destination_t upper_L)
+/* Test for "ccptn_new_filename_guarded()" with error handler. */
+{
+  cce_location_t	L[1];
+  cce_cleanup_handler_t	P_H[1], Q_H[1], T_H[1];
+
+  if (cce_location(L)) {
+    fprintf(stderr, "%s: exception: %s\n", __func__,
+	    cce_condition_static_message(cce_condition(L)));
+    cce_run_error_handlers_raise(L, upper_L);
+  } else {
+    static char const *	pathname = "/path/to/file.ext";
+    ccptn_t		*P, *Q, *T;
+
+    P = ccptn_new_nodup_asciiz_guarded(L, P_H, pathname);
+    Q = ccptn_new_normalise_guarded(L, Q_H, P);
+    {
+      cce_location_t		inner_L[1];
+      cce_error_handler_t	S_H[1];
+
+      if (cce_location(inner_L)) {
+	cce_run_error_handlers_raise(inner_L, L);
+      } else {
+	ccptn_t *	S = ccptn_new_filename_guarded(inner_L, S_H, Q);
+	cctests_assert_asciiz(inner_L, "file.ext", ccptn_asciiz(S));
+	T = S;
+	cce_run_cleanup_handlers(inner_L);
+      }
+    }
+    ccptn_handler_ptn_init(L, T_H, T);
+    cctests_assert_asciiz(L, "file.ext", ccptn_asciiz(T));
+    cce_run_cleanup_handlers(L);
+  }
+}
+
 
 int
 main (int argc CCPTN_UNUSED, const char *const argv[])
@@ -679,6 +791,8 @@ main (int argc CCPTN_UNUSED, const char *const argv[])
       cctests_run(test_2_3_1);
       cctests_run(test_2_3_2);
       cctests_run(test_2_3_3);
+
+      cctests_run(test_2_4_1);
     }
     cctests_end_group();
 
@@ -716,6 +830,8 @@ main (int argc CCPTN_UNUSED, const char *const argv[])
 
       cctests_run(test_4_3_1);
       cctests_run(test_4_3_2);
+
+      cctests_run(test_4_4_1);
     }
     cctests_end_group();
 
@@ -735,6 +851,8 @@ main (int argc CCPTN_UNUSED, const char *const argv[])
       cctests_run(test_5_3_2);
       cctests_run(test_5_3_3);
       cctests_run(test_5_3_4);
+
+      cctests_run(test_5_4_1);
     }
     cctests_end_group();
   }
