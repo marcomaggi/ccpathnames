@@ -358,6 +358,60 @@ ccptn_condition_is_no_filename (cce_condition_t const * C)
 
 
 /** --------------------------------------------------------------------
+ ** Condition objects: pathname with no tailname.
+ ** ----------------------------------------------------------------- */
+
+static cce_condition_static_message_fun_t	ccptn_condition_static_message_no_tailname;
+
+static ccptn_descriptor_no_tailname_t ccptn_descriptor_no_tailname_stru = {
+  /* This  "parent" field  is  set below  by  the module  initialisation
+     function. */
+  .descriptor.parent		= &(ccptn_descriptor_invalid_pathname_stru.descriptor),
+  .descriptor.delete		= NULL,
+  .descriptor.final		= NULL,
+  .descriptor.static_message	= ccptn_condition_static_message_no_tailname
+};
+
+ccptn_descriptor_no_tailname_t const * const ccptn_descriptor_no_tailname_ptr = &ccptn_descriptor_no_tailname_stru;
+
+/* This  is  the  single  instance  of  the  "no  tailname"  exceptional
+   condition.  It is used by "cce_raise()" and "cce_retry()". */
+static ccptn_condition_no_tailname_t const ccptn_condition_no_tailname_stru = {
+  .invalid_pathname.runtime_error.error.root.condition.descriptor = &(ccptn_descriptor_no_tailname_stru.descriptor)
+};
+
+ccptn_condition_no_tailname_t const * const ccptn_condition_no_tailname_ptr = &ccptn_condition_no_tailname_stru;
+
+/* ------------------------------------------------------------------ */
+
+char const *
+ccptn_condition_static_message_no_tailname (cce_condition_t const * C CCPTN_UNUSED)
+{
+  return "input pathname has no tailname part";
+}
+
+/* ------------------------------------------------------------------ */
+
+void
+ccptn_condition_init_no_tailname (ccptn_condition_no_tailname_t * C)
+{
+  ccptn_condition_init_invalid_pathname(&(C->invalid_pathname));
+}
+
+cce_condition_t const *
+ccptn_condition_new_no_tailname (void)
+{
+  return (cce_condition_t const *) ccptn_condition_no_tailname_ptr;
+}
+
+bool
+ccptn_condition_is_no_tailname (cce_condition_t const * C)
+{
+  return cce_is_condition(C, &(ccptn_descriptor_no_tailname_ptr->descriptor));
+}
+
+
+/** --------------------------------------------------------------------
  ** Condition objects: pathname with no rootname.
  ** ----------------------------------------------------------------- */
 

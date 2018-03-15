@@ -41,136 +41,10 @@
 #  include <unistd.h>
 #endif
 
-#define INLINE1	__attribute__((__always_inline__,__nonnull__(1))) static inline
-#define INLINE2	__attribute__((__always_inline__,__nonnull__(1,2))) static inline
-
 
 /** --------------------------------------------------------------------
  ** Helpers.
  ** ----------------------------------------------------------------- */
-
-INLINE1 bool
-INPUT_IS_RELATIVE (char const * const input_ptr)
-{
-  return ('/' != *input_ptr);
-}
-
-INLINE1 bool
-INPUT_IS_ABSOLUTE (char const * const input_ptr)
-{
-  return ('/' == *input_ptr);
-}
-
-/* ------------------------------------------------------------------ */
-
-INLINE2 bool
-IS_STANDALONE_SLASH (char const * const in, char const * const end)
-/* Given an ASCII string referenced by IN and terminating at pointer END
-   excluded: evaluate to true if the string has 1 octet representing the
-   pathname "/"; otherwise evaluate to false. */
-{
-  return ((end == (1+in)) && ('/' == in[0]));
-}
-
-/* ------------------------------------------------------------------ */
-
-INLINE2 bool
-IS_STANDALONE_SINGLE_DOT (char const * const in, char const * const end)
-/* Given an ASCII string referenced by IN and terminating at pointer END
-   excluded: evaluate to true if the string has 1 octet representing the
-   pathname "."; otherwise evaluate to false. */
-{
-  return ((end == (1+in)) && ('.' == in[0]));
-}
-
-INLINE2 bool
-IS_STANDALONE_SINGLE_DOT_SLASH (char const * const in, char const * const end)
-/* Given an ASCII string referenced by IN and terminating at pointer END
-   excluded: evaluate  to true if  the string has 2  octets representing
-   the pathname "./"; otherwise evaluate to false. */
-{
-  return ((end == (2+in)) && ('.' == in[0]) && ('/' == in[1]));
-}
-
-INLINE2 bool
-IS_STANDALONE_SLASH_SINGLE_DOT (char const * const in, char const * const end)
-/* Given an ASCII string referenced by IN and terminating at pointer END
-   excluded: evaluate  to true if  the string has 2  octets representing
-   the pathname "/."; otherwise evaluate to false. */
-{
-  return ((end == (2+in)) && ('/' == in[0]) && ('.' == in[1]));
-}
-
-/* ------------------------------------------------------------------ */
-
-INLINE2 bool
-IS_STANDALONE_DOUBLE_DOT (char const * const in, char const * const end)
-/* Given an ASCII string referenced by IN and terminating at pointer END
-   excluded: evaluate  to true if  the string has 2  octets representing
-   the pathname ".."; otherwise evaluate to false. */
-{
-  return ((end == (2+in)) && ('.' == in[0]) && ('.' == in[1]));
-}
-
-INLINE2 bool
-IS_STANDALONE_DOUBLE_DOT_SLASH (char const * const in, char const * const end)
-/* Given an ASCII string referenced by IN and terminating at pointer END
-   excluded: evaluate  to true if  the string has 3  octets representing
-   the pathname "../"; otherwise evaluate to false. */
-{
-  return ((end == (3+in)) && ('.' == in[0]) && ('.' == in[1]) && ('/' == in[2]));
-}
-
-INLINE2 bool
-IS_STANDALONE_SLASH_DOUBLE_DOT (char const * const in, char const * const end)
-/* Given an ASCII string referenced by IN and terminating at pointer END
-   excluded: evaluate  to true if  the string has 3  octets representing
-   the pathname "/.."; otherwise evaluate to false. */
-{
-  return ((end == (3+in)) && ('/' == in[0]) && ('.' == in[1]) && ('.' == in[2]));
-}
-
-/* ------------------------------------------------------------------ */
-
-INLINE2 bool
-BEGINS_WITH_SINGLE_DOT_SLASH (char const * const in, char const * const end)
-/* Given an ASCII string referenced by IN and terminating at pointer END
-   excluded: evaluate  to true  if the string  begins with  the pathname
-   "./"; otherwise evaluate to false. */
-{
-  return ((end > (1+in)) && ('.' == in[0]) && ('/' == in[1]));
-}
-
-INLINE2 bool
-BEGINS_WITH_SLASH_SINGLE_DOT (char const * const in, char const * const end)
-/* Given an ASCII string referenced by IN and terminating at pointer END
-   excluded: evaluate  to true  if the string  begins with  the pathname
-   "/.", but not "/.."; otherwise evaluate to false. */
-{
-  return ((end > (1 + in)) && ('/' == in[0]) && ('.' == in[1]) && ('.' != in[2]));
-}
-
-/* ------------------------------------------------------------------ */
-
-INLINE2 bool
-BEGINS_WITH_DOUBLE_DOT (char const * const in, char const * const end)
-/* Given an ASCII string referenced by IN and terminating at pointer END
-   excluded: evaluate  to true  if the string  begins with  the pathname
-   ".."; otherwise evaluate to false. */
-{
-  return ((end > (1+in)) && ('.' == in[0]) && ('.' == in[1]));
-}
-
-INLINE2 bool
-BEGINS_WITH_SLASH_DOUBLE_DOT (char const * const in, char const * const end)
-/* Given an ASCII string referenced by IN and terminating at pointer END
-   excluded: evaluate  to true  if the string  begins with  the pathname
-   "/.."; otherwise evaluate to false. */
-{
-  return ((end > (2+in)) && ('/' == in[0]) && ('.' == in[1]) && ('.' == in[2]));
-}
-
-/* ------------------------------------------------------------------ */
 
 __attribute__((__always_inline__,__nonnull__(1,2),__returns_nonnull__))
 static inline char const *
@@ -460,7 +334,7 @@ ccptn_normal_pass_remove_single_dot_segments (char * output_ptr, char const * co
       fprintf(stderr, "\n");
     }
 
-    if (BEGINS_WITH_SLASH_SINGLE_DOT(in,end)) {
+    if (IS_STANDALONE_SLASH_SINGLE_DOT(in,next)) {
       /* Skip the next chunk because it is a "/.", but if it is the last
        * append a slash to the output.
        *

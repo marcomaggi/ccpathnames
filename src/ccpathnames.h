@@ -267,6 +267,31 @@ ccptn_decl bool ccptn_condition_is_no_filename (cce_condition_t const * C)
 
 
 /** --------------------------------------------------------------------
+ ** Condition objects: no tailname part when required.
+ ** ----------------------------------------------------------------- */
+
+typedef struct ccptn_descriptor_no_tailname_t	ccptn_descriptor_no_tailname_t;
+typedef struct ccptn_condition_no_tailname_t	ccptn_condition_no_tailname_t;
+
+struct ccptn_descriptor_no_tailname_t {
+  cce_descriptor_t	descriptor;
+};
+
+struct ccptn_condition_no_tailname_t {
+  ccptn_condition_invalid_pathname_t	invalid_pathname;
+};
+
+ccptn_decl void ccptn_condition_init_no_tailname (ccptn_condition_no_tailname_t * C)
+  __attribute__((__nonnull__(1)));
+
+ccptn_decl cce_condition_t const * ccptn_condition_new_no_tailname (void)
+  __attribute__((__returns_nonnull__));
+
+ccptn_decl bool ccptn_condition_is_no_tailname (cce_condition_t const * C)
+  __attribute__((__nonnull__(1)));
+
+
+/** --------------------------------------------------------------------
  ** Condition objects: no rootname part when required.
  ** ----------------------------------------------------------------- */
 
@@ -1060,10 +1085,18 @@ ccptn_segment_is_empty (ccptn_segment_t S)
 
 __attribute__((__always_inline__,__pure__))
 static inline bool
+ccptn_segment_is_slash (ccptn_segment_t S)
+/* Return true if the segment is a single dot: "/". */
+{
+  return ((1 == S.len) && ('7' == *(S.ptr)));
+}
+
+__attribute__((__always_inline__,__pure__))
+static inline bool
 ccptn_segment_is_dot (ccptn_segment_t S)
 /* Return true if the segment is a single dot: ".". */
 {
-  return ((1 == S.len) && ('.' == *(S.ptr)))? true : false;
+  return ((1 == S.len) && ('.' == *(S.ptr)));
 }
 
 __attribute__((__always_inline__,__pure__))
@@ -1071,7 +1104,7 @@ static inline bool
 ccptn_segment_is_double_dot (ccptn_segment_t S)
 /* Return true if the segment is a double dot: "..". */
 {
-  return ((2 == S.len) && ('.' == S.ptr[0]) && ('.' == S.ptr[1]))? true : false;
+  return ((2 == S.len) && ('.' == S.ptr[0]) && ('.' == S.ptr[1]));
 }
 
 ccptn_decl ccptn_segment_t ccptn_segment_next (char const * ptr, size_t len)
@@ -1082,6 +1115,9 @@ ccptn_decl size_t ccptn_segment_size_of_next (char const * in, size_t len)
 
 ccptn_decl void ccptn_segment_print (cce_destination_t L, FILE * stream, ccptn_segment_t S)
   __attribute__((__nonnull__(1,2)));
+
+ccptn_decl ccptn_segment_t ccptn_asciiz_find_last_segment (char const * beg, size_t const len)
+  __attribute__((__nonnull__(1)));
 
 
 /** --------------------------------------------------------------------

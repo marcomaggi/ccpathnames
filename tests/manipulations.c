@@ -387,6 +387,9 @@ NEW_NORMALISE_TEST(test_3_2_6_8,	"./file.ext",			"./file.ext",		false)
 NEW_NORMALISE_TEST(test_3_2_6_9,	"./path/to/file.ext",		"path/to/file.ext",	false)
 NEW_NORMALISE_TEST(test_3_2_6_10,	"./path///to////file.ext",	"path/to/file.ext",	false)
 NEW_NORMALISE_TEST(test_3_2_6_11,	"./path/to/dir///",		"path/to/dir/",		false)
+NEW_NORMALISE_TEST(test_3_2_6_12,	"~/.fvwmrc",			"~/.fvwmrc",		false)
+NEW_NORMALISE_TEST(test_3_2_6_13,	".fvwmrc",			".fvwmrc",		false)
+NEW_NORMALISE_TEST(test_3_2_6_14,	"/path/to/.fvwmrc",		"/path/to/.fvwmrc",	false)
 
 /* ------------------------------------------------------------------ */
 
@@ -532,6 +535,9 @@ main (int argc CCPTN_UNUSED, const char *const argv[])
       cctests_run(test_3_2_6_9);
       cctests_run(test_3_2_6_10);
       cctests_run(test_3_2_6_11);
+      cctests_run(test_3_2_6_12);
+      cctests_run(test_3_2_6_13);
+      cctests_run(test_3_2_6_14);
 
       /* Absolute pathnames: double-dot removal. */
       cctests_run(test_3_2_7_1);

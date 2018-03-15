@@ -120,11 +120,23 @@ ccptn_extension_print (cce_destination_t L, FILE * stream, ccptn_extension_t E)
  ** Helpers.
  ** ----------------------------------------------------------------- */
 
-static ccptn_segment_t
+ccptn_segment_t
 ccptn_asciiz_find_last_segment (char const * beg, size_t const len)
+/* Given an ASCII string representing  a pathname, referenced by BEG and
+ * holding LEN octets  (not including a terminating zero,  if any): find
+ * and return  the last segment  in the pathname.  The  returned segment
+ * does not contain a leading or ending slash.  The returned segment can
+ * be empty.  Examples:
+ *
+ *	"/path/to/file.ext"	=> "file.ext"
+ *	"/path/to/dir/"		=> "dir"
+ *	"/"			=> ""
+ *	"."			=> "."
+ *	".."			=> ".."
+ */
 {
   char const *	end = beg + len;
-  char const *	ptr = --end;
+  char const *	ptr;
 
   /* If the  last octet in the  pathname is the ASCII  representation of
    * the  slash separator:  step back.   We want  the following  segment
@@ -132,22 +144,21 @@ ccptn_asciiz_find_last_segment (char const * beg, size_t const len)
    *
    *	"/path/to/dir.ext/"	=> "dir.ext"
    */
-  if ('/' == *ptr) {
-    --ptr;
+  if ('/' == *(end-1)) {
+    --end;
   }
 
   /* Find the first slash separator starting from the end. */
-  for (; beg <= ptr; --ptr) {
+  for (ptr = end-1; beg <= ptr; --ptr) {
     if ('/' == *ptr) {
       /* "ptr"  is  at  the  beginning  of  the  last  component,  slash
 	 included. */
+      ++ptr;
       ccptn_segment_t	S = {
-	.ptr	= 1+ptr,
+	.ptr	= ptr,
 	.len	= end - ptr
       };
       return S;
-    } else {
-
     }
   }
 
@@ -156,7 +167,7 @@ ccptn_asciiz_find_last_segment (char const * beg, size_t const len)
   {
     ccptn_segment_t	S = {
       .ptr	= beg,
-      .len	= len
+      .len	= end - beg
     };
     return S;
   }
@@ -173,7 +184,14 @@ ccptn_extension (cce_destination_t L, ccptn_t const * const P)
   if (ccptn_is_normalised(P)) {
     ccptn_segment_t	S = ccptn_asciiz_find_last_segment(ccptn_asciiz(P), ccptn_len(P));
 
-    if (ccptn_segment_is_dot(S) ||
+    if (0) {
+      fprintf(stderr, "%s: ", __func__);
+      ccptn_segment_print(L, stderr, S);
+      fprintf(stderr, "\n");
+    }
+
+    if (ccptn_segment_is_slash(S) ||
+	ccptn_segment_is_dot(S) ||
 	ccptn_segment_is_double_dot(S) ||
 	ccptn_segment_is_empty(S)) {
       ccptn_extension_t	E = {
@@ -194,11 +212,6 @@ ccptn_extension (cce_destination_t L, ccptn_t const * const P)
 	       pathname  has  no  extension.   It  is  a  dotfile  like:
 	       ".fvwmrc". */
 	    break;
-	  } else if ('/' == *(ptr - 1)) {
-	    /* The dot is the first octet right after a slash separator:
-	       this pathname  has no extension.   It is a  dotfile like:
-	       "/home/marco/.fvwmrc". */
-	    break;
 	  } else {
 	    ccptn_extension_t	E = {
 	      .ptr = ptr,
@@ -211,11 +224,14 @@ ccptn_extension (cce_destination_t L, ccptn_t const * const P)
 	}
       }
 
-      /* No dot found in the last segment.  Return an empty extension. */
+      /* Extension  not found  in  the last  segment.   Return an  empty
+	 extension. */
       {
+	char const *	p = ccptn_asciiz(P) + ccptn_len(P);
+
 	ccptn_extension_t	E = {
 	  .len	= 0,
-	  .ptr	= ccptn_asciiz(P) + ccptn_len(P)
+	  .ptr = (('/' == *(p-1))? (p-1) : p)
 	};
 	return E;
       }
@@ -238,7 +254,35 @@ ptn_rootname (cce_destination_t L, ccptn_t * const R, ccptn_t const * const P)
     ccptn_extension_t	E = ccptn_extension(L, P);
 
     if (ccptn_extension_is_empty(E)) {
-      cce_raise(L, ccptn_condition_new_no_rootname());
+      ccptn_segment_t	S = ccptn_asciiz_find_last_segment(ccptn_asciiz(P), ccptn_len(P));
+
+      if (0) {
+	fprintf(stderr, "%s: input pathname=%s\n", __func__, ccptn_asciiz(P));
+	fprintf(stderr, "%s: last segment=", __func__);
+	ccptn_segment_print(L, stderr, S);
+	fprintf(stderr, "\n");
+      }
+
+      if (IS_STANDALONE_SLASH(ccptn_asciiz(P), ccptn_asciiz(P) + ccptn_len(P)) ||
+	  ccptn_segment_is_dot(S) || ccptn_segment_is_double_dot(S)) {
+	cce_raise(L, ccptn_condition_new_no_rootname());
+      } else {
+	char const *	beg = ccptn_asciiz(P);
+	size_t		len = ccptn_len(P);
+
+	if ('/' == beg[len - 1]) {
+	  --len;
+	}
+	if (R) {
+	  ccptn_init_dup_ascii(L, R, beg, len);
+	  R->normalised	= 1;
+	  return R;
+	} else {
+	  ccptn_t *	Q = ccptn_new_dup_ascii(L, beg, len);
+	  Q->normalised	= 1;
+	  return Q;
+	}
+      }
     } else {
       char const * const	beg = ccptn_asciiz(P);
 
@@ -311,10 +355,10 @@ ptn_dirname (cce_destination_t L, ccptn_t * const R, ccptn_t const * const P)
   if (ccptn_is_normalised(P)) {
     size_t const	len = ccptn_len(P);
     char const * const	beg = ccptn_asciiz(P);
-    char const *	ptr = beg + len - 1;
+    char const * const	end = beg + len;
 
     /* If the pathname is ".": the directory part is "..". */
-    if ((1 == len) && ('.' == *beg)) {
+    if (IS_STANDALONE_SINGLE_DOT(beg, end)) {
       if (R) {
 	ccptn_init_dup_asciiz(L, R, "..");
 	R->normalised	= 1;
@@ -326,9 +370,24 @@ ptn_dirname (cce_destination_t L, ccptn_t * const R, ccptn_t const * const P)
       }
     }
     /* If the pathname is "..", it has no dirname. */
-    else if ((2 == len) && ('.' == beg[0]) && ('.' == beg[1])) {
+    else if (IS_STANDALONE_DOUBLE_DOT(beg, end)) {
       cce_raise(L, ccptn_condition_new_no_dirname());
-    } else {
+    }
+    /* If the pathname is "/": the directory part is "/". */
+    else if (IS_STANDALONE_SLASH(beg, end)) {
+      if (R) {
+	ccptn_init_dup_asciiz(L, R, "/");
+	R->normalised	= 1;
+	return R;
+      } else {
+	ccptn_t *	Q = ccptn_new_dup_asciiz(L, "/");
+	Q->normalised	= 1;
+	return Q;
+      }
+    }
+    else {
+      char const *	ptr = end - 1;
+
       /* Skip the trailing slash, if any. */
       if ('/' == *ptr) {
 	--ptr;
@@ -340,15 +399,15 @@ ptn_dirname (cce_destination_t L, ccptn_t * const R, ccptn_t const * const P)
       }
 
       if (beg < ptr) {
-	/* If we have found a slash: skip it and build the return value. */
+	/* If we  have found a  slash: include  it and build  the return
+	   value. */
 	++ptr;
-	size_t	rv_len = (len - (ptr - beg));
 	if (R) {
-	  ccptn_init_dup_ascii(L, R, ptr, rv_len);
+	  ccptn_init_dup_ascii(L, R, beg, ptr - beg);
 	  R->normalised	= 1;
 	  return R;
 	} else {
-	  ccptn_t *	Q = ccptn_new_dup_ascii(L, ptr, rv_len);
+	  ccptn_t *	Q = ccptn_new_dup_ascii(L, beg, ptr - beg);
 	  Q->normalised	= 1;
 	  return Q;
 	}
@@ -412,30 +471,36 @@ ptn_tailname (cce_destination_t L, ccptn_t * const R, ccptn_t const * const P)
   if (ccptn_is_normalised(P)) {
     size_t const	len = ccptn_len(P);
     char const * const	beg = ccptn_asciiz(P);
-    char const *	ptr = beg + len - 1;
 
-    /* Skip the trailing slash, if any. */
-    if ('/' == *ptr) {
-      --ptr;
-    }
-    /* Find the latest slash. */
-    while ((beg < ptr) && ('/' != *ptr)) {
-      --ptr;
-    }
-
-    /* If we have found a slash: skip it. */
-    if (beg < ptr) {
-      ++ptr;
-    }
-
-    if (R) {
-      ccptn_init_dup_asciiz(L, R, ptr);
-      R->normalised	= 1;
-      return R;
+    if (IS_STANDALONE_SLASH(beg, beg + len)) {
+      cce_raise(L, ccptn_condition_new_no_tailname());
     } else {
-      ccptn_t *	Q = ccptn_new_dup_asciiz(L, ptr);
-      Q->normalised	= 1;
-      return Q;
+      char const *	ptr = beg + len - 1;
+
+      /* Skip the trailing slash, if any. */
+      if ('/' == *ptr) {
+	--ptr;
+      }
+
+      /* Find the latest slash. */
+      while ((beg < ptr) && ('/' != *ptr)) {
+	--ptr;
+      }
+
+      /* If we have found a slash: skip it. */
+      if (beg < ptr) {
+	++ptr;
+      }
+
+      if (R) {
+	ccptn_init_dup_asciiz(L, R, ptr);
+	R->normalised	= 1;
+	return R;
+      } else {
+	ccptn_t *	Q = ccptn_new_dup_asciiz(L, ptr);
+	Q->normalised	= 1;
+	return Q;
+      }
     }
   } else {
     cce_raise(L, ccptn_condition_new_normalised_pathname());
@@ -492,32 +557,37 @@ ptn_filename (cce_destination_t L, ccptn_t * const R, ccptn_t const * const P)
   if (ccptn_is_normalised(P)) {
     size_t const	len = ccptn_len(P);
     char const * const	beg = ccptn_asciiz(P);
-    char const *	ptr = beg + len - 1;
+    char const * const	end = beg + len;
 
-    /* If there  is a  trailing slash: the  input pathname  represents a
-       directory, so there is not filename. */
-    if ('/' == *ptr) {
+    if (IS_STANDALONE_SLASH(beg, end) || IS_STANDALONE_SINGLE_DOT(beg, end) || IS_STANDALONE_DOUBLE_DOT(beg, end)) {
       cce_raise(L, ccptn_condition_new_no_filename());
-    }
-
-    /* Find the latest slash. */
-    while ((beg < ptr) && ('/' != *ptr)) {
-      --ptr;
-    }
-
-    /* If we have found a slash: skip it. */
-    if (beg < ptr) {
-      ++ptr;
-    }
-
-    if (R) {
-      ccptn_init_dup_asciiz(L, R, ptr);
-      R->normalised	= 1;
-      return R;
     } else {
-      ccptn_t *	Q = ccptn_new_dup_asciiz(L, ptr);
-      Q->normalised	= 1;
-      return Q;
+      char const *	ptr = end - 1;
+
+      /* There is a trailing slash: it represents a directory. */
+      if ('/' == *ptr) {
+	cce_raise(L, ccptn_condition_new_no_filename());
+      }
+
+      /* Find the latest slash. */
+      while ((beg < ptr) && ('/' != *ptr)) {
+	--ptr;
+      }
+
+      /* If we have found a slash: skip it. */
+      if (beg < ptr) {
+	++ptr;
+      }
+
+      if (R) {
+	ccptn_init_dup_asciiz(L, R, ptr);
+	R->normalised	= 1;
+	return R;
+      } else {
+	ccptn_t *	Q = ccptn_new_dup_asciiz(L, ptr);
+	Q->normalised	= 1;
+	return Q;
+      }
     }
   } else {
     cce_raise(L, ccptn_condition_new_normalised_pathname());

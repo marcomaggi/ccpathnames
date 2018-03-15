@@ -636,7 +636,7 @@ cctests_decl void cctests_p_assert_ascii (cce_destination_t L, char const * expe
 
 #define cctests_assert_ascii(L,EXPECTED,RESULT,RESULT_LEN)		\
   cctests_p_assert_ascii(L, EXPECTED, RESULT, RESULT_LEN,		\
-			 "cctests_assert_ascii(" #L ", " #EXPECTED ", " #RESULT ")", \
+			 "cctests_assert_ascii(" #L ", " #EXPECTED ", " #RESULT ", " #RESULT_LEN ")", \
 			 __FILE__, __func__, __LINE__)
 
 

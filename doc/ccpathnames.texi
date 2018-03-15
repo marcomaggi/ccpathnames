@@ -280,6 +280,7 @@ library is built with @gcc{}: it will be called automatically by the library ini
 * conditions normalised::       Normalised pathname required.
 * conditions no dirname::       Directory part is missing.
 * conditions no filename::      Filename is missing.
+* conditions no tailname::      Tailname is missing.
 * conditions no rootname::      Rootname is missing.
 @end menu
 
@@ -548,6 +549,56 @@ condition object.
 
 @deftypefun bool ccptn_is_condition_no_filename (cce_condition_t const * @var{C})
 Return @ctrue{} if @var{C} is an @emph{no filename} condition object; otherwise return @cfalse{}.
+@end deftypefun
+
+@c page
+@node conditions no tailname
+@section Tailname is missing
+
+
+The @dfn{no tailname exceptional--condition object} has the purpose of describing an exceptional
+condition caused by attempting an operation on a pathname that has no tailname part, when this is
+required.  The tailname is the relative pathname representing the last segment.  Examples:
+
+@example
+"/path/to/file.ext"     @result{} "file.ext"
+"/path/to/dir/"         @result{} "dir/"
+"file.ext"              @result{} "file.ext"
+"."                     @result{} "."
+".."                    @result{} ".."
+"/"                     @error{} no tailname
+@end example
+
+There should be only one @emph{no tailname} condition object: the one predefined by @value{PACKAGE}.
+
+All the following definitions are accessible from the header file @file{ccexceptions.h}.
+
+
+@deftp {Struct Typedef} ccptn_descriptor_no_tailname_t
+Structure type representing the descriptor for @emph{no tailname} condition objects.  This
+descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.
+@end deftp
+
+
+@deftp {Struct Typedef} ccptn_condition_no_tailname_t
+Structure type representing an @emph{no tailname} condition object.
+@end deftp
+
+
+@deftypefun void ccptn_condition_init_no_tailname (ccptn_condition_no_tailname_t * @var{C})
+Initialise an already allocated condition object.  This function exists to allow sub--typing from
+@objtype{ccptn_condition_no_tailname_t}.
+@end deftypefun
+
+
+@deftypefun {cce_condition_t const *} ccptn_condition_new_no_tailname (void)
+Return a pointer to the statically allocated structure representing the single @emph{no tailname}
+condition object.
+@end deftypefun
+
+
+@deftypefun bool ccptn_is_condition_no_tailname (cce_condition_t const * @var{C})
+Return @ctrue{} if @var{C} is an @emph{no tailname} condition object; otherwise return @cfalse{}.
 @end deftypefun
 
 @c page
@@ -1293,6 +1344,7 @@ dot, but only if it is not the whole segment.  Examples:
 ".fvwmrc"               => ""
 "."                     => ""
 ".."                    => ""
+"/"                     => ""
 @end example
 
 Extension extraction is possible only for an input pathname that has been previously normalised; if
@@ -1327,6 +1379,7 @@ the last segment stripped.  Examples:
 ".fvwmrc"               => ".fvwmrc"
 "."                     --> error
 ".."                    --> error
+"/"                     --> error
 @end example
 
 It is an error to attempt rootname extraction from an input pathname that has no rootname; in this
@@ -1344,7 +1397,7 @@ referenced by @var{P}.  If an error occurs: raise an exception by performing a n
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_new_rootname (cce_destination_t @var{L}, ccptn_t * @var{R}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_init_rootname (cce_destination_t @var{L}, ccptn_t * @var{R}, ccptn_t const * @var{P})
 Initialise an already allocated instance of @objtype{ccptn_t}, referenced by @var{R}, representing
 the rootname of the input pathname referenced by @var{P}.  If an error occurs: raise an exception by
 performing a non--local exit to @var{L}.
@@ -1428,6 +1481,7 @@ Examples:
 "file.ext"              @error{} no dirname
 "."                     @result{} ".."
 ".."                    @error{} no dirname
+"/"                     @result{} "/"
 @end example
 
 It is an error to attempt dirname extraction from an input pathname that has no dirname; in this
@@ -1445,7 +1499,7 @@ referenced by @var{P}.  If an error occurs: raise an exception by performing a n
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_new_dirname (cce_destination_t @var{L}, ccptn_t * @var{R}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_init_dirname (cce_destination_t @var{L}, ccptn_t * @var{R}, ccptn_t const * @var{P})
 Initialise an already allocated instance of @objtype{ccptn_t}, referenced by @var{R}, representing
 the dirname of the input pathname referenced by @var{P}.  If an error occurs: raise an exception by
 performing a non--local exit to @var{L}.
@@ -1529,9 +1583,13 @@ Examples:
 "file.ext"              @result{} "file.ext"
 "."                     @result{} "."
 ".."                    @result{} ".."
+"/"                     @error{} no tailname
 @end example
 
-Every pathname has a tailname.
+Every pathname has a tailname with the exception of @file{/}.
+
+It is an error to attempt tailname extraction from an input pathname that has no tailname; in this
+case the functions below will raise an exception of type @objtype{ccptn_condition_no_tailname_t}.
 
 Tailname extraction is possible only for an input pathname that has been previously normalised; if
 the input is not normalised: the functions below will raise an exception of type
@@ -1545,7 +1603,7 @@ referenced by @var{P}.  If an error occurs: raise an exception by performing a n
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_new_tailname (cce_destination_t @var{L}, ccptn_t * @var{R}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_init_tailname (cce_destination_t @var{L}, ccptn_t * @var{R}, ccptn_t const * @var{P})
 Initialise an already allocated instance of @objtype{ccptn_t}, referenced by @var{R}, representing
 the tailname of the input pathname referenced by @var{P}.  If an error occurs: raise an exception by
 performing a non--local exit to @var{L}.
@@ -1629,6 +1687,7 @@ it does not represent a directory.  Examples:
 "file.ext"              @result{} "file.ext"
 "."                     @error{} no filename
 ".."                    @error{} no filename
+"/"                     @error{} no filename
 @end example
 
 It is an error to attempt filename extraction from an input pathname that has no filename; in this
@@ -1646,7 +1705,7 @@ referenced by @var{P}.  If an error occurs: raise an exception by performing a n
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_new_filename (cce_destination_t @var{L}, ccptn_t * @var{R}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_init_filename (cce_destination_t @var{L}, ccptn_t * @var{R}, ccptn_t const * @var{P})
 Initialise an already allocated instance of @objtype{ccptn_t}, referenced by @var{R}, representing
 the filename of the input pathname referenced by @var{P}.  If an error occurs: raise an exception by
 performing a non--local exit to @var{L}.
