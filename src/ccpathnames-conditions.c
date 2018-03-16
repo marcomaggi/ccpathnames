@@ -196,6 +196,60 @@ ccptn_condition_is_zero_length (cce_condition_t const * C)
 
 
 /** --------------------------------------------------------------------
+ ** Condition objects: invalid length.
+ ** ----------------------------------------------------------------- */
+
+static cce_condition_static_message_fun_t	ccptn_condition_static_message_invalid_length;
+
+static ccptn_descriptor_invalid_length_t ccptn_descriptor_invalid_length_stru = {
+  /* This  "parent" field  is  set below  by  the module  initialisation
+     function. */
+  .descriptor.parent		= NULL,
+  .descriptor.delete		= NULL,
+  .descriptor.final		= NULL,
+  .descriptor.static_message	= ccptn_condition_static_message_invalid_length
+};
+
+ccptn_descriptor_invalid_length_t const * const ccptn_descriptor_invalid_length_ptr = &ccptn_descriptor_invalid_length_stru;
+
+/* This is  the single  instance of  the "invalid  pathname" exceptional
+   condition.  It is used by "cce_raise()" and "cce_retry()". */
+static ccptn_condition_invalid_length_t const ccptn_condition_invalid_length_stru = {
+  .runtime_error.error.root.condition.descriptor = &(ccptn_descriptor_invalid_length_stru.descriptor)
+};
+
+ccptn_condition_invalid_length_t const * const ccptn_condition_invalid_length_ptr = &ccptn_condition_invalid_length_stru;
+
+/* ------------------------------------------------------------------ */
+
+char const *
+ccptn_condition_static_message_invalid_length (cce_condition_t const * C CCPTN_UNUSED)
+{
+  return "the operation would generate a invalid length pathname";
+}
+
+/* ------------------------------------------------------------------ */
+
+void
+ccptn_condition_init_invalid_length (ccptn_condition_invalid_length_t * C)
+{
+  cce_condition_init_runtime_error(&(C->runtime_error));
+}
+
+cce_condition_t const *
+ccptn_condition_new_invalid_length (void)
+{
+  return (cce_condition_t const *) ccptn_condition_invalid_length_ptr;
+}
+
+bool
+ccptn_condition_is_invalid_length (cce_condition_t const * C)
+{
+  return cce_is_condition(C, &(ccptn_descriptor_invalid_length_ptr->descriptor));
+}
+
+
+/** --------------------------------------------------------------------
  ** Condition objects: normalised pathname.
  ** ----------------------------------------------------------------- */
 
@@ -475,6 +529,7 @@ ccptn_init (void)
   ccptn_descriptor_invalid_pathname_stru.descriptor.parent	= &(cce_descriptor_runtime_error_ptr->descriptor);
   ccptn_descriptor_exceeded_length_stru.descriptor.parent	= &(cce_descriptor_runtime_error_ptr->descriptor);
   ccptn_descriptor_zero_length_stru.descriptor.parent		= &(cce_descriptor_runtime_error_ptr->descriptor);
+  ccptn_descriptor_invalid_length_stru.descriptor.parent	= &(cce_descriptor_runtime_error_ptr->descriptor);
 }
 
 /* end of file */

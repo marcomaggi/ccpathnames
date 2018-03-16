@@ -192,6 +192,31 @@ ccptn_decl bool ccptn_condition_is_zero_length (cce_condition_t const * C)
 
 
 /** --------------------------------------------------------------------
+ ** Condition objects: resulting pathname would exceed maximum length.
+ ** ----------------------------------------------------------------- */
+
+typedef struct ccptn_descriptor_invalid_length_t	ccptn_descriptor_invalid_length_t;
+typedef struct ccptn_condition_invalid_length_t		ccptn_condition_invalid_length_t;
+
+struct ccptn_descriptor_invalid_length_t {
+  cce_descriptor_t	descriptor;
+};
+
+struct ccptn_condition_invalid_length_t {
+  cce_condition_runtime_error_t	runtime_error;
+};
+
+ccptn_decl void ccptn_condition_init_invalid_length (ccptn_condition_invalid_length_t * C)
+  __attribute__((__nonnull__(1)));
+
+ccptn_decl cce_condition_t const * ccptn_condition_new_invalid_length (void)
+  __attribute__((__returns_nonnull__));
+
+ccptn_decl bool ccptn_condition_is_invalid_length (cce_condition_t const * C)
+  __attribute__((__nonnull__(1)));
+
+
+/** --------------------------------------------------------------------
  ** Condition objects: invalid pathname.
  ** ----------------------------------------------------------------- */
 

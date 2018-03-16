@@ -276,7 +276,8 @@ library is built with @gcc{}: it will be called automatically by the library ini
 @menu
 * conditions invalid::          Invalid pathname condition object.
 * conditions length::           Maximum pathname length exceeded.
-* conditions zero::             Zero-length pathname.
+* conditions zero length::      Zero-length pathname.
+* conditions invalid length::   Invalid length pathname.
 * conditions normalised::       Normalised pathname required.
 * conditions no dirname::       Directory part is missing.
 * conditions no filename::      Filename is missing.
@@ -369,7 +370,7 @@ Return @ctrue{} if @var{C} is an @emph{exceeded length} condition object; otherw
 @end deftypefun
 
 @c page
-@node conditions zero
+@node conditions zero length
 @section Zero--length pathname
 
 
@@ -406,6 +407,48 @@ condition object.
 
 @deftypefun bool ccptn_is_condition_zero_length (cce_condition_t const * @var{C})
 Return @ctrue{} if @var{C} is an @emph{zero length} condition object; otherwise return @cfalse{}.
+@end deftypefun
+
+@c page
+@node conditions invalid length
+@section Invalid length pathname
+
+
+The @dfn{invalid length exceptional--condition object} has the purpose of describing an exceptional
+condition caused by attempting an operation on a pathname string that contains a non--terminating
+zero octet.
+
+There should be only one @emph{invalid length} condition object: the one predefined by
+@value{PACKAGE}.
+
+All the following definitions are accessible from the header file @file{ccexceptions.h}.
+
+
+@deftp {Struct Typedef} ccptn_descriptor_invalid_length_t
+Structure type representing the descriptor for @emph{invalid length} condition objects.  This
+descriptor has @objtype{cce_descriptor_runtime_error_t} as parent descriptor.
+@end deftp
+
+
+@deftp {Struct Typedef} ccptn_condition_invalid_length_t
+Structure type representing an @emph{invalid length} condition object.
+@end deftp
+
+
+@deftypefun void ccptn_condition_init_invalid_length (ccptn_condition_invalid_length_t * @var{C})
+Initialise an already allocated condition object.  This function exists to allow sub--typing from
+@objtype{ccptn_condition_invalid_length_t}.
+@end deftypefun
+
+
+@deftypefun {cce_condition_t const *} ccptn_condition_new_invalid_length (void)
+Return a pointer to the statically allocated structure representing the single @emph{invalid length}
+condition object.
+@end deftypefun
+
+
+@deftypefun bool ccptn_is_condition_invalid_length (cce_condition_t const * @var{C})
+Return @ctrue{} if @var{C} is an @emph{invalid length} condition object; otherwise return @cfalse{}.
 @end deftypefun
 
 @c page
