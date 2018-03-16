@@ -1,0 +1,22 @@
+-*- coding: utf-8-unix -*-
+
+* TODO Normalisation passes
+
+  Write  a new  low-level normalisation  function that  includes everything  from the
+  passes functions.
+
+* TODO Normalisation predicate
+
+  Write a function that tests if a pathname string is normalised.
+
+* TODO Normalisation constructors
+
+  Write constructors that normalise the input pathname.
+
+* end
+
+### end of file
+# Local Variables:
+# fill-column: 85
+# ispell-local-dictionary: "en_GB"
+# End:
