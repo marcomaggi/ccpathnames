@@ -633,11 +633,11 @@ ptn_normalise (cce_destination_t L, ccptn_t * const R, ccptn_t const * const P)
     two_len = ccptn_normal_pass_remove_single_dot_segments(two, one, one_len);
     one_len = ccptn_normal_pass_remove_double_dot_segments(L, one, two, two_len);
     if (R) {
-      ccptn_init_dup_asciiz(L, R, one);
+      ccptn_init_dup_ascii(L, R, one, one_len);
       R->normalised = 1;
       return R;
     } else {
-      ccptn_t *	Q = ccptn_new_dup_asciiz(L, one);
+      ccptn_t *	Q = ccptn_new_dup_ascii(L, one, one_len);
       Q->normalised = 1;
       return Q;
     }
