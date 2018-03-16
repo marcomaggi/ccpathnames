@@ -192,6 +192,17 @@ ccptn_init_dup_asciiz (cce_destination_t L, ccptn_t * P, char const * pathname)
  ** Constructor functions: ASCII input.
  ** ----------------------------------------------------------------- */
 
+static void
+scan_for_non_terminating_zeros (cce_destination_t L, char const * pathname, size_t len)
+/* Scan for zero octets in side the pathname. */
+{
+  for (size_t i=0; i<len; ++i) {
+    if ('\0' == pathname[i]) {
+      cce_raise(L, ccptn_condition_new_invalid_length());
+    }
+  }
+}
+
 __attribute__((__nonnull__(1)))
 static void
 delete_for_ccptn_new_dup_ascii (ccptn_t * P)
@@ -213,14 +224,10 @@ ccptn_new_dup_ascii (cce_destination_t L, char const * pathname, size_t len)
   if (CCPTN_PATH_MAX < len) {
     cce_raise(L, ccptn_condition_new_exceeded_length());
   } else if (0 < len) {
-    /* Scan for zero octets in side the pathname. */
-    for (size_t i=0; i<len; ++i) {
-      if ('\0' == pathname[i]) {
-	cce_raise(L, ccptn_condition_new_invalid_length());
-      }
-    }
+    ccptn_t *	P;
 
-    ccptn_t *	P = cce_sys_malloc(L, sizeof(ccptn_t) + len + 1);
+    scan_for_non_terminating_zeros(L, pathname, len);
+    P = cce_sys_malloc(L, sizeof(ccptn_t) + len + 1);
     P->delete		= delete_for_ccptn_new_dup_ascii;
     P->len		= len;
     P->absolute		= ('/' == *pathname)? 1 : 0;
@@ -258,13 +265,7 @@ ccptn_init_dup_ascii (cce_destination_t L, ccptn_t * P, char const * pathname, s
   if (CCPTN_PATH_MAX < len) {
     cce_raise(L, ccptn_condition_new_exceeded_length());
   } else if (0 < len) {
-    /* Scan for zero octets in side the pathname. */
-    for (size_t i=0; i<len; ++i) {
-      if ('\0' == pathname[i]) {
-	cce_raise(L, ccptn_condition_new_invalid_length());
-      }
-    }
-
+    scan_for_non_terminating_zeros(L, pathname, len);
     P->delete		= delete_for_ccptn_init_dup_ascii;
     P->len		= len;
     P->absolute		= ('/' == *pathname)? 1 : 0;
