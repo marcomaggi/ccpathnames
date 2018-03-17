@@ -9,10 +9,6 @@
 
   Write a function that tests if a pathname string is normalised.
 
-* TODO Normalisation constructors
-
-  Write constructors that normalise the input pathname.
-
 * end
 
 ### end of file

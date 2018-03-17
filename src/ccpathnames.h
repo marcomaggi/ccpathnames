@@ -437,10 +437,16 @@ ccptn_decl ccptn_t * ccptn_init_nodup_asciiz (cce_destination_t L, ccptn_t * P, 
 ccptn_decl ccptn_t * ccptn_init_dup_asciiz (cce_destination_t L, ccptn_t * P, char const * pathname)
   __attribute__((__returns_nonnull__,__nonnull__(1,2)));
 
+ccptn_decl ccptn_t * ccptn_init_normal_asciiz (cce_destination_t L, ccptn_t * P, char const * pathname)
+  __attribute__((__returns_nonnull__,__nonnull__(1,2)));
+
 ccptn_decl ccptn_t * ccptn_new_nodup_asciiz (cce_destination_t L, char const * pathname)
   __attribute__((__returns_nonnull__,__nonnull__(1,2)));
 
 ccptn_decl ccptn_t * ccptn_new_dup_asciiz (cce_destination_t L, char const * pathname)
+  __attribute__((__returns_nonnull__,__nonnull__(1,2)));
+
+ccptn_decl ccptn_t * ccptn_new_normal_asciiz (cce_destination_t L, char const * pathname)
   __attribute__((__returns_nonnull__,__nonnull__(1,2)));
 
 /* ------------------------------------------------------------------ */
@@ -496,6 +502,15 @@ ccptn_init_dup_asciiz_guarded_error (cce_destination_t L, ccptn_t * R, cce_handl
   return R;
 }
 
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3,4)))
+static inline ccptn_t *
+ccptn_init_normal_asciiz_guarded_error (cce_destination_t L, ccptn_t * R, cce_handler_t * R_H, char const * pathname)
+{
+  ccptn_init_normal_asciiz(L, R, pathname);
+  ccptn_error_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
 __attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
 static inline ccptn_t *
 ccptn_new_nodup_asciiz_guarded_error (cce_destination_t L, cce_handler_t * R_H, char const * pathname)
@@ -510,6 +525,15 @@ static inline ccptn_t *
 ccptn_new_dup_asciiz_guarded_error (cce_destination_t L, cce_handler_t * R_H, char const * pathname)
 {
   ccptn_t *	R = ccptn_new_dup_asciiz(L, pathname);
+  ccptn_error_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
+static inline ccptn_t *
+ccptn_new_normal_asciiz_guarded_error (cce_destination_t L, cce_handler_t * R_H, char const * pathname)
+{
+  ccptn_t *	R = ccptn_new_normal_asciiz(L, pathname);
   ccptn_error_handler_ptn_init(L, R_H, R);
   return R;
 }
@@ -534,6 +558,15 @@ ccptn_init_dup_asciiz_guarded_cleanup (cce_destination_t L, ccptn_t * R, cce_han
   return R;
 }
 
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3,4)))
+static inline ccptn_t *
+ccptn_init_normal_asciiz_guarded_cleanup (cce_destination_t L, ccptn_t * R, cce_handler_t * R_H, char const * pathname)
+{
+  ccptn_init_normal_asciiz(L, R, pathname);
+  ccptn_cleanup_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
 __attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
 static inline ccptn_t *
 ccptn_new_nodup_asciiz_guarded_cleanup (cce_destination_t L, cce_handler_t * R_H, char const * pathname)
@@ -552,6 +585,15 @@ ccptn_new_dup_asciiz_guarded_cleanup (cce_destination_t L, cce_handler_t * R_H, 
   return R;
 }
 
+__attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
+static inline ccptn_t *
+ccptn_new_normal_asciiz_guarded_cleanup (cce_destination_t L, cce_handler_t * R_H, char const * pathname)
+{
+  ccptn_t *	R = ccptn_new_normal_asciiz(L, pathname);
+  ccptn_cleanup_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
 /* ------------------------------------------------------------------ */
 
 #define ccptn_init_nodup_asciiz_guarded(L,R,H,PATHNAME)		\
@@ -564,6 +606,11 @@ ccptn_new_dup_asciiz_guarded_cleanup (cce_destination_t L, cce_handler_t * R_H, 
 	   cce_cleanup_handler_t	*: ccptn_init_dup_asciiz_guarded_cleanup, \
 	   cce_error_handler_t		*: ccptn_init_dup_asciiz_guarded_error)(L,R,&(H->handler),PATHNAME)
 
+#define ccptn_init_normal_asciiz_guarded(L,R,H,PATHNAME)		\
+  _Generic((H),								\
+	   cce_cleanup_handler_t	*: ccptn_init_normal_asciiz_guarded_cleanup, \
+	   cce_error_handler_t		*: ccptn_init_normal_asciiz_guarded_error)(L,R,&(H->handler),PATHNAME)
+
 #define ccptn_new_nodup_asciiz_guarded(L,H,PATHNAME)		\
   _Generic((H),								\
 	   cce_cleanup_handler_t	*: ccptn_new_nodup_asciiz_guarded_cleanup, \
@@ -573,6 +620,11 @@ ccptn_new_dup_asciiz_guarded_cleanup (cce_destination_t L, cce_handler_t * R_H, 
   _Generic((H),								\
 	   cce_cleanup_handler_t	*: ccptn_new_dup_asciiz_guarded_cleanup, \
 	   cce_error_handler_t		*: ccptn_new_dup_asciiz_guarded_error)(L,&(H->handler),PATHNAME)
+
+#define ccptn_new_normal_asciiz_guarded(L,H,PATHNAME)		\
+  _Generic((H),								\
+	   cce_cleanup_handler_t	*: ccptn_new_normal_asciiz_guarded_cleanup, \
+	   cce_error_handler_t		*: ccptn_new_normal_asciiz_guarded_error)(L,&(H->handler),PATHNAME)
 
 
 /** --------------------------------------------------------------------

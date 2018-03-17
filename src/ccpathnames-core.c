@@ -35,7 +35,23 @@
 
 
 /** --------------------------------------------------------------------
- ** Constructor functions: ASCIIZ input.
+ ** Helpers.
+ ** ----------------------------------------------------------------- */
+
+static void
+scan_for_non_terminating_zeros (cce_destination_t L, char const * pathname, size_t len)
+/* Scan for zero octets in side the pathname. */
+{
+  for (size_t i=0; i<len; ++i) {
+    if ('\0' == pathname[i]) {
+      cce_raise(L, ccptn_condition_new_invalid_length());
+    }
+  }
+}
+
+
+/** --------------------------------------------------------------------
+ ** Constructor functions: ASCIIZ input, allocated struct, nodup data.
  ** ----------------------------------------------------------------- */
 
 __attribute__((__nonnull__(1)))
@@ -74,7 +90,10 @@ ccptn_new_nodup_asciiz (cce_destination_t L, char const * pathname)
   }
 }
 
-/* ------------------------------------------------------------------ */
+
+/** --------------------------------------------------------------------
+ ** Constructor functions: ASCIIZ input, allocated struct, dup data.
+ ** ----------------------------------------------------------------- */
 
 __attribute__((__nonnull__(1)))
 static void
@@ -115,11 +134,68 @@ ccptn_new_dup_asciiz (cce_destination_t L, char const * pathname)
   }
 }
 
-/* ------------------------------------------------------------------ */
+
+/** --------------------------------------------------------------------
+ ** Constructor functions: ASCIIZ input, allocated struct, normal data.
+ ** ----------------------------------------------------------------- */
 
 __attribute__((__nonnull__(1)))
 static void
-delete_for_ccptn_nit_nodup_asciiz (ccptn_t * P CCPTN_UNUSED)
+delete_for_ccptn_new_normal_asciiz (ccptn_t * P)
+{
+  free(P);
+}
+
+ccptn_t *
+ccptn_new_normal_asciiz (cce_destination_t L, char const * pathname)
+/* Allocate a new "ccptn_t" instance  initialising it with data from the
+ * ASCIIZ string "pathname".  The data  *is* duplicated and the pathname
+ * is normalised.
+ *
+ * The finalisation function registered in the instance will release the
+ * struct itself, and the data buffer.
+ */
+{
+  size_t	len = strlen(pathname);
+
+  if (CCPTN_PATH_MAX < len) {
+    cce_raise(L, ccptn_condition_new_exceeded_length());
+  } else if (0 < len) {
+    ccptn_t *	P;
+    char	one[1 + len];
+    size_t	one_len;
+
+    one_len = ccptn_normal_pass_remove_useless_slashes(one, pathname, len);
+    {
+      char	two[1 + one_len];
+      size_t	two_len;
+
+      two_len = ccptn_normal_pass_remove_single_dot_segments(two, one, one_len);
+      one_len = ccptn_normal_pass_remove_double_dot_segments(L, one, two, two_len);
+      P			= cce_sys_malloc(L, sizeof(ccptn_t) + one_len + 1);
+      P->delete		= delete_for_ccptn_new_normal_asciiz;
+      P->len		= one_len;
+      P->absolute	= ('/' == one[0])? 1 : 0;
+      P->normalised	= 1;
+      P->realpath	= 0;
+      P->buf		= (char *)(((uint8_t *)P) + sizeof(ccptn_t));
+      strncpy(P->buf, one, one_len);
+      P->buf[one_len]	= '\0';
+      return P;
+    }
+  } else {
+    cce_raise(L, ccptn_condition_new_zero_length());
+  }
+}
+
+
+/** --------------------------------------------------------------------
+ ** Constructor functions: ASCIIZ input, existent struct, nodup data.
+ ** ----------------------------------------------------------------- */
+
+__attribute__((__nonnull__(1)))
+static void
+delete_for_ccptn_init_nodup_asciiz (ccptn_t * P CCPTN_UNUSED)
 {
 }
 
@@ -137,7 +213,7 @@ ccptn_init_nodup_asciiz (cce_destination_t L CCPTN_UNUSED, ccptn_t * P, char con
   if (CCPTN_PATH_MAX < len) {
     cce_raise(L, ccptn_condition_new_exceeded_length());
   } else if (0 < len) {
-    P->delete		= delete_for_ccptn_nit_nodup_asciiz;
+    P->delete		= delete_for_ccptn_init_nodup_asciiz;
     P->len		= strlen(pathname);
     P->absolute		= ('/' == *pathname)? 1 : 0;
     P->normalised	= 0;
@@ -149,7 +225,10 @@ ccptn_init_nodup_asciiz (cce_destination_t L CCPTN_UNUSED, ccptn_t * P, char con
   }
 }
 
-/* ------------------------------------------------------------------ */
+
+/** --------------------------------------------------------------------
+ ** Constructor functions: ASCIIZ input, existent struct, dup data.
+ ** ----------------------------------------------------------------- */
 
 __attribute__((__nonnull__(1)))
 static void
@@ -189,19 +268,60 @@ ccptn_init_dup_asciiz (cce_destination_t L, ccptn_t * P, char const * pathname)
 
 
 /** --------------------------------------------------------------------
- ** Constructor functions: ASCII input.
+ ** Constructor functions: ASCIIZ input, existent struct, normal data.
  ** ----------------------------------------------------------------- */
 
+__attribute__((__nonnull__(1)))
 static void
-scan_for_non_terminating_zeros (cce_destination_t L, char const * pathname, size_t len)
-/* Scan for zero octets in side the pathname. */
+delete_for_ccptn_init_normal_asciiz (ccptn_t * P)
 {
-  for (size_t i=0; i<len; ++i) {
-    if ('\0' == pathname[i]) {
-      cce_raise(L, ccptn_condition_new_invalid_length());
+  free(P->buf);
+}
+
+ccptn_t *
+ccptn_init_normal_asciiz (cce_destination_t L, ccptn_t * P, char const * pathname)
+/* Initialise an already allocted "ccptn_t"  instance with data from the
+ * ASCIIZ string "pathname".   The data *is* duplicated  the pathname is
+ * normalised.
+ *
+ * The finalisation function registered in the instance will release the
+ * data area but not the struct itself.
+ */
+{
+  size_t	len = strlen(pathname);
+
+  if (CCPTN_PATH_MAX < len) {
+    cce_raise(L, ccptn_condition_new_exceeded_length());
+  } else if (0 < len) {
+    char	one[1 + len];
+    size_t	one_len;
+
+    one_len = ccptn_normal_pass_remove_useless_slashes(one, pathname, len);
+    {
+      char	two[1 + one_len];
+      size_t	two_len;
+
+      two_len = ccptn_normal_pass_remove_single_dot_segments(two, one, one_len);
+      one_len = ccptn_normal_pass_remove_double_dot_segments(L, one, two, two_len);
+      P->delete		= delete_for_ccptn_init_normal_asciiz;
+      P->len		= one_len;
+      P->absolute	= ('/' == one[0])? 1 : 0;
+      P->normalised	= 1;
+      P->realpath	= 0;
+      P->buf		= cce_sys_malloc(L, one_len + 1);
+      strncpy(P->buf, one, one_len);
+      P->buf[one_len]	= '\0';
+      return P;
     }
+  } else {
+    cce_raise(L, ccptn_condition_new_zero_length());
   }
 }
+
+
+/** --------------------------------------------------------------------
+ ** Constructor functions: ASCII input, allocated struct, dup data.
+ ** ----------------------------------------------------------------- */
 
 __attribute__((__nonnull__(1)))
 static void
@@ -242,7 +362,67 @@ ccptn_new_dup_ascii (cce_destination_t L, char const * pathname, size_t len)
   }
 }
 
-/* ------------------------------------------------------------------ */
+
+/** --------------------------------------------------------------------
+ ** Constructor functions: ASCII input, allocated struct, normal data.
+ ** ----------------------------------------------------------------- */
+
+__attribute__((__nonnull__(1)))
+static void
+delete_for_ccptn_new_normal_ascii (ccptn_t * P)
+{
+  free(P);
+}
+
+ccptn_t *
+ccptn_new_normal_ascii (cce_destination_t L, char const * pathname, size_t len)
+/* Allocate a new "ccptn_t" instance  initialising it with data from the
+ * ASCII string "pathname" which  holds "len" octets without terminating
+ * zero.  The  data *is* duplicated:  the returned "ccptn_t"  includes a
+ * copy of the data from "pathname".
+ *
+ * The finalisation function registered in the instance will release the
+ * struct itself, and the data buffer.
+ */
+{
+  if (CCPTN_PATH_MAX < len) {
+    cce_raise(L, ccptn_condition_new_exceeded_length());
+  } else if (0 < len) {
+    scan_for_non_terminating_zeros(L, pathname, len);
+
+    char	one[1 + len];
+    size_t	one_len;
+
+    one_len = ccptn_normal_pass_remove_useless_slashes(one, pathname, len);
+    {
+      char	two[1 + one_len];
+      size_t	two_len;
+
+      two_len = ccptn_normal_pass_remove_single_dot_segments(two, one, one_len);
+      one_len = ccptn_normal_pass_remove_double_dot_segments(L, one, two, two_len);
+      {
+	ccptn_t *	P;
+	P = cce_sys_malloc(L, sizeof(ccptn_t) + one_len + 1);
+	P->delete	= delete_for_ccptn_new_normal_ascii;
+	P->len		= one_len;
+	P->absolute	= ('/' == one[0])? 1 : 0;
+	P->normalised	= 1;
+	P->realpath	= 0;
+	P->buf		= (char *)(((uint8_t *)P) + sizeof(ccptn_t));
+	strncpy(P->buf, one, one_len);
+	P->buf[one_len]	= '\0';
+	return P;
+      }
+    }
+  } else {
+    cce_raise(L, ccptn_condition_new_zero_length());
+  }
+}
+
+
+/** --------------------------------------------------------------------
+ ** Constructor functions: ASCII input, existent struct, dup data.
+ ** ----------------------------------------------------------------- */
 
 __attribute__((__nonnull__(1)))
 static void
@@ -275,6 +455,58 @@ ccptn_init_dup_ascii (cce_destination_t L, ccptn_t * P, char const * pathname, s
     strncpy(P->buf, pathname, len);
     P->buf[len]		= '\0';
     return P;
+  } else {
+    cce_raise(L, ccptn_condition_new_zero_length());
+  }
+}
+
+
+/** --------------------------------------------------------------------
+ ** Constructor functions: ASCII input, existent struct, normal data.
+ ** ----------------------------------------------------------------- */
+
+__attribute__((__nonnull__(1)))
+static void
+delete_for_ccptn_init_normal_ascii (ccptn_t * P)
+{
+  free(P->buf);
+}
+
+ccptn_t *
+ccptn_init_normal_ascii (cce_destination_t L, ccptn_t * P, char const * pathname, size_t len)
+/* Initialise an already allocted "ccptn_t"  instance with data from the
+ * ASCII string "pathname" which  holds "len" octets without terminating
+ * zero.  The data *is* duplicated and the pathname normalised.
+ *
+ * The finalisation function registered in the instance will release the
+ * data area but not the struct itself.
+ */
+{
+  if (CCPTN_PATH_MAX < len) {
+    cce_raise(L, ccptn_condition_new_exceeded_length());
+  } else if (0 < len) {
+    scan_for_non_terminating_zeros(L, pathname, len);
+
+    char	one[1 + len];
+    size_t	one_len;
+
+    one_len = ccptn_normal_pass_remove_useless_slashes(one, pathname, len);
+    {
+      char	two[1 + one_len];
+      size_t	two_len;
+
+      two_len = ccptn_normal_pass_remove_single_dot_segments(two, one, one_len);
+      one_len = ccptn_normal_pass_remove_double_dot_segments(L, one, two, two_len);
+      P->delete		= delete_for_ccptn_init_normal_ascii;
+      P->len		= one_len;
+      P->absolute	= ('/' == one[0])? 1 : 0;
+      P->normalised	= 1;
+      P->realpath	= 0;
+      P->buf		= cce_sys_malloc(L, one_len + 1);
+      strncpy(P->buf, one, one_len);
+      P->buf[one_len]	= '\0';
+      return P;
+    }
   } else {
     cce_raise(L, ccptn_condition_new_zero_length());
   }
