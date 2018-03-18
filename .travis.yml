@@ -88,7 +88,7 @@ env:
     - PKG_CONFIG_PATH=/tmp/mine/lib/pkgconfig:$PKG_CONFIG_PATH;
     # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
     #   via the "travis encrypt" command using the project repo's public key
-    - secure: ""
+    - secure: "WL6FrDIUZOjfN5Nq1MjMdGG9cvKwk8gQ1DSXx3bWR19LzOSzuDU21OViUfE1nt4rXcCVkaNNlTuIcfrD1j25GbmnvehWFJFauAx2vIAAmriSySn7uK17aem0jXNu7dtC1bS6ILKxCk6RopVQF5wCGzJ3nvs2Ptm7TyLR0daIsTMemAkh3y3ziCWQiWDSkg80H0x5zqdUyaGF2ev9k5kFcOCpIZ5KhgggF02c87e1OjwwDjRblcRZfkbdnqkbq+e+cOSOMLBnTcsys7/kMWskTWnwFQWvORgUmnpvIoiBlKyxttyemgD+2coPIDY9ssBrNNhNytmPeV8ZRWNsXzQYgs7ewJRnqv5azkz4o/5wrTPVyewJLZWD05Jt7zrMbdlRXCVvrcQmqxfnCNaMUjm+22NAiZ+OH9Kca0DCbxfelFA7YqGzsQr5qq+0qN8DksRSzDsL+b8BxuFnOegXJ0uuobLA4CZt6dF+elSQ4cbnu0j/vy+zqkmTcoLZiBad6wLRWak1otKwjlGI/uCWgszWivmSdmaRZdb5Ufq8q58NB+4ubbRdiMCJZGA6szDVNBH9S2niglnJwXInBF8vajrtECSu+0sMsPPeZjr9VPtaIv5bwv91aQK3twqXrd6BDa6xAJMbnMUXfD9GXQAgoH27RRs6/TQs0mcWkU5tXGxObLY="
 
 #page
 #### Coverity Scan integration

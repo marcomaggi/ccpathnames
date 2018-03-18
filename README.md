@@ -1,7 +1,7 @@
 # ccpathnames
 
 [![Build Status](https://travis-ci.org/marcomaggi/ccpathnames.svg?branch=master)](https://travis-ci.org/marcomaggi/ccpathnames)
-[![Coverity passed](https://scan.coverity.com/projects/12801/badge.svg)](https://scan.coverity.com/projects/marcomaggi-ccpathnames)
+[![Coverity passed](https://scan.coverity.com/projects/15205/badge.svg)](https://scan.coverity.com/projects/marcomaggi-ccpathnames)
 [![codecov](https://codecov.io/gh/marcomaggi/ccpathnames/branch/master/graph/badge.svg)](https://codecov.io/gh/marcomaggi/ccpathnames)
 
 
