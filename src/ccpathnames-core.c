@@ -161,7 +161,6 @@ ccptn_new_normal_asciiz (cce_destination_t L, char const * pathname)
   if (CCPTN_PATH_MAX < len) {
     cce_raise(L, ccptn_condition_new_exceeded_length());
   } else if (0 < len) {
-    ccptn_t *	P;
     char	one[1 + len];
     size_t	one_len;
 
@@ -169,6 +168,7 @@ ccptn_new_normal_asciiz (cce_destination_t L, char const * pathname)
     {
       char	two[1 + one_len];
       size_t	two_len;
+      ccptn_t *	P;
 
       two_len = ccptn_normal_pass_remove_single_dot_segments(two, one, one_len);
       one_len = ccptn_normal_pass_remove_double_dot_segments(L, one, two, two_len);
