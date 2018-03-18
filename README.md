@@ -145,7 +145,7 @@ Pull Requests feature at the project's GitHub site.
 
 The latest release of this package can be downloaded from:
 
-[https://bitbucket.org/marcomaggi/ccpathnames/downloads](https://bitbucket.org/marcomaggi/ccpathnames/downloads)
+[https://bitbucket.org/mmstuff/ccpathnames/downloads](https://bitbucket.org/mmstuff/ccpathnames/downloads)
 
 development takes place at:
 
@@ -153,7 +153,7 @@ development takes place at:
 
 and as backup at:
 
-[https://bitbucket.org/marcomaggi/ccpathnames/](https://bitbucket.org/marcomaggi/ccpathnames/)
+[https://bitbucket.org/mmstuff/ccpathnames/](https://bitbucket.org/mmstuff/ccpathnames/)
 
 the documentation is available online:
 
