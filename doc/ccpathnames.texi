@@ -128,6 +128,7 @@ included in the section entitled ``@gnu{} Free Documentation License''.
 * version::                     Version functions.
 * init::                        Library initialisation.
 * conditions::                  Exceptional condition objects.
+* memory::                      Custom memory allocation.
 * typedefs::                    Type definitions.
 * ctors::                       Constructing pathname representations.
 * dtors::                       Destructing pathname representations.
@@ -696,6 +697,60 @@ Return @ctrue{} if @var{C} is an @emph{no rootname} condition object; otherwise 
 @end deftypefun
 
 @c page
+@node memory
+@chapter Custom memory allocation
+
+
+@value{PACKAGE} exposes an @api{} to allow the use of a custom allocator for the pathnames.
+
+
+@deftp {Struct Typedef} ccptn_allocator_t
+The type of a custom memory allocator.  It has the following public fields:
+
+@table @code
+@item ccptn_malloc_fun_t * malloc
+Pointer to a function used to allocate memory.
+
+@item ccptn_free_fun_t * free
+Pointer to a function used to release allocated memory.
+@end table
+@end deftp
+
+
+@deftypefn {Function Pointer} {void *} ccptn_malloc_fun_t (ccptn_allocator_t const * @var{A}, cce_destination_t @var{L}, size_t @var{size})
+Type of function used to allocate memory.  Basically it works like the standard @cfunc{malloc}, but
+if allocation fails: it raises an exception by performing a non--local exit to @var{L}.  The
+argument @var{A} is a pointer to the allocator itself.
+@end deftypefn
+
+
+@deftypefn {Function Pointer} void ccptn_free_fun_t (ccptn_allocator_t const * @var{A}, void * @var{ptr})
+Type of function used to release allocated memory.  Basically it works like the standard
+@cfunc{free}.  The argument @var{A} is a pointer to the allocator itself.
+@end deftypefn
+
+
+@deftypevr {Constant} {ccptn_allocator_t const * const} ccptn_default_allocator
+Default allocator predefined by @value{PACKAGE}.  At the core it uses the standard @cfunc{malloc}
+and @cfunc{free}.
+@end deftypevr
+
+
+@deftypevar {ccptn_allocator_t const *} ccptn_current_allocator
+Currently selected custom memory allocator.  It is initialised with @code{ccptn_default_allocator}.
+@end deftypevar
+
+
+@deftypefun {void *} ccptn_malloc (cce_destination_t @var{L}, size_t @var{size})
+Allocate memory using the currently selected memory allocator.
+@end deftypefun
+
+
+@deftypefun void ccptn_free (void * @var{ptr})
+Release allocated memory using the currently selected memory allocator.
+@end deftypefun
+
+@c page
 @node typedefs
 @chapter Type definitions
 
@@ -734,7 +789,7 @@ Allocate a new @objtype{ccptn_t} instance initialising it with data from the @as
 non--local exit to to @var{L}.
 
 The data is @strong{not} duplicated: the returned @objtype{ccptn_t} references @var{pathname}
-itself.  Memory is allocated with @cfunc{malloc}.  The finalisation function registered in the
+itself.  Memory is allocated with @cfunc{ccptn_malloc}.  The finalisation function registered in the
 instance will release the @code{struct} itself, but not the data buffer.
 
 As usage example see the following code:
@@ -763,8 +818,8 @@ Allocate a new @objtype{ccptn_t} instance initialising it with data from the @as
 non--local exit to to @var{L}.
 
 The data @strong{is} duplicated: the returned @objtype{ccptn_t} includes a copy of the data from
-@var{pathname}.  Memory is allocated with @cfunc{malloc}.  The finalisation function registered in
-the instance will release the @code{struct} itself, and the data buffer.
+@var{pathname}.  Memory is allocated with @cfunc{ccptn_malloc}.  The finalisation function
+registered in the instance will release the @code{struct} itself, and the data buffer.
 
 As usage example see the following code:
 
@@ -793,7 +848,7 @@ Allocate a new @objtype{ccptn_t} instance initialising it with data from the @as
 non--local exit to to @var{L}.
 
 The data @strong{is} duplicated and the pathname is normalised, @ref{manipulations normalise,
-Normalising pathnames}.  Memory is allocated with @cfunc{malloc}.  The finalisation function
+Normalising pathnames}.  Memory is allocated with @cfunc{ccptn_malloc}.  The finalisation function
 registered in the instance will release the @code{struct} itself, and the data buffer.
 
 As usage example see the following code:
@@ -825,7 +880,7 @@ Initialise an already allocated @objtype{ccptn_t} instance with data from the @a
 @var{L}.
 
 The data is @strong{not} duplicated: the instance references @var{pathname} itself.  Memory is
-allocated with @cfunc{malloc}.  The finalisation function registered in the instance will do
+allocated with @cfunc{ccptn_malloc}.  The finalisation function registered in the instance will do
 nothing.
 
 As usage example see the following code:
@@ -855,8 +910,8 @@ Initialise an already allocated @objtype{ccptn_t} instance with data from the @a
 @var{L}.
 
 The data @strong{is} duplicated: the instance includes a copy of the data from @var{pathname}.
-Memory is allocated with @cfunc{malloc}.  The finalisation function registered in the instance will
-release the data area but not the @code{struct} itself.
+Memory is allocated with @cfunc{ccptn_malloc}.  The finalisation function registered in the instance
+will release the data area but not the @code{struct} itself.
 
 As usage example see the following code:
 
@@ -885,7 +940,7 @@ Initialise an already allocated @objtype{ccptn_t} instance with data from the @a
 @var{L}.
 
 The data @strong{is} duplicated and the pathname is normalised, @ref{manipulations normalise,
-Normalising pathnames}..  Memory is allocated with @cfunc{malloc}.  The finalisation function
+Normalising pathnames}.  Memory is allocated with @cfunc{ccptn_malloc}.  The finalisation function
 registered in the instance will release the data area but not the @code{struct} itself.
 
 As usage example see the following code:
@@ -921,8 +976,8 @@ Allocate a new @objtype{ccptn_t} instance initialising it with data from the @as
 error occurs: raise an exception by performing a non--local exit to to @var{L}.
 
 The data @strong{is} duplicated: the returned @objtype{ccptn_t} includes a copy of the data from
-@var{pathname}.  Memory is allocated with @cfunc{malloc}.  The finalisation function registered in
-the instance will release the @code{struct} itself, and the data buffer.
+@var{pathname}.  Memory is allocated with @cfunc{ccptn_malloc}.  The finalisation function
+registered in the instance will release the @code{struct} itself, and the data buffer.
 
 As usage example see the following code:
 
@@ -951,7 +1006,7 @@ Allocate a new @objtype{ccptn_t} instance initialising it with data from the @as
 error occurs: raise an exception by performing a non--local exit to to @var{L}.
 
 The data @strong{is} duplicated and the pathname is normalised, @ref{manipulations normalise,
-Normalising pathnames}.  Memory is allocated with @cfunc{malloc}.  The finalisation function
+Normalising pathnames}.  Memory is allocated with @cfunc{ccptn_malloc}.  The finalisation function
 registered in the instance will release the @code{struct} itself, and the data buffer.
 
 As usage example see the following code:
@@ -981,8 +1036,8 @@ Initialise an already allocated @objtype{ccptn_t} instance with data from the @a
 exception by performing a non--local exit to to @var{L}.
 
 The data @strong{is} duplicated: the instance includes a copy of the data from @var{pathname}.
-Memory is allocated with @cfunc{malloc}.  The finalisation function registered in the instance will
-release the data area but not the @code{struct} itself.
+Memory is allocated with @cfunc{ccptn_malloc}.  The finalisation function registered in the instance
+will release the data area but not the @code{struct} itself.
 
 As usage example see the following code:
 
@@ -1011,7 +1066,7 @@ Initialise an already allocated @objtype{ccptn_t} instance with data from the @a
 exception by performing a non--local exit to to @var{L}.
 
 The data @strong{is} duplicated and the pathname is normalised, @ref{manipulations normalise,
-Normalising pathnames}.  Memory is allocated with @cfunc{malloc}.  The finalisation function
+Normalising pathnames}.  Memory is allocated with @cfunc{ccptn_malloc}.  The finalisation function
 registered in the instance will release the data area but not the @code{struct} itself.
 
 As usage example see the following code:

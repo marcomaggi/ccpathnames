@@ -42,6 +42,7 @@ libccpathnames_la_SOURCES	= \
 	src/ccpathnames-internals.h	\
 	src/ccpathnames-version.c	\
 	src/ccpathnames-conditions.c	\
+	src/ccpathnames-memory.c	\
 	src/ccpathnames-core.c		\
 	src/ccpathnames-manipulation.c	\
 	src/ccpathnames-components.c	\

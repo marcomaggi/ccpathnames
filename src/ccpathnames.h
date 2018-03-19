@@ -342,6 +342,30 @@ ccptn_decl bool ccptn_condition_is_no_rootname (cce_condition_t const * C)
 
 
 /** --------------------------------------------------------------------
+ ** Memory allocation
+ ** ----------------------------------------------------------------- */
+
+typedef struct ccptn_allocator_t		ccptn_allocator_t;
+
+typedef void *	ccptn_malloc_fun_t (ccptn_allocator_t const * A, cce_destination_t L, size_t size);
+typedef void	ccptn_free_fun_t   (ccptn_allocator_t const * A, void * ptr);
+
+struct ccptn_allocator_t {
+  ccptn_malloc_fun_t *	malloc;
+  ccptn_free_fun_t *	free;
+};
+
+ccptn_decl ccptn_allocator_t const * const ccptn_default_allocator;
+ccptn_decl ccptn_allocator_t const *       ccptn_current_allocator;
+
+ccptn_decl void * ccptn_malloc (cce_destination_t L, size_t size)
+  __attribute__((__nonnull__(1),__returns_nonnull__));
+
+ccptn_decl void   ccptn_free   (void * ptr)
+  __attribute__((__nonnull__(1)));
+
+
+/** --------------------------------------------------------------------
  ** Type definitions.
  ** ----------------------------------------------------------------- */
 
