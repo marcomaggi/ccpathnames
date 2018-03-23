@@ -32,6 +32,10 @@
 #include <string.h>
 
 
+/** --------------------------------------------------------------------
+ ** Raw assertions.
+ ** ----------------------------------------------------------------- */
+
 void
 cctests_p_assert (cce_destination_t L, char const * const expr, bool const result,
 		  char const * const filename, char const * const funcname, int const linenum)
@@ -43,10 +47,16 @@ cctests_p_assert (cce_destination_t L, char const * const expr, bool const resul
   }
 }
 
+
+/** --------------------------------------------------------------------
+ ** String comparison.
+ ** ----------------------------------------------------------------- */
+
 void
 cctests_p_assert_asciiz (cce_destination_t L, char const * expected, char const * result,
 			 char const * const expr,
 			 char const * const filename, char const * const funcname, int const linenum)
+/* Compare zero terminated strings. */
 {
   if (0 != strcmp(expected, result)) {
     fprintf(cctests_log_stream, "CCTests: %s: %s: line %d: assertion failure: %s\n",
@@ -61,6 +71,7 @@ void
 cctests_p_assert_ascii (cce_destination_t L, char const * expected, char const * result, size_t result_len,
 			char const * const expr,
 			char const * const filename, char const * const funcname, int const linenum)
+/* Compare non-zero terminated strings. */
 {
   size_t	expected_len = strlen(expected);
 
