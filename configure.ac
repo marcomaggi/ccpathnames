@@ -2,7 +2,7 @@ dnl @configure_input@
 dnl
 
 AC_PREREQ([2.69])
-AC_INIT([CCPathnames],[0.1.0-devel.0],
+AC_INIT([CCPathnames],[0.1.0-beta.0],
   [marco.maggi-ipsu@poste.it],
   [ccpathnames],[http://marcomaggi.github.com/ccpathnames])
 dnl This is the revision number of this configure.ac
@@ -74,7 +74,7 @@ AC_SUBST([CCSYS_ON_DARWIN],[$CCSYS_ON_DARWIN])
 dnl page
 #### libraries interface version
 
-AS_VAR_SET([SLACKSTUFF_PACKAGE_VERSION],[0.1d0.0])
+AS_VAR_SET([SLACKSTUFF_PACKAGE_VERSION],[0.1.0])
 AC_SUBST([SLACKSTUFF_PACKAGE_VERSION])
 
 dnl This is the version stored in the pkg-config data file.
