@@ -297,7 +297,7 @@ exceptional condition caused by attempting to use an invalid pathname.
 There should be only one @emph{invalid pathname} condition object: the one predefined by
 @value{PACKAGE}.
 
-All the following definitions are accessible from the header file @file{ccexceptions.h}.
+All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
 @deftp {Struct Typedef} ccptn_descriptor_invalid_pathname_t
@@ -339,7 +339,7 @@ condition caused by attempting an operation that would generate a too long pathn
 There should be only one @emph{exceeded length} condition object: the one predefined by
 @value{PACKAGE}.
 
-All the following definitions are accessible from the header file @file{ccexceptions.h}.
+All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
 @deftp {Struct Typedef} ccptn_descriptor_exceeded_length_t
@@ -380,7 +380,7 @@ condition caused by attempting an operation that would generate zero--length pat
 
 There should be only one @emph{zero length} condition object: the one predefined by @value{PACKAGE}.
 
-All the following definitions are accessible from the header file @file{ccexceptions.h}.
+All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
 @deftp {Struct Typedef} ccptn_descriptor_zero_length_t
@@ -422,7 +422,7 @@ zero octet.
 There should be only one @emph{invalid length} condition object: the one predefined by
 @value{PACKAGE}.
 
-All the following definitions are accessible from the header file @file{ccexceptions.h}.
+All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
 @deftp {Struct Typedef} ccptn_descriptor_invalid_length_t
@@ -464,7 +464,7 @@ normalised, while the operation requires that it is.
 There should be only one @emph{normalised pathname} condition object: the one predefined by
 @value{PACKAGE}.
 
-All the following definitions are accessible from the header file @file{ccexceptions.h}.
+All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
 @deftp {Struct Typedef} ccptn_descriptor_normalised_pathname_t
@@ -515,7 +515,7 @@ stripped.  Examples:
 
 There should be only one @emph{no dirname} condition object: the one predefined by @value{PACKAGE}.
 
-All the following definitions are accessible from the header file @file{ccexceptions.h}.
+All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
 @deftp {Struct Typedef} ccptn_descriptor_no_dirname_t
@@ -565,7 +565,7 @@ represent a directory.  Examples:
 
 There should be only one @emph{no filename} condition object: the one predefined by @value{PACKAGE}.
 
-All the following definitions are accessible from the header file @file{ccexceptions.h}.
+All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
 @deftp {Struct Typedef} ccptn_descriptor_no_filename_t
@@ -615,7 +615,7 @@ required.  The tailname is the relative pathname representing the last segment. 
 
 There should be only one @emph{no tailname} condition object: the one predefined by @value{PACKAGE}.
 
-All the following definitions are accessible from the header file @file{ccexceptions.h}.
+All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
 @deftp {Struct Typedef} ccptn_descriptor_no_tailname_t
@@ -666,7 +666,7 @@ required.  The rootname is a pathname with the extension of the last segment str
 
 There should be only one @emph{no rootname} condition object: the one predefined by @value{PACKAGE}.
 
-All the following definitions are accessible from the header file @file{ccexceptions.h}.
+All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
 @deftp {Struct Typedef} ccptn_descriptor_no_rootname_t
