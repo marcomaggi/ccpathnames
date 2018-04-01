@@ -323,7 +323,7 @@ pathname} condition object.
 @end deftypefun
 
 
-@deftypefun bool ccptn_is_condition_invalid_pathname (cce_condition_t const * @var{C})
+@deftypefun bool ccptn_condition_is_invalid_pathname (cce_condition_t const * @var{C})
 Return @ctrue{} if @var{C} is an @emph{invalid pathname} condition object; otherwise return
 @cfalse{}.
 @end deftypefun
@@ -365,7 +365,7 @@ length} condition object.
 @end deftypefun
 
 
-@deftypefun bool ccptn_is_condition_exceeded_length (cce_condition_t const * @var{C})
+@deftypefun bool ccptn_condition_is_exceeded_length (cce_condition_t const * @var{C})
 Return @ctrue{} if @var{C} is an @emph{exceeded length} condition object; otherwise return
 @cfalse{}.
 @end deftypefun
@@ -406,7 +406,7 @@ condition object.
 @end deftypefun
 
 
-@deftypefun bool ccptn_is_condition_zero_length (cce_condition_t const * @var{C})
+@deftypefun bool ccptn_condition_is_zero_length (cce_condition_t const * @var{C})
 Return @ctrue{} if @var{C} is an @emph{zero length} condition object; otherwise return @cfalse{}.
 @end deftypefun
 
@@ -448,7 +448,7 @@ condition object.
 @end deftypefun
 
 
-@deftypefun bool ccptn_is_condition_invalid_length (cce_condition_t const * @var{C})
+@deftypefun bool ccptn_condition_is_invalid_length (cce_condition_t const * @var{C})
 Return @ctrue{} if @var{C} is an @emph{invalid length} condition object; otherwise return @cfalse{}.
 @end deftypefun
 
@@ -490,7 +490,7 @@ pathname} condition object.
 @end deftypefun
 
 
-@deftypefun bool ccptn_is_condition_normalised_pathname (cce_condition_t const * @var{C})
+@deftypefun bool ccptn_condition_is_normalised_pathname (cce_condition_t const * @var{C})
 Return @ctrue{} if @var{C} is an @emph{normalised pathname} condition object; otherwise return
 @cfalse{}.
 @end deftypefun
@@ -541,7 +541,7 @@ condition object.
 @end deftypefun
 
 
-@deftypefun bool ccptn_is_condition_no_dirname (cce_condition_t const * @var{C})
+@deftypefun bool ccptn_condition_is_no_dirname (cce_condition_t const * @var{C})
 Return @ctrue{} if @var{C} is an @emph{no dirname} condition object; otherwise return @cfalse{}.
 @end deftypefun
 
@@ -591,7 +591,7 @@ condition object.
 @end deftypefun
 
 
-@deftypefun bool ccptn_is_condition_no_filename (cce_condition_t const * @var{C})
+@deftypefun bool ccptn_condition_is_no_filename (cce_condition_t const * @var{C})
 Return @ctrue{} if @var{C} is an @emph{no filename} condition object; otherwise return @cfalse{}.
 @end deftypefun
 
@@ -641,7 +641,7 @@ condition object.
 @end deftypefun
 
 
-@deftypefun bool ccptn_is_condition_no_tailname (cce_condition_t const * @var{C})
+@deftypefun bool ccptn_condition_is_no_tailname (cce_condition_t const * @var{C})
 Return @ctrue{} if @var{C} is an @emph{no tailname} condition object; otherwise return @cfalse{}.
 @end deftypefun
 
@@ -692,7 +692,7 @@ condition object.
 @end deftypefun
 
 
-@deftypefun bool ccptn_is_condition_no_rootname (cce_condition_t const * @var{C})
+@deftypefun bool ccptn_condition_is_no_rootname (cce_condition_t const * @var{C})
 Return @ctrue{} if @var{C} is an @emph{no rootname} condition object; otherwise return @cfalse{}.
 @end deftypefun
 
