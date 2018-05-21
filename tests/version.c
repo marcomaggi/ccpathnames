@@ -17,8 +17,9 @@
 #include <stdlib.h>
 
 int
-main (int argc CCPTN_UNUSED, const char *const argv[] CCPTN_UNUSED)
+main (void)
 {
+  ccptn_library_init();
   printf("version number string: %s\n", ccptn_version_string());
   printf("libtool version number: %d:%d:%d\n",
 	 ccptn_version_interface_current(),

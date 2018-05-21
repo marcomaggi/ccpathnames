@@ -479,7 +479,7 @@ main (int argc CCPTN_UNUSED, const char *const argv[])
 {
   progname = argv[0];
 
-  ccptn_init();
+  ccptn_library_init();
 
   cctests_init("manipulation functions");
   {

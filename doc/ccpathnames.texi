@@ -176,7 +176,7 @@ package CCTests, at least version @value{CCTESTS_VERSION}.
 @code{CCPTN_}; all the type names are prefixed with @code{ccptn_} and suffixed with @code{_t}.
 
 Notice that, before using the library, we need to call the global initialisation function
-@cfunc{ccptn_init}.
+@cfunc{ccptn_library_init}.
 
 @menu
 * overview linking::            Linking code with the library.
@@ -261,9 +261,8 @@ Return an integer representing the library interface current age.
 @chapter Library initialisation
 
 
-@deftypefun void ccptn_init (void)
-Initialises the internal structures of the library.  It is fine to call this function multiple
-times.
+@deftypefun void ccptn_library_init (void)
+Initialise the internal structures of the library.  It is fine to call this function multiple times.
 
 @quotation
 @strong{NOTE} This function is defined with the @gcc{} attribute @code{constructor}, so, when the

@@ -21,8 +21,6 @@
 #  include <config.h>
 #endif
 
-static char const * progname;
-
 
 /** --------------------------------------------------------------------
  ** Last segment.
@@ -732,11 +730,9 @@ test_5_4_1 (cce_destination_t upper_L)
 
 
 int
-main (int argc CCPTN_UNUSED, const char *const argv[])
+main (void)
 {
-  progname = argv[0];
-
-  ccptn_init();
+  ccptn_library_init();
 
   cctests_init("pathname components");
   {

@@ -524,7 +524,7 @@ ccptn_condition_is_no_rootname (cce_condition_t const * C)
  ** ----------------------------------------------------------------- */
 
 void
-ccptn_init (void)
+ccptn_library_init (void)
 {
   ccptn_descriptor_invalid_pathname_stru.descriptor.parent	= &(cce_descriptor_runtime_error_ptr->descriptor);
   ccptn_descriptor_exceeded_length_stru.descriptor.parent	= &(cce_descriptor_runtime_error_ptr->descriptor);

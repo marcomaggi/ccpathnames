@@ -107,7 +107,7 @@ test_2_1 (cce_destination_t upper_L)
 int
 main (void)
 {
-  ccptn_init();
+  ccptn_library_init();
 
   cctests_init("condition objects");
   {

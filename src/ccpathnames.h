@@ -112,8 +112,8 @@ ccptn_decl int		ccptn_version_interface_age	(void);
  ** Initialisation.
  ** ----------------------------------------------------------------- */
 
-ccptn_decl void ccptn_init (void)
-  __attribute__((constructor));
+ccptn_decl void ccptn_library_init (void)
+  __attribute__((__constructor__));
 
 
 /** --------------------------------------------------------------------
