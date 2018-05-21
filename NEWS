@@ -3,6 +3,18 @@
 		       News file for CCPathnames
 		       =========================
 
+Revision 0.2.0-devel.0
+----------------------
+
+* Updated packaging infrastructure.
+
+* The package no depends on CCExceptions version 0.8.0.
+
+* The test suite now depends on CCTests version 0.2.0.
+
+* Renamed "ccptn_init()" to  "ccptn_library_init()".
+
+
 Revision 0.1.0-beta.0
 ----------------------
 
