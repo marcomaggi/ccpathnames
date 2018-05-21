@@ -96,7 +96,7 @@ env:
 
 install:
    - ./meta/travis-ci/install-ccexceptions.sh
-#   - ./meta/travis-ci/install-cctests.sh
+   - ./meta/travis-ci/install-cctests.sh
 
 #page
 #### build scripts
