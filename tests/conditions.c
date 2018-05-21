@@ -48,13 +48,13 @@ test_1_1 (cce_destination_t upper_L)
     if (1) { fprintf(stderr, "%s: %s\n", __func__, cce_condition_static_message(cce_condition(L))); }
     if (cce_condition_is_runtime_error(cce_condition(L))
 	&& ccptn_condition_is_invalid_pathname(cce_condition(L))) {
-      cce_run_cleanup_handlers_final(L);
+      cce_run_clean_handlers_final(L);
     } else {
-      cce_run_cleanup_handlers_raise(L, upper_L);
+      cce_run_clean_handlers_raise(L, upper_L);
     }
   } else {
     cce_raise(L, cce_condition(ccptn_condition_new_invalid_pathname()));
-    cce_run_cleanup_handlers(L);
+    cce_run_clean_handlers(L);
   }
 }
 
@@ -68,13 +68,13 @@ test_1_2 (cce_destination_t upper_L)
     if (1) { fprintf(stderr, "%s: %s\n", __func__, cce_condition_static_message(cce_condition(L))); }
     if (cce_condition_is_runtime_error(cce_condition(L))
 	&& ccptn_condition_is_normalised_pathname(cce_condition(L))) {
-      cce_run_cleanup_handlers_final(L);
+      cce_run_clean_handlers_final(L);
     } else {
-      cce_run_cleanup_handlers_raise(L, upper_L);
+      cce_run_clean_handlers_raise(L, upper_L);
     }
   } else {
     cce_raise(L, cce_condition(ccptn_condition_new_normalised_pathname()));
-    cce_run_cleanup_handlers(L);
+    cce_run_clean_handlers(L);
   }
 }
 
@@ -93,13 +93,13 @@ test_2_1 (cce_destination_t upper_L)
     if (1) { fprintf(stderr, "%s: %s\n", __func__, cce_condition_static_message(cce_condition(L))); }
     if (cce_condition_is_runtime_error(cce_condition(L))
 	&& ccptn_condition_is_exceeded_length(cce_condition(L))) {
-      cce_run_cleanup_handlers_final(L);
+      cce_run_clean_handlers_final(L);
     } else {
-      cce_run_cleanup_handlers_raise(L, upper_L);
+      cce_run_clean_handlers_raise(L, upper_L);
     }
   } else {
     cce_raise(L, cce_condition(ccptn_condition_new_exceeded_length()));
-    cce_run_cleanup_handlers(L);
+    cce_run_clean_handlers(L);
   }
 }
 

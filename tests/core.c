@@ -45,7 +45,7 @@ test_1_1 (cce_destination_t upper_L)
       cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
     }
     ccptn_delete(P);
-    cce_run_cleanup_handlers(L);
+    cce_run_clean_handlers(L);
   }
 }
 
@@ -67,7 +67,7 @@ test_1_2 (cce_destination_t upper_L)
       cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
     }
     ccptn_delete(P);
-    cce_run_cleanup_handlers(L);
+    cce_run_clean_handlers(L);
   }
 }
 
@@ -89,7 +89,7 @@ test_1_3 (cce_destination_t upper_L)
       cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
     }
     ccptn_delete(P);
-    cce_run_cleanup_handlers(L);
+    cce_run_clean_handlers(L);
   }
 }
 
@@ -112,7 +112,7 @@ test_1_4 (cce_destination_t upper_L)
     }
     ccptn_delete(P);
 
-    cce_run_cleanup_handlers(L);
+    cce_run_clean_handlers(L);
   }
 }
 
@@ -123,7 +123,7 @@ test_1_5 (cce_destination_t upper_L)
 /* Test for "ccptn_handler_ptn_init()". */
 {
   cce_location_t	L[1];
-  cce_cleanup_handler_t	P_H[1];
+  cce_clean_handler_t	P_H[1];
 
   if (cce_location(L)) {
     cce_run_error_handlers_raise(L, upper_L);
@@ -137,7 +137,7 @@ test_1_5 (cce_destination_t upper_L)
       if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
       cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
     }
-    cce_run_cleanup_handlers(L);
+    cce_run_clean_handlers(L);
   }
 }
 
@@ -164,7 +164,7 @@ test_1_6 (cce_destination_t upper_L)
       cctests_assert(L, false == ccptn_is_realpath(P));
     }
     ccptn_delete(P);
-    cce_run_cleanup_handlers(L);
+    cce_run_clean_handlers(L);
   }
 }
 
@@ -189,7 +189,7 @@ test_1_7 (cce_destination_t upper_L)
       cctests_assert(L, false == ccptn_is_realpath(P));
     }
     ccptn_delete(P);
-    cce_run_cleanup_handlers(L);
+    cce_run_clean_handlers(L);
   }
 }
 
@@ -214,7 +214,7 @@ test_2_1_1 (cce_destination_t upper_L)
     cctests_assert(L, true == ccptn_is_absolute(P));
     ccptn_delete(P);
 
-    cce_run_cleanup_handlers(L);
+    cce_run_clean_handlers(L);
   }
 }
 
@@ -234,7 +234,7 @@ test_2_1_2 (cce_destination_t upper_L)
     cctests_assert(L, false == ccptn_is_absolute(P));
     ccptn_delete(P);
 
-    cce_run_cleanup_handlers(L);
+    cce_run_clean_handlers(L);
   }
 }
 
@@ -256,7 +256,7 @@ test_2_2_1 (cce_destination_t upper_L)
     cctests_assert(L, false == ccptn_is_relative(P));
     ccptn_delete(P);
 
-    cce_run_cleanup_handlers(L);
+    cce_run_clean_handlers(L);
   }
 }
 
@@ -276,7 +276,7 @@ test_2_2_2 (cce_destination_t upper_L)
     cctests_assert(L, true == ccptn_is_relative(P));
     ccptn_delete(P);
 
-    cce_run_cleanup_handlers(L);
+    cce_run_clean_handlers(L);
   }
 }
 
@@ -298,7 +298,7 @@ test_2_3_1 (cce_destination_t upper_L)
     cctests_assert(L, false == ccptn_is_realpath(P));
     ccptn_delete(P);
 
-    cce_run_cleanup_handlers(L);
+    cce_run_clean_handlers(L);
   }
 }
 
@@ -323,7 +323,7 @@ test_2_3_2 (cce_destination_t upper_L)
     ccptn_delete(P);
     ccptn_delete(Q);
 
-    cce_run_cleanup_handlers(L);
+    cce_run_clean_handlers(L);
   }
 #endif
 }
@@ -335,10 +335,10 @@ test_2_3_2 (cce_destination_t upper_L)
 
 void
 test_3_1 (cce_destination_t upper_L)
-/* Test for "ccptn_new_nodup_asciiz_guarded()", cleanup handler. */
+/* Test for "ccptn_new_nodup_asciiz_guarded()", clean handler. */
 {
   cce_location_t	L[1];
-  cce_cleanup_handler_t	P_H[1];
+  cce_clean_handler_t	P_H[1];
 
   if (cce_location(L)) {
     cce_run_error_handlers_raise(L, upper_L);
@@ -350,16 +350,16 @@ test_3_1 (cce_destination_t upper_L)
     cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
     if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
 
-    cce_run_cleanup_handlers(L);
+    cce_run_clean_handlers(L);
   }
 }
 
 void
 test_3_2 (cce_destination_t upper_L)
-/* Test for "ccptn_new_dup_asciiz_guarded()", cleanup handler. */
+/* Test for "ccptn_new_dup_asciiz_guarded()", clean handler. */
 {
   cce_location_t	L[1];
-  cce_cleanup_handler_t	P_H[1];
+  cce_clean_handler_t	P_H[1];
 
   if (cce_location(L)) {
     cce_run_error_handlers_raise(L, upper_L);
@@ -371,16 +371,16 @@ test_3_2 (cce_destination_t upper_L)
     cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
     if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
 
-    cce_run_cleanup_handlers(L);
+    cce_run_clean_handlers(L);
   }
 }
 
 void
 test_3_3 (cce_destination_t upper_L)
-/* Test for "ccptn_init_nodup_asciiz_guarded()", cleanup handler. */
+/* Test for "ccptn_init_nodup_asciiz_guarded()", clean handler. */
 {
   cce_location_t	L[1];
-  cce_cleanup_handler_t	P_H[1];
+  cce_clean_handler_t	P_H[1];
 
   if (cce_location(L)) {
     cce_run_error_handlers_raise(L, upper_L);
@@ -392,16 +392,16 @@ test_3_3 (cce_destination_t upper_L)
     cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
     if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
 
-    cce_run_cleanup_handlers(L);
+    cce_run_clean_handlers(L);
   }
 }
 
 void
 test_3_4 (cce_destination_t upper_L)
-/* Test for "ccptn_init_dup_asciiz_guarded()", cleanup handler. */
+/* Test for "ccptn_init_dup_asciiz_guarded()", clean handler. */
 {
   cce_location_t	L[1];
-  cce_cleanup_handler_t	P_H[1];
+  cce_clean_handler_t	P_H[1];
 
   if (cce_location(L)) {
     cce_run_error_handlers_raise(L, upper_L);
@@ -413,16 +413,16 @@ test_3_4 (cce_destination_t upper_L)
     cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
     if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
 
-    cce_run_cleanup_handlers(L);
+    cce_run_clean_handlers(L);
   }
 }
 
 void
 test_3_5 (cce_destination_t upper_L)
-/* Test for "ccptn_new_normal_asciiz_guarded()", cleanup handler. */
+/* Test for "ccptn_new_normal_asciiz_guarded()", clean handler. */
 {
   cce_location_t	L[1];
-  cce_cleanup_handler_t	P_H[1];
+  cce_clean_handler_t	P_H[1];
 
   if (cce_location(L)) {
     cce_run_error_handlers_raise(L, upper_L);
@@ -437,16 +437,16 @@ test_3_5 (cce_destination_t upper_L)
     cctests_assert(L, false == ccptn_is_realpath(P));
     if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
 
-    cce_run_cleanup_handlers(L);
+    cce_run_clean_handlers(L);
   }
 }
 
 void
 test_3_6 (cce_destination_t upper_L)
-/* Test for "ccptn_init_normal_asciiz_guarded()", cleanup handler. */
+/* Test for "ccptn_init_normal_asciiz_guarded()", clean handler. */
 {
   cce_location_t	L[1];
-  cce_cleanup_handler_t	P_H[1];
+  cce_clean_handler_t	P_H[1];
 
   if (cce_location(L)) {
     cce_run_error_handlers_raise(L, upper_L);
@@ -461,7 +461,7 @@ test_3_6 (cce_destination_t upper_L)
     cctests_assert(L, false == ccptn_is_realpath(P));
     if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
 
-    cce_run_cleanup_handlers(L);
+    cce_run_clean_handlers(L);
   }
 }
 
@@ -473,7 +473,7 @@ test_4_1 (cce_destination_t upper_L)
 {
   static char const * const	pathname = "/path/to/file.ext";
   cce_location_t		L[1];
-  cce_cleanup_handler_t		Q_H[1];
+  cce_clean_handler_t		Q_H[1];
 
   if (cce_location(L)) {
     cce_run_error_handlers_raise(L, upper_L);
@@ -493,7 +493,7 @@ test_4_1 (cce_destination_t upper_L)
 	cctests_assert_asciiz(inner_L, pathname, ccptn_asciiz(P));
 	if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
 	Q = P;
-	cce_run_cleanup_handlers(inner_L);
+	cce_run_clean_handlers(inner_L);
       }
     }
     ccptn_handler_ptn_init(L, Q_H, Q);
@@ -508,7 +508,7 @@ test_4_2 (cce_destination_t upper_L)
 {
   static char const * const	pathname = "/path/to/file.ext";
   cce_location_t		L[1];
-  cce_cleanup_handler_t		Q_H[1];
+  cce_clean_handler_t		Q_H[1];
 
   if (cce_location(L)) {
     cce_run_error_handlers_raise(L, upper_L);
@@ -527,7 +527,7 @@ test_4_2 (cce_destination_t upper_L)
 	cctests_assert_asciiz(inner_L, pathname, ccptn_asciiz(P));
 	if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
 	Q = P;
-	cce_run_cleanup_handlers(inner_L);
+	cce_run_clean_handlers(inner_L);
       }
     }
     ccptn_handler_ptn_init(L, Q_H, Q);
@@ -542,7 +542,7 @@ test_4_3 (cce_destination_t upper_L)
 {
   static char const * const	pathname = "/path/to/file.ext";
   cce_location_t		L[1];
-  cce_cleanup_handler_t		Q_H[1];
+  cce_clean_handler_t		Q_H[1];
 
   if (cce_location(L)) {
     cce_run_error_handlers_raise(L, upper_L);
@@ -562,7 +562,7 @@ test_4_3 (cce_destination_t upper_L)
 	cctests_assert_asciiz(inner_L, pathname, ccptn_asciiz(P));
 	if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
 	Q[0] = P[0];
-	cce_run_cleanup_handlers(inner_L);
+	cce_run_clean_handlers(inner_L);
       }
     }
     ccptn_handler_ptn_init(L, Q_H, Q);
@@ -577,7 +577,7 @@ test_4_4 (cce_destination_t upper_L)
 {
   static char const * const	pathname = "/path/to/file.ext";
   cce_location_t		L[1];
-  cce_cleanup_handler_t		Q_H[1];
+  cce_clean_handler_t		Q_H[1];
 
   if (cce_location(L)) {
     cce_run_error_handlers_raise(L, upper_L);
@@ -597,7 +597,7 @@ test_4_4 (cce_destination_t upper_L)
 	cctests_assert_asciiz(inner_L, pathname, ccptn_asciiz(P));
 	if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
 	Q[0] = P[0];
-	cce_run_cleanup_handlers(inner_L);
+	cce_run_clean_handlers(inner_L);
       }
     }
     ccptn_handler_ptn_init(L, Q_H, Q);
@@ -613,7 +613,7 @@ test_4_5 (cce_destination_t upper_L)
   static char const *		input_pathname  = "/path//./to/mix/../file.ext";
   static char const *		normal_pathname = "/path/to/file.ext";
   cce_location_t		L[1];
-  cce_cleanup_handler_t		Q_H[1];
+  cce_clean_handler_t		Q_H[1];
 
   if (cce_location(L)) {
     cce_run_error_handlers_raise(L, upper_L);
@@ -635,7 +635,7 @@ test_4_5 (cce_destination_t upper_L)
 	cctests_assert(L, false == ccptn_is_realpath(P));
 	if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
 	Q = P;
-	cce_run_cleanup_handlers(inner_L);
+	cce_run_clean_handlers(inner_L);
       }
     }
     ccptn_handler_ptn_init(L, Q_H, Q);
@@ -653,7 +653,7 @@ test_4_6 (cce_destination_t upper_L)
   static char const *		input_pathname  = "/path//./to/mix/../file.ext";
   static char const *		normal_pathname = "/path/to/file.ext";
   cce_location_t		L[1];
-  cce_cleanup_handler_t		Q_H[1];
+  cce_clean_handler_t		Q_H[1];
 
   if (cce_location(L)) {
     cce_run_error_handlers_raise(L, upper_L);
@@ -675,7 +675,7 @@ test_4_6 (cce_destination_t upper_L)
 	cctests_assert(L, false == ccptn_is_realpath(P));
 	if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
 	Q[0] = P[0];
-	cce_run_cleanup_handlers(inner_L);
+	cce_run_clean_handlers(inner_L);
       }
     }
     ccptn_handler_ptn_init(L, Q_H, Q);

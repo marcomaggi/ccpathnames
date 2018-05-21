@@ -2,7 +2,7 @@
 
 ACLOCAL_AMFLAGS		= -I meta/autotools
 AUTOMAKE_OPTIONS	= foreign
-EXTRA_DIST		= INSTALL configure.sh		\
+EXTRA_DIST		= INSTALL			\
 			  meta/slackstuff/config.in	\
 			  meta/slackware/slack-desc.in
 dist_doc_DATA		= README COPYING
@@ -49,28 +49,6 @@ libccpathnames_la_SOURCES	= \
 	src/ccpathnames-input-output.c
 
 #page
-#### libraries
-
-check_LTLIBRARIES	= libcctests.la
-libcctests_la_CPPFLAGS	= $(CCEXCEPTIONS_CFLAGS) \
-	-Dcctests_VERSION_INTERFACE_STRING='"0.0.0"'	\
-	-Dcctests_VERSION_INTERFACE_CURRENT=0		\
-	-Dcctests_VERSION_INTERFACE_REVISION=0		\
-	-Dcctests_VERSION_INTERFACE_AGE=0
-libcctests_la_LDFLAGS	= $(CCEXCEPTIONS_LIBS)
-libcctests_la_SOURCES	= \
-	cctests/cctests.h			\
-	cctests/cctests-internals.h		\
-	cctests/cctests-version.c		\
-	cctests/cctests-conditions.c		\
-	cctests/cctests-exception-handlers.c	\
-	cctests/cctests-system.c		\
-	cctests/cctests-driver.c		\
-	cctests/cctests-assertions.c		\
-	cctests/cctests-process.c		\
-	cctests/cctests-helpers.c
-
-#page
 #### tests
 
 check_PROGRAMS	= \
@@ -80,10 +58,12 @@ check_PROGRAMS	= \
 	tests/manipulations	\
 	tests/components
 
+if MMUX_TESTING_ENABLED
 TESTS				= $(check_PROGRAMS)
+endif
 
-ccpathnames_tests_cppflags	= -I$(srcdir)/src $(CCEXCEPTIONS_CFLAGS) -I$(srcdir)/cctests
-ccpathnames_tests_ldadd		= libccpathnames.la $(CCEXCEPTIONS_LIBS) libcctests.la
+ccpathnames_tests_cppflags	= -I$(srcdir)/src $(CCEXCEPTIONS_CFLAGS) $(CCTESTS_CFLAGS)
+ccpathnames_tests_ldadd		= libccpathnames.la $(CCEXCEPTIONS_LIBS) $(CCTESTS_LIBS)
 
 tests_version_CPPFLAGS		= $(ccpathnames_tests_cppflags)
 tests_version_LDADD		= $(ccpathnames_tests_ldadd)
@@ -119,59 +99,6 @@ $(builddir)/.gdbinit:
 #
 gdb-test: $(builddir)/.gdbinit
 	libtool --mode=execute gdb $$FILE
-
-#page
-#### Coverity support
-#
-# We can visit the project site at:
-#
-#    <https://scan.coverity.com/projects/marcomaggi-ccpathnames>
-#
-# Remember to  put in  the PATH  the directory  in which  the Coverity
-# tools are installed; for example:
-#
-#    $ export PATH=/opt/coverity/8.7.0/cov-analysis-linux64-8.7.0/bin:$PATH
-#
-# The tool  will use  a temporary directory  "$(builddir)/cov-int"; we
-# must *not* change this pathname.
-#
-# To generate and submit a report we must do:
-#
-#    $ make clean
-#    $ make coverity-scan
-#    $ make coverity-archive
-#    $ make coverity-upload
-#
-# after "make  coverity-scan" we should  check that the last  lines of
-# the file "cov-int/build-log.txt" report a successful build:
-#
-#    $ tail cov-int/build-log.txt
-#
-# NOTE If  your Linux kernel  is at version 4.8  or above you  have to
-# first issue the command:
-#
-#    $ sudo /sbin/sysctl vsyscall=emulate
-#
-# to make the Coverity tools work.
-#
-
-CCPATHNAMES_COVERITY_TOKEN_FILE = /home/unsafe-users/marco-devel/.coverity-ccpathnames-token
-
-.PHONY: coverity-scan coverity-archive coverity-upload
-
-coverity-scan:
-	cov-build --dir cov-int make -j 4
-
-coverity-archive:
-	tar caf ccpathnames.xz cov-int
-
-coverity-upload:
-	curl --form token=$$(<$(CCPATHNAMES_COVERITY_TOKEN_FILE)) \
-	     --form email='marco.maggi-ipsu@poste.it' \
-	     --form file='@ccpathnames.xz' \
-	     --form version="$(VERSION)" \
-	     --form description="A build description" \
-	     'https://scan.coverity.com/builds?project=marcomaggi%2Fccpathnames'
 
 #page
 #### Static analysis with Clang's Static Analyzer

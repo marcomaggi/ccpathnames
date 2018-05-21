@@ -2,9 +2,9 @@ dnl @configure_input@
 dnl
 
 AC_PREREQ([2.69])
-AC_INIT([CCPathnames],[0.1.0-beta.0],
+AC_INIT([CCPathnames],[0.2.0-devel.0],
   [marco.maggi-ipsu@poste.it],
-  [ccpathnames],[http://marcomaggi.github.com/ccpathnames])
+  [ccpathnames],[http://github.com/marcomaggi/ccpathnames])
 dnl This is the revision number of this configure.ac
 AC_REVISION([0.1])
 AC_COPYRIGHT([Copyright (c) 2018 Marco Maggi <marco.maggi-ipsu@poste.it>
@@ -41,80 +41,32 @@ LT_PREREQ([2.4])
 LT_INIT
 
 dnl page
-#### configuration
-
-AS_VAR_SET([CCSYS_ON_LINUX], [0])
-AS_VAR_SET([CCSYS_ON_BSD],   [0])
-AS_VAR_SET([CCSYS_ON_CYGWIN],[0])
-AS_VAR_SET([CCSYS_ON_DARWIN],[0])
-
-AS_CASE("$target_os",
-  [*linux*],
-  [AS_VAR_SET([CCSYS_ON_LINUX],[1])
-   AC_MSG_NOTICE([detected OS: linux])],
-  [*bsd*],
-  [AS_VAR_SET([CCSYS_ON_BSD],[1])
-   AC_MSG_NOTICE([detected OS: BSD])],
-  [*cygwin*],
-  [AS_VAR_SET([CCSYS_ON_CYGWIN],[1])
-   AC_MSG_NOTICE([detected OS: CYGWIN])],
-  [*darwin*],
-  [AS_VAR_SET([CCSYS_ON_CYGWIN],[1])
-   AC_MSG_NOTICE([detected OS: DARWIN])])
-AM_CONDITIONAL([ON_LINUX], [test "x$CCSYS_ON_LINUX"  = x1])
-AM_CONDITIONAL([ON_BSD],   [test "x$CCSYS_ON_BSD"    = x1])
-AM_CONDITIONAL([ON_CYGWIN],[test "x$CCSYS_ON_CYGWIN" = x1])
-AM_CONDITIONAL([ON_DARWIN],[test "x$CCSYS_ON_DARWIN" = x1])
-
-AC_SUBST([CCSYS_ON_LINUX], [$CCSYS_ON_LINUX])
-AC_SUBST([CCSYS_ON_BSD],   [$CCSYS_ON_BSD])
-AC_SUBST([CCSYS_ON_CYGWIN],[$CCSYS_ON_CYGWIN])
-AC_SUBST([CCSYS_ON_DARWIN],[$CCSYS_ON_DARWIN])
-
-dnl page
 #### libraries interface version
 
-AS_VAR_SET([SLACKSTUFF_PACKAGE_VERSION],[0.1.0])
-AC_SUBST([SLACKSTUFF_PACKAGE_VERSION])
+MMUX_LIBTOOL_LIBRARY_VERSIONS([ccpathnames],2,0,0)
 
 dnl This is the version stored in the pkg-config data file.
-AC_SUBST([CCPATHNAMES_PKG_CONFIG_VERSION],[0.1])
+AC_SUBST([CCPATHNAME_PKG_CONFIG_VERSION],[0.2])
 
-MM_LIBTOOL_LIBRARY_VERSIONS([ccpathnames],1,0,0)
-
-dnl page
-#### external libraries
-
-dnl Testing presence of pkg-config
-AC_MSG_CHECKING([availability of pkg-config m4 macros])
-AS_IF([test m4_ifdef([PKG_CHECK_MODULES],[yes],[no]) == yes],
-  [AC_MSG_RESULT([yes])],
-  [AC_MSG_RESULT([no])
-   AC_MSG_ERROR([pkg-config is required.  See pkg-config.freedesktop.org])])
-
-PKG_CHECK_MODULES([CCEXCEPTIONS],[ccexceptions >= 0.6.4])
-
-AC_CACHE_SAVE
+AS_VAR_SET([SLACKSTUFF_PACKAGE_VERSION],[0.2d0.0])
+AC_SUBST([SLACKSTUFF_PACKAGE_VERSION])
 
 dnl page
 #### basic system inspection
 
-AC_LANG([C])
-AC_PROG_CC_C99
-AX_CHECK_COMPILE_FLAG([-std=c11],[],[AC_MSG_ERROR([*** Compiler does not support -std=c11])],[-pedantic])
+MMUX_CHECK_TARGET_OS
 
-AS_VAR_SET(AX_CFLAGS,[-std=c11])
-AS_VAR_APPEND(AX_CFLAGS,[" -Wall -Wextra"])
-AX_GCC_VERSION
-AS_IF([test "x$GCC" = "xyes"],
-  [AS_CASE("$GCC_VERSION",
-     [7.*],[AS_VAR_APPEND(AX_CFLAGS,[" -pedantic -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wrestrict -Wnull-dereference -Wjump-misses-init -Wdouble-promotion -Wshadow -Wformat=2 -Wmisleading-indentation"])])])
+AC_LANG([C])
+MMUX_LANG_C11
 AC_SUBST(AX_CFLAGS)
 
 AM_PROG_AS
 AM_PROG_CC_C_O
 AC_HEADER_STDC
-AC_CHECK_HEADERS([assert.h string.h limits.h errno.h unistd.h])
+AC_CHECK_HEADERS([assert.h stddef.h string.h limits.h errno.h unistd.h])
+
+MMUX_DETERMINE_SIZEOF([SIZE_T],[size_t],[MMUX_INCLUDE_STDDEF_H])
+MMUX_DETERMINE_SIZEOF([SSIZE_T],[ssize_t],[MMUX_INCLUDE_UNISTD_H])
 
 AC_CACHE_SAVE
 
@@ -123,10 +75,17 @@ dnl page
 
 AC_CHECK_FUNCS([realpath])
 
-dnl This is used by CCTests.
-AC_CHECK_FUNCS([isatty])
-
 AC_CACHE_SAVE
+
+dnl page
+#### external libraries
+
+MMUX_CHECK_PKG_CONFIG_MACROS
+PKG_CHECK_MODULES([CCEXCEPTIONS],[ccexceptions >= 0.8.0])
+dnl PKG_CHECK_MODULES([CCMEMORY],[ccmemory >= 0.1])
+PKG_CHECK_MODULES([CCTESTS],[cctests >= 0.2.0])
+
+AM_CONDITIONAL([MMUX_TESTING_ENABLED],[test -n "$CCTESTS_LIBS"])
 
 dnl page
 #### finish

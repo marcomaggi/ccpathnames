@@ -526,11 +526,11 @@ ccptn_handler_ptn_function (const cce_condition_t * C CCE_UNUSED, cce_handler_t 
 }
 
 void
-ccptn_cleanup_handler_ptn_init (cce_location_t * L, cce_handler_t * H, ccptn_t * P)
+ccptn_clean_handler_ptn_init (cce_location_t * L, cce_handler_t * H, ccptn_t * P)
 {
   H->function	= ccptn_handler_ptn_function;
   H->pointer	= P;
-  cce_register_cleanup_handler(L, H);
+  cce_register_clean_handler(L, H);
 }
 
 void
