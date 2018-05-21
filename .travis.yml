@@ -1,6 +1,6 @@
 # .travis.yml --
 #
-# Travis CI configuration for CCPathnames.
+# Travis CI configuration for CCTemplate.
 
 #page
 #### about compiler packages
@@ -36,12 +36,18 @@
 # otherwise the installed packages will  not be found and used correctly
 # by the "configure" script.
 #
+# Notice that (as of May 17,  2018) Travis CI's run-time system raises a
+# warning if the first directory in the PATH environment variable is not
+# the one  that it sets.   So, for now,  we append the  custom directory
+# rather than prepend it;  this is not the best if we  want to make sure
+# that the executables we install are  found before the one installed by
+# the platform.
 #
 # We need the following in the global environment:
 #
 #   env:
 #     global:
-#       - PATH=/tmp/mine/bin:$PATH;
+#       - PATH=$PATH:/tmp/mine/bin;
 #       - LD_LIBRARY_PATH=/tmp/mine/lib:$LD_LIBRARY_PATH;
 #       - PKG_CONFIG_PATH=/tmp/mine/lib/pkgconfig:$PKG_CONFIG_PATH;
 #
@@ -49,7 +55,7 @@
 # running the "configure" script as follows:
 #
 #   script: |
-#     export PATH=/tmp/mine/bin:$PATH;
+#     export PATH=$PATH:/tmp/mine/bin;
 #     export LD_LIBRARY_PATH=/tmp/mine/lib:$LD_LIBRARY_PATH;
 #     export PKG_CONFIG_PATH=/tmp/mine/lib/pkgconfig:$PKG_CONFIG_PATH;
 #     ./configure
@@ -60,8 +66,7 @@
 
 language: c
 
-# We need sudo for Coverity Scan.
-sudo: true
+#sudo: true
 
 # Let's just look at the project's dashboard at Travis CI's site.
 #
@@ -76,63 +81,22 @@ git:
 branches:
   only:
     - master
-    - coverity_scan
 
 # NOTE There must be only *one* env.global key!!!  Otherwise the earlier
 # settings will be ineffective.
 env:
   global:
     - MAKEFLAGS="-j 2"
-    - PATH=/tmp/mine/bin:$PATH;
+    - PATH=$PATH:/tmp/mine/bin
     - LD_LIBRARY_PATH=/tmp/mine/lib:$LD_LIBRARY_PATH;
     - PKG_CONFIG_PATH=/tmp/mine/lib/pkgconfig:$PKG_CONFIG_PATH;
-    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
-    #   via the "travis encrypt" command using the project repo's public key
-    - secure: "WL6FrDIUZOjfN5Nq1MjMdGG9cvKwk8gQ1DSXx3bWR19LzOSzuDU21OViUfE1nt4rXcCVkaNNlTuIcfrD1j25GbmnvehWFJFauAx2vIAAmriSySn7uK17aem0jXNu7dtC1bS6ILKxCk6RopVQF5wCGzJ3nvs2Ptm7TyLR0daIsTMemAkh3y3ziCWQiWDSkg80H0x5zqdUyaGF2ev9k5kFcOCpIZ5KhgggF02c87e1OjwwDjRblcRZfkbdnqkbq+e+cOSOMLBnTcsys7/kMWskTWnwFQWvORgUmnpvIoiBlKyxttyemgD+2coPIDY9ssBrNNhNytmPeV8ZRWNsXzQYgs7ewJRnqv5azkz4o/5wrTPVyewJLZWD05Jt7zrMbdlRXCVvrcQmqxfnCNaMUjm+22NAiZ+OH9Kca0DCbxfelFA7YqGzsQr5qq+0qN8DksRSzDsL+b8BxuFnOegXJ0uuobLA4CZt6dF+elSQ4cbnu0j/vy+zqkmTcoLZiBad6wLRWak1otKwjlGI/uCWgszWivmSdmaRZdb5Ufq8q58NB+4ubbRdiMCJZGA6szDVNBH9S2niglnJwXInBF8vajrtECSu+0sMsPPeZjr9VPtaIv5bwv91aQK3twqXrd6BDa6xAJMbnMUXfD9GXQAgoH27RRs6/TQs0mcWkU5tXGxObLY="
-
-#page
-#### Coverity Scan integration
-#
-# This is still in  development (why it is so hard to  set it up?!?).  I
-# would like to:
-#
-# - Run a single scan job when commits are pushed on the "coverity_scan"
-# branch.
-#
-# - Do  not run the scan  when commits are pushed  to branches different
-# from "coverity_scan".
-#
-# - Do not run the full matrix of scripts when commits are pushed on the
-# "coverity_scan" branch.
-#
-
-before_install:
-  - if test "$TRAVIS_OS_NAME" != osx ; then echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-; else true; fi
-
-addons:
-  coverity_scan:
-    project:
-      name: "marcomaggi/ccpathnames"
-      description: "Build submitted via Travis CI"
-    notification_email: marco.maggi-ipsu@poste.it
-    # To run the scan we want to execute the following commands:
-    #
-    #   sh ./autogen.sh
-    #   ./configure --enable-maintainer-mode
-    #   make clean
-    #   cov-build make all
-    #
-    # so we put the preparation in "build_command_prepend:" and the
-    # making in "build_command:".
-    build_command_prepend: "sh ./autogen.sh; ./configure --enable-maintainer-mode; make clean"
-    build_command: "make all"
-    branch_pattern: coverity_scan
 
 #page
 #### dependencies management
 
 install:
    - ./meta/travis-ci/install-ccexceptions.sh
+#   - ./meta/travis-ci/install-cctests.sh
 
 #page
 #### build scripts

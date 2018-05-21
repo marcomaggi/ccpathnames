@@ -1,7 +1,6 @@
 # ccpathnames
 
 [![Build Status](https://travis-ci.org/marcomaggi/ccpathnames.svg?branch=master)](https://travis-ci.org/marcomaggi/ccpathnames)
-[![Coverity passed](https://scan.coverity.com/projects/15205/badge.svg)](https://scan.coverity.com/projects/marcomaggi-ccpathnames)
 [![codecov](https://codecov.io/gh/marcomaggi/ccpathnames/branch/master/graph/badge.svg)](https://codecov.io/gh/marcomaggi/ccpathnames)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/eeff156606fe41ce8bb56468a9c8106b)](https://www.codacy.com/app/marcomaggi/ccpathnames?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=marcomaggi/ccpathnames&amp;utm_campaign=Badge_Grade)
 
@@ -180,18 +179,6 @@ project's dashboard at:
 
 Usage of this  service is configured through the  file `.travis.yml` and
 additional scripts are under the directory `meta/travis-ci`.
-
-
-### Coverity Scan
-
-Coverity Scan is  a service providing the results of  static analysis on
-open source coding projects.  We can find this project's dashboard at:
-
-[https://scan.coverity.com/projects/marcomaggi-ccpathnames](https://scan.coverity.com/projects/marcomaggi-ccpathnames)
-
-Usage of this  service is implemented with make rules;  see the relevant
-section in the file `Makefile.am`.  To access the service a unique token
-is needed: this token is private and is owned by the current maintainer.
 
 
 ### Clang's Static Analyzer
