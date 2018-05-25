@@ -34,7 +34,7 @@ test_1_1 (cce_destination_t upper_L)
   cce_location_t	L[1];
 
   if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname = "/path/to/file.ext";
     ccptn_t *		P;
@@ -45,7 +45,7 @@ test_1_1 (cce_destination_t upper_L)
       cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
     }
     ccptn_delete(P);
-    cce_run_clean_handlers(L);
+    cce_run_body_handlers(L);
   }
 }
 
@@ -56,7 +56,7 @@ test_1_2 (cce_destination_t upper_L)
   cce_location_t	L[1];
 
   if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname = "/path/to/file.ext";
     ccptn_t *		P;
@@ -67,7 +67,7 @@ test_1_2 (cce_destination_t upper_L)
       cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
     }
     ccptn_delete(P);
-    cce_run_clean_handlers(L);
+    cce_run_body_handlers(L);
   }
 }
 
@@ -78,7 +78,7 @@ test_1_3 (cce_destination_t upper_L)
   cce_location_t	L[1];
 
   if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname = "/path/to/file.ext";
     ccptn_t		P[1];
@@ -89,7 +89,7 @@ test_1_3 (cce_destination_t upper_L)
       cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
     }
     ccptn_delete(P);
-    cce_run_clean_handlers(L);
+    cce_run_body_handlers(L);
   }
 }
 
@@ -100,7 +100,7 @@ test_1_4 (cce_destination_t upper_L)
   cce_location_t	L[1];
 
   if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname = "/path/to/file.ext";
     ccptn_t		P[1];
@@ -112,7 +112,7 @@ test_1_4 (cce_destination_t upper_L)
     }
     ccptn_delete(P);
 
-    cce_run_clean_handlers(L);
+    cce_run_body_handlers(L);
   }
 }
 
@@ -126,7 +126,7 @@ test_1_5 (cce_destination_t upper_L)
   cce_clean_handler_t	P_H[1];
 
   if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname = "/path/to/file.ext";
     ccptn_t *		P;
@@ -137,7 +137,7 @@ test_1_5 (cce_destination_t upper_L)
       if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
       cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
     }
-    cce_run_clean_handlers(L);
+    cce_run_body_handlers(L);
   }
 }
 
@@ -150,7 +150,7 @@ test_1_6 (cce_destination_t upper_L)
   cce_location_t	L[1];
 
   if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	input_pathname  = "/path/./to/mix/../file.ext";
     static char const *	normal_pathname = "/path/to/file.ext";
@@ -164,7 +164,7 @@ test_1_6 (cce_destination_t upper_L)
       cctests_assert(L, false == ccptn_is_realpath(P));
     }
     ccptn_delete(P);
-    cce_run_clean_handlers(L);
+    cce_run_body_handlers(L);
   }
 }
 
@@ -175,7 +175,7 @@ test_1_7 (cce_destination_t upper_L)
   cce_location_t	L[1];
 
   if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	input_pathname  = "/path/./to/mix/../file.ext";
     static char const *	normal_pathname = "/path/to/file.ext";
@@ -189,7 +189,7 @@ test_1_7 (cce_destination_t upper_L)
       cctests_assert(L, false == ccptn_is_realpath(P));
     }
     ccptn_delete(P);
-    cce_run_clean_handlers(L);
+    cce_run_body_handlers(L);
   }
 }
 
@@ -205,7 +205,7 @@ test_2_1_1 (cce_destination_t upper_L)
   cce_location_t	L[1];
 
   if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname = "/path/to/file.ext";
     ccptn_t *		P;
@@ -214,7 +214,7 @@ test_2_1_1 (cce_destination_t upper_L)
     cctests_assert(L, true == ccptn_is_absolute(P));
     ccptn_delete(P);
 
-    cce_run_clean_handlers(L);
+    cce_run_body_handlers(L);
   }
 }
 
@@ -225,7 +225,7 @@ test_2_1_2 (cce_destination_t upper_L)
   cce_location_t	L[1];
 
   if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname = "./path/to/file.ext";
     ccptn_t *		P;
@@ -234,7 +234,7 @@ test_2_1_2 (cce_destination_t upper_L)
     cctests_assert(L, false == ccptn_is_absolute(P));
     ccptn_delete(P);
 
-    cce_run_clean_handlers(L);
+    cce_run_body_handlers(L);
   }
 }
 
@@ -247,7 +247,7 @@ test_2_2_1 (cce_destination_t upper_L)
   cce_location_t	L[1];
 
   if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname = "/path/to/file.ext";
     ccptn_t *		P;
@@ -256,7 +256,7 @@ test_2_2_1 (cce_destination_t upper_L)
     cctests_assert(L, false == ccptn_is_relative(P));
     ccptn_delete(P);
 
-    cce_run_clean_handlers(L);
+    cce_run_body_handlers(L);
   }
 }
 
@@ -267,7 +267,7 @@ test_2_2_2 (cce_destination_t upper_L)
   cce_location_t	L[1];
 
   if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname = "./path/to/file.ext";
     ccptn_t *		P;
@@ -276,7 +276,7 @@ test_2_2_2 (cce_destination_t upper_L)
     cctests_assert(L, true == ccptn_is_relative(P));
     ccptn_delete(P);
 
-    cce_run_clean_handlers(L);
+    cce_run_body_handlers(L);
   }
 }
 
@@ -289,7 +289,7 @@ test_2_3_1 (cce_destination_t upper_L)
   cce_location_t	L[1];
 
   if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname = "/path/to/file.ext";
     ccptn_t *		P;
@@ -298,7 +298,7 @@ test_2_3_1 (cce_destination_t upper_L)
     cctests_assert(L, false == ccptn_is_realpath(P));
     ccptn_delete(P);
 
-    cce_run_clean_handlers(L);
+    cce_run_body_handlers(L);
   }
 }
 
@@ -310,7 +310,7 @@ test_2_3_2 (cce_destination_t upper_L)
   cce_location_t	L[1];
 
   if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     char const *	pathname = progname;
     ccptn_t *		P;
@@ -323,7 +323,7 @@ test_2_3_2 (cce_destination_t upper_L)
     ccptn_delete(P);
     ccptn_delete(Q);
 
-    cce_run_clean_handlers(L);
+    cce_run_body_handlers(L);
   }
 #endif
 }
@@ -341,7 +341,7 @@ test_3_1 (cce_destination_t upper_L)
   cce_clean_handler_t	P_H[1];
 
   if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname = "/path/to/file.ext";
     ccptn_t *		P;
@@ -350,7 +350,7 @@ test_3_1 (cce_destination_t upper_L)
     cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
     if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
 
-    cce_run_clean_handlers(L);
+    cce_run_body_handlers(L);
   }
 }
 
@@ -362,7 +362,7 @@ test_3_2 (cce_destination_t upper_L)
   cce_clean_handler_t	P_H[1];
 
   if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname = "/path/to/file.ext";
     ccptn_t *		P;
@@ -371,7 +371,7 @@ test_3_2 (cce_destination_t upper_L)
     cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
     if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
 
-    cce_run_clean_handlers(L);
+    cce_run_body_handlers(L);
   }
 }
 
@@ -383,7 +383,7 @@ test_3_3 (cce_destination_t upper_L)
   cce_clean_handler_t	P_H[1];
 
   if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname = "/path/to/file.ext";
     ccptn_t		P[1];
@@ -392,7 +392,7 @@ test_3_3 (cce_destination_t upper_L)
     cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
     if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
 
-    cce_run_clean_handlers(L);
+    cce_run_body_handlers(L);
   }
 }
 
@@ -404,7 +404,7 @@ test_3_4 (cce_destination_t upper_L)
   cce_clean_handler_t	P_H[1];
 
   if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname = "/path/to/file.ext";
     ccptn_t		P[1];
@@ -413,7 +413,7 @@ test_3_4 (cce_destination_t upper_L)
     cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
     if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
 
-    cce_run_clean_handlers(L);
+    cce_run_body_handlers(L);
   }
 }
 
@@ -425,7 +425,7 @@ test_3_5 (cce_destination_t upper_L)
   cce_clean_handler_t	P_H[1];
 
   if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	input_pathname  = "/path//./to/mix/../file.ext";
     static char const *	normal_pathname = "/path/to/file.ext";
@@ -437,7 +437,7 @@ test_3_5 (cce_destination_t upper_L)
     cctests_assert(L, false == ccptn_is_realpath(P));
     if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
 
-    cce_run_clean_handlers(L);
+    cce_run_body_handlers(L);
   }
 }
 
@@ -449,7 +449,7 @@ test_3_6 (cce_destination_t upper_L)
   cce_clean_handler_t	P_H[1];
 
   if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	input_pathname  = "/path//./to/mix/../file.ext";
     static char const *	normal_pathname = "/path/to/file.ext";
@@ -461,7 +461,7 @@ test_3_6 (cce_destination_t upper_L)
     cctests_assert(L, false == ccptn_is_realpath(P));
     if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
 
-    cce_run_clean_handlers(L);
+    cce_run_body_handlers(L);
   }
 }
 
@@ -476,7 +476,7 @@ test_4_1 (cce_destination_t upper_L)
   cce_clean_handler_t		Q_H[1];
 
   if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     ccptn_t *		Q;
 
@@ -485,7 +485,7 @@ test_4_1 (cce_destination_t upper_L)
       cce_error_handler_t	P_H[1];
 
       if (cce_location(inner_L)) {
-	cce_run_error_handlers_raise(inner_L, L);
+	cce_run_catch_handlers_raise(inner_L, L);
       } else {
 	ccptn_t *		P;
 
@@ -493,12 +493,12 @@ test_4_1 (cce_destination_t upper_L)
 	cctests_assert_asciiz(inner_L, pathname, ccptn_asciiz(P));
 	if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
 	Q = P;
-	cce_run_clean_handlers(inner_L);
+	cce_run_body_handlers(inner_L);
       }
     }
     ccptn_handler_ptn_init(L, Q_H, Q);
     cctests_assert_asciiz(L, pathname, ccptn_asciiz(Q));
-    cce_run_error_handlers(L);
+    cce_run_catch_handlers(L);
   }
 }
 
@@ -511,7 +511,7 @@ test_4_2 (cce_destination_t upper_L)
   cce_clean_handler_t		Q_H[1];
 
   if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     ccptn_t *		Q;
     {
@@ -519,7 +519,7 @@ test_4_2 (cce_destination_t upper_L)
       cce_error_handler_t	P_H[1];
 
       if (cce_location(inner_L)) {
-	cce_run_error_handlers_raise(inner_L, L);
+	cce_run_catch_handlers_raise(inner_L, L);
       } else {
 	ccptn_t *		P;
 
@@ -527,12 +527,12 @@ test_4_2 (cce_destination_t upper_L)
 	cctests_assert_asciiz(inner_L, pathname, ccptn_asciiz(P));
 	if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
 	Q = P;
-	cce_run_clean_handlers(inner_L);
+	cce_run_body_handlers(inner_L);
       }
     }
     ccptn_handler_ptn_init(L, Q_H, Q);
     cctests_assert_asciiz(L, pathname, ccptn_asciiz(Q));
-    cce_run_error_handlers(L);
+    cce_run_catch_handlers(L);
   }
 }
 
@@ -545,7 +545,7 @@ test_4_3 (cce_destination_t upper_L)
   cce_clean_handler_t		Q_H[1];
 
   if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     ccptn_t	Q[1];
 
@@ -554,7 +554,7 @@ test_4_3 (cce_destination_t upper_L)
       cce_error_handler_t	P_H[1];
 
       if (cce_location(inner_L)) {
-	cce_run_error_handlers_raise(inner_L, L);
+	cce_run_catch_handlers_raise(inner_L, L);
       } else {
 	ccptn_t		P[1];
 
@@ -562,12 +562,12 @@ test_4_3 (cce_destination_t upper_L)
 	cctests_assert_asciiz(inner_L, pathname, ccptn_asciiz(P));
 	if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
 	Q[0] = P[0];
-	cce_run_clean_handlers(inner_L);
+	cce_run_body_handlers(inner_L);
       }
     }
     ccptn_handler_ptn_init(L, Q_H, Q);
     cctests_assert_asciiz(L, pathname, ccptn_asciiz(Q));
-    cce_run_error_handlers(L);
+    cce_run_catch_handlers(L);
   }
 }
 
@@ -580,7 +580,7 @@ test_4_4 (cce_destination_t upper_L)
   cce_clean_handler_t		Q_H[1];
 
   if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     ccptn_t	Q[1];
 
@@ -589,7 +589,7 @@ test_4_4 (cce_destination_t upper_L)
       cce_error_handler_t	P_H[1];
 
       if (cce_location(inner_L)) {
-	cce_run_error_handlers_raise(inner_L, L);
+	cce_run_catch_handlers_raise(inner_L, L);
       } else {
 	ccptn_t		P[1];
 
@@ -597,12 +597,12 @@ test_4_4 (cce_destination_t upper_L)
 	cctests_assert_asciiz(inner_L, pathname, ccptn_asciiz(P));
 	if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
 	Q[0] = P[0];
-	cce_run_clean_handlers(inner_L);
+	cce_run_body_handlers(inner_L);
       }
     }
     ccptn_handler_ptn_init(L, Q_H, Q);
     cctests_assert_asciiz(L, pathname, ccptn_asciiz(Q));
-    cce_run_error_handlers(L);
+    cce_run_catch_handlers(L);
   }
 }
 
@@ -616,7 +616,7 @@ test_4_5 (cce_destination_t upper_L)
   cce_clean_handler_t		Q_H[1];
 
   if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     ccptn_t *	Q;
 
@@ -625,7 +625,7 @@ test_4_5 (cce_destination_t upper_L)
       cce_error_handler_t	P_H[1];
 
       if (cce_location(inner_L)) {
-	cce_run_error_handlers_raise(inner_L, L);
+	cce_run_catch_handlers_raise(inner_L, L);
       } else {
 	ccptn_t *	P;
 
@@ -635,14 +635,14 @@ test_4_5 (cce_destination_t upper_L)
 	cctests_assert(L, false == ccptn_is_realpath(P));
 	if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
 	Q = P;
-	cce_run_clean_handlers(inner_L);
+	cce_run_body_handlers(inner_L);
       }
     }
     ccptn_handler_ptn_init(L, Q_H, Q);
     cctests_assert_asciiz(L, normal_pathname, ccptn_asciiz(Q));
     cctests_assert(L, true  == ccptn_is_normalised(Q));
     cctests_assert(L, false == ccptn_is_realpath(Q));
-    cce_run_error_handlers(L);
+    cce_run_catch_handlers(L);
   }
 }
 
@@ -656,7 +656,7 @@ test_4_6 (cce_destination_t upper_L)
   cce_clean_handler_t		Q_H[1];
 
   if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     ccptn_t	Q[1];
 
@@ -665,7 +665,7 @@ test_4_6 (cce_destination_t upper_L)
       cce_error_handler_t	P_H[1];
 
       if (cce_location(inner_L)) {
-	cce_run_error_handlers_raise(inner_L, L);
+	cce_run_catch_handlers_raise(inner_L, L);
       } else {
 	ccptn_t		P[1];
 
@@ -675,14 +675,14 @@ test_4_6 (cce_destination_t upper_L)
 	cctests_assert(L, false == ccptn_is_realpath(P));
 	if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
 	Q[0] = P[0];
-	cce_run_clean_handlers(inner_L);
+	cce_run_body_handlers(inner_L);
       }
     }
     ccptn_handler_ptn_init(L, Q_H, Q);
     cctests_assert_asciiz(L, normal_pathname, ccptn_asciiz(Q));
     cctests_assert(L, true  == ccptn_is_normalised(Q));
     cctests_assert(L, false == ccptn_is_realpath(Q));
-    cce_run_error_handlers(L);
+    cce_run_catch_handlers(L);
   }
 }
 

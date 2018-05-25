@@ -62,7 +62,7 @@ TEST_LAST_SEGMENT(test_0_10, "/",			"")
     if (cce_location(L)) {						\
       fprintf(stderr, "%s: exception: %s\n", __func__,			\
 	      cce_condition_static_message(cce_condition(L)));		\
-      cce_run_error_handlers_raise(L, upper_L);				\
+      cce_run_catch_handlers_raise(L, upper_L);				\
     } else {								\
       static char const *	pathname = INPUT_PATHNAME;		\
       ccptn_t			*P, *Q;					\
@@ -80,7 +80,7 @@ TEST_LAST_SEGMENT(test_0_10, "/",			"")
 									\
       cctests_assert_ascii(L, EXPECTED_EXTENSION, E.ptr, E.len);	\
 									\
-      cce_run_clean_handlers(L);					\
+      cce_run_body_handlers(L);					\
     }									\
   }
 
@@ -111,7 +111,7 @@ TEST_EXTENSION(test_1_10, "/",				"")
     if (cce_location(L)) {						\
       fprintf(stderr, "%s: exception: %s\n", __func__,			\
 	      cce_condition_static_message(cce_condition(L)));		\
-      cce_run_error_handlers_raise(L, upper_L);				\
+      cce_run_catch_handlers_raise(L, upper_L);				\
     } else {								\
       static char const *	pathname = INPUT_PATHNAME;		\
       ccptn_t			*P, *Q, *R;				\
@@ -134,7 +134,7 @@ TEST_EXTENSION(test_1_10, "/",				"")
 									\
       cctests_assert_asciiz(L, EXPECTED_PATHNAME, ccptn_asciiz(R));	\
 									\
-      cce_run_clean_handlers(L);					\
+      cce_run_body_handlers(L);					\
     }									\
   }
 
@@ -159,7 +159,7 @@ TEST_NEW_ROOTNAME(test_2_1_7, "~/.fvwmrc",		"~/.fvwmrc")
     if (cce_location(L)) {						\
       fprintf(stderr, "%s: exception: %s\n", __func__,			\
 	      cce_condition_static_message(cce_condition(L)));		\
-      cce_run_error_handlers_raise(L, upper_L);				\
+      cce_run_catch_handlers_raise(L, upper_L);				\
     } else {								\
       static char const *	pathname = INPUT_PATHNAME;		\
       ccptn_t			*P, *Q, R[1];				\
@@ -182,7 +182,7 @@ TEST_NEW_ROOTNAME(test_2_1_7, "~/.fvwmrc",		"~/.fvwmrc")
 									\
       cctests_assert_asciiz(L, EXPECTED_PATHNAME, ccptn_asciiz(R));	\
 									\
-      cce_run_clean_handlers(L);					\
+      cce_run_body_handlers(L);					\
     }									\
   }
 
@@ -211,9 +211,9 @@ TEST_INIT_ROOTNAME(test_2_2_7, "~/.fvwmrc",		"~/.fvwmrc")
 		cce_condition_static_message(cce_condition(L)));	\
       }									\
       if (ccptn_condition_is_no_rootname(cce_condition(L))) {		\
-	cce_run_error_handlers_final(L);				\
+	cce_run_catch_handlers_final(L);				\
       } else {								\
-	cce_run_error_handlers_raise(L, upper_L);			\
+	cce_run_catch_handlers_raise(L, upper_L);			\
       }									\
     } else {								\
       static char const *	pathname = INPUT_PATHNAME;		\
@@ -227,7 +227,7 @@ TEST_INIT_ROOTNAME(test_2_2_7, "~/.fvwmrc",		"~/.fvwmrc")
       }									\
       ccptn_new_rootname_guarded(L, R_H, Q);				\
       cctests_assert(L, false);						\
-      cce_run_clean_handlers(L);					\
+      cce_run_body_handlers(L);					\
     }									\
   }
 
@@ -247,7 +247,7 @@ test_2_4_1 (cce_destination_t upper_L)
   if (cce_location(L)) {
     fprintf(stderr, "%s: exception: %s\n", __func__,
 	    cce_condition_static_message(cce_condition(L)));
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname = "/path/to/file.ext";
     ccptn_t		*P, *Q, *T;
@@ -259,17 +259,17 @@ test_2_4_1 (cce_destination_t upper_L)
       cce_error_handler_t	S_H[1];
 
       if (cce_location(inner_L)) {
-	cce_run_error_handlers_raise(inner_L, L);
+	cce_run_catch_handlers_raise(inner_L, L);
       } else {
 	ccptn_t *	S = ccptn_new_rootname_guarded(inner_L, S_H, Q);
 	cctests_assert_asciiz(inner_L, "/path/to/file", ccptn_asciiz(S));
 	T = S;
-	cce_run_clean_handlers(inner_L);
+	cce_run_body_handlers(inner_L);
       }
     }
     ccptn_handler_ptn_init(L, T_H, T);
     cctests_assert_asciiz(L, "/path/to/file", ccptn_asciiz(T));
-    cce_run_clean_handlers(L);
+    cce_run_body_handlers(L);
   }
 }
 
@@ -289,7 +289,7 @@ test_2_4_1 (cce_destination_t upper_L)
     if (cce_location(L)) {						\
       fprintf(stderr, "%s: exception: %s\n", __func__,			\
 	      cce_condition_static_message(cce_condition(L)));		\
-      cce_run_error_handlers_raise(L, upper_L);				\
+      cce_run_catch_handlers_raise(L, upper_L);				\
     } else {								\
       static char const *	pathname = INPUT_PATHNAME;		\
       ccptn_t		*P, *Q, *T;					\
@@ -304,7 +304,7 @@ test_2_4_1 (cce_destination_t upper_L)
 									\
       cctests_assert_asciiz(L, EXPECTED_TAILNAME, ccptn_asciiz(T));	\
 									\
-      cce_run_clean_handlers(L);					\
+      cce_run_body_handlers(L);					\
     }									\
   }
 
@@ -327,7 +327,7 @@ TEST_NEW_TAILNAME(test_3_1_5, "..",			"..")
     if (cce_location(L)) {						\
       fprintf(stderr, "%s: exception: %s\n", __func__,			\
 	      cce_condition_static_message(cce_condition(L)));		\
-      cce_run_error_handlers_raise(L, upper_L);				\
+      cce_run_catch_handlers_raise(L, upper_L);				\
     } else {								\
       static char const *	pathname = INPUT_PATHNAME;		\
       ccptn_t		*P, *Q, T[1];					\
@@ -342,7 +342,7 @@ TEST_NEW_TAILNAME(test_3_1_5, "..",			"..")
 									\
       cctests_assert_asciiz(L, EXPECTED_TAILNAME, ccptn_asciiz(T));	\
 									\
-      cce_run_clean_handlers(L);					\
+      cce_run_body_handlers(L);					\
     }									\
   }
 
@@ -369,9 +369,9 @@ TEST_INIT_TAILNAME(test_3_2_5, "..",			"..")
 		cce_condition_static_message(cce_condition(L)));	\
       }									\
       if (ccptn_condition_is_no_tailname(cce_condition(L))) {		\
-	cce_run_error_handlers_final(L);				\
+	cce_run_catch_handlers_final(L);				\
       } else {								\
-	cce_run_error_handlers_raise(L, upper_L);			\
+	cce_run_catch_handlers_raise(L, upper_L);			\
       }									\
     } else {								\
       static char const *	pathname = INPUT_PATHNAME;		\
@@ -381,7 +381,7 @@ TEST_INIT_TAILNAME(test_3_2_5, "..",			"..")
       Q = ccptn_new_normalise_guarded(L, Q_H, P);			\
       ccptn_new_tailname(L, Q);						\
       cctests_assert(L, false);						\
-      cce_run_clean_handlers(L);					\
+      cce_run_body_handlers(L);					\
     }									\
   }
 
@@ -399,7 +399,7 @@ test_3_4_1 (cce_destination_t upper_L)
   if (cce_location(L)) {
     fprintf(stderr, "%s: exception: %s\n", __func__,
 	    cce_condition_static_message(cce_condition(L)));
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname = "/path/to/dir/";
     ccptn_t		*P, *Q, *T;
@@ -411,17 +411,17 @@ test_3_4_1 (cce_destination_t upper_L)
       cce_error_handler_t	S_H[1];
 
       if (cce_location(inner_L)) {
-	cce_run_error_handlers_raise(inner_L, L);
+	cce_run_catch_handlers_raise(inner_L, L);
       } else {
 	ccptn_t *	S = ccptn_new_tailname_guarded(inner_L, S_H, Q);
 	cctests_assert_asciiz(inner_L, "dir/", ccptn_asciiz(S));
 	T = S;
-	cce_run_clean_handlers(inner_L);
+	cce_run_body_handlers(inner_L);
       }
     }
     ccptn_handler_ptn_init(L, T_H, T);
     cctests_assert_asciiz(L, "dir/", ccptn_asciiz(T));
-    cce_run_clean_handlers(L);
+    cce_run_body_handlers(L);
   }
 }
 
@@ -441,7 +441,7 @@ test_3_4_1 (cce_destination_t upper_L)
     if (cce_location(L)) {						\
       fprintf(stderr, "%s: exception: %s\n", __func__,			\
 	      cce_condition_static_message(cce_condition(L)));		\
-      cce_run_error_handlers_raise(L, upper_L);				\
+      cce_run_catch_handlers_raise(L, upper_L);				\
     } else {								\
       static char const *	pathname = INPUT_PATHNAME;		\
       ccptn_t		*P, *Q, *T;					\
@@ -453,7 +453,7 @@ test_3_4_1 (cce_destination_t upper_L)
 	fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(T));		\
       }									\
       cctests_assert_asciiz(L, EXPECTED_DIRNAME, ccptn_asciiz(T));	\
-      cce_run_clean_handlers(L);					\
+      cce_run_body_handlers(L);					\
     }									\
   }
 
@@ -475,7 +475,7 @@ TEST_NEW_DIRNAME(test_4_1_4, "/",			"/")
     if (cce_location(L)) {						\
       fprintf(stderr, "%s: exception: %s\n", __func__,			\
 	      cce_condition_static_message(cce_condition(L)));		\
-      cce_run_error_handlers_raise(L, upper_L);				\
+      cce_run_catch_handlers_raise(L, upper_L);				\
     } else {								\
       static char const *	pathname = INPUT_PATHNAME;		\
       ccptn_t		*P, *Q, T[1];					\
@@ -487,7 +487,7 @@ TEST_NEW_DIRNAME(test_4_1_4, "/",			"/")
 	fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(T));		\
       }									\
       cctests_assert_asciiz(L, EXPECTED_DIRNAME, ccptn_asciiz(T));	\
-      cce_run_clean_handlers(L);					\
+      cce_run_body_handlers(L);					\
     }									\
   }
 
@@ -513,9 +513,9 @@ TEST_INIT_DIRNAME(test_4_2_4, "/",			"/")
 		cce_condition_static_message(cce_condition(L)));	\
       }									\
       if (ccptn_condition_is_no_dirname(cce_condition(L))) {		\
-	cce_run_error_handlers_final(L);				\
+	cce_run_catch_handlers_final(L);				\
       } else {								\
-	cce_run_error_handlers_raise(L, upper_L);			\
+	cce_run_catch_handlers_raise(L, upper_L);			\
       }									\
     } else {								\
       static char const *	pathname = INPUT_PATHNAME;		\
@@ -525,7 +525,7 @@ TEST_INIT_DIRNAME(test_4_2_4, "/",			"/")
       Q = ccptn_new_normalise_guarded(L, Q_H, P);			\
       ccptn_new_dirname_guarded(L, T_H, Q);				\
       cctests_assert(L, false);						\
-      cce_run_clean_handlers(L);					\
+      cce_run_body_handlers(L);					\
     }									\
   }
 
@@ -545,7 +545,7 @@ test_4_4_1 (cce_destination_t upper_L)
   if (cce_location(L)) {
     fprintf(stderr, "%s: exception: %s\n", __func__,
 	    cce_condition_static_message(cce_condition(L)));
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname = "/path/to/file.ext";
     ccptn_t		*P, *Q, *T;
@@ -557,17 +557,17 @@ test_4_4_1 (cce_destination_t upper_L)
       cce_error_handler_t	S_H[1];
 
       if (cce_location(inner_L)) {
-	cce_run_error_handlers_raise(inner_L, L);
+	cce_run_catch_handlers_raise(inner_L, L);
       } else {
 	ccptn_t *	S = ccptn_new_dirname_guarded(inner_L, S_H, Q);
 	cctests_assert_asciiz(inner_L, "/path/to/", ccptn_asciiz(S));
 	T = S;
-	cce_run_clean_handlers(inner_L);
+	cce_run_body_handlers(inner_L);
       }
     }
     ccptn_handler_ptn_init(L, T_H, T);
     cctests_assert_asciiz(L, "/path/to/", ccptn_asciiz(T));
-    cce_run_clean_handlers(L);
+    cce_run_body_handlers(L);
   }
 }
 
@@ -587,7 +587,7 @@ test_4_4_1 (cce_destination_t upper_L)
     if (cce_location(L)) {						\
       fprintf(stderr, "%s: exception: %s\n", __func__,			\
 	      cce_condition_static_message(cce_condition(L)));		\
-      cce_run_error_handlers_raise(L, upper_L);				\
+      cce_run_catch_handlers_raise(L, upper_L);				\
     } else {								\
       static char const *	pathname = INPUT_PATHNAME;		\
       ccptn_t		*P, *Q, *T;					\
@@ -602,7 +602,7 @@ test_4_4_1 (cce_destination_t upper_L)
 									\
       cctests_assert_asciiz(L, EXPECTED_FILENAME, ccptn_asciiz(T));	\
 									\
-      cce_run_clean_handlers(L);					\
+      cce_run_body_handlers(L);					\
     }									\
   }
 
@@ -624,7 +624,7 @@ TEST_NEW_FILENAME(test_5_1_4, "~/.fvwmrc",		".fvwmrc")
     if (cce_location(L)) {						\
       fprintf(stderr, "%s: exception: %s\n", __func__,			\
 	      cce_condition_static_message(cce_condition(L)));		\
-      cce_run_error_handlers_raise(L, upper_L);				\
+      cce_run_catch_handlers_raise(L, upper_L);				\
     } else {								\
       static char const *	pathname = INPUT_PATHNAME;		\
       ccptn_t		*P, *Q, T[1];					\
@@ -639,7 +639,7 @@ TEST_NEW_FILENAME(test_5_1_4, "~/.fvwmrc",		".fvwmrc")
 									\
       cctests_assert_asciiz(L, EXPECTED_FILENAME, ccptn_asciiz(T));	\
 									\
-      cce_run_clean_handlers(L);					\
+      cce_run_body_handlers(L);					\
     }									\
   }
 
@@ -665,9 +665,9 @@ TEST_NEW_FILENAME(test_5_2_4, "~/.fvwmrc",		".fvwmrc")
 		cce_condition_static_message(cce_condition(L)));	\
       }									\
       if (ccptn_condition_is_no_filename(cce_condition(L))) {		\
-	cce_run_error_handlers_final(L);				\
+	cce_run_catch_handlers_final(L);				\
       } else {								\
-	cce_run_error_handlers_raise(L, upper_L);			\
+	cce_run_catch_handlers_raise(L, upper_L);			\
       }									\
     } else {								\
       static char const *	pathname = INPUT_PATHNAME;		\
@@ -680,7 +680,7 @@ TEST_NEW_FILENAME(test_5_2_4, "~/.fvwmrc",		".fvwmrc")
       }									\
       ccptn_new_filename_guarded(L, T_H, Q);				\
       cctests_assert(L, false);						\
-      cce_run_clean_handlers(L);					\
+      cce_run_body_handlers(L);					\
     }									\
   }
 
@@ -702,7 +702,7 @@ test_5_4_1 (cce_destination_t upper_L)
   if (cce_location(L)) {
     fprintf(stderr, "%s: exception: %s\n", __func__,
 	    cce_condition_static_message(cce_condition(L)));
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname = "/path/to/file.ext";
     ccptn_t		*P, *Q, *T;
@@ -714,17 +714,17 @@ test_5_4_1 (cce_destination_t upper_L)
       cce_error_handler_t	S_H[1];
 
       if (cce_location(inner_L)) {
-	cce_run_error_handlers_raise(inner_L, L);
+	cce_run_catch_handlers_raise(inner_L, L);
       } else {
 	ccptn_t *	S = ccptn_new_filename_guarded(inner_L, S_H, Q);
 	cctests_assert_asciiz(inner_L, "file.ext", ccptn_asciiz(S));
 	T = S;
-	cce_run_clean_handlers(inner_L);
+	cce_run_body_handlers(inner_L);
       }
     }
     ccptn_handler_ptn_init(L, T_H, T);
     cctests_assert_asciiz(L, "file.ext", ccptn_asciiz(T));
-    cce_run_clean_handlers(L);
+    cce_run_body_handlers(L);
   }
 }
 

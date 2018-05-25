@@ -106,7 +106,7 @@ ptn_realpath (cce_destination_t upper_L, ccptn_t * volatile R, ccptn_t const * c
   cce_clean_handler_t	rv_H[1];
 
   if (cce_location(L)) {
-    cce_run_error_handlers_raise(L, upper_L);
+    cce_run_catch_handlers_raise(L, upper_L);
   } else {
     char const *	rv;
 
@@ -128,7 +128,7 @@ ptn_realpath (cce_destination_t upper_L, ccptn_t * volatile R, ccptn_t const * c
 	  }
 	  R->realpath	= 1;
 	  R->normalised	= 1;
-	  cce_run_clean_handlers(L);
+	  cce_run_body_handlers(L);
 	  return R;
 	}
       }
