@@ -10,8 +10,9 @@ This package installs a C11 language library implementing Unix pathnames
 manipulation functions.
 
   This package  supports POSIX platforms.   This package depends  on the
-packages: CCExceptions, at least version  0.8.0.  To run the test suite:
-this package depends upon the package CCTests, at least version 0.2.0.
+packages:  CCExceptions,  at least  version  0.8.0;  CCMemory, at  least
+version 0.1.0.   To run the  test suite:  this package depends  upon the
+package CCTests, at least version 0.3.0.
 
   The package  makes use of  the GNU Autotools  and it is  tested, using
 Travis CI, on both Ubuntu GNU+Linux systems and OS X systems.
@@ -166,6 +167,10 @@ the GNU Project software can be found here:
 the package CCExceptions is available at:
 
 [https://github.com/marcomaggi/ccexceptions/](https://github.com/marcomaggi/ccexceptions/)
+
+the package CCMemory is available at:
+
+[https://github.com/marcomaggi/ccmemory/](https://github.com/marcomaggi/ccmemory/)
 
 the package CCTests is available at:
 

@@ -38,7 +38,8 @@
 @c ------------------------------------------------------------
 
 @set CCEXCEPTIONS_VERSION       0.8.0
-@set CCTESTS_VERSION            0.2.0
+@set CCMEMORY_VERSION           0.1.0
+@set CCTESTS_VERSION            0.3.0
 
 @set GITHUB_URL                 @url{https://github.com/marcomaggi/@value{PACKAGE_NICKNAME}}
 @set BITBUCKET_URL              @url{https://bitbucket.org/mmstuff/@value{PACKAGE_NICKNAME}}
@@ -55,8 +56,9 @@ This document describes version @value{VERSION} of @value{PACKAGE}, a C11 langua
 implementing Unix pathnames manipulation functions.
 
 This package supports @posix{} platforms.  This package depends on the packages: CCExceptions, at
-least version @value{CCEXCEPTIONS_VERSION}.  To run the test suite: this package depends upon the
-package CCTests, at least version @value{CCTESTS_VERSION}.
+least version @value{CCEXCEPTIONS_VERSION}; CCMemory, at least version @value{CCMEMORY_VERSION}.  To
+run the test suite: this package depends upon the package CCTests, at least version
+@value{CCTESTS_VERSION}.
 
 This package is distributed under the terms of the @gnu{} Lesser General Public License (@lgpl{}).
 
@@ -168,8 +170,9 @@ This document describes version @value{VERSION} of @value{PACKAGE}, a C11 langua
 implementing Unix pathnames manipulation functions.
 
 This package supports @posix{} platforms.  This package depends on the packages: CCExceptions, at
-least version @value{CCEXCEPTIONS_VERSION}.  To run the test suite: this package depends upon the
-package CCTests, at least version @value{CCTESTS_VERSION}.
+least version @value{CCEXCEPTIONS_VERSION}; CCMemory, at least version @value{CCMEMORY_VERSION}.  To
+run the test suite: this package depends upon the package CCTests, at least version
+@value{CCTESTS_VERSION}.
 
 @value{PACKAGE} installs the single header file @file{ccpathnames.h}.  All the function names in the
 @api{} are prefixed with @code{ccptn_}; all the preprocessor symbol names are prefixed with
@@ -2444,6 +2447,11 @@ and as backup at:
 the package CCExceptions is available at:
 
 @center @url{https://github.com/marcomaggi/ccexceptions/}
+
+@noindent
+the package CCMemory is available at:
+
+@center @url{https://github.com/marcomaggi/ccmemory/}
 
 @noindent
 the package CCTests is available at:
