@@ -502,7 +502,7 @@ ccptn_decl void ccptn_error_handler_ptn_init (cce_destination_t L, cce_handler_t
 #define ccptn_handler_ptn_init(L,H,P)					\
   _Generic((H),								\
 	   cce_clean_handler_t	*: ccptn_clean_handler_ptn_init, \
-	   cce_error_handler_t		*: ccptn_error_handler_ptn_init)(L,&(H->handler),P)
+	   cce_error_handler_t	*: ccptn_error_handler_ptn_init)(L,&(H->handler),P)
 
 
 /** --------------------------------------------------------------------
