@@ -61,6 +61,10 @@ delete_for_ccptn_new_nodup_asciiz (ccptn_t * P)
   ccptn_free(P);
 }
 
+static ccptn_methods_t const ccptn_methods_for_ccptn_new_nodup_asciiz_stru = {
+  .delete	= delete_for_ccptn_new_nodup_asciiz
+};
+
 ccptn_t *
 ccptn_new_nodup_asciiz (cce_destination_t L, char const * pathname)
 /* Allocate a new "ccptn_t" instance  initialising it with data from the
@@ -78,7 +82,7 @@ ccptn_new_nodup_asciiz (cce_destination_t L, char const * pathname)
   } else if (0 < len) {
     ccptn_t *	P = ccptn_malloc(L, sizeof(ccptn_t));
 
-    P->delete		= delete_for_ccptn_new_nodup_asciiz;
+    P->methods		= &ccptn_methods_for_ccptn_new_nodup_asciiz_stru;
     P->len		= len;
     P->absolute		= ('/' == *pathname)? 1 : 0;
     P->normalised	= 0;
@@ -102,6 +106,10 @@ delete_for_ccptn_new_dup_asciiz (ccptn_t * P)
   ccptn_free(P);
 }
 
+static ccptn_methods_t const ccptn_methods_for_ccptn_new_dup_asciiz_stru = {
+  .delete	= delete_for_ccptn_new_dup_asciiz
+};
+
 ccptn_t *
 ccptn_new_dup_asciiz (cce_destination_t L, char const * pathname)
 /* Allocate a new "ccptn_t" instance  initialising it with data from the
@@ -120,7 +128,7 @@ ccptn_new_dup_asciiz (cce_destination_t L, char const * pathname)
     ccptn_t *	P;
 
     P			= ccptn_malloc(L, sizeof(ccptn_t) + len + 1);
-    P->delete		= delete_for_ccptn_new_dup_asciiz;
+    P->methods		= &ccptn_methods_for_ccptn_new_dup_asciiz_stru;
     P->len		= len;
     P->absolute		= ('/' == *pathname)? 1 : 0;
     P->normalised	= 0;
@@ -145,6 +153,10 @@ delete_for_ccptn_new_normal_asciiz (ccptn_t * P)
 {
   ccptn_free(P);
 }
+
+static ccptn_methods_t const ccptn_methods_for_ccptn_new_normal_asciiz_stru = {
+  .delete	= delete_for_ccptn_new_normal_asciiz
+};
 
 ccptn_t *
 ccptn_new_normal_asciiz (cce_destination_t L, char const * pathname)
@@ -173,7 +185,7 @@ ccptn_new_normal_asciiz (cce_destination_t L, char const * pathname)
       two_len = ccptn_normal_pass_remove_single_dot_segments(two, one, one_len);
       one_len = ccptn_normal_pass_remove_double_dot_segments(L, one, two, two_len);
       P			= ccptn_malloc(L, sizeof(ccptn_t) + one_len + 1);
-      P->delete		= delete_for_ccptn_new_normal_asciiz;
+      P->methods	= &ccptn_methods_for_ccptn_new_normal_asciiz_stru;
       P->len		= one_len;
       P->absolute	= ('/' == one[0])? 1 : 0;
       P->normalised	= 1;
@@ -199,6 +211,10 @@ delete_for_ccptn_init_nodup_asciiz (ccptn_t * P CCPTN_UNUSED)
 {
 }
 
+static ccptn_methods_t const ccptn_methods_for_ccptn_init_nodup_asciiz_stru = {
+  .delete	= delete_for_ccptn_init_nodup_asciiz
+};
+
 ccptn_t *
 ccptn_init_nodup_asciiz (cce_destination_t L CCPTN_UNUSED, ccptn_t * P, char const * pathname)
 /* Initialise an already allocated "ccptn_t" instance with data from the
@@ -213,7 +229,7 @@ ccptn_init_nodup_asciiz (cce_destination_t L CCPTN_UNUSED, ccptn_t * P, char con
   if (CCPTN_PATH_MAX < len) {
     cce_raise(L, ccptn_condition_new_exceeded_length());
   } else if (0 < len) {
-    P->delete		= delete_for_ccptn_init_nodup_asciiz;
+    P->methods		= &ccptn_methods_for_ccptn_init_nodup_asciiz_stru;
     P->len		= strlen(pathname);
     P->absolute		= ('/' == *pathname)? 1 : 0;
     P->normalised	= 0;
@@ -237,6 +253,10 @@ delete_for_ccptn_init_dup_asciiz (ccptn_t * P)
   ccptn_free(P->buf);
 }
 
+static ccptn_methods_t const ccptn_methods_for_ccptn_init_dup_asciiz_stru = {
+  .delete	= delete_for_ccptn_init_dup_asciiz
+};
+
 ccptn_t *
 ccptn_init_dup_asciiz (cce_destination_t L, ccptn_t * P, char const * pathname)
 /* Initialise an already allocted "ccptn_t"  instance with data from the
@@ -252,7 +272,7 @@ ccptn_init_dup_asciiz (cce_destination_t L, ccptn_t * P, char const * pathname)
   if (CCPTN_PATH_MAX < len) {
     cce_raise(L, ccptn_condition_new_exceeded_length());
   } else if (0 < len) {
-    P->delete		= delete_for_ccptn_init_dup_asciiz;
+    P->methods		= &ccptn_methods_for_ccptn_init_dup_asciiz_stru;
     P->len		= len;
     P->absolute		= ('/' == *pathname)? 1 : 0;
     P->normalised	= 0;
@@ -277,6 +297,10 @@ delete_for_ccptn_init_normal_asciiz (ccptn_t * P)
 {
   ccptn_free(P->buf);
 }
+
+static ccptn_methods_t const ccptn_methods_for_ccptn_init_normal_asciiz_stru = {
+  .delete	= delete_for_ccptn_init_normal_asciiz
+};
 
 ccptn_t *
 ccptn_init_normal_asciiz (cce_destination_t L, ccptn_t * P, char const * pathname)
@@ -303,7 +327,7 @@ ccptn_init_normal_asciiz (cce_destination_t L, ccptn_t * P, char const * pathnam
 
       two_len = ccptn_normal_pass_remove_single_dot_segments(two, one, one_len);
       one_len = ccptn_normal_pass_remove_double_dot_segments(L, one, two, two_len);
-      P->delete		= delete_for_ccptn_init_normal_asciiz;
+      P->methods	= &ccptn_methods_for_ccptn_init_normal_asciiz_stru;
       P->len		= one_len;
       P->absolute	= ('/' == one[0])? 1 : 0;
       P->normalised	= 1;
@@ -330,6 +354,10 @@ delete_for_ccptn_new_dup_ascii (ccptn_t * P)
   ccptn_free(P);
 }
 
+static ccptn_methods_t const ccptn_methods_for_ccptn_new_dup_ascii_stru = {
+  .delete	= delete_for_ccptn_new_dup_ascii
+};
+
 ccptn_t *
 ccptn_new_dup_ascii (cce_destination_t L, char const * pathname, size_t len)
 /* Allocate a new "ccptn_t" instance  initialising it with data from the
@@ -348,7 +376,7 @@ ccptn_new_dup_ascii (cce_destination_t L, char const * pathname, size_t len)
 
     scan_for_non_terminating_zeros(L, pathname, len);
     P = ccptn_malloc(L, sizeof(ccptn_t) + len + 1);
-    P->delete		= delete_for_ccptn_new_dup_ascii;
+    P->methods		= &ccptn_methods_for_ccptn_new_dup_ascii_stru;
     P->len		= len;
     P->absolute		= ('/' == *pathname)? 1 : 0;
     P->normalised	= 0;
@@ -373,6 +401,10 @@ delete_for_ccptn_new_normal_ascii (ccptn_t * P)
 {
   ccptn_free(P);
 }
+
+static ccptn_methods_t const ccptn_methods_for_ccptn_new_normal_ascii_stru = {
+  .delete	= delete_for_ccptn_new_normal_ascii
+};
 
 ccptn_t *
 ccptn_new_normal_ascii (cce_destination_t L, char const * pathname, size_t len)
@@ -403,7 +435,7 @@ ccptn_new_normal_ascii (cce_destination_t L, char const * pathname, size_t len)
       {
 	ccptn_t *	P;
 	P = ccptn_malloc(L, sizeof(ccptn_t) + one_len + 1);
-	P->delete	= delete_for_ccptn_new_normal_ascii;
+	P->methods	= &ccptn_methods_for_ccptn_new_normal_ascii_stru;
 	P->len		= one_len;
 	P->absolute	= ('/' == one[0])? 1 : 0;
 	P->normalised	= 1;
@@ -431,6 +463,10 @@ delete_for_ccptn_init_dup_ascii (ccptn_t * P)
   ccptn_free(P->buf);
 }
 
+static ccptn_methods_t const ccptn_methods_for_ccptn_init_dup_ascii_stru = {
+  .delete	= delete_for_ccptn_init_dup_ascii
+};
+
 ccptn_t *
 ccptn_init_dup_ascii (cce_destination_t L, ccptn_t * P, char const * pathname, size_t len)
 /* Initialise an already allocted "ccptn_t"  instance with data from the
@@ -446,7 +482,7 @@ ccptn_init_dup_ascii (cce_destination_t L, ccptn_t * P, char const * pathname, s
     cce_raise(L, ccptn_condition_new_exceeded_length());
   } else if (0 < len) {
     scan_for_non_terminating_zeros(L, pathname, len);
-    P->delete		= delete_for_ccptn_init_dup_ascii;
+    P->methods		= &ccptn_methods_for_ccptn_init_dup_ascii_stru;
     P->len		= len;
     P->absolute		= ('/' == *pathname)? 1 : 0;
     P->normalised	= 0;
@@ -471,6 +507,10 @@ delete_for_ccptn_init_normal_ascii (ccptn_t * P)
 {
   ccptn_free(P->buf);
 }
+
+static ccptn_methods_t const ccptn_methods_for_ccptn_init_normal_ascii_stru = {
+  .delete	= delete_for_ccptn_init_normal_ascii
+};
 
 ccptn_t *
 ccptn_init_normal_ascii (cce_destination_t L, ccptn_t * P, char const * pathname, size_t len)
@@ -497,7 +537,7 @@ ccptn_init_normal_ascii (cce_destination_t L, ccptn_t * P, char const * pathname
 
       two_len = ccptn_normal_pass_remove_single_dot_segments(two, one, one_len);
       one_len = ccptn_normal_pass_remove_double_dot_segments(L, one, two, two_len);
-      P->delete		= delete_for_ccptn_init_normal_ascii;
+      P->methods	= &ccptn_methods_for_ccptn_init_normal_ascii_stru;
       P->len		= one_len;
       P->absolute	= ('/' == one[0])? 1 : 0;
       P->normalised	= 1;

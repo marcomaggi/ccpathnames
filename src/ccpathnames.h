@@ -371,16 +371,21 @@ ccptn_decl void   ccptn_free   (void * ptr)
  ** ----------------------------------------------------------------- */
 
 typedef struct ccptn_t			ccptn_t;
+typedef struct ccptn_methods_t		ccptn_methods_t;
 typedef struct ccptn_segment_t		ccptn_segment_t;
 typedef struct ccptn_extension_t	ccptn_extension_t;
 
 typedef void ccptn_delete_fun_t (ccptn_t * P);
 
-/* This struct represents a full pathname. */
-struct ccptn_t {
+struct ccptn_methods_t {
   /* Finalisation function  for this  struct instance.  It  releases all
      the dynamic resources associated to this instance. */
   ccptn_delete_fun_t *	delete;
+};
+
+/* This struct represents a full pathname. */
+struct ccptn_t {
+  ccptn_methods_t const *	methods;
 
   struct {
     /* True if  this pathname is absolute;  false if it is  relative.  A
@@ -488,7 +493,7 @@ __attribute__((__nonnull__(1),__always_inline__))
 static inline void
 ccptn_delete (ccptn_t * P)
 {
-  P->delete(P);
+  P->methods->delete(P);
 }
 
 /* ------------------------------------------------------------------ */
