@@ -86,6 +86,7 @@ extern "C" {
  ** ----------------------------------------------------------------- */
 
 #include <ccexceptions.h>
+#include <ccmemory.h>
 #include <stdlib.h>
 #include <stdbool.h>
 
@@ -623,32 +624,32 @@ ccptn_new_normal_asciiz_guarded_clean (cce_destination_t L, cce_handler_t * R_H,
 #define ccptn_init_nodup_asciiz_guarded(L,R,H,PATHNAME)		\
   _Generic((H),								\
 	   cce_clean_handler_t	*: ccptn_init_nodup_asciiz_guarded_clean, \
-	   cce_error_handler_t		*: ccptn_init_nodup_asciiz_guarded_error)(L,R,&(H->handler),PATHNAME)
+	   cce_error_handler_t	*: ccptn_init_nodup_asciiz_guarded_error)(L,R,&(H->handler),PATHNAME)
 
 #define ccptn_init_dup_asciiz_guarded(L,R,H,PATHNAME)		\
   _Generic((H),								\
 	   cce_clean_handler_t	*: ccptn_init_dup_asciiz_guarded_clean, \
-	   cce_error_handler_t		*: ccptn_init_dup_asciiz_guarded_error)(L,R,&(H->handler),PATHNAME)
+	   cce_error_handler_t	*: ccptn_init_dup_asciiz_guarded_error)(L,R,&(H->handler),PATHNAME)
 
 #define ccptn_init_normal_asciiz_guarded(L,R,H,PATHNAME)		\
   _Generic((H),								\
 	   cce_clean_handler_t	*: ccptn_init_normal_asciiz_guarded_clean, \
-	   cce_error_handler_t		*: ccptn_init_normal_asciiz_guarded_error)(L,R,&(H->handler),PATHNAME)
+	   cce_error_handler_t	*: ccptn_init_normal_asciiz_guarded_error)(L,R,&(H->handler),PATHNAME)
 
 #define ccptn_new_nodup_asciiz_guarded(L,H,PATHNAME)		\
   _Generic((H),								\
 	   cce_clean_handler_t	*: ccptn_new_nodup_asciiz_guarded_clean, \
-	   cce_error_handler_t		*: ccptn_new_nodup_asciiz_guarded_error)(L,&(H->handler),PATHNAME)
+	   cce_error_handler_t	*: ccptn_new_nodup_asciiz_guarded_error)(L,&(H->handler),PATHNAME)
 
 #define ccptn_new_dup_asciiz_guarded(L,H,PATHNAME)		\
   _Generic((H),								\
 	   cce_clean_handler_t	*: ccptn_new_dup_asciiz_guarded_clean, \
-	   cce_error_handler_t		*: ccptn_new_dup_asciiz_guarded_error)(L,&(H->handler),PATHNAME)
+	   cce_error_handler_t	*: ccptn_new_dup_asciiz_guarded_error)(L,&(H->handler),PATHNAME)
 
 #define ccptn_new_normal_asciiz_guarded(L,H,PATHNAME)		\
   _Generic((H),								\
 	   cce_clean_handler_t	*: ccptn_new_normal_asciiz_guarded_clean, \
-	   cce_error_handler_t		*: ccptn_new_normal_asciiz_guarded_error)(L,&(H->handler),PATHNAME)
+	   cce_error_handler_t	*: ccptn_new_normal_asciiz_guarded_error)(L,&(H->handler),PATHNAME)
 
 
 /** --------------------------------------------------------------------
@@ -758,12 +759,12 @@ ccptn_init_realpath_guarded_clean (cce_destination_t L, ccptn_t * const R, cce_h
 #define ccptn_new_realpath_guarded(L,H,P)				\
   _Generic((H),								\
 	   cce_clean_handler_t	*: ccptn_new_realpath_guarded_clean, \
-	   cce_error_handler_t		*: ccptn_new_realpath_guarded_error)(L,&(H->handler),P)
+	   cce_error_handler_t	*: ccptn_new_realpath_guarded_error)(L,&(H->handler),P)
 
 #define ccptn_init_realpath_guarded(L,R,H,P)				\
   _Generic((H),								\
 	   cce_clean_handler_t	*: ccptn_init_realpath_guarded_clean, \
-	   cce_error_handler_t		*: ccptn_init_realpath_guarded_error)(L,R,&(H->handler),P)
+	   cce_error_handler_t	*: ccptn_init_realpath_guarded_error)(L,R,&(H->handler),P)
 
 
 /** --------------------------------------------------------------------
@@ -821,12 +822,12 @@ ccptn_init_normalise_guarded_clean (cce_destination_t L, ccptn_t * const R, cce_
 #define ccptn_new_normalise_guarded(L,H,P)				\
   _Generic((H),								\
 	   cce_clean_handler_t	*: ccptn_new_normalise_guarded_clean, \
-	   cce_error_handler_t		*: ccptn_new_normalise_guarded_error)(L,&(H->handler),P)
+	   cce_error_handler_t	*: ccptn_new_normalise_guarded_error)(L,&(H->handler),P)
 
 #define ccptn_init_normalise_guarded(L,R,H,P)				\
   _Generic((H),								\
 	   cce_clean_handler_t	*: ccptn_init_normalise_guarded_clean, \
-	   cce_error_handler_t		*: ccptn_init_normalise_guarded_error)(L,R,&(H->handler),P)
+	   cce_error_handler_t	*: ccptn_init_normalise_guarded_error)(L,R,&(H->handler),P)
 
 /* ------------------------------------------------------------------ */
 
@@ -867,8 +868,8 @@ ccptn_new_concat_guarded_error (cce_destination_t L, cce_handler_t * const R_H,
 __attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3)))
 static inline ccptn_t *
 ccptn_new_concat_guarded_clean (cce_destination_t L, cce_handler_t * const R_H,
-				  ccptn_t const * const prefix,
-				  ccptn_t const * const suffix)
+				ccptn_t const * const prefix,
+				ccptn_t const * const suffix)
 {
   ccptn_t *	R = ccptn_new_concat(L, prefix, suffix);
   ccptn_clean_handler_ptn_init(L, R_H, R);
@@ -891,8 +892,8 @@ ccptn_init_concat_guarded_error (cce_destination_t L, ccptn_t * const R, cce_han
 __attribute__((__always_inline__,__returns_nonnull__,__nonnull__(1,2,3,4)))
 static inline ccptn_t *
 ccptn_init_concat_guarded_clean (cce_destination_t L, ccptn_t * const R, cce_handler_t * const R_H,
-				   ccptn_t const * const prefix,
-				   ccptn_t const * const suffix)
+				 ccptn_t const * const prefix,
+				 ccptn_t const * const suffix)
 {
   ccptn_init_concat(L, R, prefix, suffix);
   ccptn_clean_handler_ptn_init(L, R_H, R);
@@ -903,13 +904,13 @@ ccptn_init_concat_guarded_clean (cce_destination_t L, ccptn_t * const R, cce_han
 
 #define ccptn_new_concat_guarded(L,H,PREFIX,SUFFIX)			\
   _Generic((H),								\
-	   cce_clean_handler_t	*: ccptn_new_concat_guarded_clean, \
-	   cce_error_handler_t		*: ccptn_new_concat_guarded_error)(L,&(H->handler),PREFIX,SUFFIX)
+	   cce_clean_handler_t	*: ccptn_new_concat_guarded_clean,	\
+	   cce_error_handler_t	*: ccptn_new_concat_guarded_error)(L,&(H->handler),PREFIX,SUFFIX)
 
 #define ccptn_init_concat_guarded(L,R,H,PREFIX,SUFFIX)			\
   _Generic((H),								\
-	   cce_clean_handler_t	*: ccptn_init_concat_guarded_clean, \
-	   cce_error_handler_t		*: ccptn_init_concat_guarded_error)(L,R,&(H->handler),PREFIX,SUFFIX)
+	   cce_clean_handler_t	*: ccptn_init_concat_guarded_clean,	\
+	   cce_error_handler_t	*: ccptn_init_concat_guarded_error)(L,R,&(H->handler),PREFIX,SUFFIX)
 
 
 /** --------------------------------------------------------------------
@@ -953,7 +954,7 @@ ccptn_new_rootname_guarded_clean (cce_destination_t L, cce_handler_t * const R_H
 #define ccptn_new_rootname_guarded(L,H,P)				\
   _Generic((H),								\
 	   cce_clean_handler_t	*: ccptn_new_rootname_guarded_clean, \
-	   cce_error_handler_t		*: ccptn_new_rootname_guarded_error)(L,&(H->handler),P)
+	   cce_error_handler_t	*: ccptn_new_rootname_guarded_error)(L,&(H->handler),P)
 
 /* ------------------------------------------------------------------ */
 
@@ -978,7 +979,7 @@ ccptn_init_rootname_guarded_clean (cce_destination_t L, ccptn_t * const R, cce_h
 #define ccptn_init_rootname_guarded(L,R,H,P)				\
   _Generic((H),								\
 	   cce_clean_handler_t	*: ccptn_init_rootname_guarded_clean, \
-	   cce_error_handler_t		*: ccptn_init_rootname_guarded_error)(L,R,&(H->handler),P)
+	   cce_error_handler_t	*: ccptn_init_rootname_guarded_error)(L,R,&(H->handler),P)
 
 
 /** --------------------------------------------------------------------
@@ -1014,7 +1015,7 @@ ccptn_new_dirname_guarded_clean (cce_destination_t L, cce_handler_t * const R_H,
 #define ccptn_new_dirname_guarded(L,H,P)				\
   _Generic((H),								\
 	   cce_clean_handler_t	*: ccptn_new_dirname_guarded_clean, \
-	   cce_error_handler_t		*: ccptn_new_dirname_guarded_error)(L,&(H->handler),P)
+	   cce_error_handler_t	*: ccptn_new_dirname_guarded_error)(L,&(H->handler),P)
 
 /* ------------------------------------------------------------------ */
 
@@ -1039,7 +1040,7 @@ ccptn_init_dirname_guarded_clean (cce_destination_t L, ccptn_t * const R, cce_ha
 #define ccptn_init_dirname_guarded(L,R,H,P)				\
   _Generic((H),								\
 	   cce_clean_handler_t	*: ccptn_init_dirname_guarded_clean, \
-	   cce_error_handler_t		*: ccptn_init_dirname_guarded_error)(L,R,&(H->handler),P)
+	   cce_error_handler_t	*: ccptn_init_dirname_guarded_error)(L,R,&(H->handler),P)
 
 
 /** --------------------------------------------------------------------
@@ -1075,7 +1076,7 @@ ccptn_new_tailname_guarded_clean (cce_destination_t L, cce_handler_t * const R_H
 #define ccptn_new_tailname_guarded(L,H,P)				\
   _Generic((H),								\
 	   cce_clean_handler_t	*: ccptn_new_tailname_guarded_clean, \
-	   cce_error_handler_t		*: ccptn_new_tailname_guarded_error)(L,&(H->handler),P)
+	   cce_error_handler_t	*: ccptn_new_tailname_guarded_error)(L,&(H->handler),P)
 
 /* ------------------------------------------------------------------ */
 
@@ -1100,7 +1101,7 @@ ccptn_init_tailname_guarded_clean (cce_destination_t L, ccptn_t * const R, cce_h
 #define ccptn_init_tailname_guarded(L,R,H,P)				\
   _Generic((H),								\
 	   cce_clean_handler_t	*: ccptn_init_tailname_guarded_clean, \
-	   cce_error_handler_t		*: ccptn_init_tailname_guarded_error)(L,R,&(H->handler),P)
+	   cce_error_handler_t	*: ccptn_init_tailname_guarded_error)(L,R,&(H->handler),P)
 
 
 /** --------------------------------------------------------------------
@@ -1136,7 +1137,7 @@ ccptn_new_filename_guarded_clean (cce_destination_t L, cce_handler_t * const R_H
 #define ccptn_new_filename_guarded(L,H,P)				\
   _Generic((H),								\
 	   cce_clean_handler_t	*: ccptn_new_filename_guarded_clean, \
-	   cce_error_handler_t		*: ccptn_new_filename_guarded_error)(L,&(H->handler),P)
+	   cce_error_handler_t	*: ccptn_new_filename_guarded_error)(L,&(H->handler),P)
 
 /* ------------------------------------------------------------------ */
 
@@ -1161,7 +1162,7 @@ ccptn_init_filename_guarded_clean (cce_destination_t L, ccptn_t * const R, cce_h
 #define ccptn_init_filename_guarded(L,R,H,P)				\
   _Generic((H),								\
 	   cce_clean_handler_t	*: ccptn_init_filename_guarded_clean, \
-	   cce_error_handler_t		*: ccptn_init_filename_guarded_error)(L,R,&(H->handler),P)
+	   cce_error_handler_t	*: ccptn_init_filename_guarded_error)(L,R,&(H->handler),P)
 
 
 /** --------------------------------------------------------------------
