@@ -566,19 +566,19 @@ ccptn_handler_ptn_function (const cce_condition_t * C CCE_UNUSED, cce_handler_t 
 }
 
 void
-ccptn_clean_handler_ptn_init (cce_location_t * L, cce_handler_t * H, ccptn_t * P)
+ccptn_clean_handler_ptn_init (cce_location_t * L, ccptn_clean_handler_t * P_H, ccptn_t * P)
 {
-  H->function	= ccptn_handler_ptn_function;
-  H->pointer	= P;
-  cce_register_clean_handler(L, H);
+  P_H->handler.handler.function	= ccptn_handler_ptn_function;
+  P_H->handler.handler.pointer	= P;
+  cce_register_clean_handler(L, &(P_H->handler.handler));
 }
 
 void
-ccptn_error_handler_ptn_init (cce_location_t * L, cce_handler_t * H, ccptn_t * P)
+ccptn_error_handler_ptn_init (cce_location_t * L, ccptn_error_handler_t * P_H, ccptn_t * P)
 {
-  H->function	= ccptn_handler_ptn_function;
-  H->pointer	= P;
-  cce_register_error_handler(L, H);
+  P_H->handler.handler.function	= ccptn_handler_ptn_function;
+  P_H->handler.handler.pointer	= P;
+  cce_register_error_handler(L, &(P_H->handler.handler));
 }
 
 /* end of file */

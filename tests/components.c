@@ -57,7 +57,7 @@ TEST_LAST_SEGMENT(test_0_10, "/",			"")
   FUNCNAME (cce_destination_t upper_L)					\
   {									\
     cce_location_t	L[1];						\
-    cce_clean_handler_t	P_H[1], Q_H[1];				\
+    ccptn_clean_handler_t	P_H[1], Q_H[1];				\
 									\
     if (cce_location(L)) {						\
       fprintf(stderr, "%s: exception: %s\n", __func__,			\
@@ -106,7 +106,7 @@ TEST_EXTENSION(test_1_10, "/",				"")
   FUNCNAME (cce_destination_t upper_L)					\
   {									\
     cce_location_t		L[1];					\
-    cce_clean_handler_t		P_H[1], Q_H[1], R_H[1];			\
+    ccptn_clean_handler_t		P_H[1], Q_H[1], R_H[1];			\
 									\
     if (cce_location(L)) {						\
       fprintf(stderr, "%s: exception: %s\n", __func__,			\
@@ -154,7 +154,7 @@ TEST_NEW_ROOTNAME(test_2_1_7, "~/.fvwmrc",		"~/.fvwmrc")
   FUNCNAME (cce_destination_t upper_L)					\
   {									\
     cce_location_t		L[1];					\
-    cce_clean_handler_t	P_H[1], Q_H[1], R_H[1];			\
+    ccptn_clean_handler_t	P_H[1], Q_H[1], R_H[1];			\
 									\
     if (cce_location(L)) {						\
       fprintf(stderr, "%s: exception: %s\n", __func__,			\
@@ -203,7 +203,7 @@ TEST_INIT_ROOTNAME(test_2_2_7, "~/.fvwmrc",		"~/.fvwmrc")
   FUNCNAME (cce_destination_t upper_L)					\
   {									\
     cce_location_t		L[1];					\
-    cce_clean_handler_t	P_H[1], Q_H[1], R_H[1];			\
+    ccptn_clean_handler_t	P_H[1], Q_H[1], R_H[1];			\
 									\
     if (cce_location(L)) {						\
       if (0) {								\
@@ -242,7 +242,7 @@ test_2_4_1 (cce_destination_t upper_L)
 /* Test for "ccptn_new_rootname_guarded()" with error handler. */
 {
   cce_location_t	L[1];
-  cce_clean_handler_t	P_H[1], Q_H[1], T_H[1];
+  ccptn_clean_handler_t	P_H[1], Q_H[1], T_H[1];
 
   if (cce_location(L)) {
     fprintf(stderr, "%s: exception: %s\n", __func__,
@@ -256,7 +256,7 @@ test_2_4_1 (cce_destination_t upper_L)
     Q = ccptn_new_normalise_guarded(L, Q_H, P);
     {
       cce_location_t		inner_L[1];
-      cce_error_handler_t	S_H[1];
+      ccptn_error_handler_t	S_H[1];
 
       if (cce_location(inner_L)) {
 	cce_run_catch_handlers_raise(inner_L, L);
@@ -284,7 +284,7 @@ test_2_4_1 (cce_destination_t upper_L)
   FUNCNAME (cce_destination_t upper_L)					\
   {									\
     cce_location_t		L[1];					\
-    cce_clean_handler_t	P_H[1], Q_H[1], T_H[1];			\
+    ccptn_clean_handler_t	P_H[1], Q_H[1], T_H[1];			\
 									\
     if (cce_location(L)) {						\
       fprintf(stderr, "%s: exception: %s\n", __func__,			\
@@ -322,7 +322,7 @@ TEST_NEW_TAILNAME(test_3_1_5, "..",			"..")
   FUNCNAME (cce_destination_t upper_L)					\
   {									\
     cce_location_t		L[1];					\
-    cce_clean_handler_t	P_H[1], Q_H[1], T_H[1];			\
+    ccptn_clean_handler_t	P_H[1], Q_H[1], T_H[1];			\
 									\
     if (cce_location(L)) {						\
       fprintf(stderr, "%s: exception: %s\n", __func__,			\
@@ -361,7 +361,7 @@ TEST_INIT_TAILNAME(test_3_2_5, "..",			"..")
   FUNCNAME (cce_destination_t upper_L)					\
   {									\
     cce_location_t	L[1];						\
-    cce_clean_handler_t	P_H[1], Q_H[1];				\
+    ccptn_clean_handler_t	P_H[1], Q_H[1];				\
 									\
     if (cce_location(L)) {						\
       if (0) {								\
@@ -394,7 +394,7 @@ test_3_4_1 (cce_destination_t upper_L)
 /* Test for "ccptn_new_tailname_guarded()" with error handler. */
 {
   cce_location_t	L[1];
-  cce_clean_handler_t	P_H[1], Q_H[1], T_H[1];
+  ccptn_clean_handler_t	P_H[1], Q_H[1], T_H[1];
 
   if (cce_location(L)) {
     fprintf(stderr, "%s: exception: %s\n", __func__,
@@ -408,7 +408,7 @@ test_3_4_1 (cce_destination_t upper_L)
     Q = ccptn_new_normalise_guarded(L, Q_H, P);
     {
       cce_location_t		inner_L[1];
-      cce_error_handler_t	S_H[1];
+      ccptn_error_handler_t	S_H[1];
 
       if (cce_location(inner_L)) {
 	cce_run_catch_handlers_raise(inner_L, L);
@@ -436,7 +436,7 @@ test_3_4_1 (cce_destination_t upper_L)
   FUNCNAME (cce_destination_t upper_L)					\
   {									\
     cce_location_t	L[1];						\
-    cce_clean_handler_t	P_H[1], Q_H[1], T_H[1];			\
+    ccptn_clean_handler_t	P_H[1], Q_H[1], T_H[1];			\
 									\
     if (cce_location(L)) {						\
       fprintf(stderr, "%s: exception: %s\n", __func__,			\
@@ -470,7 +470,7 @@ TEST_NEW_DIRNAME(test_4_1_4, "/",			"/")
   FUNCNAME (cce_destination_t upper_L)					\
   {									\
     cce_location_t	L[1];						\
-    cce_clean_handler_t	P_H[1], Q_H[1], T_H[1];			\
+    ccptn_clean_handler_t	P_H[1], Q_H[1], T_H[1];			\
 									\
     if (cce_location(L)) {						\
       fprintf(stderr, "%s: exception: %s\n", __func__,			\
@@ -505,7 +505,7 @@ TEST_INIT_DIRNAME(test_4_2_4, "/",			"/")
   FUNCNAME (cce_destination_t upper_L)					\
   {									\
     cce_location_t	L[1];						\
-    cce_clean_handler_t	P_H[1], Q_H[1], T_H[1];			\
+    ccptn_clean_handler_t	P_H[1], Q_H[1], T_H[1];			\
 									\
     if (cce_location(L)) {						\
       if (0) {								\
@@ -540,7 +540,7 @@ test_4_4_1 (cce_destination_t upper_L)
 /* Test for "ccptn_new_dirname_guarded()" with error handler. */
 {
   cce_location_t	L[1];
-  cce_clean_handler_t	P_H[1], Q_H[1], T_H[1];
+  ccptn_clean_handler_t	P_H[1], Q_H[1], T_H[1];
 
   if (cce_location(L)) {
     fprintf(stderr, "%s: exception: %s\n", __func__,
@@ -554,7 +554,7 @@ test_4_4_1 (cce_destination_t upper_L)
     Q = ccptn_new_normalise_guarded(L, Q_H, P);
     {
       cce_location_t		inner_L[1];
-      cce_error_handler_t	S_H[1];
+      ccptn_error_handler_t	S_H[1];
 
       if (cce_location(inner_L)) {
 	cce_run_catch_handlers_raise(inner_L, L);
@@ -582,7 +582,7 @@ test_4_4_1 (cce_destination_t upper_L)
   FUNCNAME (cce_destination_t upper_L)					\
   {									\
     cce_location_t		L[1];					\
-    cce_clean_handler_t	P_H[1], Q_H[1], T_H[1];			\
+    ccptn_clean_handler_t	P_H[1], Q_H[1], T_H[1];			\
 									\
     if (cce_location(L)) {						\
       fprintf(stderr, "%s: exception: %s\n", __func__,			\
@@ -619,7 +619,7 @@ TEST_NEW_FILENAME(test_5_1_4, "~/.fvwmrc",		".fvwmrc")
   FUNCNAME (cce_destination_t upper_L)					\
   {									\
     cce_location_t		L[1];					\
-    cce_clean_handler_t	P_H[1], Q_H[1], T_H[1];			\
+    ccptn_clean_handler_t	P_H[1], Q_H[1], T_H[1];			\
 									\
     if (cce_location(L)) {						\
       fprintf(stderr, "%s: exception: %s\n", __func__,			\
@@ -657,7 +657,7 @@ TEST_NEW_FILENAME(test_5_2_4, "~/.fvwmrc",		".fvwmrc")
   FUNCNAME (cce_destination_t upper_L)					\
   {									\
     cce_location_t	L[1];						\
-    cce_clean_handler_t	P_H[1], Q_H[1], T_H[1];			\
+    ccptn_clean_handler_t	P_H[1], Q_H[1], T_H[1];			\
 									\
     if (cce_location(L)) {						\
       if (0) {								\
@@ -697,7 +697,7 @@ test_5_4_1 (cce_destination_t upper_L)
 /* Test for "ccptn_new_filename_guarded()" with error handler. */
 {
   cce_location_t	L[1];
-  cce_clean_handler_t	P_H[1], Q_H[1], T_H[1];
+  ccptn_clean_handler_t	P_H[1], Q_H[1], T_H[1];
 
   if (cce_location(L)) {
     fprintf(stderr, "%s: exception: %s\n", __func__,
@@ -711,7 +711,7 @@ test_5_4_1 (cce_destination_t upper_L)
     Q = ccptn_new_normalise_guarded(L, Q_H, P);
     {
       cce_location_t		inner_L[1];
-      cce_error_handler_t	S_H[1];
+      ccptn_error_handler_t	S_H[1];
 
       if (cce_location(inner_L)) {
 	cce_run_catch_handlers_raise(inner_L, L);

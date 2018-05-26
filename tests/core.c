@@ -123,7 +123,7 @@ test_1_5 (cce_destination_t upper_L)
 /* Test for "ccptn_handler_ptn_init()". */
 {
   cce_location_t	L[1];
-  cce_clean_handler_t	P_H[1];
+  ccptn_clean_handler_t	P_H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
@@ -338,7 +338,7 @@ test_3_1 (cce_destination_t upper_L)
 /* Test for "ccptn_new_nodup_asciiz_guarded()", clean handler. */
 {
   cce_location_t	L[1];
-  cce_clean_handler_t	P_H[1];
+  ccptn_clean_handler_t	P_H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
@@ -359,7 +359,7 @@ test_3_2 (cce_destination_t upper_L)
 /* Test for "ccptn_new_dup_asciiz_guarded()", clean handler. */
 {
   cce_location_t	L[1];
-  cce_clean_handler_t	P_H[1];
+  ccptn_clean_handler_t	P_H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
@@ -380,7 +380,7 @@ test_3_3 (cce_destination_t upper_L)
 /* Test for "ccptn_init_nodup_asciiz_guarded()", clean handler. */
 {
   cce_location_t	L[1];
-  cce_clean_handler_t	P_H[1];
+  ccptn_clean_handler_t	P_H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
@@ -401,7 +401,7 @@ test_3_4 (cce_destination_t upper_L)
 /* Test for "ccptn_init_dup_asciiz_guarded()", clean handler. */
 {
   cce_location_t	L[1];
-  cce_clean_handler_t	P_H[1];
+  ccptn_clean_handler_t	P_H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
@@ -422,7 +422,7 @@ test_3_5 (cce_destination_t upper_L)
 /* Test for "ccptn_new_normal_asciiz_guarded()", clean handler. */
 {
   cce_location_t	L[1];
-  cce_clean_handler_t	P_H[1];
+  ccptn_clean_handler_t	P_H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
@@ -446,7 +446,7 @@ test_3_6 (cce_destination_t upper_L)
 /* Test for "ccptn_init_normal_asciiz_guarded()", clean handler. */
 {
   cce_location_t	L[1];
-  cce_clean_handler_t	P_H[1];
+  ccptn_clean_handler_t	P_H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
@@ -473,7 +473,7 @@ test_4_1 (cce_destination_t upper_L)
 {
   static char const * const	pathname = "/path/to/file.ext";
   cce_location_t		L[1];
-  cce_clean_handler_t		Q_H[1];
+  ccptn_clean_handler_t		Q_H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
@@ -482,7 +482,7 @@ test_4_1 (cce_destination_t upper_L)
 
     {
       cce_location_t		inner_L[1];
-      cce_error_handler_t	P_H[1];
+      ccptn_error_handler_t	P_H[1];
 
       if (cce_location(inner_L)) {
 	cce_run_catch_handlers_raise(inner_L, L);
@@ -508,7 +508,7 @@ test_4_2 (cce_destination_t upper_L)
 {
   static char const * const	pathname = "/path/to/file.ext";
   cce_location_t		L[1];
-  cce_clean_handler_t		Q_H[1];
+  ccptn_clean_handler_t		Q_H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
@@ -516,7 +516,7 @@ test_4_2 (cce_destination_t upper_L)
     ccptn_t *		Q;
     {
       cce_location_t		inner_L[1];
-      cce_error_handler_t	P_H[1];
+      ccptn_error_handler_t	P_H[1];
 
       if (cce_location(inner_L)) {
 	cce_run_catch_handlers_raise(inner_L, L);
@@ -542,7 +542,7 @@ test_4_3 (cce_destination_t upper_L)
 {
   static char const * const	pathname = "/path/to/file.ext";
   cce_location_t		L[1];
-  cce_clean_handler_t		Q_H[1];
+  ccptn_clean_handler_t		Q_H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
@@ -551,7 +551,7 @@ test_4_3 (cce_destination_t upper_L)
 
     {
       cce_location_t		inner_L[1];
-      cce_error_handler_t	P_H[1];
+      ccptn_error_handler_t	P_H[1];
 
       if (cce_location(inner_L)) {
 	cce_run_catch_handlers_raise(inner_L, L);
@@ -577,7 +577,7 @@ test_4_4 (cce_destination_t upper_L)
 {
   static char const * const	pathname = "/path/to/file.ext";
   cce_location_t		L[1];
-  cce_clean_handler_t		Q_H[1];
+  ccptn_clean_handler_t		Q_H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
@@ -586,7 +586,7 @@ test_4_4 (cce_destination_t upper_L)
 
     {
       cce_location_t		inner_L[1];
-      cce_error_handler_t	P_H[1];
+      ccptn_error_handler_t	P_H[1];
 
       if (cce_location(inner_L)) {
 	cce_run_catch_handlers_raise(inner_L, L);
@@ -613,7 +613,7 @@ test_4_5 (cce_destination_t upper_L)
   static char const *		input_pathname  = "/path//./to/mix/../file.ext";
   static char const *		normal_pathname = "/path/to/file.ext";
   cce_location_t		L[1];
-  cce_clean_handler_t		Q_H[1];
+  ccptn_clean_handler_t		Q_H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
@@ -622,7 +622,7 @@ test_4_5 (cce_destination_t upper_L)
 
     {
       cce_location_t		inner_L[1];
-      cce_error_handler_t	P_H[1];
+      ccptn_error_handler_t	P_H[1];
 
       if (cce_location(inner_L)) {
 	cce_run_catch_handlers_raise(inner_L, L);
@@ -653,7 +653,7 @@ test_4_6 (cce_destination_t upper_L)
   static char const *		input_pathname  = "/path//./to/mix/../file.ext";
   static char const *		normal_pathname = "/path/to/file.ext";
   cce_location_t		L[1];
-  cce_clean_handler_t		Q_H[1];
+  ccptn_clean_handler_t		Q_H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
@@ -662,7 +662,7 @@ test_4_6 (cce_destination_t upper_L)
 
     {
       cce_location_t		inner_L[1];
-      cce_error_handler_t	P_H[1];
+      ccptn_error_handler_t	P_H[1];
 
       if (cce_location(inner_L)) {
 	cce_run_catch_handlers_raise(inner_L, L);
