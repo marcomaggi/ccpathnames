@@ -1242,7 +1242,7 @@ the clean handler @var{H}.
 @subsubheading Generic guarded constructors
 
 
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_nodup_asciiz_guarded (cce_destination_t @var{L}, ccptn_t * P, @var{H}, char const * @var{pathname})
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_nodup_asciiz_guarded (cce_destination_t @var{L}, ccptn_t * @var{P}, @var{H}, char const * @var{pathname})
 This macro uses @code{_Generic} to dispatch the expansion according to the type of @var{H}; if the
 type is a pointer to:
 
@@ -1256,7 +1256,7 @@ The macro expands into a call to @cfunc{ccptn_init_nodup_asciiz_guarded_error}.
 @end deftypefn
 
 
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_dup_asciiz_guarded (cce_destination_t @var{L}, ccptn_t * P, @var{H}, char const * @var{pathname})
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_dup_asciiz_guarded (cce_destination_t @var{L}, ccptn_t * @var{P}, @var{H}, char const * @var{pathname})
 This macro uses @code{_Generic} to dispatch the expansion according to the type of @var{H}; if the
 type is a pointer to:
 
@@ -1270,7 +1270,7 @@ The macro expands into a call to @cfunc{ccptn_init_dup_asciiz_guarded_error}.
 @end deftypefn
 
 
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_normal_asciiz_guarded (cce_destination_t @var{L}, ccptn_t * P, @var{H}, char const * @var{pathname})
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_normal_asciiz_guarded (cce_destination_t @var{L}, ccptn_t * @var{P}, @var{H}, char const * @var{pathname})
 This macro uses @code{_Generic} to dispatch the expansion according to the type of @var{H}; if the
 type is a pointer to:
 
