@@ -106,7 +106,7 @@ TEST_EXTENSION(test_1_10, "/",				"")
   FUNCNAME (cce_destination_t upper_L)					\
   {									\
     cce_location_t		L[1];					\
-    cce_clean_handler_t	P_H[1], Q_H[1], R_H[1];			\
+    cce_clean_handler_t		P_H[1], Q_H[1], R_H[1];			\
 									\
     if (cce_location(L)) {						\
       fprintf(stderr, "%s: exception: %s\n", __func__,			\

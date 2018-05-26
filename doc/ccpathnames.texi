@@ -802,7 +802,7 @@ As usage example see the following code:
 cce_location_t        L[1];
 
 if (cce_location(L)) @{
-  cce_run_error_handlers_final(L);
+  cce_run_catch_handlers_final(L);
 @} else @{
   char const *  pathname = "/path/to/file.ext";
   ccptn_t *     P;
@@ -810,7 +810,7 @@ if (cce_location(L)) @{
   P = ccptn_new_nodup_asciiz(L, pathname);
   printf("%s\n", ccptn_asciiz(P));
   ccptn_delete(P);
-  cce_run_cleanup_handlers(L);
+  cce_run_body_handlers(L);
 @}
 @end example
 @end deftypefun
@@ -831,7 +831,7 @@ As usage example see the following code:
 cce_location_t        L[1];
 
 if (cce_location(L)) @{
-  cce_run_error_handlers_final(L);
+  cce_run_catch_handlers_final(L);
 @} else @{
   char const *  pathname = "/path/to/file.ext";
   ccptn_t *     P;
@@ -840,7 +840,7 @@ if (cce_location(L)) @{
   printf("%s\n", ccptn_asciiz(P));
   ccptn_delete(P);
 
-  cce_run_cleanup_handlers(L);
+  cce_run_body_handlers(L);
 @}
 @end example
 @end deftypefun
@@ -861,7 +861,7 @@ As usage example see the following code:
 cce_location_t        L[1];
 
 if (cce_location(L)) @{
-  cce_run_error_handlers_final(L);
+  cce_run_catch_handlers_final(L);
 @} else @{
   char const *  pathname = "/path/to/file.ext";
   ccptn_t *     P;
@@ -872,7 +872,7 @@ if (cce_location(L)) @{
   @}
   ccptn_delete(P);
 
-  cce_run_cleanup_handlers(L);
+  cce_run_body_handlers(L);
 @}
 @end example
 @end deftypefun
@@ -893,7 +893,7 @@ As usage example see the following code:
 cce_location_t        L[1];
 
 if (cce_location(L)) @{
-  cce_run_error_handlers_final(L);
+  cce_run_catch_handlers_final(L);
 @} else @{
   char const *  pathname = "/path/to/file.ext";
   ccptn_t       P[1];
@@ -902,7 +902,7 @@ if (cce_location(L)) @{
   printf("%s\n", ccptn_asciiz(P));
   ccptn_delete(P);
 
-  cce_run_cleanup_handlers(L);
+  cce_run_body_handlers(L);
 @}
 @end example
 @end deftypefun
@@ -923,7 +923,7 @@ As usage example see the following code:
 cce_location_t        L[1];
 
 if (cce_location(L)) @{
-  cce_run_error_handlers_final(L);
+  cce_run_catch_handlers_final(L);
 @} else @{
   char const *  pathname = "/path/to/file.ext";
   ccptn_t       P[1];
@@ -932,7 +932,7 @@ if (cce_location(L)) @{
   printf("%s\n", ccptn_asciiz(P));
   ccptn_delete(P);
 
-  cce_run_cleanup_handlers(L);
+  cce_run_body_handlers(L);
 @}
 @end example
 @end deftypefun
@@ -953,7 +953,7 @@ As usage example see the following code:
 cce_location_t        L[1];
 
 if (cce_location(L)) @{
-  cce_run_error_handlers_final(L);
+  cce_run_catch_handlers_final(L);
 @} else @{
   char const *  pathname = "/path/to/file.ext";
   ccptn_t       P[1];
@@ -964,7 +964,7 @@ if (cce_location(L)) @{
   @}
   ccptn_delete(P);
 
-  cce_run_cleanup_handlers(L);
+  cce_run_body_handlers(L);
 @}
 @end example
 @end deftypefun
@@ -989,7 +989,7 @@ As usage example see the following code:
 cce_location_t        L[1];
 
 if (cce_location(L)) @{
-  cce_run_error_handlers_final(L);
+  cce_run_catch_handlers_final(L);
 @} else @{
   char const *  pathname = "/path/to/file.ext";
   ccptn_t *     P;
@@ -998,7 +998,7 @@ if (cce_location(L)) @{
   printf("%s\n", ccptn_asciiz(P));
   ccptn_delete(P);
 
-  cce_run_cleanup_handlers(L);
+  cce_run_body_handlers(L);
 @}
 @end example
 @end deftypefun
@@ -1019,7 +1019,7 @@ As usage example see the following code:
 cce_location_t        L[1];
 
 if (cce_location(L)) @{
-  cce_run_error_handlers_final(L);
+  cce_run_catch_handlers_final(L);
 @} else @{
   char const *  pathname = "/path/to/file.ext";
   ccptn_t *     P;
@@ -1028,7 +1028,7 @@ if (cce_location(L)) @{
   printf("%s\n", ccptn_asciiz(P));
   ccptn_delete(P);
 
-  cce_run_cleanup_handlers(L);
+  cce_run_body_handlers(L);
 @}
 @end example
 @end deftypefun
@@ -1049,7 +1049,7 @@ As usage example see the following code:
 cce_location_t        L[1];
 
 if (cce_location(L)) @{
-  cce_run_error_handlers_final(L);
+  cce_run_catch_handlers_final(L);
 @} else @{
   char const *  pathname = "/path/to/file.ext";
   ccptn_t       P[1];
@@ -1058,7 +1058,7 @@ if (cce_location(L)) @{
   printf("%s\n", ccptn_asciiz(P));
   ccptn_delete(P);
 
-  cce_run_cleanup_handlers(L);
+  cce_run_body_handlers(L);
 @}
 @end example
 @end deftypefun
@@ -1079,7 +1079,7 @@ As usage example see the following code:
 cce_location_t        L[1];
 
 if (cce_location(L)) @{
-  cce_run_error_handlers_final(L);
+  cce_run_catch_handlers_final(L);
 @} else @{
   char const *  pathname = "/path/to/file.ext";
   ccptn_t       P[1];
@@ -1088,7 +1088,7 @@ if (cce_location(L)) @{
   printf("%s\n", ccptn_asciiz(P));
   ccptn_delete(P);
 
-  cce_run_cleanup_handlers(L);
+  cce_run_body_handlers(L);
 @}
 @end example
 @end deftypefun
@@ -1111,22 +1111,22 @@ Release all the resources associated to the referenced instance of @objtype{ccpt
 use exception handlers to release @objtype{ccptn_t} instances upon exiting a local context.
 
 
-@deftypefun void ccptn_cleanup_handler_ptn_init (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t * @var{P})
+@deftypefun void ccptn_clean_handler_ptn_init (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t * @var{P})
 @deftypefunx void ccptn_error_handler_ptn_init (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t * @var{P})
-Register @var{H} as cleanup or error handler in the context of @var{L}.  The handler function will
+Register @var{H} as clean or error handler in the context of @var{L}.  The handler function will
 finalise the pathname referenced by @var{P}.  If an error occurs while configuring the handler: an
 exception is raised by performing a non--local exit to @var{L}.
 @end deftypefun
 
 
-@deftypefn {Preprocessor Macro} void ccptn_handler_ptn_init (cce_destination_t @var{L}, cce_cleanup_handler_t * @var{H}, ccptn_t * @var{P})
+@deftypefn {Preprocessor Macro} void ccptn_handler_ptn_init (cce_destination_t @var{L}, cce_clean_handler_t * @var{H}, ccptn_t * @var{P})
 @deftypefnx {Preprocessor Macro} void ccptn_handler_ptn_init (cce_destination_t @var{L}, cce_error_handler_t * @var{H}, ccptn_t * @var{P})
 This preprocessor macro uses @code{_Generic} to dispatch the call according to the type of the
 pointer @var{H}; if the type is:
 
 @table @code
-@item cce_cleanup_handler_t
-The macro expands into a call to @cfunc{ccptn_cleanup_handler_ptn_init}.
+@item cce_clean_handler_t
+The macro expands into a call to @cfunc{ccptn_clean_handler_ptn_init}.
 
 @item cce_error_handler_t
 The macro expands into a call to @cfunc{ccptn_error_handler_ptn_init}.
@@ -1138,10 +1138,10 @@ As usage example of the exception handler, see the following code:
 
 @example
 cce_location_t        L[1];
-cce_cleanup_handler_t P_H[1];
+cce_clean_handler_t P_H[1];
 
 if (cce_location(L)) @{
-  cce_run_error_handlers_final(L);
+  cce_run_catch_handlers_final(L);
 @} else @{
   char const *  pathname = "/path/to/file.ext";
   ccptn_t *     P;
@@ -1150,7 +1150,7 @@ if (cce_location(L)) @{
   ccptn_handler_ptn_init(L, P_H, P);
 
   printf("%s\n", ccptn_asciiz(P));
-  cce_run_cleanup_handlers(L);
+  cce_run_body_handlers(L);
 @}
 @end example
 
@@ -1162,79 +1162,79 @@ if (cce_location(L)) @{
 @subsubheading Constructors with error handlers
 
 
-@deftypefun {ccptn_t *} ccptn_init_nodup_asciiz_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{P}, cce_handler_t * @var{H}, char const * @var{pathname})
+@deftypefun {ccptn_t *} ccptn_init_nodup_asciiz_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{P}, cce_error_handler_t * @var{H}, char const * @var{pathname})
 Like @cfunc{ccptn_init_nodup_asciiz}, but register the resulting @objtype{ccptn_t} to be released by
 the error handler @var{H}.
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_init_dup_asciiz_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{P}, cce_handler_t * @var{H}, char const * @var{pathname})
+@deftypefun {ccptn_t *} ccptn_init_dup_asciiz_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{P}, cce_error_handler_t * @var{H}, char const * @var{pathname})
 Like @cfunc{ccptn_init_dup_asciiz}, but register the resulting @objtype{ccptn_t} to be released by
 the error handler @var{H}.
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_init_normal_asciiz_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{P}, cce_handler_t * @var{H}, char const * @var{pathname})
+@deftypefun {ccptn_t *} ccptn_init_normal_asciiz_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{P}, cce_error_handler_t * @var{H}, char const * @var{pathname})
 Like @cfunc{ccptn_init_normal_asciiz}, but register the resulting @objtype{ccptn_t} to be released
 by the error handler @var{H}.
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_new_nodup_asciiz_guarded_error (cce_destination_t @var{L}, cce_handler_t * @var{H}, char const * @var{pathname})
+@deftypefun {ccptn_t *} ccptn_new_nodup_asciiz_guarded_error (cce_destination_t @var{L}, cce_error_handler_t * @var{H}, char const * @var{pathname})
 Like @cfunc{ccptn_new_nodup_asciiz}, but register the resulting @objtype{ccptn_t} to be released by
 the error handler @var{H}.
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_new_dup_asciiz_guarded_error (cce_destination_t @var{L}, cce_handler_t * @var{H}, char const * @var{pathname})
+@deftypefun {ccptn_t *} ccptn_new_dup_asciiz_guarded_error (cce_destination_t @var{L}, cce_error_handler_t * @var{H}, char const * @var{pathname})
 Like @cfunc{ccptn_new_dup_asciiz}, but register the resulting @objtype{ccptn_t} to be released by
 the error handler @var{H}.
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_new_normal_asciiz_guarded_error (cce_destination_t @var{L}, cce_handler_t * @var{H}, char const * @var{pathname})
+@deftypefun {ccptn_t *} ccptn_new_normal_asciiz_guarded_error (cce_destination_t @var{L}, cce_error_handler_t * @var{H}, char const * @var{pathname})
 Like @cfunc{ccptn_new_normal_asciiz}, but register the resulting @objtype{ccptn_t} to be released by
 the error handler @var{H}.
 @end deftypefun
 
 @c ------------------------------------------------------------------------
 
-@subsubheading Constructors with cleanup handlers
+@subsubheading Constructors with clean handlers
 
 
-@deftypefun {ccptn_t *} ccptn_init_nodup_asciiz_guarded_cleanup (cce_destination_t @var{L}, ccptn_t * @var{P}, cce_handler_t * @var{H}, char const * @var{pathname})
+@deftypefun {ccptn_t *} ccptn_init_nodup_asciiz_guarded_clean (cce_destination_t @var{L}, ccptn_t * @var{P}, cce_clean_handler_t * @var{H}, char const * @var{pathname})
 Like @cfunc{ccptn_init_nodup_asciiz}, but register the resulting @objtype{ccptn_t} to be released by
-the cleanup handler @var{H}.
+the clean handler @var{H}.
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_init_dup_asciiz_guarded_cleanup (cce_destination_t @var{L}, ccptn_t * @var{P}, cce_handler_t * @var{H}, char const * @var{pathname})
+@deftypefun {ccptn_t *} ccptn_init_dup_asciiz_guarded_clean (cce_destination_t @var{L}, ccptn_t * @var{P}, cce_clean_handler_t * @var{H}, char const * @var{pathname})
 Like @cfunc{ccptn_init_dup_asciiz}, but register the resulting @objtype{ccptn_t} to be released by
-the cleanup handler @var{H}.
+the clean handler @var{H}.
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_init_normal_asciiz_guarded_cleanup (cce_destination_t @var{L}, ccptn_t * @var{P}, cce_handler_t * @var{H}, char const * @var{pathname})
+@deftypefun {ccptn_t *} ccptn_init_normal_asciiz_guarded_clean (cce_destination_t @var{L}, ccptn_t * @var{P}, cce_clean_handler_t * @var{H}, char const * @var{pathname})
 Like @cfunc{ccptn_init_normal_asciiz}, but register the resulting @objtype{ccptn_t} to be released
-by the cleanup handler @var{H}.
+by the clean handler @var{H}.
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_new_nodup_asciiz_guarded_cleanup (cce_destination_t @var{L}, cce_handler_t * @var{H}, char const * @var{pathname})
+@deftypefun {ccptn_t *} ccptn_new_nodup_asciiz_guarded_clean (cce_destination_t @var{L}, cce_clean_handler_t * @var{H}, char const * @var{pathname})
 Like @cfunc{ccptn_new_nodup_asciiz}, but register the resulting @objtype{ccptn_t} to be released by
-the cleanup handler @var{H}.
+the clean handler @var{H}.
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_new_dup_asciiz_guarded_cleanup (cce_destination_t @var{L}, cce_handler_t * @var{H}, char const * @var{pathname})
+@deftypefun {ccptn_t *} ccptn_new_dup_asciiz_guarded_clean (cce_destination_t @var{L}, cce_clean_handler_t * @var{H}, char const * @var{pathname})
 Like @cfunc{ccptn_new_dup_asciiz}, but register the resulting @objtype{ccptn_t} to be released by
-the cleanup handler @var{H}.
+the clean handler @var{H}.
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_new_normal_asciiz_guarded_cleanup (cce_destination_t @var{L}, cce_handler_t * @var{H}, char const * @var{pathname})
+@deftypefun {ccptn_t *} ccptn_new_normal_asciiz_guarded_clean (cce_destination_t @var{L}, cce_clean_handler_t * @var{H}, char const * @var{pathname})
 Like @cfunc{ccptn_new_normal_asciiz}, but register the resulting @objtype{ccptn_t} to be released by
-the cleanup handler @var{H}.
+the clean handler @var{H}.
 @end deftypefun
 
 @c ------------------------------------------------------------------------
@@ -1242,13 +1242,13 @@ the cleanup handler @var{H}.
 @subsubheading Generic guarded constructors
 
 
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_nodup_asciiz_guarded (cce_destination_t @var{L}, ccptn_t * P, cce_handler_t * @var{H}, char const * @var{pathname})
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_nodup_asciiz_guarded (cce_destination_t @var{L}, ccptn_t * P, @var{H}, char const * @var{pathname})
 This macro uses @code{_Generic} to dispatch the expansion according to the type of @var{H}; if the
 type is a pointer to:
 
 @table @code
-@item cce_cleanup_handler_t
-The macro expands into a call to @cfunc{ccptn_init_nodup_asciiz_guarded_cleanup}.
+@item cce_clean_handler_t
+The macro expands into a call to @cfunc{ccptn_init_nodup_asciiz_guarded_clean}.
 
 @item cce_error_handler_t
 The macro expands into a call to @cfunc{ccptn_init_nodup_asciiz_guarded_error}.
@@ -1256,13 +1256,13 @@ The macro expands into a call to @cfunc{ccptn_init_nodup_asciiz_guarded_error}.
 @end deftypefn
 
 
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_dup_asciiz_guarded (cce_destination_t @var{L}, ccptn_t * P, cce_handler_t * @var{H}, char const * @var{pathname})
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_dup_asciiz_guarded (cce_destination_t @var{L}, ccptn_t * P, @var{H}, char const * @var{pathname})
 This macro uses @code{_Generic} to dispatch the expansion according to the type of @var{H}; if the
 type is a pointer to:
 
 @table @code
-@item cce_cleanup_handler_t
-The macro expands into a call to @cfunc{ccptn_init_dup_asciiz_guarded_cleanup}.
+@item cce_clean_handler_t
+The macro expands into a call to @cfunc{ccptn_init_dup_asciiz_guarded_clean}.
 
 @item cce_error_handler_t
 The macro expands into a call to @cfunc{ccptn_init_dup_asciiz_guarded_error}.
@@ -1270,13 +1270,13 @@ The macro expands into a call to @cfunc{ccptn_init_dup_asciiz_guarded_error}.
 @end deftypefn
 
 
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_normal_asciiz_guarded (cce_destination_t @var{L}, ccptn_t * P, cce_handler_t * @var{H}, char const * @var{pathname})
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_normal_asciiz_guarded (cce_destination_t @var{L}, ccptn_t * P, @var{H}, char const * @var{pathname})
 This macro uses @code{_Generic} to dispatch the expansion according to the type of @var{H}; if the
 type is a pointer to:
 
 @table @code
-@item cce_cleanup_handler_t
-The macro expands into a call to @cfunc{ccptn_init_normal_asciiz_guarded_cleanup}.
+@item cce_clean_handler_t
+The macro expands into a call to @cfunc{ccptn_init_normal_asciiz_guarded_clean}.
 
 @item cce_error_handler_t
 The macro expands into a call to @cfunc{ccptn_init_normal_asciiz_guarded_error}.
@@ -1284,13 +1284,13 @@ The macro expands into a call to @cfunc{ccptn_init_normal_asciiz_guarded_error}.
 @end deftypefn
 
 
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_nodup_asciiz_guarded (cce_destination_t @var{L}, cce_handler_t * @var{H}, char const * @var{pathname})
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_nodup_asciiz_guarded (cce_destination_t @var{L}, @var{H}, char const * @var{pathname})
 This macro uses @code{_Generic} to dispatch the expansion according to the type of @var{H}; if the
 type is a pointer to:
 
 @table @code
-@item cce_cleanup_handler_t
-The macro expands into a call to @cfunc{ccptn_new_nodup_asciiz_guarded_cleanup}.
+@item cce_clean_handler_t
+The macro expands into a call to @cfunc{ccptn_new_nodup_asciiz_guarded_clean}.
 
 @item cce_error_handler_t
 The macro expands into a call to @cfunc{ccptn_new_nodup_asciiz_guarded_error}.
@@ -1298,13 +1298,13 @@ The macro expands into a call to @cfunc{ccptn_new_nodup_asciiz_guarded_error}.
 @end deftypefn
 
 
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_dup_asciiz_guarded (cce_destination_t @var{L}, cce_handler_t * @var{H}, char const * @var{pathname})
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_dup_asciiz_guarded (cce_destination_t @var{L}, @var{H}, char const * @var{pathname})
 This macro uses @code{_Generic} to dispatch the expansion according to the type of @var{H}; if the
 type is a pointer to:
 
 @table @code
-@item cce_cleanup_handler_t
-The macro expands into a call to @cfunc{ccptn_new_dup_asciiz_guarded_cleanup}.
+@item cce_clean_handler_t
+The macro expands into a call to @cfunc{ccptn_new_dup_asciiz_guarded_clean}.
 
 @item cce_error_handler_t
 The macro expands into a call to @cfunc{ccptn_new_dup_asciiz_guarded_error}.
@@ -1312,13 +1312,13 @@ The macro expands into a call to @cfunc{ccptn_new_dup_asciiz_guarded_error}.
 @end deftypefn
 
 
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_normal_asciiz_guarded (cce_destination_t @var{L}, cce_handler_t * @var{H}, char const * @var{pathname})
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_normal_asciiz_guarded (cce_destination_t @var{L}, @var{H}, char const * @var{pathname})
 This macro uses @code{_Generic} to dispatch the expansion according to the type of @var{H}; if the
 type is a pointer to:
 
 @table @code
-@item cce_cleanup_handler_t
-The macro expands into a call to @cfunc{ccptn_new_normal_asciiz_guarded_cleanup}.
+@item cce_clean_handler_t
+The macro expands into a call to @cfunc{ccptn_new_normal_asciiz_guarded_clean}.
 
 @item cce_error_handler_t
 The macro expands into a call to @cfunc{ccptn_new_normal_asciiz_guarded_error}.
@@ -1395,10 +1395,10 @@ As usage example, see the following code.
 
 @example
 cce_location_t          L[1];
-cce_cleanup_handler_t   P_H[1], Q_H[1];
+cce_clean_handler_t   P_H[1], Q_H[1];
 
 if (cce_location(L)) @{
-  cce_run_error_handlers_final(L);
+  cce_run_catch_handlers_final(L);
 @} else @{
   char const *  pathname = "/path/to/file.ext";
   ccptn_t       *P, *Q;
@@ -1411,7 +1411,7 @@ if (cce_location(L)) @{
 
   /* do something with Q */
 
-  cce_run_cleanup_handlers(L);
+  cce_run_body_handlers(L);
 @}
 @end example
 @end deftypefun
@@ -1429,10 +1429,10 @@ As usage example, see the following code.
 
 @example
 cce_location_t          L[1];
-cce_cleanup_handler_t   P_H[1], Q_H[1];
+cce_clean_handler_t   P_H[1], Q_H[1];
 
 if (cce_location(L)) @{
-  cce_run_error_handlers_final(L);
+  cce_run_catch_handlers_final(L);
 @} else @{
   char const *  pathname = "/path/to/file.ext";
   ccptn_t       *P, R[1];
@@ -1445,7 +1445,7 @@ if (cce_location(L)) @{
 
   /* do something with R */
 
-  cce_run_cleanup_handlers(L);
+  cce_run_body_handlers(L);
 @}
 @end example
 @end deftypefun
@@ -1455,31 +1455,31 @@ if (cce_location(L)) @{
 @subsubheading Guarded pathnames with error handlers
 
 
-@deftypefun {ccptn_t *} ccptn_new_realpath_guarded_error (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_new_realpath_guarded_error (cce_destination_t @var{L}, cce_error_handler_t * @var{H}, ccptn_t const * @var{P})
 Like @cfunc{ccptn_new_realpath}, but register the resulting instance of @objtype{ccptn_t} for
 finalisation in the error handler @var{H}.
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_init_realpath_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_init_realpath_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_error_handler_t * @var{H}, ccptn_t const * @var{P})
 Like @cfunc{ccptn_init_realpath}, but register the resulting instance of @objtype{ccptn_t} for
 finalisation in the error handler @var{H}.
 @end deftypefun
 
 @c ------------------------------------------------------------------------
 
-@subsubheading Guarded pathnames with cleanup handlers
+@subsubheading Guarded pathnames with clean handlers
 
 
-@deftypefun {ccptn_t *} ccptn_new_realpath_guarded_cleanup (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_new_realpath_guarded_clean (cce_destination_t @var{L}, cce_clean_handler_t * @var{H}, ccptn_t const * @var{P})
 Like @cfunc{ccptn_new_realpath}, but register the resulting instance of @objtype{ccptn_t} for
-finalisation in the cleanup handler @var{H}.
+finalisation in the clean handler @var{H}.
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_init_realpath_guarded_cleanup (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_init_realpath_guarded_clean (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_clean_handler_t * @var{H}, ccptn_t const * @var{P})
 Like @cfunc{ccptn_init_realpath}, but register the resulting instance of @objtype{ccptn_t} for
-finalisation in the cleanup handler @var{H}.
+finalisation in the clean handler @var{H}.
 @end deftypefun
 
 @c ------------------------------------------------------------------------
@@ -1487,13 +1487,13 @@ finalisation in the cleanup handler @var{H}.
 @subsubheading Generic preprocessor macros
 
 
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_realpath_guarded (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_realpath_guarded (cce_destination_t @var{L}, @var{H}, ccptn_t const * @var{P})
 This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
 type is a pointer to:
 
 @table @code
-@item cce_cleanup_handler_t
-The macro expands into a call to @cfunc{ccptn_new_realpath_guarded_cleanup}.
+@item cce_clean_handler_t
+The macro expands into a call to @cfunc{ccptn_new_realpath_guarded_clean}.
 
 @item cce_error_handler_t
 The macro expands into a call to @cfunc{ccptn_new_realpath_guarded_error}.
@@ -1501,13 +1501,13 @@ The macro expands into a call to @cfunc{ccptn_new_realpath_guarded_error}.
 @end deftypefn
 
 
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_realpath_guarded (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_realpath_guarded (cce_destination_t @var{L}, ccptn_t * @var{R}, @var{H}, ccptn_t const * @var{P})
 This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
 type is a pointer to:
 
 @table @code
-@item cce_cleanup_handler_t
-The macro expands into a call to @cfunc{ccptn_init_realpath_guarded_cleanup}.
+@item cce_clean_handler_t
+The macro expands into a call to @cfunc{ccptn_init_realpath_guarded_clean}.
 
 @item cce_error_handler_t
 The macro expands into a call to @cfunc{ccptn_init_realpath_guarded_error}.
@@ -1623,31 +1623,31 @@ pathname: raise an exception by performing a non--local exit to @var{L}.
 @subsubheading Guarded pathnames with error handlers
 
 
-@deftypefun {ccptn_t *} ccptn_new_normalise_guarded_error (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_new_normalise_guarded_error (cce_destination_t @var{L}, cce_error_handler_t * @var{H}, ccptn_t const * @var{P})
 Like @cfunc{ccptn_new_normalise}, but register the resulting instance of @objtype{ccptn_t} for
 finalisation in the error handler @var{H}.
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_init_normalise_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_init_normalise_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_error_handler_t * @var{H}, ccptn_t const * @var{P})
 Like @cfunc{ccptn_init_normalise}, but register the resulting instance of @objtype{ccptn_t} for
 finalisation in the error handler @var{H}.
 @end deftypefun
 
 @c ------------------------------------------------------------------------
 
-@subsubheading Guarded pathnames with cleanup handlers
+@subsubheading Guarded pathnames with clean handlers
 
 
-@deftypefun {ccptn_t *} ccptn_new_normalise_guarded_cleanup (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_new_normalise_guarded_clean (cce_destination_t @var{L}, cce_clean_handler_t * @var{H}, ccptn_t const * @var{P})
 Like @cfunc{ccptn_new_normalise}, but register the resulting instance of @objtype{ccptn_t} for
-finalisation in the cleanup handler @var{H}.
+finalisation in the clean handler @var{H}.
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_init_normalise_guarded_cleanup (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_init_normalise_guarded_clean (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_clean_handler_t * @var{H}, ccptn_t const * @var{P})
 Like @cfunc{ccptn_init_normalise}, but register the resulting instance of @objtype{ccptn_t} for
-finalisation in the cleanup handler @var{H}.
+finalisation in the clean handler @var{H}.
 @end deftypefun
 
 @c ------------------------------------------------------------------------
@@ -1655,13 +1655,13 @@ finalisation in the cleanup handler @var{H}.
 @subsubheading Generic preprocessor macros
 
 
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_normalise_guarded (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_normalise_guarded (cce_destination_t @var{L}, @var{H}, ccptn_t const * @var{P})
 This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
 type is a pointer to:
 
 @table @code
-@item cce_cleanup_handler_t
-The macro expands into a call to @cfunc{ccptn_new_normalise_guarded_cleanup}.
+@item cce_clean_handler_t
+The macro expands into a call to @cfunc{ccptn_new_normalise_guarded_clean}.
 
 @item cce_error_handler_t
 The macro expands into a call to @cfunc{ccptn_new_normalise_guarded_error}.
@@ -1669,13 +1669,13 @@ The macro expands into a call to @cfunc{ccptn_new_normalise_guarded_error}.
 @end deftypefn
 
 
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_normalise_guarded (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_normalise_guarded (cce_destination_t @var{L}, ccptn_t * @var{R}, @var{H}, ccptn_t const * @var{P})
 This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
 type is a pointer to:
 
 @table @code
-@item cce_cleanup_handler_t
-The macro expands into a call to @cfunc{ccptn_init_normalise_guarded_cleanup}.
+@item cce_clean_handler_t
+The macro expands into a call to @cfunc{ccptn_init_normalise_guarded_clean}.
 
 @item cce_error_handler_t
 The macro expands into a call to @cfunc{ccptn_init_normalise_guarded_error}.
@@ -1694,10 +1694,10 @@ non--local exit to to @var{L}.
 
 @example
 cce_location_t        L[1];
-cce_cleanup_handler_t P1_H[1], P2_H[1], R_H[1];
+cce_clean_handler_t P1_H[1], P2_H[1], R_H[1];
 
 if (cce_location(L)) @{
-  cce_run_error_handlers_final(L);
+  cce_run_catch_handlers_final(L);
 @} else @{
   char const * pathname_1 = "/path/to";
   char const * pathname_2 = "file.ext";
@@ -1708,7 +1708,7 @@ if (cce_location(L)) @{
   R  = ccptn_new_concat(L, P1, P2);
   ccptn_handler_ptn_init(L, R_H, R);
 
-  cce_run_cleanup_handlers(L);
+  cce_run_body_handlers(L);
 @}
 @end example
 @end deftypefun
@@ -1725,31 +1725,31 @@ itself.  If an error occurs: raise an exception by performing a non--local exit 
 @subsubheading Guarded pathnames with error handlers
 
 
-@deftypefun {ccptn_t *} ccptn_new_concat_guarded_error (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
+@deftypefun {ccptn_t *} ccptn_new_concat_guarded_error (cce_destination_t @var{L}, cce_error_handler_t * @var{H}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
 Like @cfunc{ccptn_new_concat}, but register the resulting instance of @objtype{ccptn_t} for
 finalisation in the error handler @var{H}.
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_init_concat_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
+@deftypefun {ccptn_t *} ccptn_init_concat_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_error_handler_t * @var{H}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
 Like @cfunc{ccptn_init_concat}, but register the resulting instance of @objtype{ccptn_t} for
 finalisation in the error handler @var{H}.
 @end deftypefun
 
 @c ------------------------------------------------------------------------
 
-@subsubheading Guarded pathnames with cleanup handlers
+@subsubheading Guarded pathnames with clean handlers
 
 
-@deftypefun {ccptn_t *} ccptn_new_concat_guarded_cleanup (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
+@deftypefun {ccptn_t *} ccptn_new_concat_guarded_clean (cce_destination_t @var{L}, cce_clean_handler_t * @var{H}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
 Like @cfunc{ccptn_new_concat}, but register the resulting instance of @objtype{ccptn_t} for
-finalisation in the cleanup handler @var{H}.
+finalisation in the clean handler @var{H}.
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_init_concat_guarded_cleanup (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
+@deftypefun {ccptn_t *} ccptn_init_concat_guarded_clean (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_clean_handler_t * @var{H}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
 Like @cfunc{ccptn_init_concat}, but register the resulting instance of @objtype{ccptn_t} for
-finalisation in the cleanup handler @var{H}.
+finalisation in the clean handler @var{H}.
 @end deftypefun
 
 @c ------------------------------------------------------------------------
@@ -1757,13 +1757,13 @@ finalisation in the cleanup handler @var{H}.
 @subsubheading Generic preprocessor macros
 
 
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_concat_guarded (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_concat_guarded (cce_destination_t @var{L}, @var{H}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
 This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
 type is a pointer to:
 
 @table @code
-@item cce_cleanup_handler_t
-The macro expands into a call to @cfunc{ccptn_new_concat_guarded_cleanup}.
+@item cce_clean_handler_t
+The macro expands into a call to @cfunc{ccptn_new_concat_guarded_clean}.
 
 @item cce_error_handler_t
 The macro expands into a call to @cfunc{ccptn_new_concat_guarded_error}.
@@ -1771,13 +1771,13 @@ The macro expands into a call to @cfunc{ccptn_new_concat_guarded_error}.
 @end deftypefn
 
 
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_concat_guarded (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_concat_guarded (cce_destination_t @var{L}, ccptn_t * @var{R}, @var{H}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
 This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
 type is a pointer to:
 
 @table @code
-@item cce_cleanup_handler_t
-The macro expands into a call to @cfunc{ccptn_init_concat_guarded_cleanup}.
+@item cce_clean_handler_t
+The macro expands into a call to @cfunc{ccptn_init_concat_guarded_clean}.
 
 @item cce_error_handler_t
 The macro expands into a call to @cfunc{ccptn_init_concat_guarded_error}.
@@ -1878,31 +1878,31 @@ performing a non--local exit to @var{L}.
 @subsubheading Guarded functions for error handlers
 
 
-@deftypefun {ccptn_t *} ccptn_new_rootname_guarded_error (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_new_rootname_guarded_error (cce_destination_t @var{L}, cce_error_handler_t * @var{H}, ccptn_t const * @var{P})
 Like @cfunc{ccptn_new_rootname}, but register the resulting instance of @objtype{ccptn_t} to be
 released by the error handler referenced by @var{H}.
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_init_rootname_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_init_rootname_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_error_handler_t * @var{H}, ccptn_t const * @var{P})
 Like @cfunc{ccptn_init_rootname}, but register the resulting instance of @objtype{ccptn_t} to be
 released by the error handler referenced by @var{H}.
 @end deftypefun
 
 @c ------------------------------------------------------------------------
 
-@subsubheading Guarded functions for cleanup handlers
+@subsubheading Guarded functions for clean handlers
 
 
-@deftypefun {ccptn_t *} ccptn_new_rootname_guarded_cleanup (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_new_rootname_guarded_clean (cce_destination_t @var{L}, cce_clean_handler_t * @var{H}, ccptn_t const * @var{P})
 Like @cfunc{ccptn_new_rootname}, but register the resulting instance of @objtype{ccptn_t} to be
-released by the cleanup handler referenced by @var{H}.
+released by the clean handler referenced by @var{H}.
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_init_rootname_guarded_cleanup (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_init_rootname_guarded_clean (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_clean_handler_t * @var{H}, ccptn_t const * @var{P})
 Like @cfunc{ccptn_init_rootname}, but register the resulting instance of @objtype{ccptn_t} to be
-released by the cleanup handler referenced by @var{H}.
+released by the clean handler referenced by @var{H}.
 @end deftypefun
 
 @c ------------------------------------------------------------------------
@@ -1910,13 +1910,13 @@ released by the cleanup handler referenced by @var{H}.
 @subsubheading Generic preprocessor macros
 
 
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_rootname_guarded (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_rootname_guarded (cce_destination_t @var{L}, @var{H}, ccptn_t const * @var{P})
 This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
 type is a pointer to:
 
 @table @code
-@item cce_cleanup_handler_t
-The macro expands into a call to @cfunc{ccptn_new_rootname_guarded_cleanup}.
+@item cce_clean_handler_t
+The macro expands into a call to @cfunc{ccptn_new_rootname_guarded_clean}.
 
 @item cce_error_handler_t
 The macro expands into a call to @cfunc{ccptn_new_rootname_guarded_error}.
@@ -1924,13 +1924,13 @@ The macro expands into a call to @cfunc{ccptn_new_rootname_guarded_error}.
 @end deftypefn
 
 
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_rootname_guarded (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_rootname_guarded (cce_destination_t @var{L}, ccptn_t * @var{R}, @var{H}, ccptn_t const * @var{P})
 This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
 type is a pointer to:
 
 @table @code
-@item cce_cleanup_handler_t
-The macro expands into a call to @cfunc{ccptn_init_rootname_guarded_cleanup}.
+@item cce_clean_handler_t
+The macro expands into a call to @cfunc{ccptn_init_rootname_guarded_clean}.
 
 @item cce_error_handler_t
 The macro expands into a call to @cfunc{ccptn_init_rootname_guarded_error}.
@@ -1980,31 +1980,31 @@ performing a non--local exit to @var{L}.
 @subsubheading Guarded functions for error handlers
 
 
-@deftypefun {ccptn_t *} ccptn_new_dirname_guarded_error (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_new_dirname_guarded_error (cce_destination_t @var{L}, cce_error_handler_t * @var{H}, ccptn_t const * @var{P})
 Like @cfunc{ccptn_new_dirname}, but register the resulting instance of @objtype{ccptn_t} to be
 released by the error handler referenced by @var{H}.
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_init_dirname_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_init_dirname_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_error_handler_t * @var{H}, ccptn_t const * @var{P})
 Like @cfunc{ccptn_init_dirname}, but register the resulting instance of @objtype{ccptn_t} to be
 released by the error handler referenced by @var{H}.
 @end deftypefun
 
 @c ------------------------------------------------------------------------
 
-@subsubheading Guarded functions for cleanup handlers
+@subsubheading Guarded functions for clean handlers
 
 
-@deftypefun {ccptn_t *} ccptn_new_dirname_guarded_cleanup (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_new_dirname_guarded_clean (cce_destination_t @var{L}, cce_clean_handler_t * @var{H}, ccptn_t const * @var{P})
 Like @cfunc{ccptn_new_dirname}, but register the resulting instance of @objtype{ccptn_t} to be
-released by the cleanup handler referenced by @var{H}.
+released by the clean handler referenced by @var{H}.
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_init_dirname_guarded_cleanup (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_init_dirname_guarded_clean (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_clean_handler_t * @var{H}, ccptn_t const * @var{P})
 Like @cfunc{ccptn_init_dirname}, but register the resulting instance of @objtype{ccptn_t} to be
-released by the cleanup handler referenced by @var{H}.
+released by the clean handler referenced by @var{H}.
 @end deftypefun
 
 @c ------------------------------------------------------------------------
@@ -2012,13 +2012,13 @@ released by the cleanup handler referenced by @var{H}.
 @subsubheading Generic preprocessor macros
 
 
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_dirname_guarded (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_dirname_guarded (cce_destination_t @var{L}, @var{H}, ccptn_t const * @var{P})
 This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
 type is a pointer to:
 
 @table @code
-@item cce_cleanup_handler_t
-The macro expands into a call to @cfunc{ccptn_new_dirname_guarded_cleanup}.
+@item cce_clean_handler_t
+The macro expands into a call to @cfunc{ccptn_new_dirname_guarded_clean}.
 
 @item cce_error_handler_t
 The macro expands into a call to @cfunc{ccptn_new_dirname_guarded_error}.
@@ -2026,13 +2026,13 @@ The macro expands into a call to @cfunc{ccptn_new_dirname_guarded_error}.
 @end deftypefn
 
 
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_dirname_guarded (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_dirname_guarded (cce_destination_t @var{L}, ccptn_t * @var{R}, @var{H}, ccptn_t const * @var{P})
 This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
 type is a pointer to:
 
 @table @code
-@item cce_cleanup_handler_t
-The macro expands into a call to @cfunc{ccptn_init_dirname_guarded_cleanup}.
+@item cce_clean_handler_t
+The macro expands into a call to @cfunc{ccptn_init_dirname_guarded_clean}.
 
 @item cce_error_handler_t
 The macro expands into a call to @cfunc{ccptn_init_dirname_guarded_error}.
@@ -2084,31 +2084,31 @@ performing a non--local exit to @var{L}.
 @subsubheading Guarded functions for error handlers
 
 
-@deftypefun {ccptn_t *} ccptn_new_tailname_guarded_error (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_new_tailname_guarded_error (cce_destination_t @var{L}, cce_error_handler_t * @var{H}, ccptn_t const * @var{P})
 Like @cfunc{ccptn_new_tailname}, but register the resulting instance of @objtype{ccptn_t} to be
 released by the error handler referenced by @var{H}.
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_init_tailname_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_init_tailname_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_error_handler_t * @var{H}, ccptn_t const * @var{P})
 Like @cfunc{ccptn_init_tailname}, but register the resulting instance of @objtype{ccptn_t} to be
 released by the error handler referenced by @var{H}.
 @end deftypefun
 
 @c ------------------------------------------------------------------------
 
-@subsubheading Guarded functions for cleanup handlers
+@subsubheading Guarded functions for clean handlers
 
 
-@deftypefun {ccptn_t *} ccptn_new_tailname_guarded_cleanup (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_new_tailname_guarded_clean (cce_destination_t @var{L}, cce_clean_handler_t * @var{H}, ccptn_t const * @var{P})
 Like @cfunc{ccptn_new_tailname}, but register the resulting instance of @objtype{ccptn_t} to be
-released by the cleanup handler referenced by @var{H}.
+released by the clean handler referenced by @var{H}.
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_init_tailname_guarded_cleanup (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_init_tailname_guarded_clean (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_clean_handler_t * @var{H}, ccptn_t const * @var{P})
 Like @cfunc{ccptn_init_tailname}, but register the resulting instance of @objtype{ccptn_t} to be
-released by the cleanup handler referenced by @var{H}.
+released by the clean handler referenced by @var{H}.
 @end deftypefun
 
 @c ------------------------------------------------------------------------
@@ -2116,13 +2116,13 @@ released by the cleanup handler referenced by @var{H}.
 @subsubheading Generic preprocessor macros
 
 
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_tailname_guarded (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_tailname_guarded (cce_destination_t @var{L}, @var{H}, ccptn_t const * @var{P})
 This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
 type is a pointer to:
 
 @table @code
-@item cce_cleanup_handler_t
-The macro expands into a call to @cfunc{ccptn_new_tailname_guarded_cleanup}.
+@item cce_clean_handler_t
+The macro expands into a call to @cfunc{ccptn_new_tailname_guarded_clean}.
 
 @item cce_error_handler_t
 The macro expands into a call to @cfunc{ccptn_new_tailname_guarded_error}.
@@ -2130,13 +2130,13 @@ The macro expands into a call to @cfunc{ccptn_new_tailname_guarded_error}.
 @end deftypefn
 
 
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_tailname_guarded (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_tailname_guarded (cce_destination_t @var{L}, ccptn_t * @var{R}, @var{H}, ccptn_t const * @var{P})
 This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
 type is a pointer to:
 
 @table @code
-@item cce_cleanup_handler_t
-The macro expands into a call to @cfunc{ccptn_init_tailname_guarded_cleanup}.
+@item cce_clean_handler_t
+The macro expands into a call to @cfunc{ccptn_init_tailname_guarded_clean}.
 
 @item cce_error_handler_t
 The macro expands into a call to @cfunc{ccptn_init_tailname_guarded_error}.
@@ -2186,31 +2186,31 @@ performing a non--local exit to @var{L}.
 @subsubheading Guarded functions for error handlers
 
 
-@deftypefun {ccptn_t *} ccptn_new_filename_guarded_error (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_new_filename_guarded_error (cce_destination_t @var{L}, cce_error_handler_t * @var{H}, ccptn_t const * @var{P})
 Like @cfunc{ccptn_new_filename}, but register the resulting instance of @objtype{ccptn_t} to be
 released by the error handler referenced by @var{H}.
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_init_filename_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_init_filename_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_error_handler_t * @var{H}, ccptn_t const * @var{P})
 Like @cfunc{ccptn_init_filename}, but register the resulting instance of @objtype{ccptn_t} to be
 released by the error handler referenced by @var{H}.
 @end deftypefun
 
 @c ------------------------------------------------------------------------
 
-@subsubheading Guarded functions for cleanup handlers
+@subsubheading Guarded functions for clean handlers
 
 
-@deftypefun {ccptn_t *} ccptn_new_filename_guarded_cleanup (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_new_filename_guarded_clean (cce_destination_t @var{L}, cce_clean_handler_t * @var{H}, ccptn_t const * @var{P})
 Like @cfunc{ccptn_new_filename}, but register the resulting instance of @objtype{ccptn_t} to be
-released by the cleanup handler referenced by @var{H}.
+released by the clean handler referenced by @var{H}.
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_init_filename_guarded_cleanup (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefun {ccptn_t *} ccptn_init_filename_guarded_clean (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_clean_handler_t * @var{H}, ccptn_t const * @var{P})
 Like @cfunc{ccptn_init_filename}, but register the resulting instance of @objtype{ccptn_t} to be
-released by the cleanup handler referenced by @var{H}.
+released by the clean handler referenced by @var{H}.
 @end deftypefun
 
 @c ------------------------------------------------------------------------
@@ -2218,13 +2218,13 @@ released by the cleanup handler referenced by @var{H}.
 @subsubheading Generic preprocessor macros
 
 
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_filename_guarded (cce_destination_t @var{L}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_filename_guarded (cce_destination_t @var{L}, @var{H}, ccptn_t const * @var{P})
 This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
 type is a pointer to:
 
 @table @code
-@item cce_cleanup_handler_t
-The macro expands into a call to @cfunc{ccptn_new_filename_guarded_cleanup}.
+@item cce_clean_handler_t
+The macro expands into a call to @cfunc{ccptn_new_filename_guarded_clean}.
 
 @item cce_error_handler_t
 The macro expands into a call to @cfunc{ccptn_new_filename_guarded_error}.
@@ -2232,13 +2232,13 @@ The macro expands into a call to @cfunc{ccptn_new_filename_guarded_error}.
 @end deftypefn
 
 
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_filename_guarded (cce_destination_t @var{L}, ccptn_t * @var{R}, cce_handler_t * @var{H}, ccptn_t const * @var{P})
+@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_filename_guarded (cce_destination_t @var{L}, ccptn_t * @var{R}, @var{H}, ccptn_t const * @var{P})
 This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
 type is a pointer to:
 
 @table @code
-@item cce_cleanup_handler_t
-The macro expands into a call to @cfunc{ccptn_init_filename_guarded_cleanup}.
+@item cce_clean_handler_t
+The macro expands into a call to @cfunc{ccptn_init_filename_guarded_clean}.
 
 @item cce_error_handler_t
 The macro expands into a call to @cfunc{ccptn_init_filename_guarded_error}.

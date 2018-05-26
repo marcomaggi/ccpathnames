@@ -16,6 +16,8 @@ Revision 0.2.0-devel.0
 
 * Renamed "ccptn_init()" to  "ccptn_library_init()".
 
+* Changed types of exception handlers for guarded constructors.
+
 
 Revision 0.1.0-beta.0
 ----------------------
