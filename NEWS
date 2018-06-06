@@ -18,6 +18,8 @@ Revision 0.2.0-devel.0
 
 * Changed types of exception handlers for guarded constructors.
 
+* Added missing C headers include.
+
 
 Revision 0.1.0-beta.0
 ----------------------

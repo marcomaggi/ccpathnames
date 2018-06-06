@@ -87,6 +87,7 @@ extern "C" {
 
 #include <ccexceptions.h>
 #include <ccmemory.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 
