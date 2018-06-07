@@ -83,7 +83,7 @@ ccptn_condition_new_invalid_pathname (void)
 bool
 ccptn_condition_is_invalid_pathname (cce_condition_t const * C)
 {
-  return cce_is_condition(C, &(ccptn_descriptor_invalid_pathname_ptr->descriptor));
+  return cce_condition_is(C, &(ccptn_descriptor_invalid_pathname_ptr->descriptor));
 }
 
 
@@ -137,7 +137,7 @@ ccptn_condition_new_exceeded_length (void)
 bool
 ccptn_condition_is_exceeded_length (cce_condition_t const * C)
 {
-  return cce_is_condition(C, &(ccptn_descriptor_exceeded_length_ptr->descriptor));
+  return cce_condition_is(C, &(ccptn_descriptor_exceeded_length_ptr->descriptor));
 }
 
 
@@ -191,7 +191,7 @@ ccptn_condition_new_zero_length (void)
 bool
 ccptn_condition_is_zero_length (cce_condition_t const * C)
 {
-  return cce_is_condition(C, &(ccptn_descriptor_zero_length_ptr->descriptor));
+  return cce_condition_is(C, &(ccptn_descriptor_zero_length_ptr->descriptor));
 }
 
 
@@ -245,7 +245,7 @@ ccptn_condition_new_invalid_length (void)
 bool
 ccptn_condition_is_invalid_length (cce_condition_t const * C)
 {
-  return cce_is_condition(C, &(ccptn_descriptor_invalid_length_ptr->descriptor));
+  return cce_condition_is(C, &(ccptn_descriptor_invalid_length_ptr->descriptor));
 }
 
 
@@ -299,7 +299,7 @@ ccptn_condition_new_normalised_pathname (void)
 bool
 ccptn_condition_is_normalised_pathname (cce_condition_t const * C)
 {
-  return cce_is_condition(C, &(ccptn_descriptor_normalised_pathname_ptr->descriptor));
+  return cce_condition_is(C, &(ccptn_descriptor_normalised_pathname_ptr->descriptor));
 }
 
 
@@ -353,7 +353,7 @@ ccptn_condition_new_no_dirname (void)
 bool
 ccptn_condition_is_no_dirname (cce_condition_t const * C)
 {
-  return cce_is_condition(C, &(ccptn_descriptor_no_dirname_ptr->descriptor));
+  return cce_condition_is(C, &(ccptn_descriptor_no_dirname_ptr->descriptor));
 }
 
 
@@ -407,7 +407,7 @@ ccptn_condition_new_no_filename (void)
 bool
 ccptn_condition_is_no_filename (cce_condition_t const * C)
 {
-  return cce_is_condition(C, &(ccptn_descriptor_no_filename_ptr->descriptor));
+  return cce_condition_is(C, &(ccptn_descriptor_no_filename_ptr->descriptor));
 }
 
 
@@ -461,7 +461,7 @@ ccptn_condition_new_no_tailname (void)
 bool
 ccptn_condition_is_no_tailname (cce_condition_t const * C)
 {
-  return cce_is_condition(C, &(ccptn_descriptor_no_tailname_ptr->descriptor));
+  return cce_condition_is(C, &(ccptn_descriptor_no_tailname_ptr->descriptor));
 }
 
 
@@ -515,7 +515,7 @@ ccptn_condition_new_no_rootname (void)
 bool
 ccptn_condition_is_no_rootname (cce_condition_t const * C)
 {
-  return cce_is_condition(C, &(ccptn_descriptor_no_rootname_ptr->descriptor));
+  return cce_condition_is(C, &(ccptn_descriptor_no_rootname_ptr->descriptor));
 }
 
 

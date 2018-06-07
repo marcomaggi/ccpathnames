@@ -21,7 +21,7 @@ sysconfdir=@sysconfdir@
 Name: @PACKAGE_NAME@
 Description: C11 library for Unix pathnames manipulation
 Version: @CCPATHNAMES_PKG_CONFIG_VERSION@
-Requires: ccexceptions >= 0.8.0, ccmemory >= 0.1
+Requires: ccexceptions >= 0.8.0, ccmemory >= 0.2.0
 Libs: -L${libdir} -lccpathnames
 Cflags: -I${includedir}
 

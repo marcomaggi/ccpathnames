@@ -115,7 +115,7 @@ ptn_realpath (cce_destination_t upper_L, ccptn_t * volatile R, ccptn_t const * c
     if (NULL == rv) {
       cce_raise(L, cce_condition_new_errno_clear());
     } else {
-      cce_handler_malloc_init(L, rv_H, (void *)rv);
+      cce_init_handler_malloc(L, rv_H, (void *)rv);
       {
 	size_t	len = strlen(rv);
 	if (CCPTN_PATH_MAX < len) {
