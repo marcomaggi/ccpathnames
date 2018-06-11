@@ -295,23 +295,23 @@ library is built with @gcc{}: it will be called automatically by the library ini
 @section Invalid pathname condition object
 
 
-The @dfn{invalid pathname exceptional--condition object} has the purpose of describing an
+The @dfn{invalid pathname exceptional--condition object--type} has the purpose of describing an
 exceptional condition caused by attempting to use an invalid pathname.
 
-There should be only one @emph{invalid pathname} condition object: the one predefined by
-@value{PACKAGE}.
+There should be only one @emph{invalid pathname} exceptional--condition object: the one predefined
+by @value{PACKAGE}.
 
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
 @deftp {Struct Typedef} ccptn_descriptor_invalid_pathname_t
-Structure type representing the descriptor for @emph{invalid pathname} condition objects.  This
-descriptor has @objtype{cce_descriptor_runtime_error_t} as parent descriptor.
+Structure type representing the descriptor for @emph{invalid pathname} exceptional--condition
+objects.  This descriptor has @objtype{cce_descriptor_runtime_error_t} as parent descriptor.
 @end deftp
 
 
 @deftp {Struct Typedef} ccptn_condition_invalid_pathname_t
-Structure type representing an @emph{invalid pathname} condition object.
+Structure type representing an @emph{invalid pathname} exceptional--condition object.
 @end deftp
 
 
@@ -323,13 +323,13 @@ Initialise an already allocated condition object.  This function exists to allow
 
 @deftypefun {cce_condition_t const *} ccptn_condition_new_invalid_pathname (void)
 Return a pointer to the statically allocated structure representing the single @emph{invalid
-pathname} condition object.
+pathname} exceptional--condition object.
 @end deftypefun
 
 
 @deftypefun bool ccptn_condition_is_invalid_pathname (cce_condition_t const * @var{C})
-Return @ctrue{} if @var{C} is an @emph{invalid pathname} condition object; otherwise return
-@cfalse{}.
+Return @ctrue{} if @var{C} is an @emph{invalid pathname} exceptional--condition object; otherwise
+return @cfalse{}.
 @end deftypefun
 
 @c page
@@ -337,41 +337,41 @@ Return @ctrue{} if @var{C} is an @emph{invalid pathname} condition object; other
 @section Maximum pathname length exceeded
 
 
-The @dfn{exceeded length exceptional--condition object} has the purpose of describing an exceptional
-condition caused by attempting an operation that would generate a too long pathname.
+The @dfn{exceeded length exceptional--condition object--type} has the purpose of describing an
+exceptional condition caused by attempting an operation that would generate a too long pathname.
 
-There should be only one @emph{exceeded length} condition object: the one predefined by
+There should be only one @emph{exceeded length} exceptional--condition object: the one predefined by
 @value{PACKAGE}.
 
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
 @deftp {Struct Typedef} ccptn_descriptor_exceeded_length_t
-Structure type representing the descriptor for @emph{exceeded length} condition objects.  This
-descriptor has @objtype{cce_descriptor_runtime_error_t} as parent descriptor.
+Structure type representing the descriptor for @emph{exceeded length} exceptional--condition
+objects.  This descriptor has @objtype{cce_descriptor_runtime_error_t} as parent descriptor.
 @end deftp
 
 
 @deftp {Struct Typedef} ccptn_condition_exceeded_length_t
-Structure type representing an @emph{exceeded length} condition object.
+Structure type representing an @emph{exceeded length} exceptional--condition object.
 @end deftp
 
 
 @deftypefun void ccptn_condition_init_exceeded_length (ccptn_condition_exceeded_length_t * @var{C})
-Initialise an already allocated condition object.  This function exists to allow sub--typing from
-@objtype{ccptn_condition_exceeded_length_t}.
+Initialise an already allocated exceptional--condition object.  This function exists to allow
+sub--typing from @objtype{ccptn_condition_exceeded_length_t}.
 @end deftypefun
 
 
 @deftypefun {cce_condition_t const *} ccptn_condition_new_exceeded_length (void)
 Return a pointer to the statically allocated structure representing the single @emph{exceeded
-length} condition object.
+length} exceptional--condition object.
 @end deftypefun
 
 
 @deftypefun bool ccptn_condition_is_exceeded_length (cce_condition_t const * @var{C})
-Return @ctrue{} if @var{C} is an @emph{exceeded length} condition object; otherwise return
-@cfalse{}.
+Return @ctrue{} if @var{C} is an @emph{exceeded length} exceptional--condition object; otherwise
+return @cfalse{}.
 @end deftypefun
 
 @c page
@@ -379,39 +379,41 @@ Return @ctrue{} if @var{C} is an @emph{exceeded length} condition object; otherw
 @section Zero--length pathname
 
 
-The @dfn{zero--length exceptional--condition object} has the purpose of describing an exceptional
+The @dfn{zero--length exceptional--condition object--type} has the purpose of describing an exceptional
 condition caused by attempting an operation that would generate zero--length pathname.
 
-There should be only one @emph{zero length} condition object: the one predefined by @value{PACKAGE}.
+There should be only one @emph{zero length} exceptional--condition object: the one predefined by
+@value{PACKAGE}.
 
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
 @deftp {Struct Typedef} ccptn_descriptor_zero_length_t
-Structure type representing the descriptor for @emph{zero length} condition objects.  This
-descriptor has @objtype{cce_descriptor_runtime_error_t} as parent descriptor.
+Structure type representing the descriptor for @emph{zero length} exceptional--condition objects.
+This descriptor has @objtype{cce_descriptor_runtime_error_t} as parent descriptor.
 @end deftp
 
 
 @deftp {Struct Typedef} ccptn_condition_zero_length_t
-Structure type representing an @emph{zero length} condition object.
+Structure type representing an @emph{zero length} exceptional--condition object.
 @end deftp
 
 
 @deftypefun void ccptn_condition_init_zero_length (ccptn_condition_zero_length_t * @var{C})
-Initialise an already allocated condition object.  This function exists to allow sub--typing from
-@objtype{ccptn_condition_zero_length_t}.
+Initialise an already allocated exceptional--condition object.  This function exists to allow
+sub--typing from @objtype{ccptn_condition_zero_length_t}.
 @end deftypefun
 
 
 @deftypefun {cce_condition_t const *} ccptn_condition_new_zero_length (void)
 Return a pointer to the statically allocated structure representing the single @emph{zero length}
-condition object.
+exceptional--condition object.
 @end deftypefun
 
 
 @deftypefun bool ccptn_condition_is_zero_length (cce_condition_t const * @var{C})
-Return @ctrue{} if @var{C} is an @emph{zero length} condition object; otherwise return @cfalse{}.
+Return @ctrue{} if @var{C} is an @emph{zero length} exceptional--condition object; otherwise return
+@cfalse{}.
 @end deftypefun
 
 @c page
@@ -419,41 +421,42 @@ Return @ctrue{} if @var{C} is an @emph{zero length} condition object; otherwise 
 @section Invalid length pathname
 
 
-The @dfn{invalid length exceptional--condition object} has the purpose of describing an exceptional
+The @dfn{invalid length exceptional--condition object--type} has the purpose of describing an exceptional
 condition caused by attempting an operation on a pathname string that contains a non--terminating
 zero octet.
 
-There should be only one @emph{invalid length} condition object: the one predefined by
+There should be only one @emph{invalid length} exceptional--condition object: the one predefined by
 @value{PACKAGE}.
 
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
 @deftp {Struct Typedef} ccptn_descriptor_invalid_length_t
-Structure type representing the descriptor for @emph{invalid length} condition objects.  This
-descriptor has @objtype{cce_descriptor_runtime_error_t} as parent descriptor.
+Structure type representing the descriptor for @emph{invalid length} exceptional--condition objects.
+This descriptor has @objtype{cce_descriptor_runtime_error_t} as parent descriptor.
 @end deftp
 
 
 @deftp {Struct Typedef} ccptn_condition_invalid_length_t
-Structure type representing an @emph{invalid length} condition object.
+Structure type representing an @emph{invalid length} exceptional--condition object.
 @end deftp
 
 
 @deftypefun void ccptn_condition_init_invalid_length (ccptn_condition_invalid_length_t * @var{C})
-Initialise an already allocated condition object.  This function exists to allow sub--typing from
-@objtype{ccptn_condition_invalid_length_t}.
+Initialise an already allocated exceptional--condition object.  This function exists to allow
+sub--typing from @objtype{ccptn_condition_invalid_length_t}.
 @end deftypefun
 
 
 @deftypefun {cce_condition_t const *} ccptn_condition_new_invalid_length (void)
 Return a pointer to the statically allocated structure representing the single @emph{invalid length}
-condition object.
+exceptional--condition object.
 @end deftypefun
 
 
 @deftypefun bool ccptn_condition_is_invalid_length (cce_condition_t const * @var{C})
-Return @ctrue{} if @var{C} is an @emph{invalid length} condition object; otherwise return @cfalse{}.
+Return @ctrue{} if @var{C} is an @emph{invalid length} exceptional--condition object; otherwise
+return @cfalse{}.
 @end deftypefun
 
 @c page
@@ -461,42 +464,42 @@ Return @ctrue{} if @var{C} is an @emph{invalid length} condition object; otherwi
 @section Normalised pathname required
 
 
-The @dfn{normalised pathname exceptional--condition object} has the purpose of describing an
+The @dfn{normalised pathname exceptional--condition object--type} has the purpose of describing an
 exceptional condition caused by attempting an operation on a pathname that is @strong{not}
 normalised, while the operation requires that it is.
 
-There should be only one @emph{normalised pathname} condition object: the one predefined by
-@value{PACKAGE}.
+There should be only one @emph{normalised pathname} exceptional--condition object: the one
+predefined by @value{PACKAGE}.
 
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
 @deftp {Struct Typedef} ccptn_descriptor_normalised_pathname_t
-Structure type representing the descriptor for @emph{normalised pathname} condition objects.  This
-descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.
+Structure type representing the descriptor for @emph{normalised pathname} exceptional--condition
+objects.  This descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.
 @end deftp
 
 
 @deftp {Struct Typedef} ccptn_condition_normalised_pathname_t
-Structure type representing an @emph{normalised pathname} condition object.
+Structure type representing an @emph{normalised pathname} exceptional--condition object.
 @end deftp
 
 
 @deftypefun void ccptn_condition_init_normalised_pathname (ccptn_condition_normalised_pathname_t * @var{C})
-Initialise an already allocated condition object.  This function exists to allow sub--typing from
-@objtype{ccptn_condition_normalised_pathname_t}.
+Initialise an already allocated exceptional--condition object.  This function exists to allow
+sub--typing from @objtype{ccptn_condition_normalised_pathname_t}.
 @end deftypefun
 
 
 @deftypefun {cce_condition_t const *} ccptn_condition_new_normalised_pathname (void)
 Return a pointer to the statically allocated structure representing the single @emph{normalised
-pathname} condition object.
+pathname} exceptional--condition object.
 @end deftypefun
 
 
 @deftypefun bool ccptn_condition_is_normalised_pathname (cce_condition_t const * @var{C})
-Return @ctrue{} if @var{C} is an @emph{normalised pathname} condition object; otherwise return
-@cfalse{}.
+Return @ctrue{} if @var{C} is an @emph{normalised pathname} exceptional--condition object; otherwise
+return @cfalse{}.
 @end deftypefun
 
 @c page
@@ -504,7 +507,7 @@ Return @ctrue{} if @var{C} is an @emph{normalised pathname} condition object; ot
 @section Directory part is missing
 
 
-The @dfn{no dirname exceptional--condition object} has the purpose of describing an exceptional
+The @dfn{no dirname exceptional--condition object--type} has the purpose of describing an exceptional
 condition caused by attempting an operation on a pathname that has no directory part, when this is
 required.  The dirname is the pathname representing the input pathname with the last segment
 stripped.  Examples:
@@ -517,36 +520,38 @@ stripped.  Examples:
 ".."                    @error{} no dirname
 @end example
 
-There should be only one @emph{no dirname} condition object: the one predefined by @value{PACKAGE}.
+There should be only one @emph{no dirname} exceptional--condition object: the one predefined by
+@value{PACKAGE}.
 
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
 @deftp {Struct Typedef} ccptn_descriptor_no_dirname_t
-Structure type representing the descriptor for @emph{no dirname} condition objects.  This descriptor
-has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.
+Structure type representing the descriptor for @emph{no dirname} exceptional--condition objects.
+This descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.
 @end deftp
 
 
 @deftp {Struct Typedef} ccptn_condition_no_dirname_t
-Structure type representing an @emph{no dirname} condition object.
+Structure type representing an @emph{no dirname} exceptional--condition object.
 @end deftp
 
 
 @deftypefun void ccptn_condition_init_no_dirname (ccptn_condition_no_dirname_t * @var{C})
-Initialise an already allocated condition object.  This function exists to allow sub--typing from
-@objtype{ccptn_condition_no_dirname_t}.
+Initialise an already allocated exceptional--condition object.  This function exists to allow
+sub--typing from @objtype{ccptn_condition_no_dirname_t}.
 @end deftypefun
 
 
 @deftypefun {cce_condition_t const *} ccptn_condition_new_no_dirname (void)
 Return a pointer to the statically allocated structure representing the single @emph{no dirname}
-condition object.
+exceptional--condition object.
 @end deftypefun
 
 
 @deftypefun bool ccptn_condition_is_no_dirname (cce_condition_t const * @var{C})
-Return @ctrue{} if @var{C} is an @emph{no dirname} condition object; otherwise return @cfalse{}.
+Return @ctrue{} if @var{C} is an @emph{no dirname} exceptional--condition object; otherwise return
+@cfalse{}.
 @end deftypefun
 
 @c page
@@ -554,10 +559,10 @@ Return @ctrue{} if @var{C} is an @emph{no dirname} condition object; otherwise r
 @section Filename is missing
 
 
-The @dfn{no filename exceptional--condition object} has the purpose of describing an exceptional
-condition caused by attempting an operation on a pathname that has no filename part, when this is
-required.  The filename is the relative pathname representing the last segment if it does not
-represent a directory.  Examples:
+The @dfn{no filename exceptional--condition object--type} has the purpose of describing an
+exceptional condition caused by attempting an operation on a pathname that has no filename part,
+when this is required.  The filename is the relative pathname representing the last segment if it
+does not represent a directory.  Examples:
 
 @example
 "/path/to/file.ext"     @result{} "file.ext"
@@ -567,36 +572,38 @@ represent a directory.  Examples:
 ".."                    @error{} no filename
 @end example
 
-There should be only one @emph{no filename} condition object: the one predefined by @value{PACKAGE}.
+There should be only one @emph{no filename} exceptional--condition object: the one predefined by
+@value{PACKAGE}.
 
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
 @deftp {Struct Typedef} ccptn_descriptor_no_filename_t
-Structure type representing the descriptor for @emph{no filename} condition objects.  This
-descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.
+Structure type representing the descriptor for @emph{no filename} exceptional--condition objects.
+This descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.
 @end deftp
 
 
 @deftp {Struct Typedef} ccptn_condition_no_filename_t
-Structure type representing an @emph{no filename} condition object.
+Structure type representing an @emph{no filename} exceptional--condition object.
 @end deftp
 
 
 @deftypefun void ccptn_condition_init_no_filename (ccptn_condition_no_filename_t * @var{C})
-Initialise an already allocated condition object.  This function exists to allow sub--typing from
-@objtype{ccptn_condition_no_filename_t}.
+Initialise an already allocated exceptional--condition object.  This function exists to allow
+sub--typing from @objtype{ccptn_condition_no_filename_t}.
 @end deftypefun
 
 
 @deftypefun {cce_condition_t const *} ccptn_condition_new_no_filename (void)
 Return a pointer to the statically allocated structure representing the single @emph{no filename}
-condition object.
+exceptional--condition object.
 @end deftypefun
 
 
 @deftypefun bool ccptn_condition_is_no_filename (cce_condition_t const * @var{C})
-Return @ctrue{} if @var{C} is an @emph{no filename} condition object; otherwise return @cfalse{}.
+Return @ctrue{} if @var{C} is an @emph{no filename} exceptional--condition object; otherwise return
+@cfalse{}.
 @end deftypefun
 
 @c page
@@ -604,7 +611,7 @@ Return @ctrue{} if @var{C} is an @emph{no filename} condition object; otherwise 
 @section Tailname is missing
 
 
-The @dfn{no tailname exceptional--condition object} has the purpose of describing an exceptional
+The @dfn{no tailname exceptional--condition object--type} has the purpose of describing an exceptional
 condition caused by attempting an operation on a pathname that has no tailname part, when this is
 required.  The tailname is the relative pathname representing the last segment.  Examples:
 
@@ -617,36 +624,38 @@ required.  The tailname is the relative pathname representing the last segment. 
 "/"                     @error{} no tailname
 @end example
 
-There should be only one @emph{no tailname} condition object: the one predefined by @value{PACKAGE}.
+There should be only one @emph{no tailname} exceptional--condition object: the one predefined by
+@value{PACKAGE}.
 
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
 @deftp {Struct Typedef} ccptn_descriptor_no_tailname_t
-Structure type representing the descriptor for @emph{no tailname} condition objects.  This
-descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.
+Structure type representing the descriptor for @emph{no tailname} exceptional--condition objects.
+This descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.
 @end deftp
 
 
 @deftp {Struct Typedef} ccptn_condition_no_tailname_t
-Structure type representing an @emph{no tailname} condition object.
+Structure type representing an @emph{no tailname} exceptional--condition object.
 @end deftp
 
 
 @deftypefun void ccptn_condition_init_no_tailname (ccptn_condition_no_tailname_t * @var{C})
-Initialise an already allocated condition object.  This function exists to allow sub--typing from
-@objtype{ccptn_condition_no_tailname_t}.
+Initialise an already allocated exceptional--condition object.  This function exists to allow
+sub--typing from @objtype{ccptn_condition_no_tailname_t}.
 @end deftypefun
 
 
 @deftypefun {cce_condition_t const *} ccptn_condition_new_no_tailname (void)
 Return a pointer to the statically allocated structure representing the single @emph{no tailname}
-condition object.
+exceptional--condition object.
 @end deftypefun
 
 
 @deftypefun bool ccptn_condition_is_no_tailname (cce_condition_t const * @var{C})
-Return @ctrue{} if @var{C} is an @emph{no tailname} condition object; otherwise return @cfalse{}.
+Return @ctrue{} if @var{C} is an @emph{no tailname} exceptional--condition object; otherwise return
+@cfalse{}.
 @end deftypefun
 
 @c page
@@ -654,9 +663,10 @@ Return @ctrue{} if @var{C} is an @emph{no tailname} condition object; otherwise 
 @section Rootname is missing
 
 
-The @dfn{no rootname exceptional--condition object} has the purpose of describing an exceptional
-condition caused by attempting an operation on a pathname that has no rootname part, when this is
-required.  The rootname is a pathname with the extension of the last segment stripped.  Examples:
+The @dfn{no rootname exceptional--condition object--type} has the purpose of describing an
+exceptional condition caused by attempting an operation on a pathname that has no rootname part,
+when this is required.  The rootname is a pathname with the extension of the last segment stripped.
+Examples:
 
 @example
 "/path/to/file.ext"     @result{} "/path/to/file"
@@ -668,36 +678,38 @@ required.  The rootname is a pathname with the extension of the last segment str
 ".."                    @error{} missing rootname
 @end example
 
-There should be only one @emph{no rootname} condition object: the one predefined by @value{PACKAGE}.
+There should be only one @emph{no rootname} exceptional--condition object: the one predefined by
+@value{PACKAGE}.
 
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
 @deftp {Struct Typedef} ccptn_descriptor_no_rootname_t
-Structure type representing the descriptor for @emph{no rootname} condition objects.  This
-descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.
+Structure type representing the descriptor for @emph{no rootname} exceptional--condition objects.
+This descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.
 @end deftp
 
 
 @deftp {Struct Typedef} ccptn_condition_no_rootname_t
-Structure type representing an @emph{no rootname} condition object.
+Structure type representing an @emph{no rootname} exceptional--condition object.
 @end deftp
 
 
 @deftypefun void ccptn_condition_init_no_rootname (ccptn_condition_no_rootname_t * @var{C})
-Initialise an already allocated condition object.  This function exists to allow sub--typing from
-@objtype{ccptn_condition_no_rootname_t}.
+Initialise an already allocated exceptional--condition object.  This function exists to allow
+sub--typing from @objtype{ccptn_condition_no_rootname_t}.
 @end deftypefun
 
 
 @deftypefun {cce_condition_t const *} ccptn_condition_new_no_rootname (void)
 Return a pointer to the statically allocated structure representing the single @emph{no rootname}
-condition object.
+exceptional--condition object.
 @end deftypefun
 
 
 @deftypefun bool ccptn_condition_is_no_rootname (cce_condition_t const * @var{C})
-Return @ctrue{} if @var{C} is an @emph{no rootname} condition object; otherwise return @cfalse{}.
+Return @ctrue{} if @var{C} is an @emph{no rootname} exceptional--condition object; otherwise return
+@cfalse{}.
 @end deftypefun
 
 @c page
