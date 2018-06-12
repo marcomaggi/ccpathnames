@@ -299,19 +299,31 @@ The @dfn{invalid pathname exceptional--condition object--type} has the purpose o
 exceptional condition caused by attempting to use an invalid pathname.
 
 There should be only one @emph{invalid pathname} exceptional--condition object: the one predefined
-by @value{PACKAGE}.
+by @value{PACKAGE}.  Subtyping is allowed.
 
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
 @deftp {Struct Typedef} ccptn_descriptor_invalid_pathname_t
 Structure type representing the descriptor for @emph{invalid pathname} exceptional--condition
-objects.  This descriptor has @objtype{cce_descriptor_runtime_error_t} as parent descriptor.
+objects.  This descriptor has @objtype{cce_descriptor_runtime_error_t} as parent descriptor.  It has
+the following public fields:
+
+@table @code
+@item cce_descriptor_t descriptor
+Core values for the exceptional--condition object--type.
+@end table
 @end deftp
 
 
 @deftp {Struct Typedef} ccptn_condition_invalid_pathname_t
-Structure type representing an @emph{invalid pathname} exceptional--condition object.
+Structure type representing an @emph{invalid pathname} exceptional--condition object.  It has the
+following public fields:
+
+@table @code
+@item cce_condition_runtime_error_t runtime_error
+Core values for the exceptional--condition object.
+@end table
 @end deftp
 
 
@@ -348,12 +360,24 @@ All the following definitions are accessible from the header file @file{ccpathna
 
 @deftp {Struct Typedef} ccptn_descriptor_exceeded_length_t
 Structure type representing the descriptor for @emph{exceeded length} exceptional--condition
-objects.  This descriptor has @objtype{cce_descriptor_runtime_error_t} as parent descriptor.
+objects.  This descriptor has @objtype{cce_descriptor_runtime_error_t} as parent descriptor.  It has
+the following public fields:
+
+@table @code
+@item cce_descriptor_t descriptor
+Core values for the exceptional--condition object--type.
+@end table
 @end deftp
 
 
 @deftp {Struct Typedef} ccptn_condition_exceeded_length_t
-Structure type representing an @emph{exceeded length} exceptional--condition object.
+Structure type representing an @emph{exceeded length} exceptional--condition object.  It has the
+following public fields:
+
+@table @code
+@item cce_condition_runtime_error_t runtime_error
+Core values for the exceptional--condition object.
+@end table
 @end deftp
 
 
@@ -390,12 +414,24 @@ All the following definitions are accessible from the header file @file{ccpathna
 
 @deftp {Struct Typedef} ccptn_descriptor_zero_length_t
 Structure type representing the descriptor for @emph{zero length} exceptional--condition objects.
-This descriptor has @objtype{cce_descriptor_runtime_error_t} as parent descriptor.
+This descriptor has @objtype{cce_descriptor_runtime_error_t} as parent descriptor.  It has
+the following public fields:
+
+@table @code
+@item cce_descriptor_t descriptor
+Core values for the exceptional--condition object--type.
+@end table
 @end deftp
 
 
 @deftp {Struct Typedef} ccptn_condition_zero_length_t
-Structure type representing an @emph{zero length} exceptional--condition object.
+Structure type representing an @emph{zero length} exceptional--condition object.  It has the
+following public fields:
+
+@table @code
+@item cce_condition_runtime_error_t runtime_error
+Core values for the exceptional--condition object.
+@end table
 @end deftp
 
 
@@ -433,12 +469,24 @@ All the following definitions are accessible from the header file @file{ccpathna
 
 @deftp {Struct Typedef} ccptn_descriptor_invalid_length_t
 Structure type representing the descriptor for @emph{invalid length} exceptional--condition objects.
-This descriptor has @objtype{cce_descriptor_runtime_error_t} as parent descriptor.
+This descriptor has @objtype{cce_descriptor_runtime_error_t} as parent descriptor.  It has
+the following public fields:
+
+@table @code
+@item cce_descriptor_t descriptor
+Core values for the exceptional--condition object--type.
+@end table
 @end deftp
 
 
 @deftp {Struct Typedef} ccptn_condition_invalid_length_t
-Structure type representing an @emph{invalid length} exceptional--condition object.
+Structure type representing an @emph{invalid length} exceptional--condition object.  It has the
+following public fields:
+
+@table @code
+@item cce_condition_runtime_error_t runtime_error
+Core values for the exceptional--condition object.
+@end table
 @end deftp
 
 
@@ -476,12 +524,24 @@ All the following definitions are accessible from the header file @file{ccpathna
 
 @deftp {Struct Typedef} ccptn_descriptor_normalised_pathname_t
 Structure type representing the descriptor for @emph{normalised pathname} exceptional--condition
-objects.  This descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.
+objects.  This descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.  It has
+the following public fields:
+
+@table @code
+@item cce_descriptor_t descriptor
+Core values for the exceptional--condition object--type.
+@end table
 @end deftp
 
 
 @deftp {Struct Typedef} ccptn_condition_normalised_pathname_t
-Structure type representing an @emph{normalised pathname} exceptional--condition object.
+Structure type representing an @emph{normalised pathname} exceptional--condition object.  It has the
+following public fields:
+
+@table @code
+@item ccptn_descriptor_invalid_pathname_t invalid_pathname
+Core values for the exceptional--condition object.
+@end table
 @end deftp
 
 
@@ -528,12 +588,24 @@ All the following definitions are accessible from the header file @file{ccpathna
 
 @deftp {Struct Typedef} ccptn_descriptor_no_dirname_t
 Structure type representing the descriptor for @emph{no dirname} exceptional--condition objects.
-This descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.
+This descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.  It has
+the following public fields:
+
+@table @code
+@item cce_descriptor_t descriptor
+Core values for the exceptional--condition object--type.
+@end table
 @end deftp
 
 
 @deftp {Struct Typedef} ccptn_condition_no_dirname_t
-Structure type representing an @emph{no dirname} exceptional--condition object.
+Structure type representing an @emph{no dirname} exceptional--condition object.  It has the
+following public fields:
+
+@table @code
+@item ccptn_descriptor_invalid_pathname_t invalid_pathname
+Core values for the exceptional--condition object.
+@end table
 @end deftp
 
 
@@ -580,12 +652,24 @@ All the following definitions are accessible from the header file @file{ccpathna
 
 @deftp {Struct Typedef} ccptn_descriptor_no_filename_t
 Structure type representing the descriptor for @emph{no filename} exceptional--condition objects.
-This descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.
+This descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.  It has
+the following public fields:
+
+@table @code
+@item cce_descriptor_t descriptor
+Core values for the exceptional--condition object--type.
+@end table
 @end deftp
 
 
 @deftp {Struct Typedef} ccptn_condition_no_filename_t
-Structure type representing an @emph{no filename} exceptional--condition object.
+Structure type representing an @emph{no filename} exceptional--condition object.  It has the
+following public fields:
+
+@table @code
+@item ccptn_descriptor_invalid_pathname_t invalid_pathname
+Core values for the exceptional--condition object.
+@end table
 @end deftp
 
 
@@ -632,12 +716,24 @@ All the following definitions are accessible from the header file @file{ccpathna
 
 @deftp {Struct Typedef} ccptn_descriptor_no_tailname_t
 Structure type representing the descriptor for @emph{no tailname} exceptional--condition objects.
-This descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.
+This descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.  It has
+the following public fields:
+
+@table @code
+@item cce_descriptor_t descriptor
+Core values for the exceptional--condition object--type.
+@end table
 @end deftp
 
 
 @deftp {Struct Typedef} ccptn_condition_no_tailname_t
-Structure type representing an @emph{no tailname} exceptional--condition object.
+Structure type representing an @emph{no tailname} exceptional--condition object.  It has the
+following public fields:
+
+@table @code
+@item ccptn_descriptor_invalid_pathname_t invalid_pathname
+Core values for the exceptional--condition object.
+@end table
 @end deftp
 
 
@@ -686,12 +782,24 @@ All the following definitions are accessible from the header file @file{ccpathna
 
 @deftp {Struct Typedef} ccptn_descriptor_no_rootname_t
 Structure type representing the descriptor for @emph{no rootname} exceptional--condition objects.
-This descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.
+This descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.  It has
+the following public fields:
+
+@table @code
+@item cce_descriptor_t descriptor
+Core values for the exceptional--condition object--type.
+@end table
 @end deftp
 
 
 @deftp {Struct Typedef} ccptn_condition_no_rootname_t
-Structure type representing an @emph{no rootname} exceptional--condition object.
+Structure type representing an @emph{no rootname} exceptional--condition object.  It has the
+following public fields:
+
+@table @code
+@item ccptn_descriptor_invalid_pathname_t invalid_pathname
+Core values for the exceptional--condition object.
+@end table
 @end deftp
 
 
