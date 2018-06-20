@@ -9,6 +9,11 @@
 
   Write a function that tests if a pathname string is normalised.
 
+* TODO Serialisation function
+
+  Special  serialisation function  that converts  a pathname  into a  string, quoting
+  appropriately non-printable characters.
+
 * end
 
 ### end of file
