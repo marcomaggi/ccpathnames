@@ -299,7 +299,7 @@ The @dfn{invalid pathname exceptional--condition object--type} has the purpose o
 exceptional condition caused by attempting to use an invalid pathname.
 
 There should be only one @emph{invalid pathname} exceptional--condition object: the one predefined
-by @value{PACKAGE}.  Subtyping is allowed.
+by @value{PACKAGE}.  Subtyping from this object--type is allowed.
 
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
@@ -328,8 +328,8 @@ Core values for the exceptional--condition object.
 
 
 @deftypefun void ccptn_condition_init_invalid_pathname (ccptn_condition_invalid_pathname_t * @var{C})
-Initialise an already allocated condition object.  This function exists to allow sub--typing from
-@objtype{ccptn_condition_invalid_pathname_t}.
+Initialise an already allocated exceptional--condition object.  This function exists to allow
+sub--typing from @objtype{ccptn_condition_invalid_pathname_t}.
 @end deftypefun
 
 
@@ -353,7 +353,7 @@ The @dfn{exceeded length exceptional--condition object--type} has the purpose of
 exceptional condition caused by attempting an operation that would generate a too long pathname.
 
 There should be only one @emph{exceeded length} exceptional--condition object: the one predefined by
-@value{PACKAGE}.
+@value{PACKAGE}.  Subtyping from this object--type is allowed.
 
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
@@ -407,7 +407,7 @@ The @dfn{zero--length exceptional--condition object--type} has the purpose of de
 condition caused by attempting an operation that would generate zero--length pathname.
 
 There should be only one @emph{zero length} exceptional--condition object: the one predefined by
-@value{PACKAGE}.
+@value{PACKAGE}.  Subtyping from this object--type is allowed.
 
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
@@ -457,12 +457,12 @@ Return @ctrue{} if @var{C} is an @emph{zero length} exceptional--condition objec
 @section Invalid length pathname
 
 
-The @dfn{invalid length exceptional--condition object--type} has the purpose of describing an exceptional
-condition caused by attempting an operation on a pathname string that contains a non--terminating
-zero octet.
+The @dfn{invalid length exceptional--condition object--type} has the purpose of describing an
+exceptional condition caused by attempting an operation on a pathname string that contains a
+non--terminating zero octet.
 
 There should be only one @emph{invalid length} exceptional--condition object: the one predefined by
-@value{PACKAGE}.
+@value{PACKAGE}.  Subtyping from this object--type is allowed.
 
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
@@ -517,7 +517,7 @@ exceptional condition caused by attempting an operation on a pathname that is @s
 normalised, while the operation requires that it is.
 
 There should be only one @emph{normalised pathname} exceptional--condition object: the one
-predefined by @value{PACKAGE}.
+predefined by @value{PACKAGE}.  Subtyping from this object--type is allowed.
 
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
@@ -581,7 +581,7 @@ stripped.  Examples:
 @end example
 
 There should be only one @emph{no dirname} exceptional--condition object: the one predefined by
-@value{PACKAGE}.
+@value{PACKAGE}.  Subtyping from this object--type is allowed.
 
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
@@ -645,7 +645,7 @@ does not represent a directory.  Examples:
 @end example
 
 There should be only one @emph{no filename} exceptional--condition object: the one predefined by
-@value{PACKAGE}.
+@value{PACKAGE}.  Subtyping from this object--type is allowed.
 
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
@@ -709,7 +709,7 @@ required.  The tailname is the relative pathname representing the last segment. 
 @end example
 
 There should be only one @emph{no tailname} exceptional--condition object: the one predefined by
-@value{PACKAGE}.
+@value{PACKAGE}.  Subtyping from this object--type is allowed.
 
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
@@ -775,7 +775,7 @@ Examples:
 @end example
 
 There should be only one @emph{no rootname} exceptional--condition object: the one predefined by
-@value{PACKAGE}.
+@value{PACKAGE}.  Subtyping from this object--type is allowed.
 
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
