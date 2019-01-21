@@ -58,7 +58,7 @@ __attribute__((__nonnull__(1)))
 static void
 delete_for_ccptn_new_nodup_asciiz (ccptn_t * P)
 {
-  ccptn_free(P);
+  ccmem_free(P->allocator, P);
 }
 
 static ccptn_methods_t const ccptn_methods_for_ccptn_new_nodup_asciiz_stru = {
@@ -66,7 +66,7 @@ static ccptn_methods_t const ccptn_methods_for_ccptn_new_nodup_asciiz_stru = {
 };
 
 ccptn_t *
-ccptn_new_nodup_asciiz (cce_destination_t L, char const * pathname)
+ccptn_new_nodup_asciiz (cce_destination_t L, ccmem_allocator_t const * const A, char const * pathname)
 /* Allocate a new "ccptn_t" instance  initialising it with data from the
  * ASCIIZ string "pathname".  The data is *not* duplicated: the returned
  * "ccptn_t" references "pathname" itself.
@@ -80,9 +80,10 @@ ccptn_new_nodup_asciiz (cce_destination_t L, char const * pathname)
   if (CCPTN_PATH_MAX < len) {
     cce_raise(L, ccptn_condition_new_exceeded_length());
   } else if (0 < len) {
-    ccptn_t *	P = ccptn_malloc(L, sizeof(ccptn_t));
+    ccptn_t *	P = ccmem_malloc(L, A, sizeof(ccptn_t));
 
     P->methods		= &ccptn_methods_for_ccptn_new_nodup_asciiz_stru;
+    P->allocator	= A;
     P->len		= len;
     P->absolute		= ('/' == *pathname)? 1 : 0;
     P->normalised	= 0;
@@ -103,7 +104,7 @@ __attribute__((__nonnull__(1)))
 static void
 delete_for_ccptn_new_dup_asciiz (ccptn_t * P)
 {
-  ccptn_free(P);
+  ccmem_free(P->allocator, P);
 }
 
 static ccptn_methods_t const ccptn_methods_for_ccptn_new_dup_asciiz_stru = {
@@ -111,7 +112,7 @@ static ccptn_methods_t const ccptn_methods_for_ccptn_new_dup_asciiz_stru = {
 };
 
 ccptn_t *
-ccptn_new_dup_asciiz (cce_destination_t L, char const * pathname)
+ccptn_new_dup_asciiz (cce_destination_t L, ccmem_allocator_t const * const A, char const * pathname)
 /* Allocate a new "ccptn_t" instance  initialising it with data from the
  * ASCIIZ  string "pathname".   The data  *is* duplicated:  the returned
  * "ccptn_t" includes a copy of the data from "pathname".
@@ -127,8 +128,9 @@ ccptn_new_dup_asciiz (cce_destination_t L, char const * pathname)
   } else if (0 < len) {
     ccptn_t *	P;
 
-    P			= ccptn_malloc(L, sizeof(ccptn_t) + len + 1);
+    P			= ccmem_malloc(L, A, sizeof(ccptn_t) + len + 1);
     P->methods		= &ccptn_methods_for_ccptn_new_dup_asciiz_stru;
+    P->allocator	= A;
     P->len		= len;
     P->absolute		= ('/' == *pathname)? 1 : 0;
     P->normalised	= 0;
@@ -151,7 +153,7 @@ __attribute__((__nonnull__(1)))
 static void
 delete_for_ccptn_new_normal_asciiz (ccptn_t * P)
 {
-  ccptn_free(P);
+  ccmem_free(P->allocator, P);
 }
 
 static ccptn_methods_t const ccptn_methods_for_ccptn_new_normal_asciiz_stru = {
@@ -159,7 +161,7 @@ static ccptn_methods_t const ccptn_methods_for_ccptn_new_normal_asciiz_stru = {
 };
 
 ccptn_t *
-ccptn_new_normal_asciiz (cce_destination_t L, char const * pathname)
+ccptn_new_normal_asciiz (cce_destination_t L, ccmem_allocator_t const * const A, char const * pathname)
 /* Allocate a new "ccptn_t" instance  initialising it with data from the
  * ASCIIZ string "pathname".  The data  *is* duplicated and the pathname
  * is normalised.
@@ -184,8 +186,9 @@ ccptn_new_normal_asciiz (cce_destination_t L, char const * pathname)
 
       two_len = ccptn_normal_pass_remove_single_dot_segments(two, one, one_len);
       one_len = ccptn_normal_pass_remove_double_dot_segments(L, one, two, two_len);
-      P			= ccptn_malloc(L, sizeof(ccptn_t) + one_len + 1);
+      P			= ccmem_malloc(L, A, sizeof(ccptn_t) + one_len + 1);
       P->methods	= &ccptn_methods_for_ccptn_new_normal_asciiz_stru;
+      P->allocator	= A;
       P->len		= one_len;
       P->absolute	= ('/' == one[0])? 1 : 0;
       P->normalised	= 1;
@@ -216,7 +219,7 @@ static ccptn_methods_t const ccptn_methods_for_ccptn_init_nodup_asciiz_stru = {
 };
 
 ccptn_t *
-ccptn_init_nodup_asciiz (cce_destination_t L CCPTN_UNUSED, ccptn_t * P, char const * pathname)
+ccptn_init_nodup_asciiz (cce_destination_t L CCPTN_UNUSED, ccmem_allocator_t const * const A, ccptn_t * P, char const * pathname)
 /* Initialise an already allocated "ccptn_t" instance with data from the
  * ASCIIZ string "pathname".  The data is *not* duplicated: the instance
  * references "pathname" itself.
@@ -230,6 +233,7 @@ ccptn_init_nodup_asciiz (cce_destination_t L CCPTN_UNUSED, ccptn_t * P, char con
     cce_raise(L, ccptn_condition_new_exceeded_length());
   } else if (0 < len) {
     P->methods		= &ccptn_methods_for_ccptn_init_nodup_asciiz_stru;
+    P->allocator	= A;
     P->len		= strlen(pathname);
     P->absolute		= ('/' == *pathname)? 1 : 0;
     P->normalised	= 0;
@@ -250,7 +254,7 @@ __attribute__((__nonnull__(1)))
 static void
 delete_for_ccptn_init_dup_asciiz (ccptn_t * P)
 {
-  ccptn_free(P->buf);
+  ccmem_free(P->allocator, P->buf);
 }
 
 static ccptn_methods_t const ccptn_methods_for_ccptn_init_dup_asciiz_stru = {
@@ -258,7 +262,7 @@ static ccptn_methods_t const ccptn_methods_for_ccptn_init_dup_asciiz_stru = {
 };
 
 ccptn_t *
-ccptn_init_dup_asciiz (cce_destination_t L, ccptn_t * P, char const * pathname)
+ccptn_init_dup_asciiz (cce_destination_t L, ccmem_allocator_t const * const A, ccptn_t * P, char const * pathname)
 /* Initialise an already allocted "ccptn_t"  instance with data from the
  * ASCIIZ  string "pathname".   The data  *is* duplicated:  the instance
  * includes a copy of the data from "pathname".
@@ -273,11 +277,12 @@ ccptn_init_dup_asciiz (cce_destination_t L, ccptn_t * P, char const * pathname)
     cce_raise(L, ccptn_condition_new_exceeded_length());
   } else if (0 < len) {
     P->methods		= &ccptn_methods_for_ccptn_init_dup_asciiz_stru;
+    P->allocator	= A;
     P->len		= len;
     P->absolute		= ('/' == *pathname)? 1 : 0;
     P->normalised	= 0;
     P->realpath		= 0;
-    P->buf		= ccptn_malloc(L, len + 1);
+    P->buf		= ccmem_malloc(L, A, len + 1);
     strncpy(P->buf, pathname, len);
     P->buf[len]		= '\0';
     return P;
@@ -295,7 +300,7 @@ __attribute__((__nonnull__(1)))
 static void
 delete_for_ccptn_init_normal_asciiz (ccptn_t * P)
 {
-  ccptn_free(P->buf);
+  ccmem_free(P->allocator, P->buf);
 }
 
 static ccptn_methods_t const ccptn_methods_for_ccptn_init_normal_asciiz_stru = {
@@ -303,7 +308,7 @@ static ccptn_methods_t const ccptn_methods_for_ccptn_init_normal_asciiz_stru = {
 };
 
 ccptn_t *
-ccptn_init_normal_asciiz (cce_destination_t L, ccptn_t * P, char const * pathname)
+ccptn_init_normal_asciiz (cce_destination_t L, ccmem_allocator_t const * const A, ccptn_t * P, char const * pathname)
 /* Initialise an already allocted "ccptn_t"  instance with data from the
  * ASCIIZ string "pathname".   The data *is* duplicated  the pathname is
  * normalised.
@@ -328,11 +333,12 @@ ccptn_init_normal_asciiz (cce_destination_t L, ccptn_t * P, char const * pathnam
       two_len = ccptn_normal_pass_remove_single_dot_segments(two, one, one_len);
       one_len = ccptn_normal_pass_remove_double_dot_segments(L, one, two, two_len);
       P->methods	= &ccptn_methods_for_ccptn_init_normal_asciiz_stru;
+      P->allocator	= A;
       P->len		= one_len;
       P->absolute	= ('/' == one[0])? 1 : 0;
       P->normalised	= 1;
       P->realpath	= 0;
-      P->buf		= ccptn_malloc(L, one_len + 1);
+      P->buf		= ccmem_malloc(L, A, one_len + 1);
       strncpy(P->buf, one, one_len);
       P->buf[one_len]	= '\0';
       return P;
@@ -351,7 +357,7 @@ __attribute__((__nonnull__(1)))
 static void
 delete_for_ccptn_new_dup_ascii (ccptn_t * P)
 {
-  ccptn_free(P);
+  ccmem_free(P->allocator, P);
 }
 
 static ccptn_methods_t const ccptn_methods_for_ccptn_new_dup_ascii_stru = {
@@ -359,7 +365,7 @@ static ccptn_methods_t const ccptn_methods_for_ccptn_new_dup_ascii_stru = {
 };
 
 ccptn_t *
-ccptn_new_dup_ascii (cce_destination_t L, char const * pathname, size_t len)
+ccptn_new_dup_ascii (cce_destination_t L, ccmem_allocator_t const * const A, char const * pathname, size_t len)
 /* Allocate a new "ccptn_t" instance  initialising it with data from the
  * ASCII string "pathname" which  holds "len" octets without terminating
  * zero.  The  data *is* duplicated:  the returned "ccptn_t"  includes a
@@ -375,8 +381,9 @@ ccptn_new_dup_ascii (cce_destination_t L, char const * pathname, size_t len)
     ccptn_t *	P;
 
     scan_for_non_terminating_zeros(L, pathname, len);
-    P = ccptn_malloc(L, sizeof(ccptn_t) + len + 1);
+    P = ccmem_malloc(L, A, sizeof(ccptn_t) + len + 1);
     P->methods		= &ccptn_methods_for_ccptn_new_dup_ascii_stru;
+    P->allocator	= A;
     P->len		= len;
     P->absolute		= ('/' == *pathname)? 1 : 0;
     P->normalised	= 0;
@@ -399,7 +406,7 @@ __attribute__((__nonnull__(1)))
 static void
 delete_for_ccptn_new_normal_ascii (ccptn_t * P)
 {
-  ccptn_free(P);
+  ccmem_free(P->allocator, P);
 }
 
 static ccptn_methods_t const ccptn_methods_for_ccptn_new_normal_ascii_stru = {
@@ -407,7 +414,7 @@ static ccptn_methods_t const ccptn_methods_for_ccptn_new_normal_ascii_stru = {
 };
 
 ccptn_t *
-ccptn_new_normal_ascii (cce_destination_t L, char const * pathname, size_t len)
+ccptn_new_normal_ascii (cce_destination_t L, ccmem_allocator_t const * const A, char const * pathname, size_t len)
 /* Allocate a new "ccptn_t" instance  initialising it with data from the
  * ASCII string "pathname" which  holds "len" octets without terminating
  * zero.  The  data *is* duplicated:  the returned "ccptn_t"  includes a
@@ -434,8 +441,9 @@ ccptn_new_normal_ascii (cce_destination_t L, char const * pathname, size_t len)
       one_len = ccptn_normal_pass_remove_double_dot_segments(L, one, two, two_len);
       {
 	ccptn_t *	P;
-	P = ccptn_malloc(L, sizeof(ccptn_t) + one_len + 1);
+	P = ccmem_malloc(L, A, sizeof(ccptn_t) + one_len + 1);
 	P->methods	= &ccptn_methods_for_ccptn_new_normal_ascii_stru;
+	P->allocator	= A;
 	P->len		= one_len;
 	P->absolute	= ('/' == one[0])? 1 : 0;
 	P->normalised	= 1;
@@ -460,7 +468,7 @@ __attribute__((__nonnull__(1)))
 static void
 delete_for_ccptn_init_dup_ascii (ccptn_t * P)
 {
-  ccptn_free(P->buf);
+  ccmem_free(P->allocator, P->buf);
 }
 
 static ccptn_methods_t const ccptn_methods_for_ccptn_init_dup_ascii_stru = {
@@ -468,7 +476,7 @@ static ccptn_methods_t const ccptn_methods_for_ccptn_init_dup_ascii_stru = {
 };
 
 ccptn_t *
-ccptn_init_dup_ascii (cce_destination_t L, ccptn_t * P, char const * pathname, size_t len)
+ccptn_init_dup_ascii (cce_destination_t L, ccmem_allocator_t const * const A, ccptn_t * P, char const * pathname, size_t len)
 /* Initialise an already allocted "ccptn_t"  instance with data from the
  * ASCII string "pathname" which  holds "len" octets without terminating
  * zero.  The data *is* duplicated: the  instance includes a copy of the
@@ -483,11 +491,12 @@ ccptn_init_dup_ascii (cce_destination_t L, ccptn_t * P, char const * pathname, s
   } else if (0 < len) {
     scan_for_non_terminating_zeros(L, pathname, len);
     P->methods		= &ccptn_methods_for_ccptn_init_dup_ascii_stru;
+    P->allocator	= A;
     P->len		= len;
     P->absolute		= ('/' == *pathname)? 1 : 0;
     P->normalised	= 0;
     P->realpath		= 0;
-    P->buf		= ccptn_malloc(L, len + 1);
+    P->buf		= ccmem_malloc(L, A, len + 1);
     strncpy(P->buf, pathname, len);
     P->buf[len]		= '\0';
     return P;
@@ -505,7 +514,7 @@ __attribute__((__nonnull__(1)))
 static void
 delete_for_ccptn_init_normal_ascii (ccptn_t * P)
 {
-  ccptn_free(P->buf);
+  ccmem_free(P->allocator, P->buf);
 }
 
 static ccptn_methods_t const ccptn_methods_for_ccptn_init_normal_ascii_stru = {
@@ -513,7 +522,7 @@ static ccptn_methods_t const ccptn_methods_for_ccptn_init_normal_ascii_stru = {
 };
 
 ccptn_t *
-ccptn_init_normal_ascii (cce_destination_t L, ccptn_t * P, char const * pathname, size_t len)
+ccptn_init_normal_ascii (cce_destination_t L, ccmem_allocator_t const * const A, ccptn_t * P, char const * pathname, size_t len)
 /* Initialise an already allocted "ccptn_t"  instance with data from the
  * ASCII string "pathname" which  holds "len" octets without terminating
  * zero.  The data *is* duplicated and the pathname normalised.
@@ -538,11 +547,12 @@ ccptn_init_normal_ascii (cce_destination_t L, ccptn_t * P, char const * pathname
       two_len = ccptn_normal_pass_remove_single_dot_segments(two, one, one_len);
       one_len = ccptn_normal_pass_remove_double_dot_segments(L, one, two, two_len);
       P->methods	= &ccptn_methods_for_ccptn_init_normal_ascii_stru;
+      P->allocator	= A;
       P->len		= one_len;
       P->absolute	= ('/' == one[0])? 1 : 0;
       P->normalised	= 1;
       P->realpath	= 0;
-      P->buf		= ccptn_malloc(L, one_len + 1);
+      P->buf		= ccmem_malloc(L, A, one_len + 1);
       strncpy(P->buf, one, one_len);
       P->buf[one_len]	= '\0';
       return P;
@@ -579,6 +589,121 @@ ccptn_error_handler_ptn_init (cce_location_t * L, ccptn_error_handler_t * P_H, c
   P_H->handler.handler.function	= ccptn_handler_ptn_function;
   P_H->handler.handler.pointer	= P;
   cce_register_error_handler(L, &(P_H->handler));
+}
+
+
+/** --------------------------------------------------------------------
+ ** Pathnames: guarded constructors.
+ ** ----------------------------------------------------------------- */
+
+ccptn_t *
+ccptn_init_nodup_asciiz_guarded_error (cce_destination_t L, ccmem_allocator_t const * const A,
+				       ccptn_t * P, ccptn_error_handler_t * R_H, char const * pathname)
+{
+  ccptn_init_nodup_asciiz(L, A, P, pathname);
+  ccptn_error_handler_ptn_init(L, R_H, P);
+  return P;
+}
+
+ccptn_t *
+ccptn_init_dup_asciiz_guarded_error (cce_destination_t L, ccmem_allocator_t const * const A,
+				     ccptn_t * R, ccptn_error_handler_t * R_H, char const * pathname)
+{
+  ccptn_init_dup_asciiz(L, A, R, pathname);
+  ccptn_error_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+ccptn_t *
+ccptn_init_normal_asciiz_guarded_error (cce_destination_t L, ccmem_allocator_t const * const A,
+					ccptn_t * R, ccptn_error_handler_t * R_H, char const * pathname)
+{
+  ccptn_init_normal_asciiz(L, A, R, pathname);
+  ccptn_error_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+ccptn_t *
+ccptn_new_nodup_asciiz_guarded_error (cce_destination_t L, ccmem_allocator_t const * const A,
+				      ccptn_error_handler_t * R_H, char const * pathname)
+{
+  ccptn_t *	R = ccptn_new_nodup_asciiz(L, A, pathname);
+  ccptn_error_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+ccptn_t *
+ccptn_new_dup_asciiz_guarded_error (cce_destination_t L, ccmem_allocator_t const * const A,
+				    ccptn_error_handler_t * R_H, char const * pathname)
+{
+  ccptn_t *	R = ccptn_new_dup_asciiz(L, A, pathname);
+  ccptn_error_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+ccptn_t *
+ccptn_new_normal_asciiz_guarded_error (cce_destination_t L, ccmem_allocator_t const * const A,
+				       ccptn_error_handler_t * R_H, char const * pathname)
+{
+  ccptn_t *	R = ccptn_new_normal_asciiz(L, A, pathname);
+  ccptn_error_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+/* ------------------------------------------------------------------ */
+
+ccptn_t *
+ccptn_init_nodup_asciiz_guarded_clean (cce_destination_t L, ccmem_allocator_t const * const A,
+				       ccptn_t * R, ccptn_clean_handler_t * R_H, char const * pathname)
+{
+  ccptn_init_nodup_asciiz(L, A, R, pathname);
+  ccptn_clean_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+ccptn_t *
+ccptn_init_dup_asciiz_guarded_clean (cce_destination_t L, ccmem_allocator_t const * const A,
+				     ccptn_t * R, ccptn_clean_handler_t * R_H, char const * pathname)
+{
+  ccptn_init_dup_asciiz(L, A, R, pathname);
+  ccptn_clean_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+ccptn_t *
+ccptn_init_normal_asciiz_guarded_clean (cce_destination_t L, ccmem_allocator_t const * const A,
+					ccptn_t * R, ccptn_clean_handler_t * R_H, char const * pathname)
+{
+  ccptn_init_normal_asciiz(L, A, R, pathname);
+  ccptn_clean_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+ccptn_t *
+ccptn_new_nodup_asciiz_guarded_clean (cce_destination_t L, ccmem_allocator_t const * const A,
+				      ccptn_clean_handler_t * R_H, char const * pathname)
+{
+  ccptn_t *	R = ccptn_new_nodup_asciiz(L, A, pathname);
+  ccptn_clean_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+ccptn_t *
+ccptn_new_dup_asciiz_guarded_clean (cce_destination_t L, ccmem_allocator_t const * const A,
+				    ccptn_clean_handler_t * R_H, char const * pathname)
+{
+  ccptn_t *	R = ccptn_new_dup_asciiz(L, A, pathname);
+  ccptn_clean_handler_ptn_init(L, R_H, R);
+  return R;
+}
+
+ccptn_t *
+ccptn_new_normal_asciiz_guarded_clean (cce_destination_t L, ccmem_allocator_t const * const A,
+				       ccptn_clean_handler_t * R_H, char const * pathname)
+{
+  ccptn_t *	R = ccptn_new_normal_asciiz(L, A, pathname);
+  ccptn_clean_handler_ptn_init(L, R_H, R);
+  return R;
 }
 
 /* end of file */
