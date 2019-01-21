@@ -439,6 +439,14 @@ Revised^6 Report on the algorithmic language Scheme
 @code{false}
 @end macro
 
+@macro method{NAME}
+@cfunc{\NAME\}
+@end macro
+
+@macro iface{NAME}
+@code{\NAME\}
+@end macro
+
 @c page
 @c ------------------------------------------------------------
 @c Macros for references to external documents.
@@ -464,12 +472,20 @@ Revised^6 Report on the algorithmic language Scheme
 @ref{\NODE\,\TITLE\,\TITLE\,vicare}
 @end macro
 
-@macro nauref{NODE, TITLE}
-@ref{\NODE\,\TITLE\,\TITLE\,nausicaa}
+@macro ccexceptionsref{NODE, TITLE}
+@ref{\NODE\,\TITLE\,\TITLE\,ccexceptions}
 @end macro
 
-@macro naumoreref{NODE, TITLE}
-@ref{\NODE\,\TITLE\,\TITLE\,nausicaa-more}
+@macro ccmemoryref{NODE, TITLE}
+@ref{\NODE\,\TITLE\,\TITLE\,ccmemory}
+@end macro
+
+@macro ccstructsref{NODE, TITLE}
+@ref{\NODE\,\TITLE\,\TITLE\,ccstructs}
+@end macro
+
+@macro ccstringsref{NODE, TITLE}
+@ref{\NODE\,\TITLE\,\TITLE\,ccstrings}
 @end macro
 
 @c page

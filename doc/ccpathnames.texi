@@ -179,6 +179,9 @@ upon the package CCTests, at least version @value{CCTESTS_VERSION}.
 @api{} are prefixed with @code{ccptn_}; all the preprocessor symbol names are prefixed with
 @code{CCPTN_}; all the type names are prefixed with @code{ccptn_} and suffixed with @code{_t}.
 
+@value{PACKAGE} implements its @api{} using the facilities of the header file @file{ccnames.h}
+installed by CCStructs; @ccstructsref{ccnames, Automatically generated @api{} names}.
+
 Notice that, before using the library, we need to call the global initialisation function
 @cfunc{ccptn_library_init}.
 

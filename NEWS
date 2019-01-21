@@ -10,7 +10,9 @@ Revision 0.2.0-devel.0
 
 * The package now depends on CCExceptions version 0.8.0.
 
-* The package now depends on CCMemory version 0.2.0.
+* The package now depends on CCMemory version 0.2.1.
+
+* The package now depends on CCStructs version 0.2.0.
 
 * The test suite now depends on CCTests version 0.3.0.
 
