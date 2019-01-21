@@ -33,13 +33,13 @@
 
 @c To be used as @value{COPYRIGHT_YEARS} whenever we need to include the
 @c list of copyright years.
-@set COPYRIGHT_YEARS            2018
+@set COPYRIGHT_YEARS            2018-2019
 
 @c ------------------------------------------------------------
 
 @set CCEXCEPTIONS_VERSION       0.8.0
-@set CCMEMORY_VERSION           0.2.0
-@set CCSTRUCTS_VERSION          0.1.0
+@set CCMEMORY_VERSION           0.2.1
+@set CCSTRUCTS_VERSION          0.2.0
 @set CCTESTS_VERSION            0.3.0
 
 @set GITHUB_URL                 @url{https://github.com/marcomaggi/@value{PACKAGE_NICKNAME}}

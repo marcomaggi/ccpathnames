@@ -3,10 +3,9 @@
 ACLOCAL_AMFLAGS		= -I meta/autotools
 AUTOMAKE_OPTIONS	= foreign
 EXTRA_DIST		= INSTALL			\
-			  meta/slackstuff/config.in	\
 			  meta/slackware/slack-desc.in
 dist_doc_DATA		= README COPYING
-AM_CFLAGS		= -I$(srcdir)/src $(AX_CFLAGS)
+AM_CFLAGS		= $(MMUX_CFLAGS) -I$(srcdir)/src
 
 ## --------------------------------------------------------------------
 
@@ -14,9 +13,12 @@ EXTRA_DIST		+= meta/scripts/ccpathnames.pc.in
 pkgconfigdir		= $(libdir)/pkgconfig
 nodist_pkgconfig_DATA	= meta/scripts/ccpathnames.pc
 
-## --------------------------------------------------------------------
+
+#### documentation
 
 AM_MAKEINFOFLAGS	= --no-split
+AM_MAKEINFOHTMLFLAGS	= --split=node -c WORDS_IN_PAGE=0 \
+	-c PRE_BODY_CLOSE="<p>This document describes version <tt>$(PACKAGE_VERSION)</tt> of <em>$(PACKAGE_NAME)</em>.</p>"
 
 info_TEXINFOS		= doc/ccpathnames.texi
 doc_ccpathnames_TEXINFOS	= \
@@ -41,10 +43,10 @@ libccpathnames_la_SOURCES	= \
 	src/ccpathnames.h			\
 	src/ccpathnames-internals.h		\
 	src/ccpathnames-version.c		\
-	src/ccpathnames-conditions.c		\
-	src/ccpathnames-input-representation.c
+	src/ccpathnames-conditions.c
 
 
+#src/ccpathnames-input-representation.c
 # src/ccpathnames-core.c			\
 # src/ccpathnames-manipulation.c		\
 # src/ccpathnames-components.c		\
@@ -81,14 +83,14 @@ tests_conditions_LDADD			= $(ccpathnames_tests_ldadd)
 tests_input_representation_CPPFLAGS	= $(ccpathnames_tests_cppflags)
 tests_input_representation_LDADD	= $(ccpathnames_tests_ldadd)
 
-tests_core_CPPFLAGS			= $(ccpathnames_tests_cppflags)
-tests_core_LDADD			= $(ccpathnames_tests_ldadd)
+# tests_core_CPPFLAGS			= $(ccpathnames_tests_cppflags)
+# tests_core_LDADD			= $(ccpathnames_tests_ldadd)
 
-tests_manipulations_CPPFLAGS		= $(ccpathnames_tests_cppflags)
-tests_manipulations_LDADD		= $(ccpathnames_tests_ldadd)
+# tests_manipulations_CPPFLAGS		= $(ccpathnames_tests_cppflags)
+# tests_manipulations_LDADD		= $(ccpathnames_tests_ldadd)
 
-tests_components_CPPFLAGS		= $(ccpathnames_tests_cppflags)
-tests_components_LDADD			= $(ccpathnames_tests_ldadd)
+# tests_components_CPPFLAGS		= $(ccpathnames_tests_cppflags)
+# tests_components_LDADD			= $(ccpathnames_tests_ldadd)
 
 ## --------------------------------------------------------------------
 
@@ -96,43 +98,8 @@ installcheck-local: $(TESTS)
 	@for f in $(TESTS); do $(builddir)/$$f; done
 
 
-#### testing under GDB
+#### common rules
 
-$(builddir)/.gdbinit:
-	ln -sv "$(top_srcdir)/gdbinit" "$(builddir)/.gdbinit"
-
-# This rule is meant to be used as:
-#
-#   $ make all gdb-test FILE=tests/inspection CFLAGS='-g'
-#
-# after having created an appropriate file "$(top_srcdir)/.gdbinit".
-#
-gdb-test: $(builddir)/.gdbinit
-	libtool --mode=execute gdb $$FILE
-
-
-#### Static analysis with Clang's Static Analyzer
-#
-# See the documentation for the command line tool at:
-#
-#    <http://clang-analyzer.llvm.org/scan-build.html>
-#
-# To run the tool we must do:
-#
-#    $ make clean
-#    $ make clang-static-analysis
-#
-# The  program  "scan-build"  works  by  overriding  the  CC  and  CXX
-# environment variables.  Automake defines CXX as:
-#
-#    CXX = g++ -std=c++11
-#
-# so we override CXXFLAGS to include the language specification.
-#
-
-.PHONY: clang-static-analysis
-
-clang-static-analysis:
-	scan-build make CXXFLAGS='-std=c++11'
+include $(top_srcdir)/meta/automake/mmux-makefile-rules
 
 ### end of file

@@ -1,13 +1,15 @@
-dnl @configure_input@
-dnl
+# @configure_input@
+#
 
 AC_PREREQ([2.69])
-AC_INIT([CCPathnames],[0.2.0-devel.0],
+MMUX_PKG_VERSIONS([0],[2],[0],[devel.0])
+AC_INIT([CCPathnames],[MMUX_PACKAGE_VERSION],
   [marco.maggi-ipsu@poste.it],
   [ccpathnames],[http://github.com/marcomaggi/ccpathnames])
-dnl This is the revision number of this configure.ac
+MMUX_INIT
+MMUX_LIBTOOL_LIBRARY_VERSIONS([cctemplate],2,0,0)
 AC_REVISION([0.1])
-AC_COPYRIGHT([Copyright (c) 2018 Marco Maggi <marco.maggi-ipsu@poste.it>
+AC_COPYRIGHT([Copyright (c) 2018, 2019 Marco Maggi <marco.maggi-ipsu@poste.it>
 
 This program is free software: you  can redistribute it and/or modify it
 under the terms of the GNU Lesser General Public License as published by
@@ -28,7 +30,7 @@ AC_CONFIG_AUX_DIR([meta/autotools])
 AC_CANONICAL_BUILD
 AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
-AM_INIT_AUTOMAKE([foreign dist-xz no-dist-gzip subdir-objects])
+AM_INIT_AUTOMAKE([foreign subdir-objects])
 AM_MAINTAINER_MODE
 
 AM_PROG_AR
@@ -40,7 +42,7 @@ AC_PROG_MKDIR_P
 LT_PREREQ([2.4])
 LT_INIT
 
-dnl page
+
 #### libraries interface version
 
 MMUX_LIBTOOL_LIBRARY_VERSIONS([ccpathnames],2,0,0)
@@ -51,14 +53,13 @@ AC_SUBST([CCPATHNAME_PKG_CONFIG_VERSION],[0.2])
 AS_VAR_SET([SLACKSTUFF_PACKAGE_VERSION],[0.2d0.0])
 AC_SUBST([SLACKSTUFF_PACKAGE_VERSION])
 
-dnl page
+
 #### basic system inspection
 
 MMUX_CHECK_TARGET_OS
 
 AC_LANG([C])
 MMUX_LANG_C11
-AC_SUBST(AX_CFLAGS)
 
 AM_PROG_AS
 AM_PROG_CC_C_O
@@ -70,36 +71,38 @@ MMUX_DETERMINE_SIZEOF([SSIZE_T],[ssize_t],[MMUX_INCLUDE_UNISTD_H])
 
 AC_CACHE_SAVE
 
-dnl page
+
 #### checks for library functions
 
 AC_CHECK_FUNCS([realpath])
 
 AC_CACHE_SAVE
 
-dnl page
+
 #### external libraries
 
 MMUX_CHECK_PKG_CONFIG_MACROS
 PKG_CHECK_MODULES([CCEXCEPTIONS],[ccexceptions >= 0.8.0])
-PKG_CHECK_MODULES([CCMEMORY],[ccmemory >= 0.2.0])
-PKG_CHECK_MODULES([CCSTRUCTS],[ccstructs >= 0.1.0])
+PKG_CHECK_MODULES([CCMEMORY],[ccmemory >= 0.2.1])
+PKG_CHECK_MODULES([CCSTRUCTS],[ccstructs >= 0.2.0])
 PKG_CHECK_MODULES([CCTESTS],[cctests >= 0.3.0],,[AC_MSG_WARN([package CCTests not found])])
 
 AM_CONDITIONAL([MMUX_TESTING_ENABLED],[test -n "$CCTESTS_LIBS"])
 
-dnl page
+MMUX_PKG_CONFIG_FIND_INCLUDE_FILE([ccexceptions],[ccexceptions.h])
+MMUX_PKG_CONFIG_FIND_INCLUDE_FILE([ccmemory],[ccmemory.h])
+MMUX_PKG_CONFIG_FIND_INCLUDE_FILE([ccstructs],[ccstructs.h])
+
+AC_CACHE_SAVE
+
+
 #### finish
 
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([Makefile]
    [meta/scripts/ccpathnames.pc]
-   [meta/slackstuff/config]
    [meta/slackware/slack-desc])
+MMUX_OUTPUT
 AC_OUTPUT
 
 ### end of file
-# Local Variables:
-# mode: autoconf
-# page-delimiter: "^dnl page"
-# End:

@@ -14,9 +14,8 @@
   Special  serialisation function  that converts  a pathname  into a  string, quoting
   appropriately non-printable characters.
 
-* end
+* Local Variables
 
-### end of file
 # Local Variables:
 # fill-column: 85
 # ispell-local-dictionary: "en_GB"

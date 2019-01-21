@@ -11,7 +11,7 @@ manipulation functions.
 
   This package  supports POSIX platforms.   This package depends  on the
 packages:  CCExceptions,  at least  version  0.8.0;  CCMemory, at  least
-version  0.2.0; CCStructs,  at least  version  0.1.0.  To  run the  test
+version  0.2.1; CCStructs,  at least  version  0.2.0.  To  run the  test
 suite: this package  depends upon the package CCTests,  at least version
 0.3.0.
 
@@ -21,13 +21,13 @@ Travis CI, on both Ubuntu GNU+Linux systems and OS X systems.
 
 ## License
 
-Copyright (c) 2018 Marco Maggi <marco.maggi-ipsu@poste.it><br/>
+Copyright (c) 2018, 2019 Marco Maggi <marco.maggi-ipsu@poste.it><br/>
 All rights reserved.
 
 This program is free software: you  can redistribute it and/or modify it
-under the  terms of the GNU  General Public License as  published by the
-Free Software Foundation,  either version 3 of the License,  or (at your
-option) any later version.
+under the terms of the GNU Lesser General Public License as published by
+the Free  Software Foundation, either version  3 of the License,  or (at
+your option) any later version.
 
 This program  is distributed  in the  hope that it  will be  useful, but
 WITHOUT   ANY   WARRANTY;  without   even   the   implied  warranty   of
