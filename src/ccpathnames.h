@@ -608,6 +608,14 @@ ccptn_decl ccptn_t const * ccname_new(ccptn_t, filename)
 
 
 /** --------------------------------------------------------------------
+ ** Pathnames: input/output.
+ ** ----------------------------------------------------------------- */
+
+ccptn_decl void ccptn_fwrite (cce_destination_t L, FILE * stream, ccptn_t const * P)
+  __attribute__((__nonnull__(1,2,3)));
+
+
+/** --------------------------------------------------------------------
  ** Constructors for interfaces implemented by pathname.
  ** ----------------------------------------------------------------- */
 
@@ -903,13 +911,19 @@ struct ccptn_extension_t {
 ccptn_decl ccptn_extension_t ccptn_extension (cce_destination_t L, ccptn_t const * P)
   __attribute__((__nonnull__(1,2)));
 
-
-/** --------------------------------------------------------------------
- ** Pathnames: input/output.
- ** ----------------------------------------------------------------- */
+__attribute__((__always_inline__,__pure__))
+static inline bool
+ccptn_extension_is_empty (ccptn_extension_t E)
+/* Return true if the extension is an empty string. */
+{
+  return (0 == E.len);
+}
 
-ccptn_decl void ccptn_fwrite (cce_destination_t L, FILE * stream, ccptn_t const * P)
-  __attribute__((__nonnull__(1,2,3)));
+ccptn_decl bool ccptn_extension_equal (ccptn_extension_t E1, ccptn_extension_t E2)
+  __attribute__((__pure__));
+
+ccptn_decl void ccptn_extension_fwrite (cce_destination_t L, FILE * stream, ccptn_extension_t E)
+  __attribute__((__nonnull__(1,2)));
 
 
 /** --------------------------------------------------------------------
@@ -987,25 +1001,6 @@ ccptn_decl void ccptn_segment_fwrite (cce_destination_t L, FILE * stream, ccptn_
 
 ccptn_decl ccptn_segment_t ccptn_asciiz_find_last_segment (char const * beg, size_t const len)
   __attribute__((__nonnull__(1)));
-
-
-/** --------------------------------------------------------------------
- ** Extensions.
- ** ----------------------------------------------------------------- */
-
-__attribute__((__always_inline__,__pure__))
-static inline bool
-ccptn_extension_is_empty (ccptn_extension_t E)
-/* Return true if the extension is an empty string. */
-{
-  return (0 == E.len);
-}
-
-ccptn_decl bool ccptn_extension_equal (ccptn_extension_t E1, ccptn_extension_t E2)
-  __attribute__((__pure__));
-
-ccptn_decl void ccptn_extension_fwrite (cce_destination_t L, FILE * stream, ccptn_extension_t E)
-  __attribute__((__nonnull__(1,2)));
 
 
 /** --------------------------------------------------------------------
