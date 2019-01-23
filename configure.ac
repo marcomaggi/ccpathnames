@@ -92,6 +92,7 @@ AM_CONDITIONAL([MMUX_TESTING_ENABLED],[test -n "$CCTESTS_LIBS"])
 MMUX_PKG_CONFIG_FIND_INCLUDE_FILE([ccexceptions],[ccexceptions.h])
 MMUX_PKG_CONFIG_FIND_INCLUDE_FILE([ccmemory],[ccmemory.h])
 MMUX_PKG_CONFIG_FIND_INCLUDE_FILE([ccstructs],[ccstructs.h])
+MMUX_PKG_CONFIG_FIND_INCLUDE_FILE([ccstructs],[ccnames.h])
 
 AC_CACHE_SAVE
 

@@ -18,13 +18,13 @@
 #
 
 AC_DEFUN([MMUX_PKG_CONFIG_FIND_INCLUDE_FILE],
-  [AC_CACHE_CHECK([include file for pkg-config module $1],
-     [mmux_cv_$1_include_file],
+  [AC_CACHE_CHECK([include file for pkg-config module $1: $2],
+     [mmux_cv_$1_[]AS_TR_CPP($2)[]include_file],
      [AS_IF([MMUX_PKG_CONFIG_MODULE_INCLUDEDIR=$(pkg-config $1 --variable=includedir)],
-            [AS_VAR_SET([mmux_cv_$1_include_file],[$MMUX_PKG_CONFIG_MODULE_INCLUDEDIR/$2])],
-            [AS_VAR_SET([mmux_cv_$1_include_file])])])
-   AC_SUBST(AS_TR_CPP([$1_HEADER]), [$mmux_cv_$1_include_file])
-   AS_VAR_APPEND([MMUX_DEPENDENCIES_INCLUDES]," $mmux_cv_$1_include_file")])
+            [AS_VAR_SET([mmux_cv_$1_[]AS_TR_CPP($2)[]include_file],[$MMUX_PKG_CONFIG_MODULE_INCLUDEDIR/$2])],
+            [AS_VAR_SET([mmux_cv_$1_[]AS_TR_CPP($2)[]include_file])])])
+   AC_SUBST(AS_TR_CPP([$1_HEADER]), [$mmux_cv_$1_[]AS_TR_CPP($2)[]include_file])
+   AS_VAR_APPEND([MMUX_DEPENDENCIES_INCLUDES]," $mmux_cv_$1_[]AS_TR_CPP($2)[]include_file")])
 
 ### end of file
 # Local Variables:
