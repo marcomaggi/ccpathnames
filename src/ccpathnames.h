@@ -668,54 +668,55 @@ ccptn_init_error_handler (cce_destination_t L, ccptn_error_handler_t * H, ccptn_
 
 
 /** --------------------------------------------------------------------
- ** Pathnames guarded constructors: helper preprocessor macros.
- ** ----------------------------------------------------------------- */
-
-#define CCPTN_ARGS_CLEAN	cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H
-#define CCPTN_ARGS_ERROR	cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H
-
-
-
-/** --------------------------------------------------------------------
  ** Pathnames guarded constructors: embedded instances.
  ** ----------------------------------------------------------------- */
 
-ccptn_decl void ccname_init(ccptn_t, pointer, clean) (CCPTN_ARGS_CLEAN, ccptn_t * P, char const * input_rep)
+ccptn_decl void ccname_init(ccptn_t, pointer, clean)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccptn_t * P, char const * input_rep)
   __attribute__((__nonnull__(1,2,3,4,5)));
 
-ccptn_decl void ccname_init(ccptn_t, pointer, error) (CCPTN_ARGS_ERROR, ccptn_t * P, char const * input_rep)
-  __attribute__((__nonnull__(1,2,3,4,5)));
-
-/* ------------------------------------------------------------------ */
-
-ccptn_decl void ccname_init(ccptn_t, pointer_dup, clean) (CCPTN_ARGS_CLEAN, ccptn_t * P, char const * input_rep)
-  __attribute__((__nonnull__(1,2,3,4,5)));
-
-ccptn_decl void ccname_init(ccptn_t, pointer_dup, error) (CCPTN_ARGS_ERROR, ccptn_t * P, char const * input_rep)
+ccptn_decl void ccname_init(ccptn_t, pointer, error)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccptn_t * P, char const * input_rep)
   __attribute__((__nonnull__(1,2,3,4,5)));
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl void ccname_init(ccptn_t, asciiz, clean) (CCPTN_ARGS_CLEAN, ccptn_t * P, ccmem_asciiz_t input_rep)
+ccptn_decl void ccname_init(ccptn_t, pointer_dup, clean)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccptn_t * P, char const * input_rep)
+  __attribute__((__nonnull__(1,2,3,4,5)));
+
+ccptn_decl void ccname_init(ccptn_t, pointer_dup, error)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccptn_t * P, char const * input_rep)
+  __attribute__((__nonnull__(1,2,3,4,5)));
+
+/* ------------------------------------------------------------------ */
+
+ccptn_decl void ccname_init(ccptn_t, asciiz, clean)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccptn_t * P, ccmem_asciiz_t input_rep)
   __attribute__((__nonnull__(1,2,3,4)));
 
-ccptn_decl void ccname_init(ccptn_t, asciiz, error) (CCPTN_ARGS_ERROR, ccptn_t * P, ccmem_asciiz_t input_rep)
+ccptn_decl void ccname_init(ccptn_t, asciiz, error)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccptn_t * P, ccmem_asciiz_t input_rep)
   __attribute__((__nonnull__(1,2,3,4)));
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl void ccname_init(ccptn_t, asciiz_dup, clean) (CCPTN_ARGS_CLEAN, ccptn_t * P, ccmem_asciiz_t input_rep)
+ccptn_decl void ccname_init(ccptn_t, asciiz_dup, clean)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccptn_t * P, ccmem_asciiz_t input_rep)
   __attribute__((__nonnull__(1,2,3,4)));
 
-ccptn_decl void ccname_init(ccptn_t, asciiz_dup, error) (CCPTN_ARGS_ERROR, ccptn_t * P, ccmem_asciiz_t input_rep)
+ccptn_decl void ccname_init(ccptn_t, asciiz_dup, error)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccptn_t * P, ccmem_asciiz_t input_rep)
   __attribute__((__nonnull__(1,2,3,4)));
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl void ccname_init(ccptn_t, ascii, clean) (CCPTN_ARGS_CLEAN, ccptn_t * P, ccmem_ascii_t input_rep)
+ccptn_decl void ccname_init(ccptn_t, ascii, clean)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccptn_t * P, ccmem_ascii_t input_rep)
   __attribute__((__nonnull__(1,2,3,4)));
 
-ccptn_decl void ccname_init(ccptn_t, ascii, error) (CCPTN_ARGS_ERROR, ccptn_t * P, ccmem_ascii_t input_rep)
+ccptn_decl void ccname_init(ccptn_t, ascii, error)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccptn_t * P, ccmem_ascii_t input_rep)
   __attribute__((__nonnull__(1,2,3,4)));
 
 
@@ -723,42 +724,52 @@ ccptn_decl void ccname_init(ccptn_t, ascii, error) (CCPTN_ARGS_ERROR, ccptn_t * 
  ** Pathnames guarded constructors: standalone instances.
  ** ----------------------------------------------------------------- */
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, pointer, clean) (CCPTN_ARGS_CLEAN, char const * input_rep)
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, pointer, clean)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, char const * input_rep)
   __attribute__((__nonnull__(1,2,3,4)));
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, pointer, error) (CCPTN_ARGS_ERROR, char const * input_rep)
-  __attribute__((__nonnull__(1,2,3,4)));
-
-/* ------------------------------------------------------------------ */
-
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, pointer_dup, clean) (CCPTN_ARGS_CLEAN, char const * input_rep)
-  __attribute__((__nonnull__(1,2,3,4)));
-
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, pointer_dup, error) (CCPTN_ARGS_ERROR, char const * input_rep)
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, pointer, error)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, char const * input_rep)
   __attribute__((__nonnull__(1,2,3,4)));
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, asciiz, clean) (CCPTN_ARGS_CLEAN, ccmem_asciiz_t input_rep)
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, pointer_dup, clean)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, char const * input_rep)
+  __attribute__((__nonnull__(1,2,3,4)));
+
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, pointer_dup, error)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, char const * input_rep)
+  __attribute__((__nonnull__(1,2,3,4)));
+
+/* ------------------------------------------------------------------ */
+
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, asciiz, clean)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccmem_asciiz_t input_rep)
   __attribute__((__nonnull__(1,2,3)));
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, asciiz, error) (CCPTN_ARGS_ERROR, ccmem_asciiz_t input_rep)
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, asciiz, error)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccmem_asciiz_t input_rep)
   __attribute__((__nonnull__(1,2,3)));
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, asciiz_dup, clean) (CCPTN_ARGS_CLEAN, ccmem_asciiz_t input_rep)
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, asciiz_dup, clean)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccmem_asciiz_t input_rep)
   __attribute__((__nonnull__(1,2,3)));
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, asciiz_dup, error) (CCPTN_ARGS_ERROR, ccmem_asciiz_t input_rep)
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, asciiz_dup, error)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccmem_asciiz_t input_rep)
   __attribute__((__nonnull__(1,2,3)));
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, ascii, clean) (CCPTN_ARGS_CLEAN, ccmem_ascii_t input_rep)
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, ascii, clean)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccmem_ascii_t input_rep)
   __attribute__((__nonnull__(1,2,3)));
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, ascii, error) (CCPTN_ARGS_ERROR, ccmem_ascii_t input_rep)
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, ascii, error)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccmem_ascii_t input_rep)
   __attribute__((__nonnull__(1,2,3)));
 
 
@@ -766,50 +777,62 @@ ccptn_decl ccptn_t const * ccname_new(ccptn_t, ascii, error) (CCPTN_ARGS_ERROR, 
  ** Pathnames manipulation: guarded constructors.
  ** ----------------------------------------------------------------- */
 
-ccptn_decl void ccname_init(ccptn_t, realpath, clean) (CCPTN_ARGS_CLEAN, ccptn_t * dst, ccptn_t const * src)
+ccptn_decl void ccname_init(ccptn_t, realpath, clean)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccptn_t * dst, ccptn_t const * src)
   __attribute__((__nonnull__(1,2,3,4,5)));
 
-ccptn_decl void ccname_init(ccptn_t, realpath, error) (CCPTN_ARGS_ERROR, ccptn_t * dst, ccptn_t const * src)
-  __attribute__((__nonnull__(1,2,3,4,5)));
-
-/* ------------------------------------------------------------------ */
-
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, realpath, clean) (CCPTN_ARGS_CLEAN, ccptn_t const * src)
-  __attribute__((__nonnull__(1,2,3,4),__returns_nonnull__));
-
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, realpath, error) (CCPTN_ARGS_ERROR, ccptn_t const * src)
-  __attribute__((__nonnull__(1,2,3,4),__returns_nonnull__));
-
-/* ------------------------------------------------------------------ */
-
-ccptn_decl void ccname_init(ccptn_t, normalise, clean) (CCPTN_ARGS_CLEAN, ccptn_t * dst, ccptn_t const * src)
-  __attribute__((__nonnull__(1,2,3,4,5)));
-
-ccptn_decl void ccname_init(ccptn_t, normalise, error) (CCPTN_ARGS_ERROR, ccptn_t * dst, ccptn_t const * src)
+ccptn_decl void ccname_init(ccptn_t, realpath, error)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccptn_t * dst, ccptn_t const * src)
   __attribute__((__nonnull__(1,2,3,4,5)));
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, normalise, clean) (CCPTN_ARGS_CLEAN, ccptn_t const * src)
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, realpath, clean)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccptn_t const * src)
   __attribute__((__nonnull__(1,2,3,4),__returns_nonnull__));
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, normalise, error) (CCPTN_ARGS_ERROR, ccptn_t const * src)
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, realpath, error)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccptn_t const * src)
   __attribute__((__nonnull__(1,2,3,4),__returns_nonnull__));
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl void ccname_init(ccptn_t, concat, clean) (CCPTN_ARGS_CLEAN, ccptn_t * result, ccptn_t const * prefix, ccptn_t const * suffix)
+ccptn_decl void ccname_init(ccptn_t, normalise, clean)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccptn_t * dst, ccptn_t const * src)
+  __attribute__((__nonnull__(1,2,3,4,5)));
+
+ccptn_decl void ccname_init(ccptn_t, normalise, error)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccptn_t * dst, ccptn_t const * src)
+  __attribute__((__nonnull__(1,2,3,4,5)));
+
+/* ------------------------------------------------------------------ */
+
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, normalise, clean)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccptn_t const * src)
+  __attribute__((__nonnull__(1,2,3,4),__returns_nonnull__));
+
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, normalise, error)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccptn_t const * src)
+  __attribute__((__nonnull__(1,2,3,4),__returns_nonnull__));
+
+/* ------------------------------------------------------------------ */
+
+ccptn_decl void ccname_init(ccptn_t, concat, clean)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccptn_t * result, ccptn_t const * prefix, ccptn_t const * suffix)
   __attribute__((__nonnull__(1,2,3,4,5,6)));
 
-ccptn_decl void ccname_init(ccptn_t, concat, error) (CCPTN_ARGS_ERROR, ccptn_t * result, ccptn_t const * prefix, ccptn_t const * suffix)
+ccptn_decl void ccname_init(ccptn_t, concat, error)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccptn_t * result, ccptn_t const * prefix, ccptn_t const * suffix)
   __attribute__((__nonnull__(1,2,3,4,5,6)));
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, concat, clean) (CCPTN_ARGS_CLEAN, ccptn_t const * prefix, ccptn_t const * suffix)
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, concat, clean)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccptn_t const * prefix, ccptn_t const * suffix)
   __attribute__((__nonnull__(1,2,3,4,5),__returns_nonnull__));
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, concat, error) (CCPTN_ARGS_ERROR, ccptn_t const * prefix, ccptn_t const * suffix)
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, concat, error)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccptn_t const * prefix, ccptn_t const * suffix)
   __attribute__((__nonnull__(1,2,3,4,5),__returns_nonnull__));
 
 
@@ -817,66 +840,82 @@ ccptn_decl ccptn_t const * ccname_new(ccptn_t, concat, error) (CCPTN_ARGS_ERROR,
  ** Pathname components: guarded constructors.
  ** ----------------------------------------------------------------- */
 
-ccptn_decl void ccname_init(ccptn_t, rootname, clean) (CCPTN_ARGS_CLEAN, ccptn_t * R, ccptn_t const * P)
+ccptn_decl void ccname_init(ccptn_t, rootname, clean)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccptn_t * R, ccptn_t const * P)
   __attribute__((__nonnull__(1,2,3,4)));
 
-ccptn_decl void ccname_init(ccptn_t, rootname, error) (CCPTN_ARGS_ERROR, ccptn_t * R, ccptn_t const * P)
-  __attribute__((__nonnull__(1,2,3,4)));
-
-/* ------------------------------------------------------------------ */
-
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, rootname, clean) (CCPTN_ARGS_CLEAN, ccptn_t const * P)
-  __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
-
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, rootname, error) (CCPTN_ARGS_ERROR, ccptn_t const * P)
-  __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
-
-/* ------------------------------------------------------------------ */
-
-ccptn_decl void ccname_init(ccptn_t, dirname, clean) (CCPTN_ARGS_CLEAN, ccptn_t * R, ccptn_t const * P)
-  __attribute__((__nonnull__(1,2,3,4)));
-
-ccptn_decl void ccname_init(ccptn_t, dirname, error) (CCPTN_ARGS_ERROR, ccptn_t * R, ccptn_t const * P)
+ccptn_decl void ccname_init(ccptn_t, rootname, error)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccptn_t * R, ccptn_t const * P)
   __attribute__((__nonnull__(1,2,3,4)));
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, dirname, clean) (CCPTN_ARGS_CLEAN, ccptn_t const * P)
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, rootname, clean)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccptn_t const * P)
   __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, dirname, error) (CCPTN_ARGS_ERROR, ccptn_t const * P)
-  __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
-
-/* ------------------------------------------------------------------ */
-
-ccptn_decl void ccname_init(ccptn_t, tailname, clean) (CCPTN_ARGS_CLEAN, ccptn_t * R, ccptn_t const * P)
-  __attribute__((__nonnull__(1,2,3,4)));
-
-ccptn_decl void ccname_init(ccptn_t, tailname, error) (CCPTN_ARGS_ERROR, ccptn_t * R, ccptn_t const * P)
-  __attribute__((__nonnull__(1,2,3,4)));
-
-/* ------------------------------------------------------------------ */
-
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, tailname, clean) (CCPTN_ARGS_CLEAN, ccptn_t const * P)
-  __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
-
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, tailname, error) (CCPTN_ARGS_ERROR, ccptn_t const * P)
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, rootname, error)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccptn_t const * P)
   __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl void ccname_init(ccptn_t, filename, clean) (CCPTN_ARGS_CLEAN, ccptn_t * R, ccptn_t const * P)
+ccptn_decl void ccname_init(ccptn_t, dirname, clean)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccptn_t * R, ccptn_t const * P)
   __attribute__((__nonnull__(1,2,3,4)));
 
-ccptn_decl void ccname_init(ccptn_t, filename, error) (CCPTN_ARGS_ERROR, ccptn_t * R, ccptn_t const * P)
+ccptn_decl void ccname_init(ccptn_t, dirname, error)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccptn_t * R, ccptn_t const * P)
   __attribute__((__nonnull__(1,2,3,4)));
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, filename, clean) (CCPTN_ARGS_CLEAN, ccptn_t const * P)
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, dirname, clean)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccptn_t const * P)
   __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, filename, error) (CCPTN_ARGS_ERROR, ccptn_t const * P)
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, dirname, error)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccptn_t const * P)
+  __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
+
+/* ------------------------------------------------------------------ */
+
+ccptn_decl void ccname_init(ccptn_t, tailname, clean)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccptn_t * R, ccptn_t const * P)
+  __attribute__((__nonnull__(1,2,3,4)));
+
+ccptn_decl void ccname_init(ccptn_t, tailname, error)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccptn_t * R, ccptn_t const * P)
+  __attribute__((__nonnull__(1,2,3,4)));
+
+/* ------------------------------------------------------------------ */
+
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, tailname, clean)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccptn_t const * P)
+  __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
+
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, tailname, error)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccptn_t const * P)
+  __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
+
+/* ------------------------------------------------------------------ */
+
+ccptn_decl void ccname_init(ccptn_t, filename, clean)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccptn_t * R, ccptn_t const * P)
+  __attribute__((__nonnull__(1,2,3,4)));
+
+ccptn_decl void ccname_init(ccptn_t, filename, error)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccptn_t * R, ccptn_t const * P)
+  __attribute__((__nonnull__(1,2,3,4)));
+
+/* ------------------------------------------------------------------ */
+
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, filename, clean)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccptn_t const * P)
+  __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
+
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, filename, error)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccptn_t const * P)
   __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
 
 
