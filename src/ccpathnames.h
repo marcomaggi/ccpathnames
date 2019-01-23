@@ -496,6 +496,13 @@ ccptn_ptr (ccptn_t const * const P)
   return (P->ptr);
 }
 
+__attribute__((__nonnull__(1),__always_inline__,__pure__,__returns_nonnull__))
+static inline ccmem_allocator_t const *
+ccptn_allocator (ccptn_t const * const P)
+{
+  return (P->allocator);
+}
+
 
 /** --------------------------------------------------------------------
  ** Pathnames: predicates.
@@ -538,25 +545,23 @@ ccptn_decl void ccname_init(ccptn_t, realpath)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * dst, ccptn_t const * src)
   __attribute__((__nonnull__(1,2,3,3)));
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, realpath)
-  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t const * src)
-  __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
-
-/* ------------------------------------------------------------------ */
-
 ccptn_decl void ccname_init(ccptn_t, normalise)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * dst, ccptn_t const * src)
   __attribute__((__nonnull__(1,2,3,4)));
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, normalise)
-  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t const * src)
-  __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
-
-/* ------------------------------------------------------------------ */
-
 ccptn_decl void ccname_init(ccptn_t, concat)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * result, ccptn_t const * prefix, ccptn_t const * suffix)
   __attribute__((__nonnull__(1,2,3,4,5)));
+
+/* ------------------------------------------------------------------ */
+
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, realpath)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t const * src)
+  __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
+
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, normalise)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t const * src)
+  __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
 
 ccptn_decl ccptn_t const * ccname_new(ccptn_t, concat)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t const * prefix, ccptn_t const * suffix)
@@ -568,41 +573,37 @@ ccptn_decl ccptn_t const * ccname_new(ccptn_t, concat)
  ** ----------------------------------------------------------------- */
 
 ccptn_decl void ccname_init(ccptn_t, rootname)
-  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * R, ccptn_t const * P)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * dst, ccptn_t const * src)
   __attribute__((__nonnull__(1,2,3,4)));
-
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, rootname)
-  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t const * P)
-  __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
-
-/* ------------------------------------------------------------------ */
 
 ccptn_decl void ccname_init(ccptn_t, dirname)
-  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * R, ccptn_t const * P)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * dst, ccptn_t const * src)
   __attribute__((__nonnull__(1,2,3,4)));
-
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, dirname)
-  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t const * P)
-  __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
-
-/* ------------------------------------------------------------------ */
 
 ccptn_decl void ccname_init(ccptn_t, tailname)
-  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * R, ccptn_t const * P)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * dst, ccptn_t const * src)
   __attribute__((__nonnull__(1,2,3,4)));
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, tailname)
-  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t const * P)
-  __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
+ccptn_decl void ccname_init(ccptn_t, filename)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * dst, ccptn_t const * src)
+  __attribute__((__nonnull__(1,2,3,4)));
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl void ccname_init(ccptn_t, filename)
-  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * R, ccptn_t const * P)
-  __attribute__((__nonnull__(1,2,3,4)));
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, rootname)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t const * src)
+  __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
+
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, dirname)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t const * src)
+  __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
+
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, tailname)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t const * src)
+  __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
 
 ccptn_decl ccptn_t const * ccname_new(ccptn_t, filename)
-  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t const * P)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t const * src)
   __attribute__((__nonnull__(1,2,3),__returns_nonnull__));
 
 
@@ -613,13 +614,13 @@ ccptn_decl ccptn_t const * ccname_new(ccptn_t, filename)
 ccptn_decl ccstructs_dtor_I ccname_iface_new(ccstructs_dtor_I, ccptn_t) (ccptn_t const * self)
   __attribute__((__nonnull__(1)));
 
-ccptn_decl ccstructs_dumpable_I ccname_iface_new(ccstructs_dumpable_I, ccptn_t) (ccptn_t const * S)
+ccptn_decl ccstructs_dumpable_I ccname_iface_new(ccstructs_dumpable_I, ccptn_t) (ccptn_t const * self)
   __attribute__((__nonnull__(1)));
 
-ccptn_decl ccstructs_serialiser_I ccname_iface_new(ccstructs_serialiser_I, ccptn_t) (ccptn_t const * S)
+ccptn_decl ccstructs_serialiser_I ccname_iface_new(ccstructs_serialiser_I, ccptn_t) (ccptn_t const * self)
   __attribute__((__nonnull__(1)));
 
-ccptn_decl ccstructs_deserialiser_I ccname_iface_new(ccstructs_deserialiser_I, ccptn_t) (ccptn_t * S)
+ccptn_decl ccstructs_deserialiser_I ccname_iface_new(ccstructs_deserialiser_I, ccptn_t) (ccptn_t * self)
   __attribute__((__nonnull__(1)));
 
 
