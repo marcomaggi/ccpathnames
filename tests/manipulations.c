@@ -7,7 +7,7 @@
 
 	Test file for pathname manipulation functions.
 
-  Copyright (C) 2018 Marco Maggi <marco.maggi-ipsu@poste.it>
+  Copyright (C) 2018, 2019 Marco Maggi <marco.maggi-ipsu@poste.it>
 
   See the COPYING file.
 */
@@ -22,6 +22,7 @@
 #endif
 
 static char const * progname;
+static ccmem_allocator_t const * A;
 
 
 /** --------------------------------------------------------------------
@@ -30,7 +31,7 @@ static char const * progname;
 
 void
 test_1_1 (cce_destination_t upper_L)
-/* Test for "ccptn_new_concat()". */
+/* Test for "ccname_new(ccptn_t, concat, clean)()". */
 {
   cce_location_t	L[1];
   ccptn_clean_handler_t	P1_H[1], P2_H[1], R_H[1];
@@ -40,20 +41,15 @@ test_1_1 (cce_destination_t upper_L)
   } else {
     static char const *	pathname_1 = "/path/to";
     static char const *	pathname_2 = "file.ext";
-    ccptn_t		*P1, *P2, *R;
+    ccptn_t const	*P1, *P2, *R;
 
-    P1 = ccptn_new_nodup_asciiz(L, pathname_1);
-    ccptn_handler_ptn_init(L, P1_H, P1);
+    P1 = ccname_new(ccptn_t, pointer, clean)(L, A, P1_H, pathname_1);
+    P2 = ccname_new(ccptn_t, pointer, clean)(L, A, P2_H, pathname_2);
+    R  = ccname_new(ccptn_t, concat,  clean)(L, A, R_H, P1, P2);
 
-    P2 = ccptn_new_nodup_asciiz(L, pathname_2);
-    ccptn_handler_ptn_init(L, P2_H, P2);
+    if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(R)); }
 
-    R = ccptn_new_concat(L, P1, P2);
-    ccptn_handler_ptn_init(L, R_H, R);
-
-    if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(R)); }
-
-    cctests_assert_asciiz(L, "/path/to/file.ext", ccptn_asciiz(R));
+    cctests_assert_asciiz(L, "/path/to/file.ext", ccptn_ptr(R));
 
     cce_run_body_handlers(L);
   }
@@ -61,31 +57,24 @@ test_1_1 (cce_destination_t upper_L)
 
 void
 test_1_2 (cce_destination_t upper_L)
-/* Test for "ccptn_new_concat()": if the  prefix is absolute, the result
-   is absolute. */
+/* Test for  "ccname_new(ccptn_t, concat, clean)()":  if the prefix is  absolute, the
+   result is absolute. */
 {
   cce_location_t	L[1];
-  ccptn_clean_handler_t	P1_H[1];
-  ccptn_clean_handler_t	P2_H[1];
-  ccptn_clean_handler_t	R_H[1];
+  ccptn_clean_handler_t	P1_H[1], P2_H[1], R_H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname_1 = "/path/to";
     static char const *	pathname_2 = "file.ext";
-    ccptn_t		*P1, *P2, *R;
+    ccptn_t const	*P1, *P2, *R;
 
-    P1 = ccptn_new_nodup_asciiz(L, pathname_1);
-    ccptn_handler_ptn_init(L, P1_H, P1);
+    P1 = ccname_new(ccptn_t, pointer, clean)(L, A, P1_H, pathname_1);
+    P2 = ccname_new(ccptn_t, pointer, clean)(L, A, P2_H, pathname_2);
+    R  = ccname_new(ccptn_t, concat,  clean)(L, A, R_H, P1, P2);
 
-    P2 = ccptn_new_nodup_asciiz(L, pathname_2);
-    ccptn_handler_ptn_init(L, P2_H, P2);
-
-    R = ccptn_new_concat(L, P1, P2);
-    ccptn_handler_ptn_init(L, R_H, R);
-
-    if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(R)); }
+    if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(R)); }
 
     cctests_assert(L, true  == ccptn_is_absolute(R));
     cctests_assert(L, false == ccptn_is_relative(R));
@@ -96,31 +85,24 @@ test_1_2 (cce_destination_t upper_L)
 
 void
 test_1_3 (cce_destination_t upper_L)
-/* Test for "ccptn_new_concat()": if the  prefix is relative, the result
-   is relative. */
+/* Test for  "ccname_new(ccptn_t, concat, clean)()":  if the prefix is  relative, the
+   result is relative. */
 {
   cce_location_t	L[1];
-  ccptn_clean_handler_t	P1_H[1];
-  ccptn_clean_handler_t	P2_H[1];
-  ccptn_clean_handler_t	R_H[1];
+  ccptn_clean_handler_t	P1_H[1], P2_H[1], R_H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname_1 = "./path/to";
     static char const *	pathname_2 = "file.ext";
-    ccptn_t		*P1, *P2, *R;
+    ccptn_t const	*P1, *P2, *R;
 
-    P1 = ccptn_new_nodup_asciiz(L, pathname_1);
-    ccptn_handler_ptn_init(L, P1_H, P1);
+    P1 = ccname_new(ccptn_t, pointer, clean)(L, A, P1_H, pathname_1);
+    P2 = ccname_new(ccptn_t, pointer, clean)(L, A, P2_H, pathname_2);
+    R  = ccname_new(ccptn_t, concat,  clean)(L, A, R_H, P1, P2);
 
-    P2 = ccptn_new_nodup_asciiz(L, pathname_2);
-    ccptn_handler_ptn_init(L, P2_H, P2);
-
-    R = ccptn_new_concat(L, P1, P2);
-    ccptn_handler_ptn_init(L, R_H, R);
-
-    if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(R)); }
+    if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(R)); }
 
     cctests_assert(L, false == ccptn_is_absolute(R));
     cctests_assert(L, true  == ccptn_is_relative(R));
@@ -133,32 +115,26 @@ test_1_3 (cce_destination_t upper_L)
 
 void
 test_2_1 (cce_destination_t upper_L)
-/* Test for "ccptn_init_concat()". */
+/* Test for "ccname_init(ccptn_t, concat, clean)()". */
 {
   cce_location_t	L[1];
-  ccptn_clean_handler_t	P1_H[1];
-  ccptn_clean_handler_t	P2_H[1];
-  ccptn_clean_handler_t	R_H[1];
+  ccptn_clean_handler_t	P1_H[1], P2_H[1], R_H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname_1 = "/path/to";
     static char const *	pathname_2 = "file.ext";
-    ccptn_t		*P1, *P2, R[1];
+    ccptn_t const	*P1, *P2;
+    ccptn_t		R[1];
 
-    P1 = ccptn_new_nodup_asciiz(L, pathname_1);
-    ccptn_handler_ptn_init(L, P1_H, P1);
+    P1 = ccname_new(ccptn_t, pointer, clean)(L, A, P1_H, pathname_1);
+    P2 = ccname_new(ccptn_t, pointer, clean)(L, A, P2_H, pathname_2);
+    ccname_init(ccptn_t, concat, clean)(L, A, R_H, R, P1, P2);
 
-    P2 = ccptn_new_nodup_asciiz(L, pathname_2);
-    ccptn_handler_ptn_init(L, P2_H, P2);
+    if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(R)); }
 
-    ccptn_init_concat(L, R, P1, P2);
-    ccptn_handler_ptn_init(L, R_H, R);
-
-    if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(R)); }
-
-    cctests_assert_asciiz(L, "/path/to/file.ext", ccptn_asciiz(R));
+    cctests_assert_asciiz(L, "/path/to/file.ext", ccptn_ptr(R));
 
     cce_run_body_handlers(L);
   }
@@ -166,31 +142,25 @@ test_2_1 (cce_destination_t upper_L)
 
 void
 test_2_2 (cce_destination_t upper_L)
-/* Test for "ccptn_init_concat()": if the  prefix is absolute, the result
-   is absolute. */
+/* Test for "ccname_init(ccptn_t,  concat, clean)()": if the prefix  is absolute, the
+   result is absolute. */
 {
   cce_location_t	L[1];
-  ccptn_clean_handler_t	P1_H[1];
-  ccptn_clean_handler_t	P2_H[1];
-  ccptn_clean_handler_t	R_H[1];
+  ccptn_clean_handler_t	P1_H[1], P2_H[1], R_H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname_1 = "/path/to";
     static char const *	pathname_2 = "file.ext";
-    ccptn_t		*P1, *P2, R[1];
+    ccptn_t const	*P1, *P2;
+    ccptn_t		R[1];
 
-    P1 = ccptn_new_nodup_asciiz(L, pathname_1);
-    ccptn_handler_ptn_init(L, P1_H, P1);
+    P1 = ccname_new(ccptn_t, pointer, clean)(L, A, P1_H, pathname_1);
+    P2 = ccname_new(ccptn_t, pointer, clean)(L, A, P2_H, pathname_2);
+    ccname_init(ccptn_t, concat, clean)(L, A, R_H, R, P1, P2);
 
-    P2 = ccptn_new_nodup_asciiz(L, pathname_2);
-    ccptn_handler_ptn_init(L, P2_H, P2);
-
-    ccptn_init_concat(L, R, P1, P2);
-    ccptn_handler_ptn_init(L, R_H, R);
-
-    if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(R)); }
+    if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(R)); }
 
     cctests_assert(L, true  == ccptn_is_absolute(R));
     cctests_assert(L, false == ccptn_is_relative(R));
@@ -201,31 +171,25 @@ test_2_2 (cce_destination_t upper_L)
 
 void
 test_2_3 (cce_destination_t upper_L)
-/* Test for "ccptn_init_concat()": if the  prefix is relative, the result
-   is relative. */
+/* Test for "ccname_init(ccptn_t,  concat, clean)()": if the prefix  is relative, the
+   result is relative. */
 {
   cce_location_t	L[1];
-  ccptn_clean_handler_t	P1_H[1];
-  ccptn_clean_handler_t	P2_H[1];
-  ccptn_clean_handler_t	R_H[1];
+  ccptn_clean_handler_t	P1_H[1], P2_H[1], R_H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname_1 = "./path/to";
     static char const *	pathname_2 = "file.ext";
-    ccptn_t		*P1, *P2, R[1];
+    ccptn_t const	*P1, *P2;
+    ccptn_t		R[1];
 
-    P1 = ccptn_new_nodup_asciiz(L, pathname_1);
-    ccptn_handler_ptn_init(L, P1_H, P1);
+    P1 = ccname_new(ccptn_t, pointer, clean)(L, A, P1_H, pathname_1);
+    P2 = ccname_new(ccptn_t, pointer, clean)(L, A, P2_H, pathname_2);
+    ccname_init(ccptn_t, concat, clean)(L, A, R_H, R, P1, P2);
 
-    P2 = ccptn_new_nodup_asciiz(L, pathname_2);
-    ccptn_handler_ptn_init(L, P2_H, P2);
-
-    ccptn_init_concat(L, R, P1, P2);
-    ccptn_handler_ptn_init(L, R_H, R);
-
-    if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(R)); }
+    if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(R)); }
 
     cctests_assert(L, false == ccptn_is_absolute(R));
     cctests_assert(L, true  == ccptn_is_relative(R));
@@ -241,7 +205,7 @@ test_2_3 (cce_destination_t upper_L)
 
 void
 test_3_1_1 (cce_destination_t upper_L)
-/* Test for "ccptn_new_realpath()". */
+/* Test for "ccname_new(ccptn_t, realpath, clean)()". */
 {
 #ifdef HAVE_REALPATH
   cce_location_t	L[1];
@@ -251,14 +215,10 @@ test_3_1_1 (cce_destination_t upper_L)
     cce_run_catch_handlers_raise(L, upper_L);
   } else {
     char const *	pathname = progname;
-    ccptn_t *		P;
-    ccptn_t *		R;
+    ccptn_t const	*P, *R;
 
-    P = ccptn_new_nodup_asciiz(L, pathname);
-    ccptn_handler_ptn_init(L, P_H, P);
-
-    R = ccptn_new_realpath(L, P);
-    ccptn_handler_ptn_init(L, R_H, R);
+    P = ccname_new(ccptn_t, pointer,  clean)(L, A, P_H, pathname);
+    R = ccname_new(ccptn_t, realpath, clean)(L, A, R_H, P);
 
     cctests_assert(L, false == ccptn_is_realpath(P));
     cctests_assert(L, false == ccptn_is_normalised(P));
@@ -273,7 +233,7 @@ test_3_1_1 (cce_destination_t upper_L)
 
 void
 test_3_1_2 (cce_destination_t upper_L)
-/* Test for "ccptn_init_realpath()". */
+/* Test for "ccname_init(ccptn_t, realpath, clean)()". */
 {
 #ifdef HAVE_REALPATH
   cce_location_t	L[1];
@@ -283,13 +243,11 @@ test_3_1_2 (cce_destination_t upper_L)
     cce_run_catch_handlers_raise(L, upper_L);
   } else {
     char const *	pathname = progname;
-    ccptn_t		*P, R[1];
+    ccptn_t const	*P;
+    ccptn_t		R[1];
 
-    P = ccptn_new_nodup_asciiz(L, pathname);
-    ccptn_handler_ptn_init(L, P_H, P);
-
-    ccptn_init_realpath(L, R, P);
-    ccptn_handler_ptn_init(L, R_H, R);
+    P = ccname_new(ccptn_t, pointer,  clean)(L, A, P_H, pathname);
+    ccname_init(ccptn_t, realpath, clean)(L, A, R_H, R, P);
 
     cctests_assert(L, false == ccptn_is_realpath(P));
     cctests_assert(L, false == ccptn_is_normalised(P));
@@ -307,38 +265,34 @@ test_3_1_2 (cce_destination_t upper_L)
  ** Normalisation: normalise.
  ** ----------------------------------------------------------------- */
 
-/* Test for "ccptn_new_normalise()". */
+/* Test for "ccname_new(ccptn_t, normalise, clean)()". */
 #define NEW_NORMALISE_TEST(FUNCNAME,INPUT_PATHNAME,EXPECTED_PATHNAME,VERBOSE) \
   void									\
   FUNCNAME (cce_destination_t upper_L)					\
   {									\
-    cce_location_t	L[1];						\
+    cce_location_t		L[1];					\
     ccptn_clean_handler_t	P_H[1], R_H[1];				\
 									\
     if (cce_location(L)) {						\
       cce_run_catch_handlers_raise(L, upper_L);				\
     } else {								\
       char const *	pathname = INPUT_PATHNAME;			\
-      ccptn_t *		P;						\
-      ccptn_t *		R;						\
+      ccptn_t const	*P, *R;						\
 									\
-      P = ccptn_new_nodup_asciiz(L, pathname);				\
-      ccptn_handler_ptn_init(L, P_H, P);				\
-									\
-      R = ccptn_new_normalise(L, P);					\
-      ccptn_handler_ptn_init(L, R_H, R);				\
+      P = ccname_new(ccptn_t, pointer,   clean)(L, A, P_H, pathname);	\
+      R = ccname_new(ccptn_t, normalise, clean)(L, A, R_H, P);		\
 									\
       if (VERBOSE) {							\
 	fprintf(stderr,							\
 		"%s: input_pathname: \"%s\", normal_pathname=\"",	\
 		__func__, pathname);					\
-	ccptn_print(L, stderr, R);					\
+	ccptn_fwrite(L, stderr, R);					\
 	fprintf(stderr,							\
 		"\", expected_pathname=\"%s\"\n",			\
 		EXPECTED_PATHNAME);					\
       }									\
 									\
-      cctests_assert_asciiz(L, EXPECTED_PATHNAME, ccptn_asciiz(R));	\
+      cctests_assert_asciiz(L, EXPECTED_PATHNAME, ccptn_ptr(R));	\
       cctests_assert(L, true == ccptn_is_normalised(R));		\
 									\
       cce_run_body_handlers(L);					\
@@ -419,7 +373,7 @@ NEW_NORMALISE_TEST(test_3_2_8_15,	"./path/../../../file.ext",	"../../file.ext",	
 
 void
 test_3_2_9_1 (cce_destination_t upper_L)
-/* Test for "ccptn_new_normalise()".  Invalid pathname. */
+/* Test for "ccname_new(ccptn_t, normalise, clean)()".  Invalid pathname. */
 {
   cce_location_t	L[1];
   ccptn_clean_handler_t	P_H[1], R_H[1];
@@ -432,22 +386,17 @@ test_3_2_9_1 (cce_destination_t upper_L)
     }
   } else {
     char const *	pathname = "/..";
-    ccptn_t *		P;
-    ccptn_t *		R;
+    ccptn_t const	*P;
 
-    P = ccptn_new_nodup_asciiz(L, pathname);
-    ccptn_handler_ptn_init(L, P_H, P);
-
-    R = ccptn_new_normalise(L, P);
-    ccptn_handler_ptn_init(L, R_H, R);
-
+    P = ccname_new(ccptn_t, pointer,   clean)(L, A, P_H, pathname);
+    ccname_new(ccptn_t, normalise, clean)(L, A, R_H, P);
     cctests_assert(L, false);
   }
 }
 
 void
 test_3_2_9_2 (cce_destination_t upper_L)
-/* Test for "ccptn_new_normalise()".  Invalid pathname. */
+/* Test for "ccname_new(ccptn_t, realpath, clean)()".  Invalid pathname. */
 {
   cce_location_t	L[1];
   ccptn_clean_handler_t	P_H[1], R_H[1];
@@ -460,15 +409,10 @@ test_3_2_9_2 (cce_destination_t upper_L)
     }
   } else {
     char const *	pathname = "/path/to/../../..";
-    ccptn_t *		P;
-    ccptn_t *		R;
+    ccptn_t const	*P;
 
-    P = ccptn_new_nodup_asciiz(L, pathname);
-    ccptn_handler_ptn_init(L, P_H, P);
-
-    R = ccptn_new_normalise(L, P);
-    ccptn_handler_ptn_init(L, R_H, R);
-
+    P = ccname_new(ccptn_t, pointer,   clean)(L, A, P_H, pathname);
+    ccname_new(ccptn_t, normalise, clean)(L, A, R_H, P);
     cctests_assert(L, false);
   }
 }
@@ -478,6 +422,7 @@ int
 main (int argc CCPTN_UNUSED, const char *const argv[])
 {
   progname = argv[0];
+  A = ccmem_standard_allocator;
 
   ccptn_library_init();
 

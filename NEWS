@@ -18,9 +18,10 @@ Revision 0.2.0-devel.0
 
 * Renamed "ccptn_init()" to  "ccptn_library_init()".
 
-* Changed types of exception handlers for guarded constructors.
-
 * Added missing C headers include.
+
+* Full  rewriting  of  API  using the  facilities  of  "ccnames.h"  from
+  CCStructs.
 
 
 Revision 0.1.0-beta.0

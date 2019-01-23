@@ -7,20 +7,18 @@
 
 
 
-  Copyright (C) 2018 Marco Maggi <marco.maggi-ipsu@poste.it>
+  Copyright (C) 2018, 2019 Marco Maggi <marco.maggi-ipsu@poste.it>
 
-  This program is  free software: you can redistribute  it and/or modify
-  it  under the  terms  of  the GNU  Lesser  General  Public License  as
-  published by  the Free  Software Foundation, either  version 3  of the
-  License, or (at your option) any later version.
+  This program is free  software: you can redistribute it and/or  modify it under the
+  terms of the  GNU Lesser General Public  License as published by  the Free Software
+  Foundation, either version 3 of the License, or (at your option) any later version.
 
-  This program  is distributed in the  hope that it will  be useful, but
-  WITHOUT   ANY  WARRANTY;   without  even   the  implied   warranty  of
-  MERCHANTABILITY  or FITNESS  FOR A  PARTICULAR PURPOSE.   See  the GNU
-  General Public License for more details.
+  This program  is distributed in the  hope that it  will be useful, but  WITHOUT ANY
+  WARRANTY; without  even the implied  warranty of  MERCHANTABILITY or FITNESS  FOR A
+  PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
-  You  should have received  a copy  of the  GNU General  Public License
-  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  You should have received  a copy of the GNU General Public  License along with this
+  program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 
@@ -49,9 +47,9 @@
 __attribute__((__always_inline__,__nonnull__(1,2),__returns_nonnull__))
 static inline char const *
 find_next_slash_or_end (char const * in, char const * const end)
-/* Given an ASCII string referenced by IN and terminating at pointer END
-   excluded: find  the next slash  octet in the string.   If successful:
-   return a pointer referencing the slash.  Otherwise return END. */
+/* Given an  ASCII string referenced by  IN and terminating at  pointer END excluded:
+   find  the  next slash  octet  in  the string.   If  successful:  return a  pointer
+   referencing the slash.  Otherwise return END. */
 {
   while ((in < end) && ('/' != *in)) {
     ++in;
@@ -62,10 +60,9 @@ find_next_slash_or_end (char const * in, char const * const end)
 __attribute__((__always_inline__,__nonnull__(1,2),__returns_nonnull__))
 static inline char const *
 find_prev_slash_or_begin (char const * const output_ptr, char const * ou)
-/* Given  an ASCII  string referenced  by  OU and  beginning at  pointer
-   OUTPUT_PTR included: find the previous slash octet in the string.  If
-   successful: return a pointer referencing the slash.  Otherwise return
-   OUTPUT_PTR. */
+/* Given  an ASCII  string  referenced  by OU  and  beginning  at pointer  OUTPUT_PTR
+   included: find  the previous slash octet  in the string.  If  successful: return a
+   pointer referencing the slash.  Otherwise return OUTPUT_PTR. */
 {
   while ((output_ptr < ou) && ('/' != *ou)) {
     --ou;
@@ -76,10 +73,9 @@ find_prev_slash_or_begin (char const * const output_ptr, char const * ou)
 __attribute__((__always_inline__,__nonnull__(1,2),__returns_nonnull__))
 static inline char const *
 skip_repeated_slashes_or_end (char const * in, char const * const end)
-/* Given an ASCII string referenced by IN and terminating at pointer END
-   excluded: skip all  slash octets starting from IN  onwards.  Return a
-   pointer referencing the first octet that is not a slash; this pointer
-   may be END. */
+/* Given an  ASCII string referenced by  IN and terminating at  pointer END excluded:
+   skip all slash octets starting from  IN onwards.  Return a pointer referencing the
+   first octet that is not a slash; this pointer may be END. */
 {
   while ((in < end) && ('/' == *in)) {
     ++in;
@@ -98,9 +94,9 @@ skip_repeated_slashes_or_end (char const * in, char const * const end)
  ** ----------------------------------------------------------------- */
 
 #ifdef HAVE_REALPATH
-__attribute__((__nonnull__(1,3),__returns_nonnull__))
-static ccptn_t *
-ptn_realpath (cce_destination_t upper_L, ccptn_t * volatile R, ccptn_t const * const P)
+__attribute__((__nonnull__(1,2,4),__returns_nonnull__))
+static ccptn_t const *
+ptn_realpath (cce_destination_t upper_L, ccmem_allocator_t const * const A, ccptn_t * volatile R, ccptn_t const * const P)
 {
   cce_location_t	L[1];
   cce_clean_handler_t	rv_H[1];
@@ -111,20 +107,26 @@ ptn_realpath (cce_destination_t upper_L, ccptn_t * volatile R, ccptn_t const * c
     char const *	rv;
 
     errno = 0;
-    rv = realpath(ccptn_asciiz(P), NULL);
+    rv = realpath(P->ptr, NULL);
     if (NULL == rv) {
       cce_raise(L, cce_condition_new_errno_clear());
     } else {
       cce_init_handler_malloc(L, rv_H, (void *)rv);
       {
-	size_t	len = strlen(rv);
-	if (CCPTN_PATH_MAX < len) {
+	/* Using an  ASCII representation  will force  the "ccptn_t"  constructors to
+	   duplicate  the  internal  pathname   representation  using  a  dynamically
+	   allocated memory block. */
+	ccmem_ascii_t	R_block = {
+	  .len	= strlen(rv),
+	  .ptr	= (char *)rv
+	};
+	if (CCPTN_PATH_MAX < R_block.len) {
 	  cce_raise(L, ccptn_condition_new_exceeded_length());
 	} else {
 	  if (R) {
-	    ccptn_init_dup_asciiz(L, R, rv);
+	    ccname_init(ccptn_t, ascii)(L, A, R, R_block);
 	  } else {
-	    R = ccptn_new_dup_asciiz(L, rv);
+	    R = (ccptn_t *)ccname_new(ccptn_t, ascii)(L, A, R_block);
 	  }
 	  R->realpath	= 1;
 	  R->normalised	= 1;
@@ -136,16 +138,16 @@ ptn_realpath (cce_destination_t upper_L, ccptn_t * volatile R, ccptn_t const * c
   }
 }
 
-ccptn_t *
-ccptn_new_realpath (cce_destination_t L, ccptn_t const * const P)
+void
+ccname_init(ccptn_t, realpath) (cce_destination_t L, ccmem_allocator_t const * const A, ccptn_t * R, ccptn_t const * const P)
 {
-  return ptn_realpath(L, NULL, P);
+  ptn_realpath(L, A, R, P);
 }
 
-ccptn_t *
-ccptn_init_realpath (cce_destination_t L, ccptn_t * R, ccptn_t const * const P)
+ccptn_t const *
+ccname_new(ccptn_t, realpath) (cce_destination_t L, ccmem_allocator_t const * const A, ccptn_t const * const P)
 {
-  return ptn_realpath(L, R, P);
+  return ptn_realpath(L, A, NULL, P);
 }
 #endif
 
@@ -156,16 +158,15 @@ ccptn_init_realpath (cce_destination_t L, ccptn_t * R, ccptn_t const * const P)
 
 size_t
 ccptn_normal_pass_remove_useless_slashes (char * output_ptr, char const * const input_ptr, size_t const input_len)
-/* Copy  a  pathname  from  "input_ptr"  to  "output_ptr"  performing  a
-   normalisation pass in the process: removal of multiple slashes.
+/* Copy a pathname  from "input_ptr" to "output_ptr" performing  a normalisation pass
+   in the process: removal of multiple slashes.
 
-   The array referenced  by "input_ptr" must represent  an ASCIIZ string
-   with  at least  "input_len" octets,  terminating zero  excluded.  The
-   array referenced  by "output_ptr"  must be at  least "1  + input_len"
-   octets wide.
+   The array referenced by "input_ptr" must  represent an ASCIIZ string with at least
+   "input_len"  octets,   terminating  zero   excluded.   The  array   referenced  by
+   "output_ptr" must be at least "1 + input_len" octets wide.
 
-   Return  the  number of  octets  stored  in  the array  referenced  by
-   "output_ptr", terminating zero excluded. */
+   Return  the number  of  octets stored  in the  array  referenced by  "output_ptr",
+   terminating zero excluded. */
 {
   char const * const	end = input_ptr + input_len;
   char const *		in  = input_ptr;
@@ -189,18 +190,16 @@ ccptn_normal_pass_remove_useless_slashes (char * output_ptr, char const * const 
 
 size_t
 ccptn_normal_pass_remove_single_dot_segments (char * output_ptr, char const * const input_ptr, size_t const input_len)
-/* Copy  a  pathname  from  "input_ptr"  to  "output_ptr"  performing  a
-   normalisation pass  in the  process: removal of  single-dot segments.
-   This     pass      is     meant      to     be      applied     after
-   "ccptn_normal_pass_remove_useless_slashes()".
+/* Copy a pathname  from "input_ptr" to "output_ptr" performing  a normalisation pass
+   in the process: removal of single-dot segments.   This pass is meant to be applied
+   after "ccptn_normal_pass_remove_useless_slashes()".
 
-   The array referenced  by "input_ptr" must represent  an ASCIIZ string
-   with  at least  "input_len" octets,  terminating zero  excluded.  The
-   array referenced  by "output_ptr"  must be at  least "1  + input_len"
-   octets wide.
+   The array referenced by "input_ptr" must  represent an ASCIIZ string with at least
+   "input_len"  octets,   terminating  zero   excluded.   The  array   referenced  by
+   "output_ptr" must be at least "1 + input_len" octets wide.
 
-   Return  the  number of  octets  stored  in  the array  referenced  by
-   "output_ptr", terminating zero excluded. */
+   Return  the number  of  octets stored  in the  array  referenced by  "output_ptr",
+   terminating zero excluded. */
 {
 #undef VERBOSE
 #define VERBOSE		0
@@ -375,18 +374,17 @@ ccptn_normal_pass_remove_single_dot_segments (char * output_ptr, char const * co
 
 size_t
 ccptn_normal_pass_remove_double_dot_segments (cce_destination_t L, char * output_ptr, char const * const input_ptr, size_t const input_len)
-/* Copy  a  pathname  from  "input_ptr"  to  "output_ptr"  performing  a
-   normalisation pass in the process: removal of double-dot segments and
-   the segments  before them.  This  pass is  meant to be  applied after
+/* Copy a pathname  from "input_ptr" to "output_ptr" performing  a normalisation pass
+   in the process: removal of double-dot segments and the segments before them.  This
+   pass         is         meant          to         be         applied         after
    "ccptn_normal_pass_remove_single_dot_segments()".
 
-   The array referenced  by "input_ptr" must represent  an ASCIIZ string
-   with  at least  "input_len" octets,  terminating zero  excluded.  The
-   array referenced  by "output_ptr"  must be at  least "1  + input_len"
-   octets wide.
+   The array referenced by "input_ptr" must  represent an ASCIIZ string with at least
+   "input_len"  octets,   terminating  zero   excluded.   The  array   referenced  by
+   "output_ptr" must be at least "1 + input_len" octets wide.
 
-   Return  the  number of  octets  stored  in  the array  referenced  by
-   "output_ptr", terminating zero excluded. */
+   Return  the number  of  octets stored  in the  array  referenced by  "output_ptr",
+   terminating zero excluded. */
 {
 #undef VERBOSE
 #define VERBOSE		0
@@ -620,40 +618,47 @@ done:
  ** Normalisation: pathname normalisation.
  ** ----------------------------------------------------------------- */
 
-__attribute__((__nonnull__(1,3),__returns_nonnull__))
+__attribute__((__nonnull__(1,2,4),__returns_nonnull__))
 static ccptn_t *
-ptn_normalise (cce_destination_t L, ccptn_t * const R, ccptn_t const * const P)
+ptn_normalise (cce_destination_t L, ccmem_allocator_t const * const A, ccptn_t * R, ccptn_t const * const P)
 {
   char		one[1 + ccptn_len(P)];
   size_t	one_len;
-  one_len = ccptn_normal_pass_remove_useless_slashes(one, ccptn_asciiz(P), ccptn_len(P));
+  one_len = ccptn_normal_pass_remove_useless_slashes(one, P->ptr, ccptn_len(P));
   {
     char	two[1 + one_len];
     size_t	two_len;
     two_len = ccptn_normal_pass_remove_single_dot_segments(two, one, one_len);
     one_len = ccptn_normal_pass_remove_double_dot_segments(L, one, two, two_len);
-    if (R) {
-      ccptn_init_dup_ascii(L, R, one, one_len);
+    {
+      /* Using  an ASCII  representation  will force  the  "ccptn_t" constructors  to
+	 duplicate the internal pathname representation using a dynamically allocated
+	 memory block. */
+      ccmem_ascii_t	R_block = {
+	.len	= one_len,
+	.ptr	= one
+      };
+      if (R) {
+	ccname_init(ccptn_t, ascii)(L, A, R, R_block);
+      } else {
+	R = (ccptn_t *)ccname_new(ccptn_t, ascii)(L, A, R_block);
+      }
       R->normalised = 1;
       return R;
-    } else {
-      ccptn_t *	Q = ccptn_new_dup_ascii(L, one, one_len);
-      Q->normalised = 1;
-      return Q;
     }
   }
 }
 
-ccptn_t *
-ccptn_new_normalise (cce_destination_t L, ccptn_t const * const P)
+void
+ccname_init(ccptn_t, normalise) (cce_destination_t L, ccmem_allocator_t const * const A, ccptn_t * const R, ccptn_t const * const P)
 {
-  return ptn_normalise(L, NULL, P);
+  ptn_normalise(L, A, R, P);
 }
 
-ccptn_t *
-ccptn_init_normalise (cce_destination_t L, ccptn_t * const R, ccptn_t const * const P)
+ccptn_t const *
+ccname_new(ccptn_t, normalise) (cce_destination_t L, ccmem_allocator_t const * const A, ccptn_t const * const P)
 {
-  return ptn_normalise(L, R, P);
+  return ptn_normalise(L, A, NULL, P);
 }
 
 
@@ -661,26 +666,22 @@ ccptn_init_normalise (cce_destination_t L, ccptn_t * const R, ccptn_t const * co
  ** Composition.
  ** ----------------------------------------------------------------- */
 
-__attribute__((__nonnull__(1,3,4),__returns_nonnull__))
+__attribute__((__nonnull__(1,2,4,5),__returns_nonnull__))
 static ccptn_t *
-ptn_concat (cce_destination_t L, ccptn_t * const R, ccptn_t const * const prefix, ccptn_t const * const suffix)
+ptn_concat (cce_destination_t L, ccmem_allocator_t const * const A, ccptn_t * R,
+	    ccptn_t const * const prefix, ccptn_t const * const suffix)
 {
-  bool		prefix_is_absolute = ccptn_is_absolute(prefix);
-  bool		suffix_is_absolute = ccptn_is_absolute(suffix);
-
-  /* The resulting length  is the sum of the original  lengths, plus one
-   * for the slash separator.
-   *
-   * If  the  suffix   is  absolute:  its  first  octet   is  the  ASCII
-   * representation of  the slash  separator; we will  copy it  into the
-   * output.
-   *
-   * If  the suffix  is relative:  its first  octet is  *not* the  ASCII
-   * representation of the slash separator;  we will explicitly insert a
+  /* The resulting length is the sum of  the original lengths, plus one for the slash
    * separator.
+   *
+   * If the suffix  is absolute: its first  octet is the ASCII  representation of the
+   * slash separator; we will copy it into the output.
+   *
+   * If the suffix is relative: its first  octet is *not* the ASCII representation of
+   * the slash separator; we will explicitly insert a separator.
    */
   size_t	R_len = ccptn_len(prefix) + ccptn_len(suffix);
-  if (! suffix_is_absolute) {
+  if (! ccptn_is_absolute(suffix)) {
     ++R_len;
   }
 
@@ -689,19 +690,19 @@ ptn_concat (cce_destination_t L, ccptn_t * const R, ccptn_t const * const prefix
   } else {
     /* This array must hold the whole pathname plus the terminating zero
        octet. */
-    char	R_pathname[R_len + 1];
-    char *	ptr = R_pathname;
+    char	R_ptr[R_len + 1];
+    char *	ptr = R_ptr;
 
     /* Copy the prefix. */
     {
       size_t	len = ccptn_len(prefix);
 
-      strncpy(ptr, ccptn_asciiz(prefix), len);
+      strncpy(ptr, prefix->ptr, len);
       ptr += len;
     }
 
     /* Insert a separator if needed. */
-    if (! suffix_is_absolute) {
+    if (! ccptn_is_absolute(suffix)) {
       *ptr++ = '/';
     }
 
@@ -709,35 +710,161 @@ ptn_concat (cce_destination_t L, ccptn_t * const R, ccptn_t const * const prefix
     {
       size_t	len = ccptn_len(suffix);
 
-      strncpy(ptr, ccptn_asciiz(suffix), len);
+      strncpy(ptr, suffix->ptr, len);
       ptr += len;
       *ptr = '\0';
     }
 
     /* Build and return the resulting pathname. */
-    if (NULL != R) {
-      ccptn_init_dup_asciiz(L, R, R_pathname);
-      R->absolute    = prefix_is_absolute;
+    {
+      /* Using  an ASCII  representation  will force  the  "ccptn_t" constructors  to
+	 duplicate the internal pathname representation using a dynamically allocated
+	 memory block. */
+      ccmem_ascii_t	R_block = {
+	.len	= R_len,
+	.ptr	= R_ptr
+      };
+
+      if (NULL != R) {
+	ccname_init(ccptn_t, ascii)(L, A, R, R_block);
+      } else {
+	R = (ccptn_t *)ccname_new(ccptn_t, ascii)(L, A, R_block);
+      }
+      R->absolute = ccptn_is_absolute(prefix);
       return R;
-    } else {
-      ccptn_t *		Q;
-      Q              = ccptn_new_dup_asciiz(L, R_pathname);
-      Q->absolute    = prefix_is_absolute;
-      return Q;
     }
   }
 }
 
-ccptn_t *
-ccptn_new_concat (cce_destination_t L, ccptn_t const * const prefix, ccptn_t const * const suffix)
+void
+ccname_init(ccptn_t, concat) (cce_destination_t L, ccmem_allocator_t const * const A, ccptn_t * R,
+			      ccptn_t const * const prefix, ccptn_t const * const suffix)
 {
-  return ptn_concat(L, NULL, prefix, suffix);
+  ptn_concat(L, A, R, prefix, suffix);
 }
 
-ccptn_t *
-ccptn_init_concat (cce_destination_t L, ccptn_t * R, ccptn_t const * const prefix, ccptn_t const * const suffix)
+ccptn_t const *
+ccname_new(ccptn_t, concat) (cce_destination_t L, ccmem_allocator_t const * const A,
+			     ccptn_t const * const prefix, ccptn_t const * const suffix)
 {
-  return ptn_concat(L, R, prefix, suffix);
+  return ptn_concat(L, A, NULL, prefix, suffix);
+}
+
+
+/** --------------------------------------------------------------------
+ ** Pathnames manipulation: guarded constructors.
+ ** ----------------------------------------------------------------- */
+
+void
+ccname_init(ccptn_t, realpath, clean) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H,
+				       ccptn_t * dst, ccptn_t const * src)
+{
+  ccname_init(ccptn_t, realpath)(L, A, dst, src);
+  ccptn_init_handler(L, H, dst);
+}
+
+void
+ccname_init(ccptn_t, realpath, error) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H,
+				       ccptn_t * dst, ccptn_t const * src)
+{
+  ccname_init(ccptn_t, realpath)(L, A, dst, src);
+  ccptn_init_handler(L, H, dst);
+}
+
+/* ------------------------------------------------------------------ */
+
+ccptn_t const *
+ccname_new(ccptn_t, realpath, clean) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H,
+				      ccptn_t const * src)
+{
+  ccptn_t const *	dst = ccname_new(ccptn_t, realpath)(L, A, src);
+  ccptn_init_handler(L, H, dst);
+  return dst;
+}
+
+ccptn_t const *
+ccname_new(ccptn_t, realpath, error) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H,
+				      ccptn_t const * src)
+{
+  ccptn_t const *	dst = ccname_new(ccptn_t, realpath)(L, A, src);
+  ccptn_init_handler(L, H, dst);
+  return dst;
+}
+
+/* ------------------------------------------------------------------ */
+
+void
+ccname_init(ccptn_t, normalise, clean) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H,
+					ccptn_t * dst, ccptn_t const * src)
+{
+  ccname_init(ccptn_t, normalise)(L, A, dst, src);
+  ccptn_init_handler(L, H, dst);
+}
+
+void
+ccname_init(ccptn_t, normalise, error) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H,
+					ccptn_t * dst, ccptn_t const * src)
+{
+  ccname_init(ccptn_t, normalise)(L, A, dst, src);
+  ccptn_init_handler(L, H, dst);
+}
+
+/* ------------------------------------------------------------------ */
+
+ccptn_t const *
+ccname_new(ccptn_t, normalise, clean) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H,
+				       ccptn_t const * src)
+{
+  ccptn_t const *	dst = ccname_new(ccptn_t, normalise)(L, A, src);
+  ccptn_init_handler(L, H, dst);
+  return dst;
+}
+
+ccptn_t const *
+ccname_new(ccptn_t, normalise, error) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H,
+				       ccptn_t const * src)
+{
+  ccptn_t const *	dst = ccname_new(ccptn_t, normalise)(L, A, src);
+  ccptn_init_handler(L, H, dst);
+  return dst;
+}
+
+/* ------------------------------------------------------------------ */
+
+void
+ccname_init(ccptn_t, concat, clean) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H,
+				     ccptn_t * dst, ccptn_t const * prefix, ccptn_t const * suffix)
+{
+  ccname_init(ccptn_t, concat)(L, A, dst, prefix, suffix);
+  ccptn_init_handler(L, H, dst);
+}
+
+void
+ccname_init(ccptn_t, concat, error) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H,
+				     ccptn_t * dst, ccptn_t const * prefix, ccptn_t const * suffix)
+{
+  ccname_init(ccptn_t, concat)(L, A, dst, prefix, suffix);
+  ccptn_init_handler(L, H, dst);
+}
+
+/* ------------------------------------------------------------------ */
+
+ccptn_t const *
+ccname_new(ccptn_t, concat, clean) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H,
+				    ccptn_t const * prefix, ccptn_t const * suffix)
+{
+  ccptn_t const *	dst = ccname_new(ccptn_t, concat)(L, A, prefix, suffix);
+  ccptn_init_handler(L, H, dst);
+  return dst;
+}
+
+ccptn_t const *
+ccname_new(ccptn_t, concat, error) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H,
+				    ccptn_t const * prefix, ccptn_t const * suffix)
+{
+  ccptn_t const *	dst = ccname_new(ccptn_t, concat)(L, A, prefix, suffix);
+  ccptn_init_handler(L, H, dst);
+  return dst;
 }
 
 /* end of file */

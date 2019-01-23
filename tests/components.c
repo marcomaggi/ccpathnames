@@ -7,7 +7,7 @@
 
 	Test file for pathname components functions.
 
-  Copyright (C) 2018 Marco Maggi <marco.maggi-ipsu@poste.it>
+  Copyright (C) 2018, 2019 Marco Maggi <marco.maggi-ipsu@poste.it>
 
   See the COPYING file.
 */
@@ -20,6 +20,8 @@
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
+
+static ccmem_allocator_t const * A;
 
 
 /** --------------------------------------------------------------------
@@ -56,7 +58,7 @@ TEST_LAST_SEGMENT(test_0_10, "/",			"")
   void									\
   FUNCNAME (cce_destination_t upper_L)					\
   {									\
-    cce_location_t	L[1];						\
+    cce_location_t		L[1];					\
     ccptn_clean_handler_t	P_H[1], Q_H[1];				\
 									\
     if (cce_location(L)) {						\
@@ -65,16 +67,16 @@ TEST_LAST_SEGMENT(test_0_10, "/",			"")
       cce_run_catch_handlers_raise(L, upper_L);				\
     } else {								\
       static char const *	pathname = INPUT_PATHNAME;		\
-      ccptn_t			*P, *Q;					\
+      ccptn_t const		*P, *Q;					\
       ccptn_extension_t		E;					\
 									\
-      P = ccptn_new_nodup_asciiz_guarded(L, P_H, pathname);		\
-      Q = ccptn_new_normalise_guarded(L, Q_H, P);			\
+      P = ccname_new(ccptn_t, pointer,   clean)(L, A, P_H, pathname);	\
+      Q = ccname_new(ccptn_t, normalise, clean)(L, A, Q_H, P);		\
       E = ccptn_extension(L, Q);					\
 									\
       if (0) {								\
 	fprintf(stderr, "%s: ", __func__);				\
-	ccptn_extension_print(L, stderr, E);				\
+	ccptn_extension_fwrite(L, stderr, E);				\
 	fprintf(stderr, "\n");						\
       }									\
 									\
@@ -100,13 +102,13 @@ TEST_EXTENSION(test_1_10, "/",				"")
  ** Rootnames.
  ** ----------------------------------------------------------------- */
 
-/* Test for "ccptn_new_rootname_guarded()" with clean handler. */
+/* Test for "ccname_new(ccptn_t, rootname, clean)". */
 #define TEST_NEW_ROOTNAME(FUNCNAME,INPUT_PATHNAME,EXPECTED_PATHNAME)	\
   void									\
   FUNCNAME (cce_destination_t upper_L)					\
   {									\
     cce_location_t		L[1];					\
-    ccptn_clean_handler_t		P_H[1], Q_H[1], R_H[1];			\
+    ccptn_clean_handler_t	P_H[1], Q_H[1], R_H[1];			\
 									\
     if (cce_location(L)) {						\
       fprintf(stderr, "%s: exception: %s\n", __func__,			\
@@ -114,27 +116,27 @@ TEST_EXTENSION(test_1_10, "/",				"")
       cce_run_catch_handlers_raise(L, upper_L);				\
     } else {								\
       static char const *	pathname = INPUT_PATHNAME;		\
-      ccptn_t			*P, *Q, *R;				\
+      ccptn_t const		*P, *Q, *R;				\
 									\
-      P = ccptn_new_nodup_asciiz_guarded(L, P_H, pathname);		\
-      Q = ccptn_new_normalise_guarded(L, Q_H, P);			\
+      P = ccname_new(ccptn_t, pointer,   clean)(L, A, P_H, pathname);	\
+      Q = ccname_new(ccptn_t, normalise, clean)(L, A, Q_H, P);		\
 									\
       if (0) {								\
-	fprintf(stderr, "%s: P=%s\n", __func__, ccptn_asciiz(P));	\
-	fprintf(stderr, "%s: Q=%s\n", __func__, ccptn_asciiz(Q));	\
+	fprintf(stderr, "%s: P=%s\n", __func__, ccptn_ptr(P));		\
+	fprintf(stderr, "%s: Q=%s\n", __func__, ccptn_ptr(Q));		\
       }									\
       									\
-      R = ccptn_new_rootname_guarded(L, R_H, Q);			\
+      R = ccname_new(ccptn_t, rootname, clean)(L, A, R_H, Q);		\
 									\
       if (0) {								\
 	fprintf(stderr, "%s: ", __func__);				\
-	ccptn_print(L, stderr, R);					\
+	ccptn_fwrite(L, stderr, R);					\
 	fprintf(stderr, "\n");						\
       }									\
 									\
-      cctests_assert_asciiz(L, EXPECTED_PATHNAME, ccptn_asciiz(R));	\
+      cctests_assert_asciiz(L, EXPECTED_PATHNAME, ccptn_ptr(R));	\
 									\
-      cce_run_body_handlers(L);					\
+      cce_run_body_handlers(L);						\
     }									\
   }
 
@@ -148,7 +150,7 @@ TEST_NEW_ROOTNAME(test_2_1_7, "~/.fvwmrc",		"~/.fvwmrc")
 
 /* ------------------------------------------------------------------ */
 
-/* Test for "ccptn_init_rootname_guarded()" with clean handler. */
+/* Test for "ccname_init(ccptn_t, rootname, clean)". */
 #define TEST_INIT_ROOTNAME(FUNCNAME,INPUT_PATHNAME,EXPECTED_PATHNAME)	\
   void									\
   FUNCNAME (cce_destination_t upper_L)					\
@@ -162,27 +164,28 @@ TEST_NEW_ROOTNAME(test_2_1_7, "~/.fvwmrc",		"~/.fvwmrc")
       cce_run_catch_handlers_raise(L, upper_L);				\
     } else {								\
       static char const *	pathname = INPUT_PATHNAME;		\
-      ccptn_t			*P, *Q, R[1];				\
+      ccptn_t const		*P, *Q;					\
+      ccptn_t			R[1];					\
 									\
-      P = ccptn_new_nodup_asciiz_guarded(L, P_H, pathname);		\
-      Q = ccptn_new_normalise_guarded(L, Q_H, P);			\
+      P = ccname_new(ccptn_t, pointer,    clean)(L, A, P_H, pathname);	\
+      Q = ccname_new(ccptn_t, normalise, clean)(L, A, Q_H, P);		\
 									\
       if (0) {								\
-	fprintf(stderr, "%s: P=%s\n", __func__, ccptn_asciiz(P));	\
-	fprintf(stderr, "%s: Q=%s\n", __func__, ccptn_asciiz(Q));	\
+	fprintf(stderr, "%s: P=%s\n", __func__, ccptn_ptr(P));		\
+	fprintf(stderr, "%s: Q=%s\n", __func__, ccptn_ptr(Q));		\
       }									\
       									\
-      ccptn_init_rootname_guarded(L, R, R_H, Q);			\
+      ccname_init(ccptn_t, rootname, clean)(L, A, R_H, R, Q);		\
 									\
       if (0) {								\
 	fprintf(stderr, "%s: ", __func__);				\
-	ccptn_print(L, stderr, R);					\
+	ccptn_fwrite(L, stderr, R);					\
 	fprintf(stderr, "\n");						\
       }									\
 									\
-      cctests_assert_asciiz(L, EXPECTED_PATHNAME, ccptn_asciiz(R));	\
+      cctests_assert_asciiz(L, EXPECTED_PATHNAME, ccptn_ptr(R));	\
 									\
-      cce_run_body_handlers(L);					\
+      cce_run_body_handlers(L);						\
     }									\
   }
 
@@ -196,8 +199,8 @@ TEST_INIT_ROOTNAME(test_2_2_7, "~/.fvwmrc",		"~/.fvwmrc")
 
 /* ------------------------------------------------------------------ */
 
-/* Test  for  "ccptn_new_rootname_guarded()"  with clean  handler  and
-   pathname having no rootname. */
+/* Test   for  "ccname_new(ccptn_t,   rootname,  clean)"   and  pathname   having  no
+   rootname. */
 #define TEST_NEW_ROOTNAME_NO(FUNCNAME, INPUT_PATHNAME)			\
   void									\
   FUNCNAME (cce_destination_t upper_L)					\
@@ -217,17 +220,17 @@ TEST_INIT_ROOTNAME(test_2_2_7, "~/.fvwmrc",		"~/.fvwmrc")
       }									\
     } else {								\
       static char const *	pathname = INPUT_PATHNAME;		\
-      ccptn_t		*P, *Q;						\
+      ccptn_t const		*P, *Q;					\
 									\
-      P = ccptn_new_nodup_asciiz_guarded(L, P_H, pathname);		\
-      Q = ccptn_new_normalise_guarded(L, Q_H, P);			\
+      P = ccname_new(ccptn_t, pointer,    clean)(L, A, P_H, pathname);	\
+      Q = ccname_new(ccptn_t, normalise, clean)(L, A, Q_H, P);		\
       if (0) {								\
-	fprintf(stderr, "%s: P=%s\n", __func__, ccptn_asciiz(P));	\
-	fprintf(stderr, "%s: Q=%s\n", __func__, ccptn_asciiz(Q));	\
+	fprintf(stderr, "%s: P=%s\n", __func__, ccptn_ptr(P));		\
+	fprintf(stderr, "%s: Q=%s\n", __func__, ccptn_ptr(Q));		\
       }									\
-      ccptn_new_rootname_guarded(L, R_H, Q);				\
+      ccname_new(ccptn_t, rootname, clean)(L, A, R_H, Q);		\
       cctests_assert(L, false);						\
-      cce_run_body_handlers(L);					\
+      cce_run_body_handlers(L);						\
     }									\
   }
 
@@ -239,10 +242,10 @@ TEST_NEW_ROOTNAME_NO(test_2_3_3, "/")
 
 void
 test_2_4_1 (cce_destination_t upper_L)
-/* Test for "ccptn_new_rootname_guarded()" with error handler. */
+/* Test for "ccname_new(ccptn_t, rootname, error)". */
 {
   cce_location_t	L[1];
-  ccptn_clean_handler_t	P_H[1], Q_H[1], T_H[1];
+  ccptn_clean_handler_t	P_H[1], Q_H[1], S_H[1];
 
   if (cce_location(L)) {
     fprintf(stderr, "%s: exception: %s\n", __func__,
@@ -250,25 +253,24 @@ test_2_4_1 (cce_destination_t upper_L)
     cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname = "/path/to/file.ext";
-    ccptn_t		*P, *Q, *T;
+    ccptn_t const	*P, *Q, *S;
 
-    P = ccptn_new_nodup_asciiz_guarded(L, P_H, pathname);
-    Q = ccptn_new_normalise_guarded(L, Q_H, P);
+    P = ccname_new(ccptn_t, pointer,    clean)(L, A, P_H, pathname);
+    Q = ccname_new(ccptn_t, normalise, clean)(L, A, Q_H, P);
     {
       cce_location_t		inner_L[1];
-      ccptn_error_handler_t	S_H[1];
+      ccptn_error_handler_t	T_H[1];
 
       if (cce_location(inner_L)) {
 	cce_run_catch_handlers_raise(inner_L, L);
       } else {
-	ccptn_t *	S = ccptn_new_rootname_guarded(inner_L, S_H, Q);
-	cctests_assert_asciiz(inner_L, "/path/to/file", ccptn_asciiz(S));
-	T = S;
+	S = ccname_new(ccptn_t, rootname, error)(inner_L, A, T_H, Q);
+	cctests_assert_asciiz(inner_L, "/path/to/file", ccptn_ptr(S));
 	cce_run_body_handlers(inner_L);
       }
     }
-    ccptn_handler_ptn_init(L, T_H, T);
-    cctests_assert_asciiz(L, "/path/to/file", ccptn_asciiz(T));
+    ccptn_init_handler(L, S_H, S);
+    cctests_assert_asciiz(L, "/path/to/file", ccptn_ptr(S));
     cce_run_body_handlers(L);
   }
 }
@@ -278,7 +280,7 @@ test_2_4_1 (cce_destination_t upper_L)
  ** Tailnames.
  ** ----------------------------------------------------------------- */
 
-/* Test for "ccptn_new_tailname_guarded()" with clean handler. */
+/* Test for "ccname_new(ccptn_t, tailname, clean)()". */
 #define TEST_NEW_TAILNAME(FUNCNAME,INPUT_PATHNAME,EXPECTED_TAILNAME)	\
   void									\
   FUNCNAME (cce_destination_t upper_L)					\
@@ -292,17 +294,17 @@ test_2_4_1 (cce_destination_t upper_L)
       cce_run_catch_handlers_raise(L, upper_L);				\
     } else {								\
       static char const *	pathname = INPUT_PATHNAME;		\
-      ccptn_t		*P, *Q, *T;					\
+      ccptn_t const		*P, *Q, *T;				\
 									\
-      P = ccptn_new_nodup_asciiz_guarded(L, P_H, pathname);		\
-      Q = ccptn_new_normalise_guarded(L, Q_H, P);			\
-      T = ccptn_new_tailname_guarded(L, T_H, Q);			\
+      P = ccname_new(ccptn_t, pointer,    clean)(L, A, P_H, pathname);	\
+      Q = ccname_new(ccptn_t, normalise, clean)(L, A, Q_H, P);		\
+      T = ccname_new(ccptn_t, tailname,  clean)(L, A, T_H, Q);		\
 									\
       if (0) {								\
-	fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(T));		\
+	fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(T));		\
       }									\
 									\
-      cctests_assert_asciiz(L, EXPECTED_TAILNAME, ccptn_asciiz(T));	\
+      cctests_assert_asciiz(L, EXPECTED_TAILNAME, ccptn_ptr(T));	\
 									\
       cce_run_body_handlers(L);					\
     }									\
@@ -316,7 +318,7 @@ TEST_NEW_TAILNAME(test_3_1_5, "..",			"..")
 
 /* ------------------------------------------------------------------ */
 
-/* Test for "ccptn_init_tailname_guarded()" with clean handler. */
+/* Test for "ccname_init(ccptn_t, tailname, clean)()". */
 #define TEST_INIT_TAILNAME(FUNCNAME,INPUT_PATHNAME,EXPECTED_TAILNAME)	\
   void									\
   FUNCNAME (cce_destination_t upper_L)					\
@@ -330,17 +332,18 @@ TEST_NEW_TAILNAME(test_3_1_5, "..",			"..")
       cce_run_catch_handlers_raise(L, upper_L);				\
     } else {								\
       static char const *	pathname = INPUT_PATHNAME;		\
-      ccptn_t		*P, *Q, T[1];					\
+      ccptn_t const		*P, *Q;					\
+      ccptn_t			T[1];					\
 									\
-      P = ccptn_new_nodup_asciiz_guarded(L, P_H, pathname);		\
-      Q = ccptn_new_normalise_guarded(L, Q_H, P);			\
-      ccptn_init_tailname_guarded(L, T, T_H, Q);			\
+      P = ccname_new(ccptn_t, pointer,    clean)(L, A, P_H, pathname);	\
+      Q = ccname_new(ccptn_t, normalise, clean)(L, A, Q_H, P);		\
+      ccname_init(ccptn_t, tailname, clean)(L, A, T_H, T, Q);		\
 									\
       if (0) {								\
-	fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(T));		\
+	fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(T));		\
       }									\
 									\
-      cctests_assert_asciiz(L, EXPECTED_TAILNAME, ccptn_asciiz(T));	\
+      cctests_assert_asciiz(L, EXPECTED_TAILNAME, ccptn_ptr(T));	\
 									\
       cce_run_body_handlers(L);					\
     }									\
@@ -354,14 +357,14 @@ TEST_INIT_TAILNAME(test_3_2_5, "..",			"..")
 
 /* ------------------------------------------------------------------ */
 
-/* Test  for  "ccptn_new_tailname_guarded()"  with clean  handler  and
-   input pathname having no tailname. */
+/* Test for  "ccname_new(ccptn_t, tailname,  clean)()" and  input pathname  having no
+   tailname. */
 #define TEST_NEW_TAILNAME_NO(FUNCNAME, INPUT_PATHNAME)			\
   void									\
   FUNCNAME (cce_destination_t upper_L)					\
   {									\
-    cce_location_t	L[1];						\
-    ccptn_clean_handler_t	P_H[1], Q_H[1];				\
+    cce_location_t		L[1];					\
+    ccptn_clean_handler_t	P_H[1], Q_H[1], R_H[1];			\
 									\
     if (cce_location(L)) {						\
       if (0) {								\
@@ -375,13 +378,13 @@ TEST_INIT_TAILNAME(test_3_2_5, "..",			"..")
       }									\
     } else {								\
       static char const *	pathname = INPUT_PATHNAME;		\
-      ccptn_t		*P, *Q;						\
+      ccptn_t const		*P, *Q;					\
 									\
-      P = ccptn_new_nodup_asciiz_guarded(L, P_H, pathname);		\
-      Q = ccptn_new_normalise_guarded(L, Q_H, P);			\
-      ccptn_new_tailname(L, Q);						\
+      P = ccname_new(ccptn_t, pointer,    clean)(L, A, P_H, pathname);	\
+      Q = ccname_new(ccptn_t, normalise, clean)(L, A, Q_H, P);		\
+      ccname_new(ccptn_t, tailname, clean)(L, A, R_H, Q);		\
       cctests_assert(L, false);						\
-      cce_run_body_handlers(L);					\
+      cce_run_body_handlers(L);						\
     }									\
   }
 
@@ -394,7 +397,7 @@ test_3_4_1 (cce_destination_t upper_L)
 /* Test for "ccptn_new_tailname_guarded()" with error handler. */
 {
   cce_location_t	L[1];
-  ccptn_clean_handler_t	P_H[1], Q_H[1], T_H[1];
+  ccptn_clean_handler_t	P_H[1], Q_H[1], S_H[1];
 
   if (cce_location(L)) {
     fprintf(stderr, "%s: exception: %s\n", __func__,
@@ -402,25 +405,24 @@ test_3_4_1 (cce_destination_t upper_L)
     cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname = "/path/to/dir/";
-    ccptn_t		*P, *Q, *T;
+    ccptn_t const	*P, *Q, *S;
 
-    P = ccptn_new_nodup_asciiz_guarded(L, P_H, pathname);
-    Q = ccptn_new_normalise_guarded(L, Q_H, P);
+    P = ccname_new(ccptn_t, pointer,   clean)(L, A, P_H, pathname);
+    Q = ccname_new(ccptn_t, normalise, clean)(L, A, Q_H, P);
     {
       cce_location_t		inner_L[1];
-      ccptn_error_handler_t	S_H[1];
+      ccptn_error_handler_t	T_H[1];
 
       if (cce_location(inner_L)) {
 	cce_run_catch_handlers_raise(inner_L, L);
       } else {
-	ccptn_t *	S = ccptn_new_tailname_guarded(inner_L, S_H, Q);
-	cctests_assert_asciiz(inner_L, "dir/", ccptn_asciiz(S));
-	T = S;
+	S = ccname_new(ccptn_t, tailname, error)(inner_L, A, T_H, Q);
+	cctests_assert_asciiz(inner_L, "dir/", ccptn_ptr(S));
 	cce_run_body_handlers(inner_L);
       }
     }
-    ccptn_handler_ptn_init(L, T_H, T);
-    cctests_assert_asciiz(L, "dir/", ccptn_asciiz(T));
+    ccptn_init_handler(L, S_H, S);
+    cctests_assert_asciiz(L, "dir/", ccptn_ptr(S));
     cce_run_body_handlers(L);
   }
 }
@@ -430,12 +432,12 @@ test_3_4_1 (cce_destination_t upper_L)
  ** Dirnames.
  ** ----------------------------------------------------------------- */
 
-/* Test for "ccptn_new_dirname_guarded()" with clean handler. */
+/* Test for "ccname_new(ccptn_t, dirname, clean)()". */
 #define TEST_NEW_DIRNAME(FUNCNAME,INPUT_PATHNAME,EXPECTED_DIRNAME)	\
   void									\
   FUNCNAME (cce_destination_t upper_L)					\
   {									\
-    cce_location_t	L[1];						\
+    cce_location_t		L[1];					\
     ccptn_clean_handler_t	P_H[1], Q_H[1], T_H[1];			\
 									\
     if (cce_location(L)) {						\
@@ -444,15 +446,15 @@ test_3_4_1 (cce_destination_t upper_L)
       cce_run_catch_handlers_raise(L, upper_L);				\
     } else {								\
       static char const *	pathname = INPUT_PATHNAME;		\
-      ccptn_t		*P, *Q, *T;					\
+      ccptn_t const		*P, *Q, *T;				\
 									\
-      P = ccptn_new_nodup_asciiz_guarded(L, P_H, pathname);		\
-      Q = ccptn_new_normalise_guarded(L, Q_H, P);			\
-      T = ccptn_new_dirname_guarded(L, T_H, Q);				\
+      P = ccname_new(ccptn_t, pointer,    clean)(L, A, P_H, pathname);	\
+      Q = ccname_new(ccptn_t, normalise, clean)(L, A, Q_H, P);		\
+      T = ccname_new(ccptn_t, dirname,   clean)(L, A, T_H, Q);		\
       if (0) {								\
-	fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(T));		\
+	fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(T));		\
       }									\
-      cctests_assert_asciiz(L, EXPECTED_DIRNAME, ccptn_asciiz(T));	\
+      cctests_assert_asciiz(L, EXPECTED_DIRNAME, ccptn_ptr(T));	\
       cce_run_body_handlers(L);					\
     }									\
   }
@@ -464,7 +466,7 @@ TEST_NEW_DIRNAME(test_4_1_4, "/",			"/")
 
 /* ------------------------------------------------------------------ */
 
-/* Test for "ccptn_init_dirname_guarded()" with clean handler. */
+/* Test for "ccname_init(ccptn_t, dirname, clean)()". */
 #define TEST_INIT_DIRNAME(FUNCNAME,INPUT_PATHNAME,EXPECTED_DIRNAME)	\
   void									\
   FUNCNAME (cce_destination_t upper_L)					\
@@ -478,16 +480,17 @@ TEST_NEW_DIRNAME(test_4_1_4, "/",			"/")
       cce_run_catch_handlers_raise(L, upper_L);				\
     } else {								\
       static char const *	pathname = INPUT_PATHNAME;		\
-      ccptn_t		*P, *Q, T[1];					\
+      ccptn_t const		*P, *Q;					\
+      ccptn_t			T[1];					\
 									\
-      P = ccptn_new_nodup_asciiz_guarded(L, P_H, pathname);		\
-      Q = ccptn_new_normalise_guarded(L, Q_H, P);			\
-      ccptn_init_dirname_guarded(L, T, T_H, Q);				\
+      P = ccname_new(ccptn_t, pointer,    clean)(L, A, P_H, pathname);	\
+      Q = ccname_new(ccptn_t, normalise, clean)(L, A, Q_H, P);		\
+      ccname_init(ccptn_t, dirname, clean)(L, A, T_H, T, Q);		\
       if (0) {								\
-	fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(T));		\
+	fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(T));		\
       }									\
-      cctests_assert_asciiz(L, EXPECTED_DIRNAME, ccptn_asciiz(T));	\
-      cce_run_body_handlers(L);					\
+      cctests_assert_asciiz(L, EXPECTED_DIRNAME, ccptn_ptr(T));		\
+      cce_run_body_handlers(L);						\
     }									\
   }
 
@@ -498,13 +501,13 @@ TEST_INIT_DIRNAME(test_4_2_4, "/",			"/")
 
 /* ------------------------------------------------------------------ */
 
-/* Test for "ccptn_new_dirname_guarded()" with clean handler and input
-   pathname having no dirname. */
+/* Test  for "ccname_new(ccptn_t,  dirname, clean)()"  and input  pathname having  no
+   dirname. */
 #define TEST_NEW_DIRNAME_NO(FUNCNAME,INPUT_PATHNAME)			\
   void									\
   FUNCNAME (cce_destination_t upper_L)					\
   {									\
-    cce_location_t	L[1];						\
+    cce_location_t		L[1];					\
     ccptn_clean_handler_t	P_H[1], Q_H[1], T_H[1];			\
 									\
     if (cce_location(L)) {						\
@@ -519,28 +522,27 @@ TEST_INIT_DIRNAME(test_4_2_4, "/",			"/")
       }									\
     } else {								\
       static char const *	pathname = INPUT_PATHNAME;		\
-      ccptn_t			*P, *Q;					\
+      ccptn_t const		*P, *Q;					\
 									\
-      P = ccptn_new_nodup_asciiz_guarded(L, P_H, pathname);		\
-      Q = ccptn_new_normalise_guarded(L, Q_H, P);			\
-      ccptn_new_dirname_guarded(L, T_H, Q);				\
+      P = ccname_new(ccptn_t, pointer,    clean)(L, A, P_H, pathname);	\
+      Q = ccname_new(ccptn_t, normalise, clean)(L, A, Q_H, P);		\
+      ccname_new(ccptn_t, dirname, clean)(L, A, T_H, Q);		\
       cctests_assert(L, false);						\
-      cce_run_body_handlers(L);					\
+      cce_run_body_handlers(L);						\
     }									\
   }
 
 TEST_NEW_DIRNAME_NO(test_4_3_1, "file.ext")
 TEST_NEW_DIRNAME_NO(test_4_3_2, "..")
 
-
 /* ------------------------------------------------------------------ */
 
 void
 test_4_4_1 (cce_destination_t upper_L)
-/* Test for "ccptn_new_dirname_guarded()" with error handler. */
+/* Test for "ccname_new(ccptn_t, dirname, error)()". */
 {
   cce_location_t	L[1];
-  ccptn_clean_handler_t	P_H[1], Q_H[1], T_H[1];
+  ccptn_clean_handler_t	P_H[1], Q_H[1], S_H[1];
 
   if (cce_location(L)) {
     fprintf(stderr, "%s: exception: %s\n", __func__,
@@ -548,25 +550,24 @@ test_4_4_1 (cce_destination_t upper_L)
     cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname = "/path/to/file.ext";
-    ccptn_t		*P, *Q, *T;
+    ccptn_t const	*P, *Q, *S;
 
-    P = ccptn_new_nodup_asciiz_guarded(L, P_H, pathname);
-    Q = ccptn_new_normalise_guarded(L, Q_H, P);
+    P = ccname_new(ccptn_t, pointer,   clean)(L, A, P_H, pathname);
+    Q = ccname_new(ccptn_t, normalise, clean)(L, A, Q_H, P);
     {
       cce_location_t		inner_L[1];
-      ccptn_error_handler_t	S_H[1];
+      ccptn_error_handler_t	T_H[1];
 
       if (cce_location(inner_L)) {
 	cce_run_catch_handlers_raise(inner_L, L);
       } else {
-	ccptn_t *	S = ccptn_new_dirname_guarded(inner_L, S_H, Q);
-	cctests_assert_asciiz(inner_L, "/path/to/", ccptn_asciiz(S));
-	T = S;
+	S = ccname_new(ccptn_t, dirname, error)(inner_L, A, T_H, Q);
+	cctests_assert_asciiz(inner_L, "/path/to/", ccptn_ptr(S));
 	cce_run_body_handlers(inner_L);
       }
     }
-    ccptn_handler_ptn_init(L, T_H, T);
-    cctests_assert_asciiz(L, "/path/to/", ccptn_asciiz(T));
+    ccptn_init_handler(L, S_H, S);
+    cctests_assert_asciiz(L, "/path/to/", ccptn_ptr(S));
     cce_run_body_handlers(L);
   }
 }
@@ -576,7 +577,7 @@ test_4_4_1 (cce_destination_t upper_L)
  ** Filenames.
  ** ----------------------------------------------------------------- */
 
-/* Test for "ccptn_new_filename_guarded()" with clean handler. */
+/* Test for "ccname_new(ccptn_t, filename,  clean)()". */
 #define TEST_NEW_FILENAME(FUNCNAME,INPUT_PATHNAME,EXPECTED_FILENAME)	\
   void									\
   FUNCNAME (cce_destination_t upper_L)					\
@@ -590,17 +591,17 @@ test_4_4_1 (cce_destination_t upper_L)
       cce_run_catch_handlers_raise(L, upper_L);				\
     } else {								\
       static char const *	pathname = INPUT_PATHNAME;		\
-      ccptn_t		*P, *Q, *T;					\
+      ccptn_t const		*P, *Q, *T;				\
 									\
-      P = ccptn_new_nodup_asciiz_guarded(L, P_H, pathname);		\
-      Q = ccptn_new_normalise_guarded(L, Q_H, P);			\
-      T = ccptn_new_filename_guarded(L, T_H, Q);			\
+      P = ccname_new(ccptn_t, pointer,    clean)(L, A, P_H, pathname);	\
+      Q = ccname_new(ccptn_t, normalise, clean)(L, A, Q_H, P);		\
+      T = ccname_new(ccptn_t, filename,  clean)(L, A, T_H, Q);		\
 									\
       if (0) {								\
-	fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(T));		\
+	fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(T));		\
       }									\
 									\
-      cctests_assert_asciiz(L, EXPECTED_FILENAME, ccptn_asciiz(T));	\
+      cctests_assert_asciiz(L, EXPECTED_FILENAME, ccptn_ptr(T));	\
 									\
       cce_run_body_handlers(L);					\
     }									\
@@ -613,7 +614,7 @@ TEST_NEW_FILENAME(test_5_1_4, "~/.fvwmrc",		".fvwmrc")
 
 /* ------------------------------------------------------------------ */
 
-/* Test for "ccptn_init_filename_guarded()" with clean handler. */
+/* Test for "ccname_init(ccptn_t, filename, clean)()". */
 #define TEST_INIT_FILENAME(FUNCNAME,INPUT_PATHNAME,EXPECTED_FILENAME)	\
   void									\
   FUNCNAME (cce_destination_t upper_L)					\
@@ -627,17 +628,18 @@ TEST_NEW_FILENAME(test_5_1_4, "~/.fvwmrc",		".fvwmrc")
       cce_run_catch_handlers_raise(L, upper_L);				\
     } else {								\
       static char const *	pathname = INPUT_PATHNAME;		\
-      ccptn_t		*P, *Q, T[1];					\
+      ccptn_t const		*P, *Q;					\
+      ccptn_t			T[1];					\
 									\
-      P = ccptn_new_nodup_asciiz_guarded(L, P_H, pathname);		\
-      Q = ccptn_new_normalise_guarded(L, Q_H, P);			\
-      ccptn_init_filename_guarded(L, T, T_H, Q);			\
+      P = ccname_new(ccptn_t, pointer,    clean)(L, A, P_H, pathname);	\
+      Q = ccname_new(ccptn_t, normalise, clean)(L, A, Q_H, P);		\
+      ccname_init(ccptn_t, filename, clean)(L, A, T_H, T, Q);		\
 									\
       if (0) {								\
-	fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(T));		\
+	fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(T));		\
       }									\
 									\
-      cctests_assert_asciiz(L, EXPECTED_FILENAME, ccptn_asciiz(T));	\
+      cctests_assert_asciiz(L, EXPECTED_FILENAME, ccptn_ptr(T));	\
 									\
       cce_run_body_handlers(L);					\
     }									\
@@ -650,13 +652,13 @@ TEST_NEW_FILENAME(test_5_2_4, "~/.fvwmrc",		".fvwmrc")
 
 /* ------------------------------------------------------------------ */
 
-/* Test  for  "ccptn_new_filename_guarded()"  with  pathname  having  no
+/* Test  for  "ccname_new(ccptn_t,  filename,   clean)()"  with  pathname  having  no
    filename. */
 #define TEST_NEW_FILENAME_NO(FUNCNAME, INPUT_PATHNAME)			\
   void									\
   FUNCNAME (cce_destination_t upper_L)					\
   {									\
-    cce_location_t	L[1];						\
+    cce_location_t		L[1];					\
     ccptn_clean_handler_t	P_H[1], Q_H[1], T_H[1];			\
 									\
     if (cce_location(L)) {						\
@@ -671,16 +673,16 @@ TEST_NEW_FILENAME(test_5_2_4, "~/.fvwmrc",		".fvwmrc")
       }									\
     } else {								\
       static char const *	pathname = INPUT_PATHNAME;		\
-      ccptn_t			*P, *Q;					\
+      ccptn_t const		*P, *Q;					\
 									\
-      P = ccptn_new_nodup_asciiz_guarded(L, P_H, pathname);		\
-      Q = ccptn_new_normalise_guarded(L, Q_H, P);			\
+      P = ccname_new(ccptn_t, pointer,    clean)(L, A, P_H, pathname);	\
+      Q = ccname_new(ccptn_t, normalise, clean)(L, A, Q_H, P);		\
       if (0) {								\
-	fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(Q));		\
+	fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(Q));		\
       }									\
-      ccptn_new_filename_guarded(L, T_H, Q);				\
+      ccname_new(ccptn_t, filename, clean)(L, A, T_H, Q);		\
       cctests_assert(L, false);						\
-      cce_run_body_handlers(L);					\
+      cce_run_body_handlers(L);						\
     }									\
   }
 
@@ -689,15 +691,14 @@ TEST_NEW_FILENAME_NO(test_5_3_2, "..")
 TEST_NEW_FILENAME_NO(test_5_3_3, "/path/to/dir/")
 TEST_NEW_FILENAME_NO(test_5_3_4, "/")
 
-
 /* ------------------------------------------------------------------ */
 
 void
 test_5_4_1 (cce_destination_t upper_L)
-/* Test for "ccptn_new_filename_guarded()" with error handler. */
+/* Test for "ccptn_new_filename_guarded()". */
 {
   cce_location_t	L[1];
-  ccptn_clean_handler_t	P_H[1], Q_H[1], T_H[1];
+  ccptn_clean_handler_t	P_H[1], Q_H[1], S_H[1];
 
   if (cce_location(L)) {
     fprintf(stderr, "%s: exception: %s\n", __func__,
@@ -705,25 +706,24 @@ test_5_4_1 (cce_destination_t upper_L)
     cce_run_catch_handlers_raise(L, upper_L);
   } else {
     static char const *	pathname = "/path/to/file.ext";
-    ccptn_t		*P, *Q, *T;
+    ccptn_t const	*P, *Q, *S;
 
-    P = ccptn_new_nodup_asciiz_guarded(L, P_H, pathname);
-    Q = ccptn_new_normalise_guarded(L, Q_H, P);
+    P = ccname_new(ccptn_t, pointer,   clean)(L, A, P_H, pathname);
+    Q = ccname_new(ccptn_t, normalise, clean)(L, A, Q_H, P);
     {
       cce_location_t		inner_L[1];
-      ccptn_error_handler_t	S_H[1];
+      ccptn_error_handler_t	T_H[1];
 
       if (cce_location(inner_L)) {
 	cce_run_catch_handlers_raise(inner_L, L);
       } else {
-	ccptn_t *	S = ccptn_new_filename_guarded(inner_L, S_H, Q);
-	cctests_assert_asciiz(inner_L, "file.ext", ccptn_asciiz(S));
-	T = S;
+	S = ccname_new(ccptn_t, filename, error)(inner_L, A, T_H, Q);
+	cctests_assert_asciiz(inner_L, "file.ext", ccptn_ptr(S));
 	cce_run_body_handlers(inner_L);
       }
     }
-    ccptn_handler_ptn_init(L, T_H, T);
-    cctests_assert_asciiz(L, "file.ext", ccptn_asciiz(T));
+    ccptn_init_handler(L, S_H, S);
+    cctests_assert_asciiz(L, "file.ext", ccptn_ptr(S));
     cce_run_body_handlers(L);
   }
 }
@@ -733,6 +733,8 @@ int
 main (void)
 {
   ccptn_library_init();
+
+  A = ccmem_standard_allocator;
 
   cctests_init("pathname components");
   {

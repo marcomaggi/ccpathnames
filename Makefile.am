@@ -43,13 +43,11 @@ libccpathnames_la_SOURCES	= \
 	src/ccpathnames.h			\
 	src/ccpathnames-internals.h		\
 	src/ccpathnames-version.c		\
-	src/ccpathnames-conditions.c
+	src/ccpathnames-conditions.c		\
+	src/ccpathnames-core.c			\
+	src/ccpathnames-manipulation.c		\
+	src/ccpathnames-components.c
 
-
-#src/ccpathnames-input-representation.c
-# src/ccpathnames-core.c			\
-# src/ccpathnames-manipulation.c		\
-# src/ccpathnames-components.c		\
 # src/ccpathnames-input-output.c
 
 
@@ -58,12 +56,9 @@ libccpathnames_la_SOURCES	= \
 check_PROGRAMS	= \
 	tests/version			\
 	tests/conditions		\
-	tests/input-representation
-
-
-# tests/core			\
-# tests/manipulations		\
-# tests/components
+	tests/core			\
+	tests/manipulations		\
+	tests/components
 
 if MMUX_TESTING_ENABLED
 TESTS				= $(check_PROGRAMS)
@@ -80,17 +75,14 @@ tests_version_LDADD			= $(ccpathnames_tests_ldadd)
 tests_conditions_CPPFLAGS		= $(ccpathnames_tests_cppflags)
 tests_conditions_LDADD			= $(ccpathnames_tests_ldadd)
 
-tests_input_representation_CPPFLAGS	= $(ccpathnames_tests_cppflags)
-tests_input_representation_LDADD	= $(ccpathnames_tests_ldadd)
+tests_core_CPPFLAGS			= $(ccpathnames_tests_cppflags)
+tests_core_LDADD			= $(ccpathnames_tests_ldadd)
 
-# tests_core_CPPFLAGS			= $(ccpathnames_tests_cppflags)
-# tests_core_LDADD			= $(ccpathnames_tests_ldadd)
+tests_manipulations_CPPFLAGS		= $(ccpathnames_tests_cppflags)
+tests_manipulations_LDADD		= $(ccpathnames_tests_ldadd)
 
-# tests_manipulations_CPPFLAGS		= $(ccpathnames_tests_cppflags)
-# tests_manipulations_LDADD		= $(ccpathnames_tests_ldadd)
-
-# tests_components_CPPFLAGS		= $(ccpathnames_tests_cppflags)
-# tests_components_LDADD			= $(ccpathnames_tests_ldadd)
+tests_components_CPPFLAGS		= $(ccpathnames_tests_cppflags)
+tests_components_LDADD			= $(ccpathnames_tests_ldadd)
 
 ## --------------------------------------------------------------------
 

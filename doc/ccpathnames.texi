@@ -133,10 +133,10 @@ included in the section entitled ``@gnu{} Free Documentation License''.
 * version::                     Version functions.
 * init::                        Library initialisation.
 * conditions::                  Exceptional condition objects.
-* input rep::                   Pathnames input representation.
 * typedefs::                    Type definitions.
 * ctors::                       Constructing pathname representations.
 * dtors::                       Destructing pathname representations.
+* handlers::                    Exception handlers for pathnames.
 * guarded::                     Guarded constructors.
 * predicates::                  Pathname predicates.
 * accessors::                   Pathname accessors.
@@ -825,92 +825,6 @@ Return @ctrue{} if @var{C} is an @emph{no rootname} exceptional--condition objec
 @end deftypefun
 
 @c page
-@node input rep
-@chapter Pathnames input representation
-
-
-Under @value{PACKAGE}, a pathname is represented by instances of @objtype{ccptn_t}; the constructors
-of this type accept as input a representation of the pathname as @ascii{} string, optionally
-terminated by a zero octet, which makes it an @asciiz{} string.  The input representation is
-described by instances of @objtype{ccptn_input_rep_t}, which is documented in this section.
-
-@menu
-* input rep typedefs::          Input rep types, constructors.
-* input rep dtors::             Input rep destructors.
-@end menu
-
-@c page
-@node input rep typedefs
-@section Input rep types, constructors and destructors
-
-
-@deftp {Struct Typedef} ccptn_input_rep_t
-Type of input representation used as argument for the constructors of @objtype{ccptn_t}.  In normal
-usage, we should always put instances of this type on the stack and never call its destructor: it is
-responsibility of the constructors of @objtype{ccptn_t} to destroy it correctly.
-@end deftp
-
-
-@deftypefun void ccptn_init_input_rep_nodup (ccptn_input_rep_t * @var{IRP}, char const * @var{pathname_ptr}, size_t @var{pathname_len})
-Initialise an already allocated instance of @objtype{ccptn_input_rep_t} with the @ascii{} string
-referenced by @var{pathname_ptr}.  The input string is @strong{not} duplicated; this constructor is
-applicable only to @asciiz{} strings.
-
-If the length of the string is known: we can specify it with the argument @var{pathname_len};
-otherwise we can ask the constructor to compute it by using the constant
-@samp{CCPTN_INPUT_REP_UNKNOWN_LEN} as value for the argument @var{pathname_len}.
-
-@example
-ccptn_input_rep_t       IRP[1];
-
-ccptn_init_input_rep_nodup(IRP,
-  "/path/to/file.ext", CCPTN_INPUT_REP_UNKNOWN_LEN);
-@end example
-@end deftypefun
-
-
-@deftypefun void ccptn_init_input_rep_dup (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A},
-ccptn_input_rep_t * @var{IRP}, char const * @var{pathname_ptr}, size_t @var{pathname_len})
-Initialise an already allocated instance of @objtype{ccptn_input_rep_t} with the @ascii{} string
-referenced by @var{pathname_ptr}.  The input string @strong{is} duplicated; this constructor is
-applicable to both @ascii{} and @asciiz{} strings.
-
-If an error occurs duplicating the string: an exception is raised by performing a non--local exit to
-@var{L}.  Memory for the duplicate string is allocated with @var{A}.
-
-If the length of the string is known: we can specify it with the argument @var{pathname_len};
-otherwise, if the string is @asciiz{}, we can ask the constructor to compute it by using the
-constant @samp{CCPTN_INPUT_REP_UNKNOWN_LEN} as value for the argument @var{pathname_len}.
-
-@example
-cce_location_t             L[1];
-
-if (cce_location(L)) @{
-  cce_run_catch_handlers_raise(L, upper_L);
-@} else @{
-  static char const * pathname = "/path/to/file.ext";
-  ccptn_input_rep_t   IRP[1];
-
-  ccptn_init_input_rep_dup(L, ccmem_standard_allocator, IRP,
-     pathname, CCPTN_INPUT_REP_UNKNOWN_LEN);
-  ...
-  cce_run_body_handlers(L);
-@}
-@end example
-@end deftypefun
-
-@c page
-@node input rep dtors
-@section Input rep destructors
-
-
-@deftypefun void ccptn_delete_input_rep (ccptn_input_rep_t * @var{IRP})
-Release all the asynchronous resources owned by the fields of the struct, then release the memory
-allocated for the struct itself, if needed.  I normal usage: we should never call this destructor
-function directly.
-@end deftypefun
-
-@c page
 @node typedefs
 @chapter Type definitions
 
@@ -1341,6 +1255,38 @@ if (cce_location(L)) @{
   cce_run_body_handlers(L);
 @}
 @end example
+
+@c page
+@node handlers
+@chapter Exception handlers for pathnames
+
+
+@deftp {Struct Typedef} ccptn_clean_handler_t
+@deftpx {Struct Typedef} ccptn_error_handler_t
+Type of exception handlers we can use to destroy instances of @objtype{ccptn_t} using the facilities
+of the library CCExceptions.
+@end deftp
+
+
+@deftypefun void ccptn_init_clean_handler (cce_destination_t @var{L}, ccptn_clean_handler_t * @var{H}, ccptn_t * @var{P})
+@deftypefunx void ccptn_init_error_handler (cce_destination_t @var{L}, ccptn_error_handler_t * @var{H}, ccptn_t * @var{P})
+Initialise the handler @var{H} to destroy the pathname @var{P} in the context of the location
+@var{L}.
+@end deftypefun
+
+
+@deftypefn {Preprocessor Macro} void ccptn_init_handler (cce_destination_t @var{L}, @var{H}, ccptn_t * @var{P})
+Initialise the handler @var{H} to destroy the pathname @var{P} in the context of the location
+@var{L}.  The expansion of this macro depends upon the type of @var{H}, if the type is:
+
+@table @code
+@item ccptn_clean_handler_t *
+The macro expands into a call to @cfunc{ccptn_init_clean_handler}.
+
+@item ccptn_error_handler_t *
+The macro expands into a call to @cfunc{ccptn_init_error_handler}.
+@end table
+@end deftypefn
 
 @c page
 @node guarded
@@ -2553,7 +2499,7 @@ Return @ctrue{} if the extensions are equal octet by octet; otherwise return @cf
 @end deftypefun
 
 
-@deftypefun void ccptn_extension_print (cce_destination_t @var{L}, FILE * @var{stream}, ccptn_extension_t @var{E})
+@deftypefun void ccptn_extension_fwrite (cce_destination_t @var{L}, FILE * @var{stream}, ccptn_extension_t @var{E})
 Print the extension to @var{stream}; do not flush the stream.  If an error occurs: raise an
 exception by performing a non--local exit to @var{L}.
 @end deftypefun

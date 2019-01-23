@@ -7,7 +7,7 @@
 
 	Test file for core functions.
 
-  Copyright (C) 2018 Marco Maggi <marco.maggi-ipsu@poste.it>
+  Copyright (C) 2018, 2019 Marco Maggi <marco.maggi-ipsu@poste.it>
 
   See the COPYING file.
 */
@@ -22,173 +22,241 @@
 
 static char const * progname;
 
+static ccmem_allocator_t const * A;
+
 
 /** --------------------------------------------------------------------
- ** Constructors.
+ ** Constructors: from ASCIIZ pointers.
  ** ----------------------------------------------------------------- */
 
 void
 test_1_1 (cce_destination_t upper_L)
-/* Test for "ccptn_new_nodup_asciiz()". */
+/* Test for "ccname_new(ccptn_t, pointer)()". */
 {
   cce_location_t	L[1];
+  ccptn_clean_handler_t	H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
   } else {
-    static char const *	pathname = "/path/to/file.ext";
-    ccptn_t *		P;
+    static char const *	input = "/path/to/file.ext";
+    ccptn_t const *	P;
 
-    P = ccptn_new_nodup_asciiz(L, pathname);
+    P = ccname_new(ccptn_t, pointer, clean)(L, A, H, input);
     {
-      if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
-      cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
+      if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(P)); }
+      cctests_assert_asciiz(L, input, ccptn_ptr(P));
     }
-    ccptn_delete(P);
     cce_run_body_handlers(L);
   }
 }
 
 void
 test_1_2 (cce_destination_t upper_L)
-/* Test for "ccptn_new_dup_asciiz()". */
+/* Test for "ccname_new(ccptn_t, asciiz_dup)()". */
 {
   cce_location_t	L[1];
+  ccptn_clean_handler_t	H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
   } else {
-    static char const *	pathname = "/path/to/file.ext";
-    ccptn_t *		P;
+    static char const *	input = "/path/to/file.ext";
+    ccptn_t const *	P;
 
-    P = ccptn_new_dup_asciiz(L, pathname);
+    P = ccname_new(ccptn_t, pointer_dup, clean)(L, A, H, input);
     {
-      if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
-      cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
+      if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(P)); }
+      cctests_assert_asciiz(L, input, ccptn_ptr(P));
     }
-    ccptn_delete(P);
     cce_run_body_handlers(L);
   }
 }
 
 void
 test_1_3 (cce_destination_t upper_L)
-/* Test for "ccptn_init_nodup_asciiz()". */
+/* Test for "ccname_init(ccptn_t, pointer)()". */
 {
   cce_location_t	L[1];
+  ccptn_clean_handler_t	H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
   } else {
-    static char const *	pathname = "/path/to/file.ext";
+    static char const *	input = "/path/to/file.ext";
     ccptn_t		P[1];
 
-    ccptn_init_nodup_asciiz(L, P, pathname);
+    ccname_init(ccptn_t, pointer, clean)(L, A, H, P, input);
     {
-      if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
-      cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
+      if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(P)); }
+      cctests_assert_asciiz(L, input, ccptn_ptr(P));
     }
-    ccptn_delete(P);
     cce_run_body_handlers(L);
   }
 }
 
 void
 test_1_4 (cce_destination_t upper_L)
-/* Test for "ccptn_init_dup_asciiz()". */
+/* Test for "ccname_init(ccptn_t, asciiz_dup)()". */
 {
   cce_location_t	L[1];
+  ccptn_clean_handler_t	H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
   } else {
-    static char const *	pathname = "/path/to/file.ext";
+    static char const *	input = "/path/to/file.ext";
     ccptn_t		P[1];
 
-    ccptn_init_dup_asciiz(L, P, pathname);
+    ccname_init(ccptn_t, pointer_dup, clean)(L, A, H, P, input);
     {
-      if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
-      cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
+      if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(P)); }
+      cctests_assert_asciiz(L, input, ccptn_ptr(P));
     }
-    ccptn_delete(P);
 
     cce_run_body_handlers(L);
   }
 }
 
-/* ------------------------------------------------------------------ */
+
+/** --------------------------------------------------------------------
+ ** Constructors: from ASCIIZ blocks.
+ ** ----------------------------------------------------------------- */
 
 void
-test_1_5 (cce_destination_t upper_L)
-/* Test for "ccptn_handler_ptn_init()". */
+test_2_1 (cce_destination_t upper_L)
+/* Test for "ccname_new(ccptn_t, asciiz)()". */
 {
   cce_location_t	L[1];
-  ccptn_clean_handler_t	P_H[1];
+  ccptn_clean_handler_t	H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
   } else {
-    static char const *	pathname = "/path/to/file.ext";
-    ccptn_t *		P;
+    ccmem_asciiz_t const	input = ccmem_new_asciiz_from_str("/path/to/file.ext");
+    ccptn_t const *	P;
 
-    P = ccptn_new_nodup_asciiz(L, pathname);
-    ccptn_handler_ptn_init(L, P_H, P);
+    P = ccname_new(ccptn_t, asciiz, clean)(L, A, H, input);
     {
-      if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
-      cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
+      if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(P)); }
+      cctests_assert_asciiz(L, input.ptr, ccptn_ptr(P));
     }
     cce_run_body_handlers(L);
   }
 }
 
-/* ------------------------------------------------------------------ */
-
 void
-test_1_6 (cce_destination_t upper_L)
-/* Test for "ccptn_new_normal_asciiz()". */
+test_2_2 (cce_destination_t upper_L)
+/* Test for "ccname_new(ccptn_t, asciiz_dup)()". */
 {
   cce_location_t	L[1];
+  ccptn_clean_handler_t	H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
   } else {
-    static char const *	input_pathname  = "/path/./to/mix/../file.ext";
-    static char const *	normal_pathname = "/path/to/file.ext";
-    ccptn_t *		P;
+    ccmem_asciiz_t const	input = ccmem_new_asciiz_from_str("/path/to/file.ext");
+    ccptn_t const *	P;
 
-    P = ccptn_new_normal_asciiz(L, input_pathname);
+    P = ccname_new(ccptn_t, asciiz_dup, clean)(L, A, H, input);
     {
-      if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
-      cctests_assert_asciiz(L, normal_pathname, ccptn_asciiz(P));
-      cctests_assert(L, true  == ccptn_is_absolute(P));
-      cctests_assert(L, false == ccptn_is_realpath(P));
+      if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(P)); }
+      cctests_assert_asciiz(L, input.ptr, ccptn_ptr(P));
     }
-    ccptn_delete(P);
     cce_run_body_handlers(L);
   }
 }
 
 void
-test_1_7 (cce_destination_t upper_L)
-/* Test for "ccptn_init_normal_asciiz()". */
+test_2_3 (cce_destination_t upper_L)
+/* Test for "ccname_init(ccptn_t, asciiz)()". */
 {
   cce_location_t	L[1];
+  ccptn_clean_handler_t	H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
   } else {
-    static char const *	input_pathname  = "/path/./to/mix/../file.ext";
-    static char const *	normal_pathname = "/path/to/file.ext";
+    ccmem_asciiz_t const	input = ccmem_new_asciiz_from_str("/path/to/file.ext");
     ccptn_t		P[1];
 
-    ccptn_init_normal_asciiz(L, P, input_pathname);
+    ccname_init(ccptn_t, asciiz, clean)(L, A, H, P, input);
     {
-      if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
-      cctests_assert_asciiz(L, normal_pathname, ccptn_asciiz(P));
-      cctests_assert(L, true  == ccptn_is_absolute(P));
-      cctests_assert(L, false == ccptn_is_realpath(P));
+      if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(P)); }
+      cctests_assert_asciiz(L, input.ptr, ccptn_ptr(P));
     }
-    ccptn_delete(P);
+    cce_run_body_handlers(L);
+  }
+}
+
+void
+test_2_4 (cce_destination_t upper_L)
+/* Test for "ccname_init(ccptn_t, asciiz_dup)()". */
+{
+  cce_location_t	L[1];
+  ccptn_clean_handler_t	H[1];
+
+  if (cce_location(L)) {
+    cce_run_catch_handlers_raise(L, upper_L);
+  } else {
+    ccmem_asciiz_t const	input = ccmem_new_asciiz_from_str("/path/to/file.ext");
+    ccptn_t		P[1];
+
+    ccname_init(ccptn_t, asciiz_dup, clean)(L, A, H, P, input);
+    {
+      if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(P)); }
+      cctests_assert_asciiz(L, input.ptr, ccptn_ptr(P));
+    }
+
+    cce_run_body_handlers(L);
+  }
+}
+
+
+/** --------------------------------------------------------------------
+ ** Constructors: from ASCII blocks.
+ ** ----------------------------------------------------------------- */
+
+void
+test_3_1 (cce_destination_t upper_L)
+/* Test for "ccname_new(ccptn_t, ascii)()". */
+{
+  cce_location_t	L[1];
+  ccptn_clean_handler_t	H[1];
+
+  if (cce_location(L)) {
+    cce_run_catch_handlers_raise(L, upper_L);
+  } else {
+    ccmem_ascii_t const	input = ccmem_new_ascii_from_str("/path/to/file.ext");
+    ccptn_t const *	P;
+
+    P = ccname_new(ccptn_t, ascii, clean)(L, A, H, input);
+    {
+      if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(P)); }
+      cctests_assert_asciiz(L, input.ptr, ccptn_ptr(P));
+    }
+    cce_run_body_handlers(L);
+  }
+}
+
+void
+test_3_2 (cce_destination_t upper_L)
+/* Test for "ccname_init(ccptn_t, ascii)()". */
+{
+  cce_location_t	L[1];
+  ccptn_clean_handler_t	H[1];
+
+  if (cce_location(L)) {
+    cce_run_catch_handlers_raise(L, upper_L);
+  } else {
+    ccmem_ascii_t const	input = ccmem_new_ascii_from_str("/path/to/file.ext");
+    ccptn_t		P[1];
+
+    ccname_init(ccptn_t, ascii, clean)(L, A, H, P, input);
+    {
+      if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(P)); }
+      cctests_assert_asciiz(L, input.ptr, ccptn_ptr(P));
+    }
     cce_run_body_handlers(L);
   }
 }
@@ -199,41 +267,39 @@ test_1_7 (cce_destination_t upper_L)
  ** ----------------------------------------------------------------- */
 
 void
-test_2_1_1 (cce_destination_t upper_L)
+test_4_1_1 (cce_destination_t upper_L)
 /* Test for "ccptn_is_absolute()". */
 {
   cce_location_t	L[1];
+  ccptn_clean_handler_t	H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
   } else {
-    static char const *	pathname = "/path/to/file.ext";
-    ccptn_t *		P;
+    static char const *	input = "/path/to/file.ext";
+    ccptn_t const *	P;
 
-    P = ccptn_new_nodup_asciiz(L, pathname);
+    P = ccname_new(ccptn_t, pointer, clean)(L, A, H, input);
     cctests_assert(L, true == ccptn_is_absolute(P));
-    ccptn_delete(P);
-
     cce_run_body_handlers(L);
   }
 }
 
 void
-test_2_1_2 (cce_destination_t upper_L)
+test_4_1_2 (cce_destination_t upper_L)
 /* Test for "ccptn_is_absolute()". */
 {
   cce_location_t	L[1];
+  ccptn_clean_handler_t	H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
   } else {
-    static char const *	pathname = "./path/to/file.ext";
-    ccptn_t *		P;
+    static char const *	input = "./path/to/file.ext";
+    ccptn_t const *	P;
 
-    P = ccptn_new_nodup_asciiz(L, pathname);
+    P = ccname_new(ccptn_t, pointer, clean)(L, A, H, input);
     cctests_assert(L, false == ccptn_is_absolute(P));
-    ccptn_delete(P);
-
     cce_run_body_handlers(L);
   }
 }
@@ -241,41 +307,39 @@ test_2_1_2 (cce_destination_t upper_L)
 /* ------------------------------------------------------------------ */
 
 void
-test_2_2_1 (cce_destination_t upper_L)
+test_4_2_1 (cce_destination_t upper_L)
 /* Test for "ccptn_is_relative()". */
 {
   cce_location_t	L[1];
+  ccptn_clean_handler_t	H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
   } else {
-    static char const *	pathname = "/path/to/file.ext";
-    ccptn_t *		P;
+    static char const *	input = "/path/to/file.ext";
+    ccptn_t const *	P;
 
-    P = ccptn_new_nodup_asciiz(L, pathname);
+    P = ccname_new(ccptn_t, pointer, clean)(L, A, H, input);
     cctests_assert(L, false == ccptn_is_relative(P));
-    ccptn_delete(P);
-
     cce_run_body_handlers(L);
   }
 }
 
 void
-test_2_2_2 (cce_destination_t upper_L)
+test_4_2_2 (cce_destination_t upper_L)
 /* Test for "ccptn_is_relative()". */
 {
   cce_location_t	L[1];
+  ccptn_clean_handler_t	H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
   } else {
-    static char const *	pathname = "./path/to/file.ext";
-    ccptn_t *		P;
+    static char const *	input = "./path/to/file.ext";
+    ccptn_t const *	P;
 
-    P = ccptn_new_nodup_asciiz(L, pathname);
+    P = ccname_new(ccptn_t, pointer, clean)(L, A, H, input);
     cctests_assert(L, true == ccptn_is_relative(P));
-    ccptn_delete(P);
-
     cce_run_body_handlers(L);
   }
 }
@@ -283,407 +347,46 @@ test_2_2_2 (cce_destination_t upper_L)
 /* ------------------------------------------------------------------ */
 
 void
-test_2_3_1 (cce_destination_t upper_L)
+test_4_3_1 (cce_destination_t upper_L)
 /* Test for "ccptn_is_realpath()". */
 {
   cce_location_t	L[1];
+  ccptn_clean_handler_t	H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
   } else {
-    static char const *	pathname = "/path/to/file.ext";
-    ccptn_t *		P;
+    static char const *	input = "/path/to/file.ext";
+    ccptn_t const *	P;
 
-    P = ccptn_new_nodup_asciiz(L, pathname);
+    P = ccname_new(ccptn_t, pointer, clean)(L, A, H, input);
     cctests_assert(L, false == ccptn_is_realpath(P));
-    ccptn_delete(P);
-
     cce_run_body_handlers(L);
   }
 }
 
 void
-test_2_3_2 (cce_destination_t upper_L)
+test_4_3_2 (cce_destination_t upper_L)
 /* Test for "ccptn_is_realpath()". */
 {
 #ifdef HAVE_REALPATH
   cce_location_t	L[1];
+  ccptn_clean_handler_t	P_H[1], Q_H[1];
 
   if (cce_location(L)) {
     cce_run_catch_handlers_raise(L, upper_L);
   } else {
-    char const *	pathname = progname;
-    ccptn_t *		P;
-    ccptn_t *		Q;
+    char const *	input = progname;
+    ccptn_t const *	P;
+    ccptn_t const *	Q;
 
-    P = ccptn_new_nodup_asciiz(L, pathname);
-    Q = ccptn_new_realpath(L, P);
+    P = ccname_new(ccptn_t, pointer,  clean)(L, A, P_H, input);
+    Q = ccname_new(ccptn_t, realpath, clean)(L, A, Q_H, P);
     cctests_assert(L, false == ccptn_is_realpath(P));
     cctests_assert(L, true  == ccptn_is_realpath(Q));
-    ccptn_delete(P);
-    ccptn_delete(Q);
-
     cce_run_body_handlers(L);
   }
 #endif
-}
-
-
-/** --------------------------------------------------------------------
- ** Guarded constructors.
- ** ----------------------------------------------------------------- */
-
-void
-test_3_1 (cce_destination_t upper_L)
-/* Test for "ccptn_new_nodup_asciiz_guarded()", clean handler. */
-{
-  cce_location_t	L[1];
-  ccptn_clean_handler_t	P_H[1];
-
-  if (cce_location(L)) {
-    cce_run_catch_handlers_raise(L, upper_L);
-  } else {
-    static char const *	pathname = "/path/to/file.ext";
-    ccptn_t *		P;
-
-    P = ccptn_new_nodup_asciiz_guarded(L, P_H, pathname);
-    cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
-    if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
-
-    cce_run_body_handlers(L);
-  }
-}
-
-void
-test_3_2 (cce_destination_t upper_L)
-/* Test for "ccptn_new_dup_asciiz_guarded()", clean handler. */
-{
-  cce_location_t	L[1];
-  ccptn_clean_handler_t	P_H[1];
-
-  if (cce_location(L)) {
-    cce_run_catch_handlers_raise(L, upper_L);
-  } else {
-    static char const *	pathname = "/path/to/file.ext";
-    ccptn_t *		P;
-
-    P = ccptn_new_dup_asciiz_guarded(L, P_H, pathname);
-    cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
-    if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
-
-    cce_run_body_handlers(L);
-  }
-}
-
-void
-test_3_3 (cce_destination_t upper_L)
-/* Test for "ccptn_init_nodup_asciiz_guarded()", clean handler. */
-{
-  cce_location_t	L[1];
-  ccptn_clean_handler_t	P_H[1];
-
-  if (cce_location(L)) {
-    cce_run_catch_handlers_raise(L, upper_L);
-  } else {
-    static char const *	pathname = "/path/to/file.ext";
-    ccptn_t		P[1];
-
-    ccptn_init_nodup_asciiz_guarded(L, P, P_H, pathname);
-    cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
-    if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
-
-    cce_run_body_handlers(L);
-  }
-}
-
-void
-test_3_4 (cce_destination_t upper_L)
-/* Test for "ccptn_init_dup_asciiz_guarded()", clean handler. */
-{
-  cce_location_t	L[1];
-  ccptn_clean_handler_t	P_H[1];
-
-  if (cce_location(L)) {
-    cce_run_catch_handlers_raise(L, upper_L);
-  } else {
-    static char const *	pathname = "/path/to/file.ext";
-    ccptn_t		P[1];
-
-    ccptn_init_dup_asciiz_guarded(L, P, P_H, pathname);
-    cctests_assert_asciiz(L, pathname, ccptn_asciiz(P));
-    if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
-
-    cce_run_body_handlers(L);
-  }
-}
-
-void
-test_3_5 (cce_destination_t upper_L)
-/* Test for "ccptn_new_normal_asciiz_guarded()", clean handler. */
-{
-  cce_location_t	L[1];
-  ccptn_clean_handler_t	P_H[1];
-
-  if (cce_location(L)) {
-    cce_run_catch_handlers_raise(L, upper_L);
-  } else {
-    static char const *	input_pathname  = "/path//./to/mix/../file.ext";
-    static char const *	normal_pathname = "/path/to/file.ext";
-    ccptn_t *		P;
-
-    P = ccptn_new_normal_asciiz_guarded(L, P_H, input_pathname);
-    cctests_assert_asciiz(L, normal_pathname, ccptn_asciiz(P));
-    cctests_assert(L, true  == ccptn_is_normalised(P));
-    cctests_assert(L, false == ccptn_is_realpath(P));
-    if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
-
-    cce_run_body_handlers(L);
-  }
-}
-
-void
-test_3_6 (cce_destination_t upper_L)
-/* Test for "ccptn_init_normal_asciiz_guarded()", clean handler. */
-{
-  cce_location_t	L[1];
-  ccptn_clean_handler_t	P_H[1];
-
-  if (cce_location(L)) {
-    cce_run_catch_handlers_raise(L, upper_L);
-  } else {
-    static char const *	input_pathname  = "/path//./to/mix/../file.ext";
-    static char const *	normal_pathname = "/path/to/file.ext";
-    ccptn_t		P[1];
-
-    ccptn_init_normal_asciiz_guarded(L, P, P_H, input_pathname);
-    cctests_assert_asciiz(L, normal_pathname, ccptn_asciiz(P));
-    cctests_assert(L, true  == ccptn_is_normalised(P));
-    cctests_assert(L, false == ccptn_is_realpath(P));
-    if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
-
-    cce_run_body_handlers(L);
-  }
-}
-
-/* ------------------------------------------------------------------ */
-
-void
-test_4_1 (cce_destination_t upper_L)
-/* Test for "ccptn_new_nodup_asciiz_guarded()", error handler. */
-{
-  static char const * const	pathname = "/path/to/file.ext";
-  cce_location_t		L[1];
-  ccptn_clean_handler_t		Q_H[1];
-
-  if (cce_location(L)) {
-    cce_run_catch_handlers_raise(L, upper_L);
-  } else {
-    ccptn_t *		Q;
-
-    {
-      cce_location_t		inner_L[1];
-      ccptn_error_handler_t	P_H[1];
-
-      if (cce_location(inner_L)) {
-	cce_run_catch_handlers_raise(inner_L, L);
-      } else {
-	ccptn_t *		P;
-
-	P = ccptn_new_nodup_asciiz_guarded(inner_L, P_H, pathname);
-	cctests_assert_asciiz(inner_L, pathname, ccptn_asciiz(P));
-	if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
-	Q = P;
-	cce_run_body_handlers(inner_L);
-      }
-    }
-    ccptn_handler_ptn_init(L, Q_H, Q);
-    cctests_assert_asciiz(L, pathname, ccptn_asciiz(Q));
-    cce_run_catch_handlers(L);
-  }
-}
-
-void
-test_4_2 (cce_destination_t upper_L)
-/* Test for "ccptn_new_dup_asciiz_guarded()", error handler. */
-{
-  static char const * const	pathname = "/path/to/file.ext";
-  cce_location_t		L[1];
-  ccptn_clean_handler_t		Q_H[1];
-
-  if (cce_location(L)) {
-    cce_run_catch_handlers_raise(L, upper_L);
-  } else {
-    ccptn_t *		Q;
-    {
-      cce_location_t		inner_L[1];
-      ccptn_error_handler_t	P_H[1];
-
-      if (cce_location(inner_L)) {
-	cce_run_catch_handlers_raise(inner_L, L);
-      } else {
-	ccptn_t *		P;
-
-	P = ccptn_new_dup_asciiz_guarded(inner_L, P_H, pathname);
-	cctests_assert_asciiz(inner_L, pathname, ccptn_asciiz(P));
-	if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
-	Q = P;
-	cce_run_body_handlers(inner_L);
-      }
-    }
-    ccptn_handler_ptn_init(L, Q_H, Q);
-    cctests_assert_asciiz(L, pathname, ccptn_asciiz(Q));
-    cce_run_catch_handlers(L);
-  }
-}
-
-void
-test_4_3 (cce_destination_t upper_L)
-/* Test for "ccptn_init_nodup_asciiz_guarded()", error handler. */
-{
-  static char const * const	pathname = "/path/to/file.ext";
-  cce_location_t		L[1];
-  ccptn_clean_handler_t		Q_H[1];
-
-  if (cce_location(L)) {
-    cce_run_catch_handlers_raise(L, upper_L);
-  } else {
-    ccptn_t	Q[1];
-
-    {
-      cce_location_t		inner_L[1];
-      ccptn_error_handler_t	P_H[1];
-
-      if (cce_location(inner_L)) {
-	cce_run_catch_handlers_raise(inner_L, L);
-      } else {
-	ccptn_t		P[1];
-
-	ccptn_init_nodup_asciiz_guarded(inner_L, P, P_H, pathname);
-	cctests_assert_asciiz(inner_L, pathname, ccptn_asciiz(P));
-	if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
-	Q[0] = P[0];
-	cce_run_body_handlers(inner_L);
-      }
-    }
-    ccptn_handler_ptn_init(L, Q_H, Q);
-    cctests_assert_asciiz(L, pathname, ccptn_asciiz(Q));
-    cce_run_catch_handlers(L);
-  }
-}
-
-void
-test_4_4 (cce_destination_t upper_L)
-/* Test for "ccptn_init_dup_asciiz_guarded()", error handler. */
-{
-  static char const * const	pathname = "/path/to/file.ext";
-  cce_location_t		L[1];
-  ccptn_clean_handler_t		Q_H[1];
-
-  if (cce_location(L)) {
-    cce_run_catch_handlers_raise(L, upper_L);
-  } else {
-    ccptn_t	Q[1];
-
-    {
-      cce_location_t		inner_L[1];
-      ccptn_error_handler_t	P_H[1];
-
-      if (cce_location(inner_L)) {
-	cce_run_catch_handlers_raise(inner_L, L);
-      } else {
-	ccptn_t		P[1];
-
-	ccptn_init_dup_asciiz_guarded(inner_L, P, P_H, pathname);
-	cctests_assert_asciiz(inner_L, pathname, ccptn_asciiz(P));
-	if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
-	Q[0] = P[0];
-	cce_run_body_handlers(inner_L);
-      }
-    }
-    ccptn_handler_ptn_init(L, Q_H, Q);
-    cctests_assert_asciiz(L, pathname, ccptn_asciiz(Q));
-    cce_run_catch_handlers(L);
-  }
-}
-
-void
-test_4_5 (cce_destination_t upper_L)
-/* Test for "ccptn_new_normal_asciiz_guarded()", error handler. */
-{
-  static char const *		input_pathname  = "/path//./to/mix/../file.ext";
-  static char const *		normal_pathname = "/path/to/file.ext";
-  cce_location_t		L[1];
-  ccptn_clean_handler_t		Q_H[1];
-
-  if (cce_location(L)) {
-    cce_run_catch_handlers_raise(L, upper_L);
-  } else {
-    ccptn_t *	Q;
-
-    {
-      cce_location_t		inner_L[1];
-      ccptn_error_handler_t	P_H[1];
-
-      if (cce_location(inner_L)) {
-	cce_run_catch_handlers_raise(inner_L, L);
-      } else {
-	ccptn_t *	P;
-
-	P = ccptn_new_normal_asciiz_guarded(inner_L, P_H, input_pathname);
-	cctests_assert_asciiz(inner_L, normal_pathname, ccptn_asciiz(P));
-	cctests_assert(L, true  == ccptn_is_normalised(P));
-	cctests_assert(L, false == ccptn_is_realpath(P));
-	if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
-	Q = P;
-	cce_run_body_handlers(inner_L);
-      }
-    }
-    ccptn_handler_ptn_init(L, Q_H, Q);
-    cctests_assert_asciiz(L, normal_pathname, ccptn_asciiz(Q));
-    cctests_assert(L, true  == ccptn_is_normalised(Q));
-    cctests_assert(L, false == ccptn_is_realpath(Q));
-    cce_run_catch_handlers(L);
-  }
-}
-
-void
-test_4_6 (cce_destination_t upper_L)
-/* Test for "ccptn_init_normal_asciiz_guarded()", error handler. */
-{
-  static char const *		input_pathname  = "/path//./to/mix/../file.ext";
-  static char const *		normal_pathname = "/path/to/file.ext";
-  cce_location_t		L[1];
-  ccptn_clean_handler_t		Q_H[1];
-
-  if (cce_location(L)) {
-    cce_run_catch_handlers_raise(L, upper_L);
-  } else {
-    ccptn_t	Q[1];
-
-    {
-      cce_location_t		inner_L[1];
-      ccptn_error_handler_t	P_H[1];
-
-      if (cce_location(inner_L)) {
-	cce_run_catch_handlers_raise(inner_L, L);
-      } else {
-	ccptn_t		P[1];
-
-	ccptn_init_normal_asciiz_guarded(inner_L, P, P_H, input_pathname);
-	cctests_assert_asciiz(inner_L, normal_pathname, ccptn_asciiz(P));
-	cctests_assert(L, true  == ccptn_is_normalised(P));
-	cctests_assert(L, false == ccptn_is_realpath(P));
-	if (0) { fprintf(stderr, "%s: %s\n", __func__, ccptn_asciiz(P)); }
-	Q[0] = P[0];
-	cce_run_body_handlers(inner_L);
-      }
-    }
-    ccptn_handler_ptn_init(L, Q_H, Q);
-    cctests_assert_asciiz(L, normal_pathname, ccptn_asciiz(Q));
-    cctests_assert(L, true  == ccptn_is_normalised(Q));
-    cctests_assert(L, false == ccptn_is_realpath(Q));
-    cce_run_catch_handlers(L);
-  }
 }
 
 
@@ -691,49 +394,45 @@ int
 main (int argc CCPTN_UNUSED, const char *const argv[])
 {
   progname = argv[0];
+  A = ccmem_standard_allocator;
 
   ccptn_library_init();
 
   cctests_init("core functions");
   {
-    cctests_begin_group("constructors and destructors");
+    cctests_begin_group("constructors from ASCIIZ pointer");
     {
       cctests_run(test_1_1);
       cctests_run(test_1_2);
       cctests_run(test_1_3);
       cctests_run(test_1_4);
-      cctests_run(test_1_5);
-      cctests_run(test_1_6);
-      cctests_run(test_1_7);
+    }
+    cctests_end_group();
+
+    cctests_begin_group("constructors from ASCIIZ blocks");
+    {
+      cctests_run(test_2_1);
+      cctests_run(test_2_2);
+      cctests_run(test_2_3);
+      cctests_run(test_2_4);
+    }
+    cctests_end_group();
+
+    cctests_begin_group("constructors from ASCII blocks");
+    {
+      cctests_run(test_3_1);
+      cctests_run(test_3_2);
     }
     cctests_end_group();
 
     cctests_begin_group("predicates");
     {
-      cctests_run(test_2_1_1);
-      cctests_run(test_2_1_2);
-      cctests_run(test_2_2_1);
-      cctests_run(test_2_2_2);
-      cctests_run(test_2_3_1);
-      cctests_run(test_2_3_2);
-    }
-    cctests_end_group();
-
-    cctests_begin_group("guarded constructors");
-    {
-      cctests_run(test_3_1);
-      cctests_run(test_3_2);
-      cctests_run(test_3_3);
-      cctests_run(test_3_4);
-      cctests_run(test_3_5);
-      cctests_run(test_3_6);
-
-      cctests_run(test_4_1);
-      cctests_run(test_4_2);
-      cctests_run(test_4_3);
-      cctests_run(test_4_4);
-      cctests_run(test_4_5);
-      cctests_run(test_4_6);
+      cctests_run(test_4_1_1);
+      cctests_run(test_4_1_2);
+      cctests_run(test_4_2_1);
+      cctests_run(test_4_2_2);
+      cctests_run(test_4_3_1);
+      cctests_run(test_4_3_2);
     }
     cctests_end_group();
   }
