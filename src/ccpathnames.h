@@ -86,7 +86,6 @@ extern "C" {
 #include <ccexceptions.h>
 #include <ccmemory.h>
 #include <ccstructs.h>
-#include <ccnames.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -99,7 +98,7 @@ extern "C" {
 #define CCPTN_PC(POINTER_TYPE, POINTER_NAME, EXPRESSION)	\
   POINTER_TYPE * POINTER_NAME = (POINTER_TYPE *) (EXPRESSION)
 
-#define CCPTN_CASTVAR(VAR_TYPE, VAR_NAME, EXPRESSION)	\
+#define CCPTN_CASTVAR(VAR_TYPE, VAR_NAME, EXPRESSION)		\
   VAR_TYPE VAR_NAME = (VAR_TYPE) (EXPRESSION)
 
 
