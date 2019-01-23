@@ -46,9 +46,8 @@ libccpathnames_la_SOURCES	= \
 	src/ccpathnames-conditions.c		\
 	src/ccpathnames-core.c			\
 	src/ccpathnames-manipulation.c		\
-	src/ccpathnames-components.c
-
-# src/ccpathnames-input-output.c
+	src/ccpathnames-components.c		\
+	src/ccpathnames-input-output.c
 
 
 #### tests
