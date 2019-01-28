@@ -135,8 +135,7 @@ included in the section entitled ``@gnu{} Free Documentation License''.
 * conditions::                  Exceptional condition objects.
 * typedefs::                    Type definitions.
 * ctors::                       Constructing pathname representations.
-* dtors::                       Destructing pathname representations.
-* handlers::                    Exception handlers for pathnames.
+* handlers::                    Destroying pathname representations.
 * guarded::                     Guarded constructors.
 * predicates::                  Pathname predicates.
 * accessors::                   Pathname accessors.
@@ -848,7 +847,7 @@ one octet.
 
 @menu
 * ctors embedded::              Constructors for embedded instances.
-* ctors ascii::                 Pathnames from @ascii{} strings.
+* ctors standalone::            Constructors for standalone instances.
 @end menu
 
 @c page
@@ -894,7 +893,7 @@ if (cce_location(L)) @{
   ccptn_t       P[1];
 
   ccname_init(ccptn_t, pointer)(L, A, P, input);
-  ccptn_init_handler(L, H, P)
+  ccptn_init_handler(L, H, P);
 
   cce_run_body_handlers(L);
 @}
@@ -903,8 +902,7 @@ if (cce_location(L)) @{
 
 
 @deftypefun void {ccname_init(ccptn_t, pointer, dup)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_t * @var{P}, char const * @var{input_rep})
-Like @cfunc{ccname_init(ccptn_t, pointer, dup)}, but duplicate the input representation
-@var{input-rep}.
+Like @cfunc{ccname_init(ccptn_t, pointer)}, but duplicate the input representation @var{input_rep}.
 
 @example
 cce_location_t             L[1];
@@ -918,7 +916,7 @@ if (cce_location(L)) @{
   ccptn_t       P[1];
 
   ccname_init(ccptn_t, pointer, dup)(L, A, P, input);
-  ccptn_init_handler(L, H, P)
+  ccptn_init_handler(L, H, P);
 
   cce_run_body_handlers(L);
 @}
@@ -951,7 +949,7 @@ if (cce_location(L)) @{
   ccptn_t         P[1];
 
   ccname_init(ccptn_t, asciiz)(L, A, P, input);
-  ccptn_init_handler(L, H, P)
+  ccptn_init_handler(L, H, P);
 
   cce_run_body_handlers(L);
 @}
@@ -960,8 +958,8 @@ if (cce_location(L)) @{
 
 
 @deftypefun void {ccname_init(ccptn_t, asciiz, dup)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_t * @var{P}, ccmem_asciiz_t @var{input_rep})
-Like @cfunc{ccname_init(ccptn_t, asciiz, dup)}, but duplicate the input representation
-@var{input-rep}.
+Like @cfunc{ccname_init(ccptn_t, asciiz)}, but duplicate the input representation
+@var{input_rep}.
 
 @example
 cce_location_t             L[1];
@@ -976,7 +974,7 @@ if (cce_location(L)) @{
   ccptn_t       P[1];
 
   ccname_init(ccptn_t, asciiz, dup)(L, A, P, input);
-  ccptn_init_handler(L, H, P)
+  ccptn_init_handler(L, H, P);
 
   cce_run_body_handlers(L);
 @}
@@ -1010,7 +1008,7 @@ if (cce_location(L)) @{
   ccptn_t         P[1];
 
   ccname_init(ccptn_t, ascii)(L, A, P, input);
-  ccptn_init_handler(L, H, P)
+  ccptn_init_handler(L, H, P);
 
   cce_run_body_handlers(L);
 @}
@@ -1018,38 +1016,48 @@ if (cce_location(L)) @{
 @end deftypefun
 
 @c page
-@node ctors ascii
-@section Pathnames from @ascii{} strings
+@node ctors standalone
+@section Constructors for standalone instances
 
 
-The following are the ``plain'' constructors, we should probably use the guarded ones; @ref{guarded,
-Guarded constructors}.
+An @dfn{standalone} instance of @objtype{ccptn_t} is allocated on the heap.  The constructors of
+such instances do have to allocate memory for the instance itself.
+
+@menu
+* ctors standalone pointers::   Constructors for standalone instances from
+                                @asciiz{} pointers.
+* ctors standalone asciiz::     Constructors for standalone instances from
+                                @asciiz{} blocks.
+* ctors standalone ascii::      Constructors for standalone instances from
+                                @ascii{} blocks.
+@end menu
+
+@c page
+@node ctors standalone pointers
+@subsection Constructors for standalone instances from @asciiz{} pointers
 
 
-@deftypefun {ccptn_t *} ccptn_new_dup_ascii (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, char const * @var{pathname}, size_t @var{len})
-Allocate a new @objtype{ccptn_t} instance initialising it with data from the @ascii{} string
-@var{pathname} which holds @var{len} octets without terminating zero, return a pointer to it.  If an
-error occurs: raise an exception by performing a non--local exit to to @var{L}.
+@deftypefun {ccptn_t const *} {ccname_new(ccptn_t, pointer)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, char const * @var{input_rep})
+Allocate a new instance of @objtype{ccptn_t}, using the memory allocator @var{A}, and the input
+representation @var{input_rep}.  When successful: just return.  If an error occurs: raise an
+exception by performing a non--local exit to @var{L}.
 
-The data @strong{is} duplicated: the returned @objtype{ccptn_t} includes a copy of the data from
-@var{pathname}.  Memory is allocated with @var{A}.  The finalisation function
-registered in the instance will release the @code{struct} itself, and the data buffer.
-
-As usage example see the following code:
+The argument @var{input_rep} must reference an @asciiz{} string, which is referenced by the instance
+of @objtype{ccptn_t}.
 
 @example
-cce_location_t        L[1];
+cce_location_t             L[1];
+ccptn_clean_handler_t      H[1];
+ccmem_allocator_t const *  A = ccmem_standard_allocator;
 
 if (cce_location(L)) @{
-  cce_run_catch_handlers_final(L);
+  cce_run_catch_handlers_raise(L, upper_L);
 @} else @{
-  char const *  pathname = "/path/to/file.ext";
-  ccptn_t *     P;
+  char const *     input = "/path/to/file.ext";
+  ccptn_t const *  P;
 
-  P = ccptn_new_dup_ascii(L, ccmem_standard_allocator,
-        pathname, strlen(pathname));
-  printf("%s\n", ccptn_asciiz(P));
-  ccptn_delete(P);
+  P = ccname_new(ccptn_t, pointer)(L, A, input);
+  ccptn_init_handler(L, H, P);
 
   cce_run_body_handlers(L);
 @}
@@ -1057,92 +1065,22 @@ if (cce_location(L)) @{
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_new_normal_ascii (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, char const * @var{pathname}, size_t @var{len})
-Allocate a new @objtype{ccptn_t} instance initialising it with data from the @ascii{} string
-@var{pathname} which holds @var{len} octets without terminating zero, return a pointer to it.  If an
-error occurs: raise an exception by performing a non--local exit to to @var{L}.
-
-The data @strong{is} duplicated and the pathname is normalised, @ref{manipulations normalise,
-Normalising pathnames}.  Memory is allocated with @var{A}.  The finalisation function
-registered in the instance will release the @code{struct} itself, and the data buffer.
-
-As usage example see the following code:
+@deftypefun {ccptn_t const *} {ccname_new(ccptn_t, pointer, dup)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, char const * @var{input_rep})
+Like @cfunc{ccname_new(ccptn_t, pointer)}, but duplicate the input representation @var{input_rep}.
 
 @example
-cce_location_t        L[1];
+cce_location_t             L[1];
+ccptn_clean_handler_t      H[1];
+ccmem_allocator_t const *  A = ccmem_standard_allocator;
 
 if (cce_location(L)) @{
-  cce_run_catch_handlers_final(L);
+  cce_run_catch_handlers_raise(L, upper_L);
 @} else @{
-  char const *  pathname = "/path/to/file.ext";
-  ccptn_t *     P;
+  char const *     input = "/path/to/file.ext";
+  ccptn_t const *  P;
 
-  P = ccptn_new_normal_ascii(L, ccmem_standard_allocator,
-        pathname, strlen(pathname));
-  printf("%s\n", ccptn_asciiz(P));
-  ccptn_delete(P);
-
-  cce_run_body_handlers(L);
-@}
-@end example
-@end deftypefun
-
-
-@deftypefun {ccptn_t *} ccptn_init_dup_ascii (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_t * @var{P}, char const * @var{pathname}, size_t @var{len})
-Initialise an already allocated @objtype{ccptn_t} instance with data from the @ascii{} string
-@var{pathname} which holds @var{len} octets without terminating zero.  If an error occurs: raise an
-exception by performing a non--local exit to to @var{L}.
-
-The data @strong{is} duplicated: the instance includes a copy of the data from @var{pathname}.
-Memory is allocated with @var{A}.  The finalisation function registered in the instance
-will release the data area but not the @code{struct} itself.
-
-As usage example see the following code:
-
-@example
-cce_location_t        L[1];
-
-if (cce_location(L)) @{
-  cce_run_catch_handlers_final(L);
-@} else @{
-  char const *  pathname = "/path/to/file.ext";
-  ccptn_t       P[1];
-
-  ccptn_init_dup_ascii(L, ccmem_standard_allocator,
-    P, pathname, strlen(pathname));
-  printf("%s\n", ccptn_asciiz(P));
-  ccptn_delete(P);
-
-  cce_run_body_handlers(L);
-@}
-@end example
-@end deftypefun
-
-
-@deftypefun {ccptn_t *} ccptn_init_normal_ascii (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_t * @var{P}, char const * @var{pathname}, size_t @var{len})
-Initialise an already allocated @objtype{ccptn_t} instance with data from the @ascii{} string
-@var{pathname} which holds @var{len} octets without terminating zero.  If an error occurs: raise an
-exception by performing a non--local exit to to @var{L}.
-
-The data @strong{is} duplicated and the pathname is normalised, @ref{manipulations normalise,
-Normalising pathnames}.  Memory is allocated with @var{A}.  The finalisation function registered in
-the instance will release the data area but not the @code{struct} itself.
-
-As usage example see the following code:
-
-@example
-cce_location_t        L[1];
-
-if (cce_location(L)) @{
-  cce_run_catch_handlers_final(L);
-@} else @{
-  char const *  pathname = "/path/to/file.ext";
-  ccptn_t       P[1];
-
-  ccptn_init_normal_ascii(L, ccmem_standard_allocator,
-    P, pathname, strlen(pathname));
-  printf("%s\n", ccptn_asciiz(P));
-  ccptn_delete(P);
+  P = ccname_new(ccptn_t, pointer, dup)(L, A, input);
+  ccptn_init_handler(L, H, P);
 
   cce_run_body_handlers(L);
 @}
@@ -1150,75 +1088,105 @@ if (cce_location(L)) @{
 @end deftypefun
 
 @c page
-@node dtors
+@node ctors standalone asciiz
+@subsection Constructors for standalone instances from @asciiz{} blocks
+
+
+@deftypefun {ccptn_t const *} {ccname_new(ccptn_t, asciiz)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccmem_asciiz_t @var{input_rep})
+Allocate a new instance of @objtype{ccptn_t}, using the memory allocator @var{A}, and the input
+representation @var{input_rep}.  When successful: just return.  If an error occurs: raise an
+exception by performing a non--local exit to @var{L}.
+
+The argument @var{input_rep} must reference an @asciiz{} string, which is referenced by the instance
+of @objtype{ccptn_t}; @ccmemoryref{ascii zero, Zero terminated strings}.
+
+@example
+cce_location_t             L[1];
+ccptn_clean_handler_t      H[1];
+ccmem_allocator_t const *  A = ccmem_standard_allocator;
+
+if (cce_location(L)) @{
+  cce_run_catch_handlers_raise(L, upper_L);
+@} else @{
+  ccmem_asciiz_t  input = \
+    ccmem_new_asciiz_from_str("/path/to/file.ext");
+  ccptn_t const * P;
+
+  P = ccname_new(ccptn_t, asciiz)(L, A, input);
+  ccptn_init_handler(L, H, P);
+
+  cce_run_body_handlers(L);
+@}
+@end example
+@end deftypefun
+
+
+@deftypefun {ccptn_t const *} {ccname_new(ccptn_t, asciiz, dup)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccmem_asciiz_t @var{input_rep})
+Like @cfunc{ccname_new(ccptn_t, asciiz, dup)}, but duplicate the input representation
+@var{input_rep}.
+
+@example
+cce_location_t             L[1];
+ccptn_clean_handler_t      H[1];
+ccmem_allocator_t const *  A = ccmem_standard_allocator;
+
+if (cce_location(L)) @{
+  cce_run_catch_handlers_raise(L, upper_L);
+@} else @{
+  ccmem_asciiz_t  input = \
+    ccmem_new_asciiz_from_str("/path/to/file.ext");
+  ccptn_t const * P;
+
+  P = ccname_new(ccptn_t, asciiz, dup)(L, A, input);
+  ccptn_init_handler(L, H, P);
+
+  cce_run_body_handlers(L);
+@}
+@end example
+@end deftypefun
+
+@c page
+@node ctors standalone ascii
+@subsection Constructors for standalone instances from @ascii{} blocks
+
+
+@deftypefun {ccptn_t const *} {ccname_new(ccptn_t, ascii)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccmem_ascii_t @var{input_rep})
+@deftypefunx {ccptn_t const *} {ccname_new(ccptn_t, ascii, dup)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccmem_ascii_t @var{input_rep})
+Allocate a new instance of @objtype{ccptn_t}, using the memory allocator @var{A}, and the input
+representation @var{input_rep}.  When successful: just return.  If an error occurs: raise an
+exception by performing a non--local exit to @var{L}.
+
+The argument @var{input_rep} must reference an @ascii{} string, which is duplicated by the instance
+of @objtype{ccptn_t}; @ccmemoryref{ascii non-zero, Non--zero terminated strings}.
+
+@example
+cce_location_t             L[1];
+ccptn_clean_handler_t      H[1];
+ccmem_allocator_t const *  A = ccmem_standard_allocator;
+
+if (cce_location(L)) @{
+  cce_run_catch_handlers_raise(L, upper_L);
+@} else @{
+  ccmem_ascii_t   input = \
+    ccmem_new_ascii_from_str("/path/to/file.ext");
+  ccptn_t const * P;
+
+  P = ccname_new(ccptn_t, ascii)(L, A, input);
+  ccptn_init_handler(L, H, P);
+
+  cce_run_body_handlers(L);
+@}
+@end example
+@end deftypefun
+
+@c page
+@node handlers
 @chapter Destructing pathname representations
-
-
-@deftypefun void ccptn_delete (ccptn_t * @var{P})
-Release all the resources associated to the referenced instance of @objtype{ccptn_t}.
-@end deftypefun
-
-@c ------------------------------------------------------------------------
-
-@subsubheading Using exception handlers
 
 
 @value{PACKAGE} is linked to the CCExceptions library to handle errors by raising exceptions; we can
 use exception handlers to release @objtype{ccptn_t} instances upon exiting a local context.
-
-
-@deftp {Struct Typedef} ccptn_clean_handler_t
-@deftpx {Struct Typedef} ccptn_error_handler_t
-Wrappers for @objtype{cce_clean_handler_t} and @objtype{cce_error_handler_t}.
-@end deftp
-
-
-@deftypefun void ccptn_clean_handler_ptn_init (cce_destination_t @var{L}, ccptn_clean_handler_t * @var{H}, ccptn_t * @var{P})
-@deftypefunx void ccptn_error_handler_ptn_init (cce_destination_t @var{L}, ccptn_error_handler_t * @var{H}, ccptn_t * @var{P})
-Register @var{H} as clean or error handler in the context of @var{L}.  The handler function will
-finalise the pathname referenced by @var{P}.  If an error occurs while configuring the handler: an
-exception is raised by performing a non--local exit to @var{L}.
-@end deftypefun
-
-
-@deftypefn {Preprocessor Macro} void ccptn_handler_ptn_init (cce_destination_t @var{L}, ccptn_clean_handler_t * @var{H}, ccptn_t * @var{P})
-@deftypefnx {Preprocessor Macro} void ccptn_handler_ptn_init (cce_destination_t @var{L}, ccptn_error_handler_t * @var{H}, ccptn_t * @var{P})
-This preprocessor macro uses @code{_Generic} to dispatch the call according to the type of the
-pointer @var{H}; if the type is:
-
-@table @code
-@item ccptn_clean_handler_t
-The macro expands into a call to @cfunc{ccptn_clean_handler_ptn_init}.
-
-@item ccptn_error_handler_t
-The macro expands into a call to @cfunc{ccptn_error_handler_ptn_init}.
-@end table
-@end deftypefn
-
-
-As usage example of the exception handler, see the following code:
-
-@example
-cce_location_t        L[1];
-ccptn_clean_handler_t P_H[1];
-
-if (cce_location(L)) @{
-  cce_run_catch_handlers_final(L);
-@} else @{
-  char const *  pathname = "/path/to/file.ext";
-  ccptn_t *     P;
-
-  P = ccptn_new_nodup_asciiz(L, pathname);
-  ccptn_handler_ptn_init(L, P_H, P);
-
-  printf("%s\n", ccptn_asciiz(P));
-  cce_run_body_handlers(L);
-@}
-@end example
-
-@c page
-@node handlers
-@chapter Exception handlers for pathnames
+@ccexceptionsref{handlers, The location handlers @api{}}.
 
 
 @deftp {Struct Typedef} ccptn_clean_handler_t
