@@ -411,6 +411,13 @@ ccptn_decl void ccname_init(ccptn_t, ascii)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * P, ccmem_ascii_t input_rep)
   __attribute__((__nonnull__(1,2,3)));
 
+__attribute__((__nonnull__(1,2,3),__always_inline__))
+static inline void
+ccname_init(ccptn_t, ascii, dup) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * P, ccmem_ascii_t input_rep)
+{
+  ccname_init(ccptn_t, ascii)(L, A, P, input_rep);
+}
+
 
 /** --------------------------------------------------------------------
  ** Pathname constructors for standalone instances.
