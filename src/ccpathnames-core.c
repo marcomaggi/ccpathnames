@@ -139,7 +139,7 @@ ccname_init(ccptn_t, asciiz) (cce_destination_t L, ccmem_allocator_t const * con
 }
 
 void
-ccname_init(ccptn_t, asciiz_dup) (cce_destination_t L, ccmem_allocator_t const * const A, ccptn_t * const P, ccmem_asciiz_t input_rep)
+ccname_init(ccptn_t, asciiz, dup) (cce_destination_t L, ccmem_allocator_t const * const A, ccptn_t * const P, ccmem_asciiz_t input_rep)
 /* Initialise  an  already  allocated  instance  with data  from  the  ASCIIZ  struct
    "input_rep".   The  data  is   duplicated:  the  instance  references  "input_rep"
    itself. */
@@ -161,7 +161,7 @@ ccname_init(ccptn_t, pointer) (cce_destination_t L, ccmem_allocator_t const * co
 }
 
 void
-ccname_init(ccptn_t, pointer_dup) (cce_destination_t L, ccmem_allocator_t const * const A, ccptn_t * const P, char const * const input_rep)
+ccname_init(ccptn_t, pointer, dup) (cce_destination_t L, ccmem_allocator_t const * const A, ccptn_t * const P, char const * const input_rep)
 /* Initialise  an  already  allocated  instance  with data  from  the  ASCIIZ  string
    "input_rep".  The  data is *not*  duplicated: the instance  references "input_rep"
    itself. */
@@ -232,7 +232,7 @@ ccname_new(ccptn_t, asciiz) (cce_destination_t L, ccmem_allocator_t const * cons
 }
 
 ccptn_t const *
-ccname_new(ccptn_t, asciiz_dup) (cce_destination_t L, ccmem_allocator_t const * const A, ccmem_asciiz_t input_rep)
+ccname_new(ccptn_t, asciiz, dup) (cce_destination_t L, ccmem_allocator_t const * const A, ccmem_asciiz_t input_rep)
 /* Build a  newly allocated instance  with data  from the ASCIIZ  struct "input_rep".
    The data is duplicated: the instance references "input_rep" itself. */
 {
@@ -252,7 +252,7 @@ ccname_new(ccptn_t, pointer) (cce_destination_t L, ccmem_allocator_t const * con
 }
 
 ccptn_t const *
-ccname_new(ccptn_t, pointer_dup) (cce_destination_t L, ccmem_allocator_t const * const A, char const * const input_rep)
+ccname_new(ccptn_t, pointer, dup) (cce_destination_t L, ccmem_allocator_t const * const A, char const * const input_rep)
 /* Build a  newly allocated instance  with data  from the ASCIIZ  string "input_rep".
    The data is *not* duplicated: the instance references "input_rep" itself. */
 {
@@ -469,7 +469,7 @@ ccname_init(ccptn_t, pointer, error) (cce_destination_t L, ccmem_allocator_t con
 /* ------------------------------------------------------------------ */
 
 void
-ccname_init(ccptn_t, pointer_dup, clean) (cce_destination_t L, ccmem_allocator_t const * A,
+ccname_init(ccptn_t, pointer, dup, clean) (cce_destination_t L, ccmem_allocator_t const * A,
 					  ccptn_clean_handler_t * H, ccptn_t * P,
 					  char const * input_rep)
 {
@@ -478,7 +478,7 @@ ccname_init(ccptn_t, pointer_dup, clean) (cce_destination_t L, ccmem_allocator_t
 }
 
 void
-ccname_init(ccptn_t, pointer_dup, error) (cce_destination_t L, ccmem_allocator_t const * A,
+ccname_init(ccptn_t, pointer, dup, error) (cce_destination_t L, ccmem_allocator_t const * A,
 					  ccptn_error_handler_t * H, ccptn_t * P,
 					  char const * input_rep)
 {
@@ -512,7 +512,7 @@ ccname_init(ccptn_t, asciiz, error) (cce_destination_t L, ccmem_allocator_t cons
 /* ------------------------------------------------------------------ */
 
 void
-ccname_init(ccptn_t, asciiz_dup, clean) (cce_destination_t L, ccmem_allocator_t const * A,
+ccname_init(ccptn_t, asciiz, dup, clean) (cce_destination_t L, ccmem_allocator_t const * A,
 					 ccptn_clean_handler_t * H, ccptn_t * P,
 					 ccmem_asciiz_t input_rep)
 {
@@ -521,7 +521,7 @@ ccname_init(ccptn_t, asciiz_dup, clean) (cce_destination_t L, ccmem_allocator_t 
 }
 
 void
-ccname_init(ccptn_t, asciiz_dup, error) (cce_destination_t L, ccmem_allocator_t const * A,
+ccname_init(ccptn_t, asciiz, dup, error) (cce_destination_t L, ccmem_allocator_t const * A,
 					 ccptn_error_handler_t * H, ccptn_t * P,
 					 ccmem_asciiz_t input_rep)
 {
@@ -578,7 +578,7 @@ ccname_new(ccptn_t, pointer, error) (cce_destination_t L, ccmem_allocator_t cons
 /* ------------------------------------------------------------------ */
 
 ccptn_t const *
-ccname_new(ccptn_t, pointer_dup, clean) (cce_destination_t L, ccmem_allocator_t const * A,
+ccname_new(ccptn_t, pointer, dup, clean) (cce_destination_t L, ccmem_allocator_t const * A,
 					 ccptn_clean_handler_t * H, char const * input_rep)
 {
   ccptn_t const *	P = ccname_new(ccptn_t, pointer)(L, A, input_rep);
@@ -587,7 +587,7 @@ ccname_new(ccptn_t, pointer_dup, clean) (cce_destination_t L, ccmem_allocator_t 
 }
 
 ccptn_t const *
-ccname_new(ccptn_t, pointer_dup, error) (cce_destination_t L, ccmem_allocator_t const * A,
+ccname_new(ccptn_t, pointer, dup, error) (cce_destination_t L, ccmem_allocator_t const * A,
 					 ccptn_error_handler_t * H, char const * input_rep)
 {
   ccptn_t const *	P = ccname_new(ccptn_t, pointer)(L, A, input_rep);
@@ -621,7 +621,7 @@ ccname_new(ccptn_t, asciiz, error) (cce_destination_t L, ccmem_allocator_t const
 /* ------------------------------------------------------------------ */
 
 ccptn_t const *
-ccname_new(ccptn_t, asciiz_dup, clean) (cce_destination_t L, ccmem_allocator_t const * A,
+ccname_new(ccptn_t, asciiz, dup, clean) (cce_destination_t L, ccmem_allocator_t const * A,
 					ccptn_clean_handler_t * H, ccmem_asciiz_t input_rep)
 {
   ccptn_t const *	P = ccname_new(ccptn_t, asciiz)(L, A, input_rep);
@@ -630,7 +630,7 @@ ccname_new(ccptn_t, asciiz_dup, clean) (cce_destination_t L, ccmem_allocator_t c
 }
 
 ccptn_t const *
-ccname_new(ccptn_t, asciiz_dup, error) (cce_destination_t L, ccmem_allocator_t const * A,
+ccname_new(ccptn_t, asciiz, dup, error) (cce_destination_t L, ccmem_allocator_t const * A,
 					ccptn_error_handler_t * H, ccmem_asciiz_t input_rep)
 {
   ccptn_t const *	P = ccname_new(ccptn_t, asciiz)(L, A, input_rep);

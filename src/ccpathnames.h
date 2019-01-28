@@ -391,7 +391,7 @@ ccptn_decl void ccname_init(ccptn_t, pointer)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * P, char const * input_rep)
   __attribute__((__nonnull__(1,2,3,4)));
 
-ccptn_decl void ccname_init(ccptn_t, pointer_dup)
+ccptn_decl void ccname_init(ccptn_t, pointer, dup)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * P, char const * input_rep)
   __attribute__((__nonnull__(1,2,3,4)));
 
@@ -401,7 +401,7 @@ ccptn_decl void ccname_init(ccptn_t, asciiz)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * P, ccmem_asciiz_t input_rep)
   __attribute__((__nonnull__(1,2,3)));
 
-ccptn_decl void ccname_init(ccptn_t, asciiz_dup)
+ccptn_decl void ccname_init(ccptn_t, asciiz, dup)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * P, ccmem_asciiz_t input_rep)
   __attribute__((__nonnull__(1,2,3)));
 
@@ -420,7 +420,7 @@ ccptn_decl ccptn_t const * ccname_new(ccptn_t, pointer)
   (cce_destination_t L, ccmem_allocator_t const * A, char const * input_rep)
   __attribute__((__returns_nonnull__,__nonnull__(1,2,3)));
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, pointer_dup)
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, pointer, dup)
   (cce_destination_t L, ccmem_allocator_t const * A, char const * input_rep)
   __attribute__((__returns_nonnull__,__nonnull__(1,2,3)));
 
@@ -430,7 +430,7 @@ ccptn_decl ccptn_t const * ccname_new(ccptn_t, asciiz)
   (cce_destination_t L, ccmem_allocator_t const * A, ccmem_asciiz_t input_rep)
   __attribute__((__returns_nonnull__,__nonnull__(1,2)));
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, asciiz_dup)
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, asciiz, dup)
   (cce_destination_t L, ccmem_allocator_t const * A, ccmem_asciiz_t input_rep)
   __attribute__((__returns_nonnull__,__nonnull__(1,2)));
 
@@ -440,7 +440,7 @@ ccptn_decl ccptn_t const * ccname_new(ccptn_t, ascii)
   (cce_destination_t L, ccmem_allocator_t const * A, ccmem_ascii_t input_rep)
   __attribute__((__returns_nonnull__,__nonnull__(1,2)));
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, ascii_dup)
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, ascii, dup)
   (cce_destination_t L, ccmem_allocator_t const * A, ccmem_ascii_t input_rep)
   __attribute__((__returns_nonnull__,__nonnull__(1,2)));
 
@@ -681,11 +681,11 @@ ccptn_decl void ccname_init(ccptn_t, pointer, error)
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl void ccname_init(ccptn_t, pointer_dup, clean)
+ccptn_decl void ccname_init(ccptn_t, pointer, dup, clean)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccptn_t * P, char const * input_rep)
   __attribute__((__nonnull__(1,2,3,4,5)));
 
-ccptn_decl void ccname_init(ccptn_t, pointer_dup, error)
+ccptn_decl void ccname_init(ccptn_t, pointer, dup, error)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccptn_t * P, char const * input_rep)
   __attribute__((__nonnull__(1,2,3,4,5)));
 
@@ -701,11 +701,11 @@ ccptn_decl void ccname_init(ccptn_t, asciiz, error)
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl void ccname_init(ccptn_t, asciiz_dup, clean)
+ccptn_decl void ccname_init(ccptn_t, asciiz, dup, clean)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccptn_t * P, ccmem_asciiz_t input_rep)
   __attribute__((__nonnull__(1,2,3,4)));
 
-ccptn_decl void ccname_init(ccptn_t, asciiz_dup, error)
+ccptn_decl void ccname_init(ccptn_t, asciiz, dup, error)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccptn_t * P, ccmem_asciiz_t input_rep)
   __attribute__((__nonnull__(1,2,3,4)));
 
@@ -734,11 +734,11 @@ ccptn_decl ccptn_t const * ccname_new(ccptn_t, pointer, error)
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, pointer_dup, clean)
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, pointer, dup, clean)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, char const * input_rep)
   __attribute__((__nonnull__(1,2,3,4)));
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, pointer_dup, error)
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, pointer, dup, error)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, char const * input_rep)
   __attribute__((__nonnull__(1,2,3,4)));
 
@@ -754,11 +754,11 @@ ccptn_decl ccptn_t const * ccname_new(ccptn_t, asciiz, error)
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, asciiz_dup, clean)
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, asciiz, dup, clean)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccmem_asciiz_t input_rep)
   __attribute__((__nonnull__(1,2,3)));
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, asciiz_dup, error)
+ccptn_decl ccptn_t const * ccname_new(ccptn_t, asciiz, dup, error)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccmem_asciiz_t input_rep)
   __attribute__((__nonnull__(1,2,3)));
 

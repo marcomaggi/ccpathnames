@@ -53,7 +53,7 @@ test_1_1 (cce_destination_t upper_L)
 
 void
 test_1_2 (cce_destination_t upper_L)
-/* Test for "ccname_new(ccptn_t, asciiz_dup)()". */
+/* Test for "ccname_new(ccptn_t, asciiz, dup)()". */
 {
   cce_location_t	L[1];
   ccptn_clean_handler_t	H[1];
@@ -64,7 +64,7 @@ test_1_2 (cce_destination_t upper_L)
     static char const *	input = "/path/to/file.ext";
     ccptn_t const *	P;
 
-    P = ccname_new(ccptn_t, pointer_dup, clean)(L, A, H, input);
+    P = ccname_new(ccptn_t, pointer, dup, clean)(L, A, H, input);
     {
       if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(P)); }
       cctests_assert_asciiz(L, input, ccptn_ptr(P));
@@ -97,7 +97,7 @@ test_1_3 (cce_destination_t upper_L)
 
 void
 test_1_4 (cce_destination_t upper_L)
-/* Test for "ccname_init(ccptn_t, asciiz_dup)()". */
+/* Test for "ccname_init(ccptn_t, asciiz, dup)()". */
 {
   cce_location_t	L[1];
   ccptn_clean_handler_t	H[1];
@@ -108,7 +108,7 @@ test_1_4 (cce_destination_t upper_L)
     static char const *	input = "/path/to/file.ext";
     ccptn_t		P[1];
 
-    ccname_init(ccptn_t, pointer_dup, clean)(L, A, H, P, input);
+    ccname_init(ccptn_t, pointer, dup, clean)(L, A, H, P, input);
     {
       if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(P)); }
       cctests_assert_asciiz(L, input, ccptn_ptr(P));
@@ -147,7 +147,7 @@ test_2_1 (cce_destination_t upper_L)
 
 void
 test_2_2 (cce_destination_t upper_L)
-/* Test for "ccname_new(ccptn_t, asciiz_dup)()". */
+/* Test for "ccname_new(ccptn_t, asciiz, dup)()". */
 {
   cce_location_t	L[1];
   ccptn_clean_handler_t	H[1];
@@ -158,7 +158,7 @@ test_2_2 (cce_destination_t upper_L)
     ccmem_asciiz_t const	input = ccmem_new_asciiz_from_str("/path/to/file.ext");
     ccptn_t const *	P;
 
-    P = ccname_new(ccptn_t, asciiz_dup, clean)(L, A, H, input);
+    P = ccname_new(ccptn_t, asciiz, dup, clean)(L, A, H, input);
     {
       if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(P)); }
       cctests_assert_asciiz(L, input.ptr, ccptn_ptr(P));
@@ -191,7 +191,7 @@ test_2_3 (cce_destination_t upper_L)
 
 void
 test_2_4 (cce_destination_t upper_L)
-/* Test for "ccname_init(ccptn_t, asciiz_dup)()". */
+/* Test for "ccname_init(ccptn_t, asciiz, dup)()". */
 {
   cce_location_t	L[1];
   ccptn_clean_handler_t	H[1];
@@ -202,7 +202,7 @@ test_2_4 (cce_destination_t upper_L)
     ccmem_asciiz_t const	input = ccmem_new_asciiz_from_str("/path/to/file.ext");
     ccptn_t		P[1];
 
-    ccname_init(ccptn_t, asciiz_dup, clean)(L, A, H, P, input);
+    ccname_init(ccptn_t, asciiz, dup, clean)(L, A, H, P, input);
     {
       if (1) { fprintf(stderr, "%s: %s\n", __func__, ccptn_ptr(P)); }
       cctests_assert_asciiz(L, input.ptr, ccptn_ptr(P));
