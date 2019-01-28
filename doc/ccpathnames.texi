@@ -134,8 +134,8 @@ included in the section entitled ``@gnu{} Free Documentation License''.
 * init::                        Library initialisation.
 * conditions::                  Exceptional condition objects.
 * typedefs::                    Type definitions.
-* ctors::                       Constructing pathname representations.
 * handlers::                    Destroying pathname representations.
+* ctors::                       Constructing pathname representations.
 * guarded::                     Guarded constructors.
 * predicates::                  Pathname predicates.
 * accessors::                   Pathname accessors.
@@ -841,6 +841,46 @@ one octet.
 @end deftp
 
 @c page
+@node handlers
+@chapter Destructing pathname representations
+
+
+@value{PACKAGE} is linked to the CCExceptions library to handle errors by raising exceptions; we can
+use exception handlers to release @objtype{ccptn_t} instances upon exiting a local context.
+@ccexceptionsref{handlers, The location handlers @api{}}.
+
+@value{PACKAGE} implements some ``guarded'' constructors that internally use the macro
+@cfunc{ccptn_init_handler} to appropriately register a pathname instance for destruction.
+
+
+@deftp {Struct Typedef} ccptn_clean_handler_t
+@deftpx {Struct Typedef} ccptn_error_handler_t
+Type of exception handlers we can use to destroy instances of @objtype{ccptn_t} using the facilities
+of the library CCExceptions.
+@end deftp
+
+
+@deftypefun void ccptn_init_clean_handler (cce_destination_t @var{L}, ccptn_clean_handler_t * @var{H}, ccptn_t * @var{P})
+@deftypefunx void ccptn_init_error_handler (cce_destination_t @var{L}, ccptn_error_handler_t * @var{H}, ccptn_t * @var{P})
+Initialise the handler @var{H} to destroy the pathname @var{P} in the context of the location
+@var{L}.
+@end deftypefun
+
+
+@deftypefn {Preprocessor Macro} void ccptn_init_handler (cce_destination_t @var{L}, @var{H}, ccptn_t * @var{P})
+Initialise the handler @var{H} to destroy the pathname @var{P} in the context of the location
+@var{L}.  The expansion of this macro depends upon the type of @var{H}, if the type is:
+
+@table @code
+@item ccptn_clean_handler_t *
+The macro expands into a call to @cfunc{ccptn_init_clean_handler}.
+
+@item ccptn_error_handler_t *
+The macro expands into a call to @cfunc{ccptn_init_error_handler}.
+@end table
+@end deftypefn
+
+@c page
 @node ctors
 @chapter Constructing pathname representations
 
@@ -1428,43 +1468,6 @@ if (cce_location(L)) @{
 @}
 @end example
 @end deftypefun
-
-@c page
-@node handlers
-@chapter Destructing pathname representations
-
-
-@value{PACKAGE} is linked to the CCExceptions library to handle errors by raising exceptions; we can
-use exception handlers to release @objtype{ccptn_t} instances upon exiting a local context.
-@ccexceptionsref{handlers, The location handlers @api{}}.
-
-
-@deftp {Struct Typedef} ccptn_clean_handler_t
-@deftpx {Struct Typedef} ccptn_error_handler_t
-Type of exception handlers we can use to destroy instances of @objtype{ccptn_t} using the facilities
-of the library CCExceptions.
-@end deftp
-
-
-@deftypefun void ccptn_init_clean_handler (cce_destination_t @var{L}, ccptn_clean_handler_t * @var{H}, ccptn_t * @var{P})
-@deftypefunx void ccptn_init_error_handler (cce_destination_t @var{L}, ccptn_error_handler_t * @var{H}, ccptn_t * @var{P})
-Initialise the handler @var{H} to destroy the pathname @var{P} in the context of the location
-@var{L}.
-@end deftypefun
-
-
-@deftypefn {Preprocessor Macro} void ccptn_init_handler (cce_destination_t @var{L}, @var{H}, ccptn_t * @var{P})
-Initialise the handler @var{H} to destroy the pathname @var{P} in the context of the location
-@var{L}.  The expansion of this macro depends upon the type of @var{H}, if the type is:
-
-@table @code
-@item ccptn_clean_handler_t *
-The macro expands into a call to @cfunc{ccptn_init_clean_handler}.
-
-@item ccptn_error_handler_t *
-The macro expands into a call to @cfunc{ccptn_init_error_handler}.
-@end table
-@end deftypefn
 
 @c page
 @node guarded
