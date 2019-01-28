@@ -31,7 +31,7 @@ static ccmem_allocator_t const * A;
 
 void
 test_1_1 (cce_destination_t upper_L)
-/* Test for "ccname_new(ccptn_t, pointer)()". */
+/* Test for "ccname_new(ccptn_t, pointer, clean)()". */
 {
   cce_location_t	L[1];
   ccptn_clean_handler_t	H[1];
@@ -53,7 +53,7 @@ test_1_1 (cce_destination_t upper_L)
 
 void
 test_1_2 (cce_destination_t upper_L)
-/* Test for "ccname_new(ccptn_t, asciiz, dup)()". */
+/* Test for "ccname_new(ccptn_t, pointer, dup, clean)()". */
 {
   cce_location_t	L[1];
   ccptn_clean_handler_t	H[1];
@@ -75,7 +75,7 @@ test_1_2 (cce_destination_t upper_L)
 
 void
 test_1_3 (cce_destination_t upper_L)
-/* Test for "ccname_init(ccptn_t, pointer)()". */
+/* Test for "ccname_init(ccptn_t, pointer, clean)()". */
 {
   cce_location_t	L[1];
   ccptn_clean_handler_t	H[1];
@@ -97,7 +97,7 @@ test_1_3 (cce_destination_t upper_L)
 
 void
 test_1_4 (cce_destination_t upper_L)
-/* Test for "ccname_init(ccptn_t, asciiz, dup)()". */
+/* Test for "ccname_init(ccptn_t, pointer, dup, clean)()". */
 {
   cce_location_t	L[1];
   ccptn_clean_handler_t	H[1];
