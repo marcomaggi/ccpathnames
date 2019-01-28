@@ -453,6 +453,39 @@ ccptn_decl ccptn_t const * ccname_new(ccptn_t, ascii, dup)
 
 
 /** --------------------------------------------------------------------
+ ** Pathnames: predicates.
+ ** ----------------------------------------------------------------- */
+
+__attribute__((__nonnull__(1),__always_inline__,__pure__))
+static inline bool
+ccptn_is_absolute (ccptn_t const * const P)
+{
+  return (P->absolute)? true : false;
+}
+
+__attribute__((__nonnull__(1),__always_inline__,__pure__))
+static inline bool
+ccptn_is_relative (ccptn_t const * const P)
+{
+  return (P->absolute)? false : true;
+}
+
+__attribute__((__nonnull__(1),__always_inline__,__pure__))
+static inline bool
+ccptn_is_normalised (ccptn_t const * const P)
+{
+  return (P->normalised)? true : false;
+}
+
+__attribute__((__nonnull__(1),__always_inline__,__pure__))
+static inline bool
+ccptn_is_realpath (ccptn_t const * const P)
+{
+  return (P->realpath)? true : false;
+}
+
+
+/** --------------------------------------------------------------------
  ** Pathnames: accessors.
  ** ----------------------------------------------------------------- */
 
@@ -508,39 +541,6 @@ static inline ccmem_allocator_t const *
 ccptn_allocator (ccptn_t const * const P)
 {
   return (P->allocator);
-}
-
-
-/** --------------------------------------------------------------------
- ** Pathnames: predicates.
- ** ----------------------------------------------------------------- */
-
-__attribute__((__nonnull__(1),__always_inline__,__pure__))
-static inline bool
-ccptn_is_absolute (ccptn_t const * const P)
-{
-  return (P->absolute)? true : false;
-}
-
-__attribute__((__nonnull__(1),__always_inline__,__pure__))
-static inline bool
-ccptn_is_relative (ccptn_t const * const P)
-{
-  return (P->absolute)? false : true;
-}
-
-__attribute__((__nonnull__(1),__always_inline__,__pure__))
-static inline bool
-ccptn_is_normalised (ccptn_t const * const P)
-{
-  return (P->normalised)? true : false;
-}
-
-__attribute__((__nonnull__(1),__always_inline__,__pure__))
-static inline bool
-ccptn_is_realpath (ccptn_t const * const P)
-{
-  return (P->realpath)? true : false;
 }
 
 
