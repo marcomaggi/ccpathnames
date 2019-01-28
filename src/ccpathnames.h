@@ -797,6 +797,24 @@ ccptn_decl ccptn_t const * ccname_new(ccptn_t, ascii, error)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccmem_ascii_t input_rep)
   __attribute__((__nonnull__(1,2,3)));
 
+/* ------------------------------------------------------------------ */
+
+__attribute__((__nonnull__(1,2,3),__always_inline__))
+static inline ccptn_t const *
+ccname_new(ccptn_t, ascii, dup, clean)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccmem_ascii_t input_rep)
+{
+  return ccname_new(ccptn_t, ascii, clean)(L, A, H, input_rep);
+}
+
+__attribute__((__nonnull__(1,2,3),__always_inline__))
+static inline ccptn_t const *
+ccname_new(ccptn_t, ascii, dup, error)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccmem_ascii_t input_rep)
+{
+  return ccname_new(ccptn_t, ascii, error)(L, A, H, input_rep);
+}
+
 
 /** --------------------------------------------------------------------
  ** Pathnames manipulation: guarded constructors.
