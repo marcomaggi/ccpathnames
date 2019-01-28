@@ -726,6 +726,24 @@ ccptn_decl void ccname_init(ccptn_t, ascii, error)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccptn_t * P, ccmem_ascii_t input_rep)
   __attribute__((__nonnull__(1,2,3,4)));
 
+/* ------------------------------------------------------------------ */
+
+__attribute__((__nonnull__(1,2,3,4),__always_inline__))
+static inline void
+ccname_init(ccptn_t, ascii, dup, clean)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccptn_t * P, ccmem_ascii_t input_rep)
+{
+  ccname_init(ccptn_t, ascii, clean)(L, A, H, P, input_rep);
+}
+
+__attribute__((__nonnull__(1,2,3,4),__always_inline__))
+static inline void
+ccname_init(ccptn_t, ascii, dup, error)
+  (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccptn_t * P, ccmem_ascii_t input_rep)
+{
+  ccname_init(ccptn_t, ascii, error)(L, A, H, P, input_rep);
+}
+
 
 /** --------------------------------------------------------------------
  ** Pathnames guarded constructors: standalone instances.
