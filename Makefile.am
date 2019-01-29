@@ -57,7 +57,8 @@ check_PROGRAMS	= \
 	tests/conditions		\
 	tests/core			\
 	tests/manipulations		\
-	tests/components
+	tests/components		\
+	tests/iface-destructor
 
 if MMUX_TESTING_ENABLED
 TESTS				= $(check_PROGRAMS)
@@ -82,6 +83,9 @@ tests_manipulations_LDADD		= $(ccpathnames_tests_ldadd)
 
 tests_components_CPPFLAGS		= $(ccpathnames_tests_cppflags)
 tests_components_LDADD			= $(ccpathnames_tests_ldadd)
+
+tests_iface_destructor_CPPFLAGS		= $(ccpathnames_tests_cppflags)
+tests_iface_destructor_LDADD		= $(ccpathnames_tests_ldadd)
 
 ## --------------------------------------------------------------------
 
