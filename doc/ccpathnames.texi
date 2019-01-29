@@ -1487,7 +1487,7 @@ is relative if its first octet is @strong{not} the @ascii{} representation of @s
 
 @deftypefun bool ccptn_is_realpath (ccptn_t const * @var{P})
 Return @ctrue{} if @var{P} is the result of a call to the system function @cfunc{realpath};
-otherwise return @cfalse{}.
+otherwise return @cfalse{}.  @glibcref{Symbolic Links, realpath}.
 @end deftypefun
 
 
@@ -1501,7 +1501,7 @@ to one of the normalisation functions; otherwise return @cfalse{}.
 @chapter Pathname accessors
 
 
-@deftypefun {char const *} ccptn_asciiz (ccptn_t const * @var{P})
+@deftypefun {char const *} ccptn_ptr (ccptn_t const * @var{P})
 Return a pointer to an @asciiz{} representation of the pathname.
 @end deftypefun
 
@@ -1509,6 +1509,31 @@ Return a pointer to an @asciiz{} representation of the pathname.
 @deftypefun size_t ccptn_len (ccptn_t const * @var{P})
 Return the number of octets in the pathname representation, @strong{not} including the terminating
 zero.
+@end deftypefun
+
+
+@deftypefun ccmem_ascii_t ccptn_ascii (ccptn_t const * @var{P})
+Return an @ascii{} block referencing the pathname representation; @ccmemoryref{ascii non-zero,
+Non--zero terminated strings}.
+@end deftypefun
+
+
+@deftypefun ccmem_asciiz_t ccptn_asciiz (ccptn_t const * @var{P})
+Return an @asciiz{} block referencing the pathname representation; @ccmemoryref{ascii zero, Zero
+terminated strings}.
+@end deftypefun
+
+
+@deftypefun ccmem_block_t ccptn_block (ccptn_t const * @var{P})
+Return a block referencing the pathname representation; @ccmemoryref{blocks, Blocks of memory}.  The
+pointer of the block references an @asciiz{} representation of the pathname; the length of the block
+represents the number of octets in the pathname representation, @strong{including} the terminating
+zero.
+@end deftypefun
+
+
+@deftypefun {ccmem_allocator_t const *} ccptn_allocator (ccptn_t const * @var{P})
+Return the memory allocator; @ccmemoryref{allocators typedefs, Type definitions}.
 @end deftypefun
 
 @c page
