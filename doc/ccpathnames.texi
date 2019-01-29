@@ -1562,6 +1562,11 @@ Return the memory allocator; @ccmemoryref{allocators typedefs, Type definitions}
 @subsection Obtaining an embedded real pathname
 
 
+An @dfn{embedded} instance of @objtype{ccptn_t} is allocated on the stack or embedded into an
+enclosing data structure.  The constructors of such instances do not have to allocate memory for the
+instance itself.
+
+
 @deftypefun void {ccname_init(ccptn_t, realpath)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_t * @var{dst}, ccptn_t const * @var{src})
 Initialise the already allocated @objtype{ccptn_t} instance, referenced by @var{dst}, representing
 the result of applying the standard @cfunc{realpath} to the pathname represented by @var{src}; use
@@ -1618,6 +1623,10 @@ if (cce_location(L)) @{
 @c page
 @node manipulations realpath standalone
 @subsection Obtaining a standalone real pathname
+
+
+An @dfn{standalone} instance of @objtype{ccptn_t} is allocated on the heap.  The constructors of
+such instances do have to allocate memory for the instance itself.
 
 
 @deftypefun {ccptn_t const *} {ccname_new(ccptn_t, realpath)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_t const * @var{src})
@@ -1732,6 +1741,11 @@ the following normalisations:
 @subsection Obtaining a normalised embedded pathname
 
 
+An @dfn{embedded} instance of @objtype{ccptn_t} is allocated on the stack or embedded into an
+enclosing data structure.  The constructors of such instances do not have to allocate memory for the
+instance itself.
+
+
 @deftypefun void {ccname_init(ccptn_t, normalise)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_t * @var{dst}, ccptn_t const * @var{src})
 Initialise the already allocated @objtype{ccptn_t} instance, referenced by @var{dst}, representing
 the result of normalising the pathname represented by @var{src}; use the allocator @var{A}.  When
@@ -1788,6 +1802,10 @@ if (cce_location(L)) @{
 @c page
 @node manipulations normalise standalone
 @subsection Obtaining a normalised standalone pathname
+
+
+An @dfn{standalone} instance of @objtype{ccptn_t} is allocated on the heap.  The constructors of
+such instances do have to allocate memory for the instance itself.
 
 
 @deftypefun {ccptn_t const *} {ccname_new(ccptn_t, normalise)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_t const * @var{src})
@@ -1860,6 +1878,11 @@ if (cce_location(L)) @{
 @subsection Concatenating into an embedded pathname
 
 
+An @dfn{embedded} instance of @objtype{ccptn_t} is allocated on the stack or embedded into an
+enclosing data structure.  The constructors of such instances do not have to allocate memory for the
+instance itself.
+
+
 @deftypefun void {ccname_init(ccptn_t, concat)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_t * @var{dst}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
 Initialise the already allocated @objtype{ccptn_t} instance, referenced by @var{dst}, representing
 the result of concatenating the pathname represented by @var{prefix} and @var{suffix}; use the
@@ -1918,6 +1941,10 @@ if (cce_location(L)) @{
 @c page
 @node manipulations concat standalone
 @subsection Concatenating into a standalone pathname
+
+
+An @dfn{standalone} instance of @objtype{ccptn_t} is allocated on the heap.  The constructors of
+such instances do have to allocate memory for the instance itself.
 
 
 @deftypefun {ccptn_t const *} {ccname_new(ccptn_t, concat)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
