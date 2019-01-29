@@ -2707,7 +2707,7 @@ if (cce_location(L)) @{
 @chapter Pathname input/output
 
 
-@deftypefun void ccptn_print (cce_destination_t @var{L}, FILE * @var{stream}, ccptn_t const * @var{P})
+@deftypefun void ccptn_fwrite (cce_destination_t @var{L}, FILE * @var{stream}, ccptn_t const * @var{P})
 Print the pathname to @var{stream}; do not flush the stream.  If an error occurs: raise an exception
 by performing a non--local exit to @var{L}.
 @end deftypefun
