@@ -2773,10 +2773,38 @@ if (cce_location(L)) @{
 @section The @iface{dumpable} interface
 
 
+The @iface{dumpable} interface offers a common @api{} for to print a @struct{} representation for
+debugging purposes; @ccstructsref{dumpable, The @iface{dumpable} interface}.
+
+
 @deftypefun ccstructs_dumpable_I ccname_iface_new(ccstructs_dumpable_I, ccptn_t) (ccptn_t const * @var{P})
 Build and return an instance of @iface{dumpable} interface which we can use to print on @stderr{} a
-representation of @objtype{ccptn_t}.
+representation of @objtype{ccptn_t}.  This interface does not print an ending newline.
 @end deftypefun
+
+
+Code sample:
+
+@example
+cce_location_t        L[1];
+ccptn_clean_handler_t H[1];
+
+if (cce_location(L)) @{
+  cce_run_catch_handlers_final(L);
+@} else @{
+  char const            *input = "/path/to/file.ext";
+  ccptn_t const         *P;
+  ccstructs_dumpable_I  ID;
+
+  P  = ccname_new(ccptn_t, pointer, clean)(L, A, H, input);
+  ID = ccname_iface_new(ccstructs_dumpable_I, ccptn_t)(P);
+
+  ccstructs_dumpable_dump(L, ID);
+  fprintf(stderr, "\n");
+
+  cce_run_body_handlers(L);
+@}
+@end example
 
 @c page
 @node ifaces serialiser
