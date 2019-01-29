@@ -550,7 +550,7 @@ ccptn_allocator (ccptn_t const * const P)
 
 ccptn_decl void ccname_init(ccptn_t, realpath)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * dst, ccptn_t const * src)
-  __attribute__((__nonnull__(1,2,3,3)));
+  __attribute__((__nonnull__(1,2,3,4)));
 
 ccptn_decl void ccname_init(ccptn_t, normalise)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * dst, ccptn_t const * src)
