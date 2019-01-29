@@ -1552,32 +1552,38 @@ Return the memory allocator; @ccmemoryref{allocators typedefs, Type definitions}
 @section Obtaining the real pathname
 
 
-@deftypefun {ccptn_t *} ccptn_new_realpath (cce_destination_t @var{L}, ccptn_t const * @var{P})
-Build and return a new @objtype{ccptn_t} instance representing the result of applying the standard
-@cfunc{realpath} to the pathname represented by @var{P}.  If an error occurs: raise an exception by
+@menu
+* manipulations realpath embedded::     Obtaining an embedded real pathname.
+* manipulations realpath standalone::   Obtaining a standalone real pathname.
+@end menu
+
+@c page
+@node manipulations realpath embedded
+@subsection Obtaining an embedded real pathname
+
+
+@deftypefun void {ccname_init(ccptn_t, realpath)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_t * @var{dst}, ccptn_t const * @var{src})
+Initialise the already allocated @objtype{ccptn_t} instance, referenced by @var{dst}, representing
+the result of applying the standard @cfunc{realpath} to the pathname represented by @var{src}; use
+the allocator @var{A}.  When successful: just return.  If an error occurs: raise an exception by
 performing a non--local exit to to @var{L}.
 
 Notice that the pathname has to exist for this function to succeed.
 
-As usage example, see the following code.
-
 @example
-cce_location_t          L[1];
-ccptn_clean_handler_t   P_H[1], Q_H[1];
+cce_location_t           L[1];
+ccptn_clean_handler_t    P_H[1], Q_H[1];
+ccmem_allocator_t const  *A = ccmem_standard_allocator;
 
 if (cce_location(L)) @{
   cce_run_catch_handlers_final(L);
 @} else @{
-  char const *  pathname = "/path/to/file.ext";
-  ccptn_t       *P, *Q;
+  char const  *input = "/path/to/file.ext";
+  ccptn_t     P[1], R[1];
 
-  P = ccptn_new_nodup_asciiz(L, pathname);
-  ccptn_handler_ptn_init(L, P_H, P);
-
-  Q = ccptn_new_realpath(L, P);
-  ccptn_handler_ptn_init(L, Q_H, Q);
-
-  /* do something with Q */
+  ccname_init(ccptn_t, pointer, clean)(L, A, P_H, P, input);
+  ccname_init(ccptn_t, realpath)(L, A, R, P);
+  ccptn_init_handler(L, R_H, R);
 
   cce_run_body_handlers(L);
 @}
@@ -1585,102 +1591,87 @@ if (cce_location(L)) @{
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_init_realpath (cce_destination_t @var{L}, ccptn_t * @var{R}, ccptn_t const * @var{P})
-Initialise the already allocated @objtype{ccptn_t} instance, referenced by @var{R}, representing the
-result of applying the standard @cfunc{realpath} to the pathname represented by @var{P}.  Return
-@var{R} itself.  If an error occurs: raise an exception by performing a non--local exit to to
-@var{L}.
+@deftypefun void {ccname_init(ccptn_t, realpath, clean)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_clean_handler_t * @var{H}, ccptn_t * @var{dst}, ccptn_t const * @var{src})
+@deftypefunx void {ccname_init(ccptn_t, realpath, error)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_error_handler_t * @var{H}, ccptn_t * @var{dst}, ccptn_t const * @var{src})
+Like @cfunc{ccname_init(ccptn_t, realpath)} but register the pathname instance to be destroyed using
+the handler @var{H} in the context of the location @var{L}.
+
+@example
+cce_location_t           L[1];
+ccptn_clean_handler_t    P_H[1], Q_H[1];
+ccmem_allocator_t const  *A = ccmem_standard_allocator;
+
+if (cce_location(L)) @{
+  cce_run_catch_handlers_final(L);
+@} else @{
+  char const  *input = "/path/to/file.ext";
+  ccptn_t     P[1], R[1];
+
+  ccname_init(ccptn_t, pointer,  clean)(L, A, P_H, P, input);
+  ccname_init(ccptn_t, realpath, clean)(L, A, R_H, R, P);
+
+  cce_run_body_handlers(L);
+@}
+@end example
+@end deftypefun
+
+@c page
+@node manipulations realpath standalone
+@subsection Obtaining a standalone real pathname
+
+
+@deftypefun {ccptn_t const *} {ccname_new(ccptn_t, realpath)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_t const * @var{src})
+Build and return a new @objtype{ccptn_t} instance representing the result of applying the standard
+@cfunc{realpath} to the pathname represented by @var{src}; use the allocator @var{A}.  When
+successful: return a pointer to the new instance.  If an error occurs: raise an exception by
+performing a non--local exit to to @var{L}.
 
 Notice that the pathname has to exist for this function to succeed.
 
-As usage example, see the following code.
-
 @example
-cce_location_t          L[1];
-ccptn_clean_handler_t   P_H[1], Q_H[1];
+cce_location_t             L[1];
+ccptn_clean_handler_t      P_H[1], Q_H[1];
+ccmem_allocator_t const *  A = ccmem_standard_allocator;
 
 if (cce_location(L)) @{
   cce_run_catch_handlers_final(L);
 @} else @{
-  char const *  pathname = "/path/to/file.ext";
-  ccptn_t       *P, R[1];
+  char const     *input = "/path/to/file.ext";
+  ccptn_t const  *P, *Q;
 
-  P = ccptn_new_nodup_asciiz(L, pathname);
-  ccptn_handler_ptn_init(L, P_H, P);
-
-  ccptn_init_realpath(L, R, P);
-  ccptn_handler_ptn_init(L, R_H, R);
-
-  /* do something with R */
+  P = ccname_new(ccptn_t, pointer, clean)(L, A, P_H, input);
+  Q = ccname_new(ccptn_t, realpath)(L, A, P);
+  ccptn_init_handler(L, Q_H, Q);
 
   cce_run_body_handlers(L);
 @}
 @end example
 @end deftypefun
 
-@c ------------------------------------------------------------------------
 
-@subsubheading Guarded pathnames with error handlers
+@deftypefun {ccptn_t const *} {ccname_new(ccptn_t, realpath, clean)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_clean_handler_t * @var{H}, ccptn_t const * @var{src})
+@deftypefunx {ccptn_t const *} {ccname_new(ccptn_t, realpath, error)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_error_handler_t * @var{H}, ccptn_t const * @var{src})
+Like @cfunc{ccname_new(ccptn_t, realpath)} but register the pathname instance to be destroyed using
+the handler @var{H} in the context of the location @var{L}.
 
+@example
+cce_location_t           L[1];
+ccptn_clean_handler_t    P_H[1], Q_H[1];
+ccmem_allocator_t const  *A = ccmem_standard_allocator;
 
-@deftypefun {ccptn_t *} ccptn_new_realpath_guarded_error (cce_destination_t @var{L}, ccptn_error_handler_t * @var{H}, ccptn_t const * @var{P})
-Like @cfunc{ccptn_new_realpath}, but register the resulting instance of @objtype{ccptn_t} for
-finalisation in the error handler @var{H}.
+if (cce_location(L)) @{
+  cce_run_catch_handlers_final(L);
+@} else @{
+  char const     *input = "/path/to/file.ext";
+  ccptn_t const  *P, *R;
+
+  P = ccname_init(ccptn_t, pointer,  clean)(L, A, P_H, input);
+  Q = ccname_init(ccptn_t, realpath, clean)(L, A, R_H, P);
+
+  cce_run_body_handlers(L);
+@}
+@end example
 @end deftypefun
-
-
-@deftypefun {ccptn_t *} ccptn_init_realpath_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{R}, ccptn_error_handler_t * @var{H}, ccptn_t const * @var{P})
-Like @cfunc{ccptn_init_realpath}, but register the resulting instance of @objtype{ccptn_t} for
-finalisation in the error handler @var{H}.
-@end deftypefun
-
-@c ------------------------------------------------------------------------
-
-@subsubheading Guarded pathnames with clean handlers
-
-
-@deftypefun {ccptn_t *} ccptn_new_realpath_guarded_clean (cce_destination_t @var{L}, ccptn_clean_handler_t * @var{H}, ccptn_t const * @var{P})
-Like @cfunc{ccptn_new_realpath}, but register the resulting instance of @objtype{ccptn_t} for
-finalisation in the clean handler @var{H}.
-@end deftypefun
-
-
-@deftypefun {ccptn_t *} ccptn_init_realpath_guarded_clean (cce_destination_t @var{L}, ccptn_t * @var{R}, ccptn_clean_handler_t * @var{H}, ccptn_t const * @var{P})
-Like @cfunc{ccptn_init_realpath}, but register the resulting instance of @objtype{ccptn_t} for
-finalisation in the clean handler @var{H}.
-@end deftypefun
-
-@c ------------------------------------------------------------------------
-
-@subsubheading Generic preprocessor macros
-
-
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_realpath_guarded (cce_destination_t @var{L}, @var{H}, ccptn_t const * @var{P})
-This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
-type is a pointer to:
-
-@table @code
-@item ccptn_clean_handler_t
-The macro expands into a call to @cfunc{ccptn_new_realpath_guarded_clean}.
-
-@item ccptn_error_handler_t
-The macro expands into a call to @cfunc{ccptn_new_realpath_guarded_error}.
-@end table
-@end deftypefn
-
-
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_realpath_guarded (cce_destination_t @var{L}, ccptn_t * @var{R}, @var{H}, ccptn_t const * @var{P})
-This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
-type is a pointer to:
-
-@table @code
-@item ccptn_clean_handler_t
-The macro expands into a call to @cfunc{ccptn_init_realpath_guarded_clean}.
-
-@item ccptn_error_handler_t
-The macro expands into a call to @cfunc{ccptn_init_realpath_guarded_error}.
-@end table
-@end deftypefn
 
 @c page
 @node manipulations normalise
@@ -1699,11 +1690,13 @@ file.ext                @result{} file.ext
 /path/to/dir/           @result{} /path/to/dir/
 /path/to/././file.ext   @result{} /path/to/file.ext
 /path/to/.              @result{} /path/to
-/.                      @result{} /
-.                       @result{} .
 /path/to/../file.ext    @result{} /path/file.ext
 /path/../../to/file.ext @result{} ../to/file.ext
+.                       @result{} .
 ..                      @result{} ..
+./                      @result{} .
+../                     @result{} ..
+/.                      @result{} /
 /..                     @error{} invalid pathname
 @end example
 
@@ -1727,154 +1720,40 @@ the following normalisations:
 @end example
 @end itemize
 
-
-@deftypefun {ccptn_t *} ccptn_new_normalise (cce_destination_t @var{L}, ccptn_t const * @var{P})
-Build and return a new instance of @objtype{ccptn_t} representing the normalisation of @var{P}.  If
-an error occurs: raise an exception by performing a non--local exit to to @var{L}.
-@end deftypefun
-
-
-@deftypefun {ccptn_t *} ccptn_init_normalise (cce_destination_t @var{L}, ccptn_t * @var{R}, ccptn_t const * @var{P})
-Initialise an already allocated instance of @objtype{ccptn_t}, referenced by @var{R}, with the
-representation of the normalisation of @var{P}.  If an error occurs: raise an exception by
-performing a non--local exit to to @var{L}.
-@end deftypefun
-
-@c ------------------------------------------------------------------------
-
-@subsubheading Low level functions
-
-
-@deftypefun size_t ccptn_normal_pass_remove_useless_slashes (char * @var{output_ptr}, char const * @var{input_ptr}, size_t @var{input_len})
-Copy a pathname from @var{input_ptr} to @var{output_ptr} performing a normalisation pass in the
-process: removal of multiple slashes.
-
-The array referenced by @var{input_ptr} must represent an @asciiz{} string with at least
-@var{input_len} octets, terminating zero excluded.  The array referenced by @var{output_ptr} must be
-at least @code{1 + @var{input_len}} octets wide.
-
-Return the number of octets stored in the array referenced by @var{output_ptr}, terminating zero
-excluded.
-@end deftypefun
-
-
-@deftypefun size_t ccptn_normal_pass_remove_single_dot_segments (char * @var{output_ptr}, char const * @var{input_ptr}, size_t @var{input_len})
-Copy a pathname from @var{input_ptr} to @var{output_ptr} performing a normalisation pass in the
-process: removal of single--dot segments.  This pass is meant to be applied after
-@cfunc{ccptn_normal_pass_remove_useless_slashes}.
-
-The array referenced by @var{input_ptr} must represent an @asciiz{} string with at least
-@var{input_len} octets, terminating zero excluded.  The array referenced by @var{output_ptr} must be
-at least @code{1 + @var{input_len}} octets wide.
-
-Return the number of octets stored in the array referenced by @var{output_ptr}, terminating zero
-excluded.
-@end deftypefun
-
-
-@deftypefun size_t ccptn_normal_pass_remove_double_dot_segments (cce_destination_t @var{L}, char * @var{output_ptr}, char const * @var{input_ptr}, size_t @var{input_len})
-Copy a pathname from @var{input_ptr} to @var{output_ptr} performing a normalisation pass in the
-process: removal of double--dot segments and the segments before them.  This pass is meant to be
-applied after @cfunc{ccptn_normal_pass_remove_single_dot_segments}.
-
-The array referenced by @var{input_ptr} must represent an @asciiz{} string with at least
-@var{input_len} octets, terminating zero excluded.  The array referenced by @var{output_ptr} must be
-at least @code{1 + @var{input_len}} octets wide.
-
-If successful: return the number of octets stored in the array referenced by @var{output_ptr},
-terminating zero excluded.  If a double--dot segment has no segment before, representing an invalid
-pathname: raise an exception by performing a non--local exit to @var{L}.
-@end deftypefun
-
-@c ------------------------------------------------------------------------
-
-@subsubheading Guarded pathnames with error handlers
-
-
-@deftypefun {ccptn_t *} ccptn_new_normalise_guarded_error (cce_destination_t @var{L}, ccptn_error_handler_t * @var{H}, ccptn_t const * @var{P})
-Like @cfunc{ccptn_new_normalise}, but register the resulting instance of @objtype{ccptn_t} for
-finalisation in the error handler @var{H}.
-@end deftypefun
-
-
-@deftypefun {ccptn_t *} ccptn_init_normalise_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{R}, ccptn_error_handler_t * @var{H}, ccptn_t const * @var{P})
-Like @cfunc{ccptn_init_normalise}, but register the resulting instance of @objtype{ccptn_t} for
-finalisation in the error handler @var{H}.
-@end deftypefun
-
-@c ------------------------------------------------------------------------
-
-@subsubheading Guarded pathnames with clean handlers
-
-
-@deftypefun {ccptn_t *} ccptn_new_normalise_guarded_clean (cce_destination_t @var{L}, ccptn_clean_handler_t * @var{H}, ccptn_t const * @var{P})
-Like @cfunc{ccptn_new_normalise}, but register the resulting instance of @objtype{ccptn_t} for
-finalisation in the clean handler @var{H}.
-@end deftypefun
-
-
-@deftypefun {ccptn_t *} ccptn_init_normalise_guarded_clean (cce_destination_t @var{L}, ccptn_t * @var{R}, ccptn_clean_handler_t * @var{H}, ccptn_t const * @var{P})
-Like @cfunc{ccptn_init_normalise}, but register the resulting instance of @objtype{ccptn_t} for
-finalisation in the clean handler @var{H}.
-@end deftypefun
-
-@c ------------------------------------------------------------------------
-
-@subsubheading Generic preprocessor macros
-
-
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_normalise_guarded (cce_destination_t @var{L}, @var{H}, ccptn_t const * @var{P})
-This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
-type is a pointer to:
-
-@table @code
-@item ccptn_clean_handler_t
-The macro expands into a call to @cfunc{ccptn_new_normalise_guarded_clean}.
-
-@item ccptn_error_handler_t
-The macro expands into a call to @cfunc{ccptn_new_normalise_guarded_error}.
-@end table
-@end deftypefn
-
-
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_normalise_guarded (cce_destination_t @var{L}, ccptn_t * @var{R}, @var{H}, ccptn_t const * @var{P})
-This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
-type is a pointer to:
-
-@table @code
-@item ccptn_clean_handler_t
-The macro expands into a call to @cfunc{ccptn_init_normalise_guarded_clean}.
-
-@item ccptn_error_handler_t
-The macro expands into a call to @cfunc{ccptn_init_normalise_guarded_error}.
-@end table
-@end deftypefn
+@menu
+* manipulations normalise embedded::    Obtaining a normalised embedded
+                                        pathname.
+* manipulations normalise standalone::  Obtaining a normalised standalone
+                                        pathname.
+@end menu
 
 @c page
-@node manipulations concat
-@section Concatenating pathnames
+@node manipulations normalise embedded
+@subsection Obtaining a normalised embedded pathname
 
 
-@deftypefun {ccptn_t *} ccptn_new_concat (cce_destination_t @var{L}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
-Build and return a new instance of @objtype{ccptn_t} representing the result of concatenating the
-@var{prefix} and the @var{suffix}.  If an error occurs: raise an exception by performing a
-non--local exit to to @var{L}.
+@deftypefun void {ccname_init(ccptn_t, normalise)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_t * @var{dst}, ccptn_t const * @var{src})
+Initialise the already allocated @objtype{ccptn_t} instance, referenced by @var{dst}, representing
+the result of normalising the pathname represented by @var{src}; use the allocator @var{A}.  When
+successful: just return.  If an error occurs: raise an exception by performing a non--local exit to
+to @var{L}.
+
+Notice that this function will succeed even when the pathname @strong{does not} exist.
 
 @example
-cce_location_t        L[1];
-ccptn_clean_handler_t P1_H[1], P2_H[1], R_H[1];
+cce_location_t           L[1];
+ccptn_clean_handler_t    P_H[1], Q_H[1];
+ccmem_allocator_t const  *A = ccmem_standard_allocator;
 
 if (cce_location(L)) @{
   cce_run_catch_handlers_final(L);
 @} else @{
-  char const * pathname_1 = "/path/to";
-  char const * pathname_2 = "file.ext";
-  ccptn_t      *P1, *P2, *R;
+  char const  *input = "/path/to/file.ext";
+  ccptn_t     P[1], R[1];
 
-  P1 = ccptn_new_nodup_asciiz_guarded(L, P1_H, pathname_1);
-  P2 = ccptn_new_nodup_asciiz_guarded(L, P2_H, pathname_2);
-  R  = ccptn_new_concat(L, P1, P2);
-  ccptn_handler_ptn_init(L, R_H, R);
+  ccname_init(ccptn_t, pointer, clean)(L, A, P_H, P, input);
+  ccname_init(ccptn_t, normalise)(L, A, R, P);
+  ccptn_init_handler(L, R_H, R);
 
   cce_run_body_handlers(L);
 @}
@@ -1882,75 +1761,218 @@ if (cce_location(L)) @{
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_init_concat (cce_destination_t @var{L}, ccptn_t * @var{R}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
-Initialise the already allocated instance of @objtype{ccptn_t}, referenced by @var{R}, with the
-representation of the concatenation between the @var{prefix} and the @var{suffix}.  Return @var{R}
-itself.  If an error occurs: raise an exception by performing a non--local exit to to @var{L}.
+@deftypefun void {ccname_init(ccptn_t, normalise, clean)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_clean_handler_t * @var{H}, ccptn_t * @var{dst}, ccptn_t const * @var{src})
+@deftypefunx void {ccname_init(ccptn_t, normalise, error)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_error_handler_t * @var{H}, ccptn_t * @var{dst}, ccptn_t const * @var{src})
+Like @cfunc{ccname_init(ccptn_t, normalise)} but register the pathname instance to be destroyed
+using the handler @var{H} in the context of the location @var{L}.
+
+@example
+cce_location_t           L[1];
+ccptn_clean_handler_t    P_H[1], Q_H[1];
+ccmem_allocator_t const  *A = ccmem_standard_allocator;
+
+if (cce_location(L)) @{
+  cce_run_catch_handlers_final(L);
+@} else @{
+  char const  *input = "/path/to/file.ext";
+  ccptn_t     P[1], R[1];
+
+  ccname_init(ccptn_t, pointer,   clean)(L, A, P_H, P, input);
+  ccname_init(ccptn_t, normalise, clean)(L, A, R_H, R, P);
+
+  cce_run_body_handlers(L);
+@}
+@end example
 @end deftypefun
 
-@c ------------------------------------------------------------------------
+@c page
+@node manipulations normalise standalone
+@subsection Obtaining a normalised standalone pathname
 
-@subsubheading Guarded pathnames with error handlers
 
+@deftypefun {ccptn_t const *} {ccname_new(ccptn_t, normalise)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_t const * @var{src})
+Build and return a new @objtype{ccptn_t} instance representing the result of normalising the
+pathname represented by @var{src}; use the allocator @var{A}.  When successful: return a pointer to
+the new instance.  If an error occurs: raise an exception by performing a non--local exit to to
+@var{L}.
 
-@deftypefun {ccptn_t *} ccptn_new_concat_guarded_error (cce_destination_t @var{L}, ccptn_error_handler_t * @var{H}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
-Like @cfunc{ccptn_new_concat}, but register the resulting instance of @objtype{ccptn_t} for
-finalisation in the error handler @var{H}.
+Notice that this function will succeed even when the pathname @strong{does not} exist.
+
+@example
+cce_location_t             L[1];
+ccptn_clean_handler_t      P_H[1], Q_H[1];
+ccmem_allocator_t const *  A = ccmem_standard_allocator;
+
+if (cce_location(L)) @{
+  cce_run_catch_handlers_final(L);
+@} else @{
+  char const     *input = "/path/to/file.ext";
+  ccptn_t const  *P, *Q;
+
+  P = ccname_new(ccptn_t, pointer, clean)(L, A, P_H, input);
+  Q = ccname_new(ccptn_t, normalise)(L, A, P);
+  ccptn_init_handler(L, Q_H, Q);
+
+  cce_run_body_handlers(L);
+@}
+@end example
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_init_concat_guarded_error (cce_destination_t @var{L}, ccptn_t * @var{R}, ccptn_error_handler_t * @var{H}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
-Like @cfunc{ccptn_init_concat}, but register the resulting instance of @objtype{ccptn_t} for
-finalisation in the error handler @var{H}.
+@deftypefun {ccptn_t const *} {ccname_new(ccptn_t, normalise, clean)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_clean_handler_t * @var{H}, ccptn_t const * @var{src})
+@deftypefunx {ccptn_t const *} {ccname_new(ccptn_t, normalise, error)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_error_handler_t * @var{H}, ccptn_t const * @var{src})
+Like @cfunc{ccname_new(ccptn_t, normalise)} but register the pathname instance to be destroyed using
+the handler @var{H} in the context of the location @var{L}.
+
+@example
+cce_location_t           L[1];
+ccptn_clean_handler_t    P_H[1], Q_H[1];
+ccmem_allocator_t const  *A = ccmem_standard_allocator;
+
+if (cce_location(L)) @{
+  cce_run_catch_handlers_final(L);
+@} else @{
+  char const     *input = "/path/to/file.ext";
+  ccptn_t const  *P, *R;
+
+  P = ccname_init(ccptn_t, pointer,  clean)(L, A, P_H, input);
+  Q = ccname_init(ccptn_t, normalise, clean)(L, A, R_H, P);
+
+  cce_run_body_handlers(L);
+@}
+@end example
 @end deftypefun
 
-@c ------------------------------------------------------------------------
+@c page
+@node manipulations concat
+@section Concatenating pathnames
 
-@subsubheading Guarded pathnames with clean handlers
+
+@menu
+* manipulations concat embedded::    Concatenating into an embedded
+                                     pathname.
+* manipulations concat standalone::  Concatenating into a standalone
+                                     pathname.
+@end menu
+
+@c page
+@node manipulations concat embedded
+@subsection Concatenating into an embedded pathname
 
 
-@deftypefun {ccptn_t *} ccptn_new_concat_guarded_clean (cce_destination_t @var{L}, ccptn_clean_handler_t * @var{H}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
-Like @cfunc{ccptn_new_concat}, but register the resulting instance of @objtype{ccptn_t} for
-finalisation in the clean handler @var{H}.
+@deftypefun void {ccname_init(ccptn_t, concat)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_t * @var{dst}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
+Initialise the already allocated @objtype{ccptn_t} instance, referenced by @var{dst}, representing
+the result of concatenating the pathname represented by @var{prefix} and @var{suffix}; use the
+allocator @var{A}.  When successful: just return.  If an error occurs: raise an exception by
+performing a non--local exit to to @var{L}.
+
+@example
+cce_location_t           L[1];
+ccptn_clean_handler_t    R_H[1], P_H[1], S_H[1];
+ccmem_allocator_t const  *A = ccmem_standard_allocator;
+
+if (cce_location(L)) @{
+  cce_run_catch_handlers_final(L);
+@} else @{
+  char const  *input_prefix = "/path/to";
+  char const  *input_suffix = "file.ext";
+  ccptn_t     R[1], P[1], S[1];
+
+  ccname_init(ccptn_t, pointer, clean)(L, A, P_H, P, input_prefix);
+  ccname_init(ccptn_t, pointer, clean)(L, A, S_H, S, input_suffix);
+  ccname_init(ccptn_t, concat)(L, A, R, P, S);
+  ccptn_init_handler(L, R_H, R);
+
+  cce_run_body_handlers(L);
+@}
+@end example
 @end deftypefun
 
 
-@deftypefun {ccptn_t *} ccptn_init_concat_guarded_clean (cce_destination_t @var{L}, ccptn_t * @var{R}, ccptn_clean_handler_t * @var{H}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
-Like @cfunc{ccptn_init_concat}, but register the resulting instance of @objtype{ccptn_t} for
-finalisation in the clean handler @var{H}.
+@deftypefun void {ccname_init(ccptn_t, concat, clean)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_clean_handler_t * @var{H}, ccptn_t * @var{dst}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
+@deftypefunx void {ccname_init(ccptn_t, concat, error)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_error_handler_t * @var{H}, ccptn_t * @var{dst}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
+Like @cfunc{ccname_init(ccptn_t, concat)} but register the pathname instance to be destroyed using
+the handler @var{H} in the context of the location @var{L}.
+
+@example
+cce_location_t           L[1];
+ccptn_clean_handler_t    R_H[1], P_H[1], S_H[1];
+ccmem_allocator_t const  *A = ccmem_standard_allocator;
+
+if (cce_location(L)) @{
+  cce_run_catch_handlers_final(L);
+@} else @{
+  char const  *input_prefix = "/path/to";
+  char const  *input_suffix = "file.ext";
+  ccptn_t     R[1], P[1], S[1];
+
+  ccname_init(ccptn_t, pointer, clean)(L, A, P_H, P, input_prefix);
+  ccname_init(ccptn_t, pointer, clean)(L, A, S_H, S, input_suffix);
+  ccname_init(ccptn_t, concat,  clean)(L, A, R_H, R, P, S);
+
+  cce_run_body_handlers(L);
+@}
+@end example
 @end deftypefun
 
-@c ------------------------------------------------------------------------
-
-@subsubheading Generic preprocessor macros
-
-
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_new_concat_guarded (cce_destination_t @var{L}, @var{H}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
-This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
-type is a pointer to:
-
-@table @code
-@item ccptn_clean_handler_t
-The macro expands into a call to @cfunc{ccptn_new_concat_guarded_clean}.
-
-@item ccptn_error_handler_t
-The macro expands into a call to @cfunc{ccptn_new_concat_guarded_error}.
-@end table
-@end deftypefn
+@c page
+@node manipulations concat standalone
+@subsection Concatenating into a standalone pathname
 
 
-@deftypefn {Preprocessor Macro} {ccptn_t *} ccptn_init_concat_guarded (cce_destination_t @var{L}, ccptn_t * @var{R}, @var{H}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
-This macro uses @code{_Generic} to dispatch its expansion according to the type of @var{H}; if the
-type is a pointer to:
+@deftypefun {ccptn_t const *} {ccname_new(ccptn_t, concat)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
+Build a new @objtype{ccptn_t} instance, arepresenting the result of concatenating the pathname
+represented by @var{prefix} and @var{suffix}; use the allocator @var{A}.  When successful: return a
+pointer to the new instance.  If an error occurs: raise an exception by performing a non--local exit
+to to @var{L}.
 
-@table @code
-@item ccptn_clean_handler_t
-The macro expands into a call to @cfunc{ccptn_init_concat_guarded_clean}.
+@example
+cce_location_t           L[1];
+ccptn_clean_handler_t    R_H[1], P_H[1], S_H[1];
+ccmem_allocator_t const  *A = ccmem_standard_allocator;
 
-@item ccptn_error_handler_t
-The macro expands into a call to @cfunc{ccptn_init_concat_guarded_error}.
-@end table
-@end deftypefn
+if (cce_location(L)) @{
+  cce_run_catch_handlers_final(L);
+@} else @{
+  char const  *   input_prefix = "/path/to";
+  char const     *input_suffix = "file.ext";
+  ccptn_t const  *R, *P, *S;
+
+  P = ccname_new(ccptn_t, pointer, clean)(L, A, P_H, input_prefix);
+  S = ccname_new(ccptn_t, pointer, clean)(L, A, S_H, input_suffix);
+  R = ccname_new(ccptn_t, concat)(L, A, R_H, R, P, S);
+
+  cce_run_body_handlers(L);
+@}
+@end example
+@end deftypefun
+
+
+@deftypefun {ccptn_t const *} {ccname_new(ccptn_t, concat, clean)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_clean_handler_t * @var{H}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
+@deftypefunx {ccptn_t const *} {ccname_new(ccptn_t, concat, error)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_error_handler_t * @var{H}, ccptn_t const * @var{prefix}, ccptn_t const * @var{suffix})
+Like @cfunc{ccname_new(ccptn_t, concat)} but register the pathname instance to be destroyed using
+the handler @var{H} in the context of the location @var{L}.
+
+@example
+cce_location_t           L[1];
+ccptn_clean_handler_t    R_H[1], P_H[1], S_H[1];
+ccmem_allocator_t const  *A = ccmem_standard_allocator;
+
+if (cce_location(L)) @{
+  cce_run_catch_handlers_final(L);
+@} else @{
+  char const  *   input_prefix = "/path/to";
+  char const     *input_suffix = "file.ext";
+  ccptn_t const  *R, *P, *S;
+
+  P = ccname_new(ccptn_t, pointer, clean)(L, A, P_H, input_prefix);
+  S = ccname_new(ccptn_t, pointer, clean)(L, A, S_H, input_suffix);
+  R = ccname_new(ccptn_t, concat,  clean)(L, A, R_H, P, S);
+
+  cce_run_body_handlers(L);
+@}
+@end example
+@end deftypefun
 
 @c page
 @node components
