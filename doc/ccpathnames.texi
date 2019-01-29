@@ -142,7 +142,6 @@ included in the section entitled ``@gnu{} Free Documentation License''.
 * components::                  Pathname components.
 * io::                          Pathname input/output.
 * segments::                    Manipulating segments.
-* extensions::                  Manipulating extensions.
 * utils::                       Utility definitions.
 
 Appendices
@@ -2039,6 +2038,31 @@ the input is not normalised: the functions below will raise an exception of type
 @objtype{ccptn_condition_normalised_pathname_t}.
 
 
+@deftp {Struct Typedef} ccptn_extension_t
+Type of @struct{} representing the extension of a segment in a pathname; this @struct{} does
+@strong{not} own the referenced memory.  Given the pathname:
+
+@example
+/path/to/file.ext
+@end example
+
+@noindent
+the last segment is the string @samp{file.ext} and its extension is the string @samp{.ext},
+@strong{including} the leading dot.
+
+This type has the following fields:
+
+@table @code
+@item size_t len
+The number of octets in the @code{ptr} array representing the extension in a pathname's segment.
+
+@item char const * ptr
+Pointer to the first octet in an @ascii{} string representing a pathname's segment's extension.  In
+general this string is @strong{not} zero terminated.
+@end table
+@end deftp
+
+
 @deftypefun ccptn_extension_t ccptn_extension (cce_destination_t @var{L}, ccptn_t const * @var{P})
 Find the extension of the last segment in the input pathname referenced by @var{P} and return an
 instance of @objtype{ccptn_extension_t} representing it; the returned value references the section
@@ -2048,6 +2072,22 @@ error occurs: raise an exception by performing a non--local exit to @var{L}.
 If the input pathname has no extension: the returned value represents the empty string by having the
 length field to zero, while the pointer field references the terminating zero in the @asciiz{}
 representation of the input pathname.
+@end deftypefun
+
+
+@deftypefun bool ccptn_extension_is_empty (ccptn_extension_t @var{E})
+Return @ctrue{} if @var{E} is empty; otherwise return @cfalse{}.
+@end deftypefun
+
+
+@deftypefun bool ccptn_extension_equal (ccptn_extension_t @vari{E}, ccptn_extension_t @varii{E})
+Return @ctrue{} if the extensions are equal octet by octet; otherwise return @cfalse{}.
+@end deftypefun
+
+
+@deftypefun void ccptn_extension_fwrite (cce_destination_t @var{L}, FILE * @var{stream}, ccptn_extension_t @var{E})
+Print the extension to @var{stream}; do not flush the stream.  If an error occurs: raise an
+exception by performing a non--local exit to @var{L}.
 @end deftypefun
 
 @c page
@@ -2540,51 +2580,6 @@ return @var{len} itself if no slash is found.
 @deftypefun void ccptn_segment_print (cce_destination_t @var{L}, FILE * @var{stream}, ccptn_segment_t @var{S})
 Print the segment to @var{stream}; do not flush the stream.  If an error occurs: raise an exception
 by performing a non--local exit to @var{L}.
-@end deftypefun
-
-@c page
-@node extensions
-@chapter Manipulating extensions
-
-
-@deftp {Struct Typedef} ccptn_extension_t
-This @code{struct} represents the extension of a segment in a pathname; this struct does not own the
-referenced memory.  Given the pathname:
-
-@example
-/path/to/file.ext
-@end example
-
-@noindent
-the last segment is the string @samp{file.ext} and its extension is the string @samp{.ext},
-@strong{including} the leading dot.
-
-This type has the following fields:
-
-@table @code
-@item size_t len
-The number of octets in the @code{ptr} array representing the extension in a pathname's segment.
-
-@item char const * ptr
-Pointer to the first octet in an @ascii{} string representing a pathname's segment's extension.  In
-general this string is @strong{not} zero terminated.
-@end table
-@end deftp
-
-
-@deftypefun bool ccptn_extension_is_empty (ccptn_extension_t @var{E})
-Return @ctrue{} if @var{E} is empty; otherwise return @cfalse{}.
-@end deftypefun
-
-
-@deftypefun bool ccptn_extension_equal (ccptn_extension_t @vari{E}, ccptn_extension_t @varii{E})
-Return @ctrue{} if the extensions are equal octet by octet; otherwise return @cfalse{}.
-@end deftypefun
-
-
-@deftypefun void ccptn_extension_fwrite (cce_destination_t @var{L}, FILE * @var{stream}, ccptn_extension_t @var{E})
-Print the extension to @var{stream}; do not flush the stream.  If an error occurs: raise an
-exception by performing a non--local exit to @var{L}.
 @end deftypefun
 
 @c page
