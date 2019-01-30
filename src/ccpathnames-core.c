@@ -187,6 +187,22 @@ ccname_init(ccptn_t, deserialisable) (cce_destination_t L CCPTN_UNUSED, ccmem_al
   P->ptr				= NULL;
 }
 
+/* ------------------------------------------------------------------ */
+
+void
+ccname_init(ccptn_t, clone) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * dst, ccptn_t const * src)
+{
+  dst->allocator			= A;
+  dst->dynamically_allocated_base	= 0;
+  dst->dynamically_allocated_buffer	= 1;
+  dst->absolute				= src->absolute;
+  dst->normalised			= src->normalised;
+  dst->realpath				= src->realpath;
+  dst->len				= src->len;
+  dst->ptr = ccmem_malloc(L, A, (1 + src->len));
+  memcpy((void *)(dst->ptr), src->ptr, (1 + src->len));
+}
+
 
 /** --------------------------------------------------------------------
  ** Constructor functions for standalone instances.
@@ -295,6 +311,27 @@ ccname_new(ccptn_t, deserialisable) (cce_destination_t L, ccmem_allocator_t cons
   P->len				= 0;
   P->ptr				= NULL;
   return P;
+}
+
+/* ------------------------------------------------------------------ */
+
+ccptn_t const *
+ccname_new(ccptn_t, clone) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t const * src)
+{
+  /* We store both the  base struct and the buffer in  the same dynamically allocated
+     memory block. */
+  ccptn_t *	dst = ccmem_malloc(L, A, sizeof(ccptn_t) + ccptn_len(src) + 1);
+
+  dst->allocator			= A;
+  dst->dynamically_allocated_base	= 1;
+  dst->dynamically_allocated_buffer	= 0;
+  dst->absolute				= src->absolute;
+  dst->normalised			= src->normalised;
+  dst->realpath				= src->realpath;
+  dst->len				= src->len;
+  dst->ptr				= (char *)(((uint8_t *)dst) + sizeof(ccptn_t));
+  memcpy((void *)(dst->ptr), src->ptr, (1 + src->len));
+  return dst;
 }
 
 
@@ -609,6 +646,27 @@ ccname_init(ccptn_t, deserialisable, error) (cce_destination_t L, ccmem_allocato
 
 
 /** --------------------------------------------------------------------
+ ** Pathnames guarded constructors: embedded instances, clone.
+ ** ----------------------------------------------------------------- */
+
+void
+ccname_init(ccptn_t, clone, clean) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H,
+				    ccptn_t * dst, ccptn_t const * src)
+{
+  ccname_init(ccptn_t, clone)(L, A, dst, src);
+  ccptn_init_handler(L, H, dst);
+}
+
+void
+ccname_init(ccptn_t, clone, error) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H,
+				    ccptn_t * dst, ccptn_t const * src)
+{
+  ccname_init(ccptn_t, clone)(L, A, dst, src);
+  ccptn_init_handler(L, H, dst);
+}
+
+
+/** --------------------------------------------------------------------
 n ** Pathnames guarded constructors: standalone instances, pointer input.
  ** ----------------------------------------------------------------- */
 
@@ -735,6 +793,27 @@ ccname_new(ccptn_t, deserialisable, error) (cce_destination_t L, ccmem_allocator
   ccptn_t *	P = ccname_new(ccptn_t, deserialisable)(L, A);
   ccptn_init_handler(L, H, P);
   return P;
+}
+
+
+/** --------------------------------------------------------------------
+ ** Pathnames guarded constructors: standalone instances, clone.
+ ** ----------------------------------------------------------------- */
+
+ccptn_t const *
+ccname_new(ccptn_t, clone, clean) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccptn_t const * src)
+{
+  ccptn_t const	*dst = ccname_new(ccptn_t, clone)(L, A, src);
+  ccptn_init_handler(L, H, dst);
+  return dst;
+}
+
+ccptn_t const *
+ccname_new(ccptn_t, clone, error) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccptn_t const * src)
+{
+  ccptn_t const	*dst = ccname_new(ccptn_t, clone)(L, A, src);
+  ccptn_init_handler(L, H, dst);
+  return dst;
 }
 
 

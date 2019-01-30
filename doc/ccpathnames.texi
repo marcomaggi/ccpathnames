@@ -1007,6 +1007,8 @@ instance itself.
                                 @ascii{} blocks.
 * ctors embedded deser::        Constructors for embedded instances from
                                 deserialisation.
+* ctors embedded clone::        Constructors for embedded instances from
+                                cloning.
 @end menu
 
 @c page
@@ -1342,6 +1344,61 @@ if (cce_location(L)) @{
 @end deftypefun
 
 @c page
+@node ctors embedded clone
+@subsection Constructors for embedded instances from cloning
+
+
+@deftypefun void {ccname_init(ccptn_t, clone)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_t * @var{dst}, ccptn_t const * @var{src})
+Initialise an already allocated @objtype{ccptn_t}, referenced by @var{dst}, cloning the pathname
+@var{src}; use the allocator @var{A}.  When successful just return.  If an error occurs: raise an
+exception by performing a non--local exit to @var{L}.
+
+@example
+cce_location_t             L[1];
+ccptn_clean_handler_t      dst_H[1], src_H[1];
+ccmem_allocator_t const *  A = ccmem_standard_allocator;
+
+if (cce_location(L)) @{
+  cce_run_catch_handlers_raise(L, upper_L);
+@} else @{
+  char const  *input = "/path/to/file.ext";
+  ccptn_t     dst[1], src[1];
+
+  ccname_init(ccptn_t, pointer, clean)(L, A, src_H, src, input);
+  ccname_init(ccptn_t, clone)(L, A, dst, src);
+  ccptn_init_handler(L, dst_H, dst);
+
+  cce_run_body_handlers(L);
+@}
+@end example
+@end deftypefun
+
+
+@deftypefun void {ccname_init(ccptn_t, clone, clean)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_clean_handler_t * @var{H}, ccptn_t * @var{dst}, ccptn_t * @var{src})
+@deftypefunx void {ccname_init(ccptn_t, clone, error)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_error_handler_t * @var{H}, ccptn_t * @var{dst}, ccptn_t * @var{src})
+Like @cfunc{ccname_init(ccptn_t, clone)} but register the pathname instance to be destroyed using
+the handler @var{H} in the context of the location @var{L}.
+
+@example
+cce_location_t             L[1];
+ccptn_clean_handler_t      dst_H[1], src_H[1];
+ccmem_allocator_t const *  A = ccmem_standard_allocator;
+
+if (cce_location(L)) @{
+  cce_run_catch_handlers_raise(L, upper_L);
+@} else @{
+  char const  *input = "/path/to/file.ext";
+  ccptn_t     dst[1], src[1];
+
+  ccname_init(ccptn_t, pointer, clean)(L, A, src_H, src, input);
+  ccname_init(ccptn_t, clone,   clean)(L, A, dst_H, dst, src);
+
+  cce_run_body_handlers(L);
+@}
+@end example
+@end deftypefun
+
+@c page
 @node ctors standalone
 @section Constructors for standalone instances
 
@@ -1358,6 +1415,8 @@ instances do have to allocate memory for the instance itself.
                                 @ascii{} blocks.
 * ctors standalone deser::      Constructors for standalone instances from
                                 deserialisation.
+* ctors standalone clone::      Constructors for standalone instances from
+                                cloning.
 @end menu
 
 @c page
@@ -1686,6 +1745,61 @@ if (cce_location(L)) @{
   ccptn_t const  *P;
 
   P = ccname_new(ccptn_t, deserialisable, clean)(L, A, H);
+
+  cce_run_body_handlers(L);
+@}
+@end example
+@end deftypefun
+
+@c page
+@node ctors standalone clone
+@subsection Constructors for standalone instances from cloning
+
+
+@deftypefun {ccptn_t const *} {ccname_new(ccptn_t, clone)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_t const * @var{src})
+Build a new instance of @objtype{ccptn_t} cloning the pathname @var{src}; use the allocator @var{A}.
+When successful just return.  If an error occurs: raise an exception by performing a non--local exit
+to @var{L}.
+
+@example
+cce_location_t             L[1];
+ccptn_clean_handler_t      dst_H[1], src_H[1];
+ccmem_allocator_t const *  A = ccmem_standard_allocator;
+
+if (cce_location(L)) @{
+  cce_run_catch_handlers_raise(L, upper_L);
+@} else @{
+  char const     *input = "/path/to/file.ext";
+  ccptn_t const  *dst, *src];
+
+  src = ccname_new(ccptn_t, pointer, clean)(L, A, src_H, input);
+  dst = ccname_new(ccptn_t, clone)(L, A, src);
+  ccptn_init_handler(L, dst_H, dst);
+
+  cce_run_body_handlers(L);
+@}
+@end example
+@end deftypefun
+
+
+@deftypefun {ccptn_t const *} {ccname_new(ccptn_t, clone, clean)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_clean_handler_t * @var{H}, ccptn_t * @var{src})
+@deftypefunx {ccptn_t const *} {ccname_new(ccptn_t, clone, error)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_error_handler_t * @var{H}, ccptn_t * @var{src})
+Like @cfunc{ccname_new(ccptn_t, clone)} but register the pathname instance to be destroyed using the
+handler @var{H} in the context of the location @var{L}.
+
+@example
+cce_location_t             L[1];
+ccptn_clean_handler_t      dst_H[1], src_H[1];
+ccmem_allocator_t const *  A = ccmem_standard_allocator;
+
+if (cce_location(L)) @{
+  cce_run_catch_handlers_raise(L, upper_L);
+@} else @{
+  char const     *input = "/path/to/file.ext";
+  ccptn_t const  *dst, *src];
+
+  src = ccname_new(ccptn_t, pointer, clean)(L, A, src_H, input);
+  dst = ccname_new(ccptn_t, clone,   clean)(L, A, dst_H, src);
 
   cce_run_body_handlers(L);
 @}

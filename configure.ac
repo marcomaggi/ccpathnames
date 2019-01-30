@@ -93,6 +93,7 @@ MMUX_PKG_CONFIG_FIND_INCLUDE_FILE([ccexceptions],[ccexceptions.h])
 MMUX_PKG_CONFIG_FIND_INCLUDE_FILE([ccmemory],[ccmemory.h])
 MMUX_PKG_CONFIG_FIND_INCLUDE_FILE([ccstructs],[ccstructs.h])
 MMUX_PKG_CONFIG_FIND_INCLUDE_FILE([ccstructs],[ccnames.h])
+MMUX_PKG_CONFIG_FIND_INCLUDE_FILE([cctests],[cctests.h])
 
 AC_CACHE_SAVE
 

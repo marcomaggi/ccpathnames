@@ -390,6 +390,124 @@ test_4_3_2 (cce_destination_t upper_L)
 }
 
 
+/** --------------------------------------------------------------------
+ ** Constructors for deserialisable instances.
+ ** ----------------------------------------------------------------- */
+
+void
+test_5_1 (cce_destination_t upper_L)
+/* Test for "ccname_init(ccptn_t, deserialisable, clean)()". */
+{
+  cce_location_t	L[1];
+  ccptn_clean_handler_t	H[1];
+
+  if (cce_location(L)) {
+    cce_run_catch_handlers_raise(L, upper_L);
+  } else {
+    ccptn_t	P[1];
+
+    ccname_init(ccptn_t, deserialisable, clean)(L, A, H, P);
+
+    {
+      ccstructs_dumpable_I	I;
+
+      I = ccname_iface_new(ccstructs_dumpable_I, ccptn_t)(P);
+      ccstructs_dumpable_dump(L, I);
+      fprintf(stderr, "\n");
+    }
+    cce_run_body_handlers(L);
+  }
+}
+
+void
+test_5_2 (cce_destination_t upper_L)
+/* Test for "ccname_new(ccptn_t, deserialisable, clean)()". */
+{
+  cce_location_t	L[1];
+  ccptn_clean_handler_t	H[1];
+
+  if (cce_location(L)) {
+    cce_run_catch_handlers_raise(L, upper_L);
+  } else {
+    ccptn_t const *	P;
+
+    P = ccname_new(ccptn_t, deserialisable, clean)(L, A, H);
+
+    {
+      ccstructs_dumpable_I	I;
+
+      I = ccname_iface_new(ccstructs_dumpable_I, ccptn_t)(P);
+      ccstructs_dumpable_dump(L, I);
+      fprintf(stderr, "\n");
+    }
+
+    cce_run_body_handlers(L);
+  }
+}
+
+
+/** --------------------------------------------------------------------
+ ** Constructors for clone instances.
+ ** ----------------------------------------------------------------- */
+
+void
+test_6_1 (cce_destination_t upper_L)
+/* Test for "ccname_init(ccptn_t, clone, clean)()". */
+{
+  cce_location_t	L[1];
+  ccptn_clean_handler_t	dst_H[1], src_H[1];
+
+  if (cce_location(L)) {
+    cce_run_catch_handlers_raise(L, upper_L);
+  } else {
+    static char const *	input = "/path/to/file.ext";
+    ccptn_t	dst[1], src[1];
+
+    ccname_init(ccptn_t, pointer, clean)(L, A, src_H, src, input);
+    ccname_init(ccptn_t, clone,   clean)(L, A, dst_H, dst, src);
+    if (0) {
+      ccstructs_dumpable_I	I;
+
+      I = ccname_iface_new(ccstructs_dumpable_I, ccptn_t)(dst);
+      ccstructs_dumpable_dump(L, I);
+      fprintf(stderr, "\n");
+    }
+    cctests_assert_asciiz(L, ccptn_ptr(src), ccptn_ptr(dst));
+    cctests_assert_equal_size(L, ccptn_len(src), ccptn_len(dst));
+    cce_run_body_handlers(L);
+  }
+}
+
+void
+test_6_2 (cce_destination_t upper_L)
+/* Test for "ccname_new(ccptn_t, clone, clean)()". */
+{
+  cce_location_t	L[1];
+  ccptn_clean_handler_t	dst_H[1], src_H[1];
+
+  if (cce_location(L)) {
+    cce_run_catch_handlers_raise(L, upper_L);
+  } else {
+    static char const *	input = "/path/to/file.ext";
+    ccptn_t const	*dst, *src;
+
+    src = ccname_new(ccptn_t, pointer, clean)(L, A, src_H, input);
+    dst = ccname_new(ccptn_t, clone,   clean)(L, A, dst_H, src);
+
+    if (0) {
+      ccstructs_dumpable_I	I;
+
+      I = ccname_iface_new(ccstructs_dumpable_I, ccptn_t)(dst);
+      ccstructs_dumpable_dump(L, I);
+      fprintf(stderr, "\n");
+    }
+    cctests_assert_asciiz(L, ccptn_ptr(src), ccptn_ptr(dst));
+    cctests_assert_equal_size(L, ccptn_len(src), ccptn_len(dst));
+    cce_run_body_handlers(L);
+  }
+}
+
+
 int
 main (int argc CCPTN_UNUSED, const char *const argv[])
 {
@@ -433,6 +551,20 @@ main (int argc CCPTN_UNUSED, const char *const argv[])
       cctests_run(test_4_2_2);
       cctests_run(test_4_3_1);
       cctests_run(test_4_3_2);
+    }
+    cctests_end_group();
+
+    cctests_begin_group("constructors for deserialisable instances");
+    {
+      cctests_run(test_5_1);
+      cctests_run(test_5_2);
+    }
+    cctests_end_group();
+
+    cctests_begin_group("constructors for clone instances");
+    {
+      cctests_run(test_6_1);
+      cctests_run(test_6_2);
     }
     cctests_end_group();
   }
