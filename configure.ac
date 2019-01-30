@@ -7,7 +7,7 @@ AC_INIT([CCPathnames],[MMUX_PACKAGE_VERSION],
   [marco.maggi-ipsu@poste.it],
   [ccpathnames],[http://github.com/marcomaggi/ccpathnames])
 MMUX_INIT
-MMUX_LIBTOOL_LIBRARY_VERSIONS([cctemplate],2,0,0)
+MMUX_LIBTOOL_LIBRARY_VERSIONS([ccpathnames],2,0,0)
 AC_REVISION([0.1])
 AC_COPYRIGHT([Copyright (c) 2018, 2019 Marco Maggi <marco.maggi-ipsu@poste.it>
 
