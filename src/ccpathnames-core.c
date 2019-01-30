@@ -170,6 +170,23 @@ ccname_init(ccptn_t, pointer, dup) (cce_destination_t L, ccmem_allocator_t const
   ccname_init(ccptn_t, ascii)(L, A, P, ccmem_new_ascii_from_str((char *)input_rep));
 }
 
+/* ------------------------------------------------------------------ */
+
+void
+ccname_init(ccptn_t, deserialisable) (cce_destination_t L CCPTN_UNUSED, ccmem_allocator_t const * A, ccptn_t * P)
+/* Initialise an already allocated  instance which is meant to be  used as target for
+   deserialisation from an instance of "ccstructs_deserialiser_I". */
+{
+  P->allocator				= A;
+  P->dynamically_allocated_base		= 0;
+  P->dynamically_allocated_buffer	= 0;
+  P->absolute				= 0;
+  P->normalised				= 0;
+  P->realpath				= 0;
+  P->len				= 0;
+  P->ptr				= NULL;
+}
+
 
 /** --------------------------------------------------------------------
  ** Constructor functions for standalone instances.
@@ -258,6 +275,26 @@ ccname_new(ccptn_t, pointer, dup) (cce_destination_t L, ccmem_allocator_t const 
 {
   /* The constructor for the ASCII block duplicates the input. */
   return ccname_new(ccptn_t, ascii)(L, A, ccmem_new_ascii_from_str((char *)input_rep));
+}
+
+/* ------------------------------------------------------------------ */
+
+ccptn_t *
+ccname_new(ccptn_t, deserialisable) (cce_destination_t L, ccmem_allocator_t const * A)
+/* Build  a  newly allocated  instance  which  is meant  to  be  used as  target  for
+   deserialisation from an instance of "ccstructs_deserialiser_I". */
+{
+  ccptn_t *	P = ccmem_malloc(L, A, sizeof(ccptn_t));
+
+  P->allocator				= A;
+  P->dynamically_allocated_base		= 1;
+  P->dynamically_allocated_buffer	= 0;
+  P->absolute				= 0;
+  P->normalised				= 0;
+  P->realpath				= 0;
+  P->len				= 0;
+  P->ptr				= NULL;
+  return P;
 }
 
 
@@ -368,7 +405,7 @@ ccname_iface_method(ccstructs_serialiser_I, ccptn_t, required_size) (ccstructs_s
 
 ccmem_block_t
 ccname_iface_method(ccstructs_serialiser_I, ccptn_t,
-		    write) (cce_destination_t L, ccstructs_serialiser_I I, ccmem_block_t B)
+		    write) (cce_destination_t L CCPTN_UNUSED, ccstructs_serialiser_I I, ccmem_block_t B)
 /* Interface method implementation.  Serialise an instance of "ccptn_t" in the memory
    block "B". */
 {
@@ -377,13 +414,9 @@ ccname_iface_method(ccstructs_serialiser_I, ccptn_t,
     .ptr	= B.ptr + (1 + ccptn_len(P)),
     .len	= B.len - (1 + ccptn_len(P))
   };
-  int		rv;
 
-  errno = 0;
-  rv = fwrite(P->ptr, sizeof(char), (1 + ccptn_len(P)), stderr);
-  if (-1 == rv) {
-    cce_raise(L, cce_condition_new_errno_clear());
-  }
+  if (0) { fprintf(stderr, "%s: writing %lu bytes\n", __func__, (1 + ccptn_len(P))); }
+  memcpy(B.ptr, ccptn_ptr(P), (1 + ccptn_len(P)));
   return N;
 }
 
@@ -439,6 +472,7 @@ ccname_iface_method(ccstructs_deserialiser_I, ccptn_t,
     .len	= len
   };
 
+  if (0) { fprintf(stderr, "%s: len=%lu\n", __func__, len); }
   ccname_init(ccptn_t, ascii)(L, P->allocator, P, P_block);
   return N;
 }
@@ -554,6 +588,27 @@ ccname_init(ccptn_t, ascii, error) (cce_destination_t L, ccmem_allocator_t const
 
 
 /** --------------------------------------------------------------------
+ ** Pathnames guarded constructors: embedded instances, deserialisable.
+ ** ----------------------------------------------------------------- */
+
+void
+ccname_init(ccptn_t, deserialisable, clean) (cce_destination_t L, ccmem_allocator_t const * A,
+					     ccptn_clean_handler_t * H, ccptn_t * P)
+{
+  ccname_init(ccptn_t, deserialisable)(L, A, P);
+  ccptn_init_handler(L, H, P);
+}
+
+void
+ccname_init(ccptn_t, deserialisable, error) (cce_destination_t L, ccmem_allocator_t const * A,
+					     ccptn_error_handler_t * H, ccptn_t * P)
+{
+  ccname_init(ccptn_t, deserialisable)(L, A, P);
+  ccptn_init_handler(L, H, P);
+}
+
+
+/** --------------------------------------------------------------------
 n ** Pathnames guarded constructors: standalone instances, pointer input.
  ** ----------------------------------------------------------------- */
 
@@ -657,6 +712,27 @@ ccname_new(ccptn_t, ascii, error) (cce_destination_t L, ccmem_allocator_t const 
 				   ccptn_error_handler_t * H, ccmem_ascii_t input_rep)
 {
   ccptn_t const *	P = ccname_new(ccptn_t, ascii)(L, A, input_rep);
+  ccptn_init_handler(L, H, P);
+  return P;
+}
+
+
+/** --------------------------------------------------------------------
+ ** Pathnames guarded constructors: standalone instances, deserialisable.
+ ** ----------------------------------------------------------------- */
+
+ccptn_t *
+ccname_new(ccptn_t, deserialisable, clean) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H)
+{
+  ccptn_t *	P = ccname_new(ccptn_t, deserialisable)(L, A);
+  ccptn_init_handler(L, H, P);
+  return P;
+}
+
+ccptn_t *
+ccname_new(ccptn_t, deserialisable, error) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H)
+{
+  ccptn_t *	P = ccname_new(ccptn_t, deserialisable)(L, A);
   ccptn_init_handler(L, H, P);
   return P;
 }
