@@ -21,8 +21,8 @@ WITHOUT   ANY   WARRANTY;  without   even   the   implied  warranty   of
 MERCHANTABILITY  or  FITNESS FOR  A  PARTICULAR  PURPOSE.  See  the  GNU
 General Public License for more details.
 
-You should have received a copy  of the GNU General Public License along
-with this program.  If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU Lesser General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ])
 AC_CONFIG_SRCDIR([src/])
 AC_CONFIG_MACRO_DIR([meta/autotools])
@@ -43,20 +43,10 @@ LT_PREREQ([2.4])
 LT_INIT
 
 
-#### libraries interface version
-
-MMUX_LIBTOOL_LIBRARY_VERSIONS([ccpathnames],2,0,0)
-
-dnl This is the version stored in the pkg-config data file.
-AC_SUBST([CCPATHNAME_PKG_CONFIG_VERSION],[0.2])
-
-AS_VAR_SET([SLACKSTUFF_PACKAGE_VERSION],[0.2d0.0])
-AC_SUBST([SLACKSTUFF_PACKAGE_VERSION])
-
-
 #### basic system inspection
 
 MMUX_CHECK_TARGET_OS
+AX_IS_RELEASE([git-directory])
 
 AC_LANG([C])
 MMUX_LANG_C11

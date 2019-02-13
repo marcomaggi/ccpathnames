@@ -5,7 +5,8 @@ AUTOMAKE_OPTIONS	= foreign
 EXTRA_DIST		= INSTALL			\
 			  meta/slackware/slack-desc.in
 dist_doc_DATA		= README COPYING
-AM_CFLAGS		= $(MMUX_CFLAGS) -I$(srcdir)/src
+AM_CFLAGS		= $(MMUX_CFLAGS)
+AM_CPPFLAGS		= -I$(srcdir)/src
 
 ## --------------------------------------------------------------------
 
@@ -36,7 +37,7 @@ ccpathnames_AGE			= @ccpathnames_VERSION_INTERFACE_AGE@
 include_HEADERS			= src/ccpathnames.h
 
 lib_LTLIBRARIES			= libccpathnames.la
-libccpathnames_la_CPPFLAGS	= $(CCEXCEPTIONS_CFLAGS) $(CCMEMORY_CFLAGS) $(CCSTRUCTS_CFLAGS)
+libccpathnames_la_CFLAGS	= $(AM_CFLAGS) $(CCEXCEPTIONS_CFLAGS) $(CCMEMORY_CFLAGS) $(CCSTRUCTS_CFLAGS)
 libccpathnames_la_LDFLAGS	= -version-info $(ccpathnames_CURRENT):$(ccpathnames_REVISION):$(ccpathnames_AGE) \
 				  $(CCEXCEPTIONS_LIBS) $(CCMEMORY_LIBS) $(CCSTRUCTS_LIBS)
 libccpathnames_la_SOURCES	= \
