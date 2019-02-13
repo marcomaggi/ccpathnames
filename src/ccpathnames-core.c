@@ -510,7 +510,20 @@ ccname_iface_method(ccstructs_deserialiser_I, ccptn_t,
   };
 
   if (0) { fprintf(stderr, "%s: len=%lu\n", __func__, len); }
-  ccname_init(ccptn_t, ascii)(L, P->allocator, P, P_block);
+
+  if (CCPTN_PATH_MAX < P_block.len) {
+    cce_raise(L, ccptn_condition_new_exceeded_length());
+  } else if (0 < P_block.len) {
+    scan_for_non_terminating_zeros(L, P_block.ptr, P_block.len);
+    P->len				= P_block.len;
+    P->dynamically_allocated_buffer	= 1;
+    P->absolute				= ('/' == P_block.ptr[0])? 1 : 0;
+    P->ptr				= ccmem_malloc(L, P->allocator, 1+P_block.len);
+    memcpy((void *)(P->ptr), P_block.ptr, P_block.len);
+    ((char *)(P->ptr))[P_block.len] = '\0';
+  } else {
+    cce_raise(L, ccptn_condition_new_zero_length());
+  }
   return N;
 }
 
