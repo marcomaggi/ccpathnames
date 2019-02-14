@@ -61,40 +61,54 @@ check_PROGRAMS	= \
 	tests/components		\
 	tests/iface-destructor		\
 	tests/iface-dumpable		\
-	tests/iface-serialisation
+	tests/iface-serialisation	\
+	tests/iface-pathname
 
 if MMUX_TESTING_ENABLED
 TESTS				= $(check_PROGRAMS)
 endif
 
-ccpathnames_tests_cppflags	= -I$(srcdir)/src $(CCEXCEPTIONS_CFLAGS) $(CCMEMORY_CFLAGS) $(CCSTRUCTS_CFLAGS) $(CCTESTS_CFLAGS)
-ccpathnames_tests_ldadd		= libccpathnames.la $(CCEXCEPTIONS_LIBS) $(CCMEMORY_LIBS) $(CCSTRUCTS_LIBS) $(CCTESTS_LIBS)
+ccpathnames_tests_cppflags	= $(AM_CPPFLAGS)
+ccpathnames_tests_cflags	= $(AM_CFLAGS)      $(CCEXCEPTIONS_CFLAGS) $(CCMEMORY_CFLAGS) $(CCSTRUCTS_CFLAGS) $(CCTESTS_CFLAGS)
+ccpathnames_tests_ldadd		= libccpathnames.la $(CCEXCEPTIONS_LIBS)   $(CCMEMORY_LIBS)   $(CCSTRUCTS_LIBS)   $(CCTESTS_LIBS)
 
 ## --------------------------------------------------------------------
 
 tests_version_CPPFLAGS			= $(ccpathnames_tests_cppflags)
+tests_version_CFLAGS			= $(ccpathnames_tests_cflags)
 tests_version_LDADD			= $(ccpathnames_tests_ldadd)
 
 tests_conditions_CPPFLAGS		= $(ccpathnames_tests_cppflags)
+tests_conditions_CFLAGS			= $(ccpathnames_tests_cflags)
 tests_conditions_LDADD			= $(ccpathnames_tests_ldadd)
 
 tests_core_CPPFLAGS			= $(ccpathnames_tests_cppflags)
+tests_core_CFLAGS			= $(ccpathnames_tests_cflags)
 tests_core_LDADD			= $(ccpathnames_tests_ldadd)
 
 tests_manipulations_CPPFLAGS		= $(ccpathnames_tests_cppflags)
+tests_manipulations_CFLAGS		= $(ccpathnames_tests_cflags)
 tests_manipulations_LDADD		= $(ccpathnames_tests_ldadd)
 
 tests_components_CPPFLAGS		= $(ccpathnames_tests_cppflags)
+tests_components_CFLAGS			= $(ccpathnames_tests_cflags)
 tests_components_LDADD			= $(ccpathnames_tests_ldadd)
 
 tests_iface_destructor_CPPFLAGS		= $(ccpathnames_tests_cppflags)
+tests_iface_destructor_CFLAGS		= $(ccpathnames_tests_cflags)
 tests_iface_destructor_LDADD		= $(ccpathnames_tests_ldadd)
 
 tests_iface_dumpable_CPPFLAGS		= $(ccpathnames_tests_cppflags)
+tests_iface_dumpable_CFLAGS		= $(ccpathnames_tests_cflags)
 tests_iface_dumpable_LDADD		= $(ccpathnames_tests_ldadd)
 
 tests_iface_serialisation_CPPFLAGS	= $(ccpathnames_tests_cppflags)
+tests_iface_serialisation_CFLAGS	= $(ccpathnames_tests_cflags)
 tests_iface_serialisation_LDADD		= $(ccpathnames_tests_ldadd)
+
+tests_iface_pathname_CPPFLAGS		= $(ccpathnames_tests_cppflags)
+tests_iface_pathname_CFLAGS		= $(ccpathnames_tests_cflags)
+tests_iface_pathname_LDADD		= $(ccpathnames_tests_ldadd)
 
 ## --------------------------------------------------------------------
 

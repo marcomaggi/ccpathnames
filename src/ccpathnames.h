@@ -662,6 +662,9 @@ ccptn_decl ccstructs_serialiser_I ccname_iface_new(ccstructs_serialiser_I, ccptn
 ccptn_decl ccstructs_deserialiser_I ccname_iface_new(ccstructs_deserialiser_I, ccptn_t) (ccptn_t * self)
   __attribute__((__nonnull__(1)));
 
+ccptn_decl ccstructs_pathname_I ccname_iface_new(ccstructs_pathname_I, ccptn_t) (ccptn_t const * self)
+  __attribute__((__nonnull__(1)));
+
 
 /** --------------------------------------------------------------------
  ** Pathnames: exception handlers.

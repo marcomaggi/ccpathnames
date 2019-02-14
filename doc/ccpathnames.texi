@@ -3061,11 +3061,58 @@ The type @objtype{ccptn_t}  implements some interfaces defined by the package CC
 
 
 @menu
+* ifaces pathname::             The @iface{pathname} interface.
 * ifaces destructor::           The @iface{destructor} interface.
 * ifaces dumpable::             The @iface{dumpable} interface.
 * ifaces serialiser::           The @iface{serialiser} interface.
 * ifaces deserialiser::         The @iface{deserialiser} interface.
 @end menu
+
+@c page
+@node ifaces pathname
+@section The @iface{pathname} interface
+
+
+The @iface{pathname} interface offers a common @api{} for the manipulation of @struct{} types
+implementing file system pathname representations; @ccstructsref{pathname, The @iface{pathname}
+interface}.
+
+
+@deftypefun ccstructs_pathname_I ccname_iface_new(ccstructs_pathname_I, ccptn_t) (ccptn_t const * @var{P})
+Build and return an instance of @iface{pathname} interface operating on instances of
+@objtype{ccptn_t}.
+@end deftypefun
+
+
+Code sample:
+
+@smallexample
+cce_location_t                L[1];
+ccstructs_clean_handler_t     H[1];
+
+if (cce_location(L)) @{
+  cce_run_catch_handlers_final(L);
+@} else @{
+  static char const     *input = "/path/to/file.ext";
+  ccptn_t const         *P;
+  ccstructs_pathname_I  IPTN;
+  ccstructs_dtor_I      IDTOR;
+
+  P     = ccname_new(ccptn_t, pointer)(L, A, input);
+  IPTN  = ccname_iface_new(ccstructs_pathname_I, ccptn_t)(P);
+  IDTOR = ccname_iface_new(ccstructs_dtor_I, ccstructs_pathname_I)(IPTN);
+  ccstructs_handler_init(L, H, IDTOR);
+
+  @{
+    ccstructs_dumpable_I  IDUMP =
+      ccname_iface_new(ccstructs_dumpable_I, ccstructs_pathname_I)(L, IPTN);
+
+    ccstructs_dumpable_dump(L, IDUMP);
+    fprintf(stderr, "\n");
+  @}
+  cce_run_body_handlers(L);
+@}
+@end smallexample
 
 @c page
 @node ifaces destructor

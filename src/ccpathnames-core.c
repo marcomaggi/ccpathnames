@@ -529,6 +529,115 @@ ccname_iface_method(ccstructs_deserialiser_I, ccptn_t,
 
 
 /** --------------------------------------------------------------------
+ ** Interface "ccstructs_pathname_I": implementation for "ccptn_t".
+ ** ----------------------------------------------------------------- */
+
+static ccname_iface_method_type(ccstructs_pathname_I, asciiz)        ccname_iface_method(ccstructs_pathname_I, ccptn_t, asciiz);
+static ccname_iface_method_type(ccstructs_pathname_I, is_static)     ccname_iface_method(ccstructs_pathname_I, ccptn_t, is_static);
+static ccname_iface_method_type(ccstructs_pathname_I, is_absolute)   ccname_iface_method(ccstructs_pathname_I, ccptn_t, is_absolute);
+static ccname_iface_method_type(ccstructs_pathname_I, is_relative)   ccname_iface_method(ccstructs_pathname_I, ccptn_t, is_relative);
+static ccname_iface_method_type(ccstructs_pathname_I, is_normalised) ccname_iface_method(ccstructs_pathname_I, ccptn_t, is_normalised);
+static ccname_iface_method_type(ccstructs_pathname_I, is_realpath)   ccname_iface_method(ccstructs_pathname_I, ccptn_t, is_realpath);
+
+static ccname_iface_method_type(ccstructs_pathname_I, dtor)         ccname_iface_method(ccstructs_pathname_I, ccptn_t, dtor);
+static ccname_iface_method_type(ccstructs_pathname_I, dumpable)     ccname_iface_method(ccstructs_pathname_I, ccptn_t, dumpable);
+static ccname_iface_method_type(ccstructs_pathname_I, serialiser)   ccname_iface_method(ccstructs_pathname_I, ccptn_t, serialiser);
+static ccname_iface_method_type(ccstructs_pathname_I, deserialiser) ccname_iface_method(ccstructs_pathname_I, ccptn_t, deserialiser);
+
+/* Table  of methods  for  interface.  Implementation  of "ccstructs_pathname_I"  for
+   "ccptn_t". */
+static ccname_iface_table_type(ccstructs_pathname_I) const ccname_iface_table(ccstructs_pathname_I, ccptn_t) = {
+  .asciiz	= ccname_iface_method(ccstructs_pathname_I, ccptn_t, asciiz),
+  .is_static	= ccname_iface_method(ccstructs_pathname_I, ccptn_t, is_static),
+  .is_absolute	= ccname_iface_method(ccstructs_pathname_I, ccptn_t, is_absolute),
+  .is_relative	= ccname_iface_method(ccstructs_pathname_I, ccptn_t, is_relative),
+  .is_normalised= ccname_iface_method(ccstructs_pathname_I, ccptn_t, is_normalised),
+  .is_realpath	= ccname_iface_method(ccstructs_pathname_I, ccptn_t, is_realpath),
+  .dtor		= ccname_iface_method(ccstructs_pathname_I, ccptn_t, dtor),
+  .dumpable	= ccname_iface_method(ccstructs_pathname_I, ccptn_t, dumpable),
+  .serialiser	= ccname_iface_method(ccstructs_pathname_I, ccptn_t, serialiser),
+  .deserialiser	= ccname_iface_method(ccstructs_pathname_I, ccptn_t, deserialiser)
+};
+
+ccstructs_pathname_I
+ccname_iface_new(ccstructs_pathname_I, ccptn_t) (ccptn_t const * self)
+{
+  return ccname_new(ccstructs_pathname_I)(ccstructs_core(self), &ccname_iface_table(ccstructs_pathname_I, ccptn_t));
+}
+
+/* ------------------------------------------------------------------ */
+
+static ccmem_asciiz_t
+ccname_iface_method(ccstructs_pathname_I, ccptn_t, asciiz) (cce_destination_t L CCPTN_UNUSED, ccstructs_pathname_I I)
+{
+  CCPTN_PC(ccptn_t const, P, ccstructs_pathname_self(I));
+  return ccptn_asciiz(P);
+}
+
+static bool
+ccname_iface_method(ccstructs_pathname_I, ccptn_t, is_static) (ccstructs_pathname_I I CCPTN_UNUSED)
+{
+  return false;
+}
+
+static bool
+ccname_iface_method(ccstructs_pathname_I, ccptn_t, is_absolute)   (cce_destination_t L CCPTN_UNUSED, ccstructs_pathname_I I)
+{
+  CCPTN_PC(ccptn_t const, P, ccstructs_pathname_self(I));
+  return ccptn_is_absolute(P);
+}
+
+static bool
+ccname_iface_method(ccstructs_pathname_I, ccptn_t, is_relative) (cce_destination_t L CCPTN_UNUSED, ccstructs_pathname_I I)
+{
+  CCPTN_PC(ccptn_t const, P, ccstructs_pathname_self(I));
+  return ccptn_is_relative(P);
+}
+
+static bool
+ccname_iface_method(ccstructs_pathname_I, ccptn_t, is_normalised) (cce_destination_t L CCPTN_UNUSED, ccstructs_pathname_I I)
+{
+  CCPTN_PC(ccptn_t const, P, ccstructs_pathname_self(I));
+  return ccptn_is_normalised(P);
+}
+
+static bool
+ccname_iface_method(ccstructs_pathname_I, ccptn_t, is_realpath) (cce_destination_t L CCPTN_UNUSED, ccstructs_pathname_I I)
+{
+  CCPTN_PC(ccptn_t const, P, ccstructs_pathname_self(I));
+  return ccptn_is_realpath(P);
+}
+
+static ccstructs_dtor_I
+ccname_iface_method(ccstructs_pathname_I, ccptn_t, dtor) (ccstructs_pathname_I I)
+{
+  CCPTN_PC(ccptn_t const, P, ccstructs_pathname_self(I));
+  return ccname_iface_new(ccstructs_dtor_I, ccptn_t)(P);
+}
+
+static ccstructs_dumpable_I
+ccname_iface_method(ccstructs_pathname_I, ccptn_t, dumpable) (cce_destination_t L CCPTN_UNUSED, ccstructs_pathname_I I)
+{
+  CCPTN_PC(ccptn_t const, P, ccstructs_pathname_self(I));
+  return ccname_iface_new(ccstructs_dumpable_I, ccptn_t)(P);
+}
+
+static ccstructs_serialiser_I
+ccname_iface_method(ccstructs_pathname_I, ccptn_t, serialiser) (cce_destination_t L CCPTN_UNUSED, ccstructs_pathname_I I)
+{
+  CCPTN_PC(ccptn_t const, P, ccstructs_pathname_self(I));
+  return ccname_iface_new(ccstructs_serialiser_I, ccptn_t)(P);
+}
+
+static ccstructs_deserialiser_I
+ccname_iface_method(ccstructs_pathname_I, ccptn_t, deserialiser) (cce_destination_t L CCPTN_UNUSED, ccstructs_pathname_I I)
+{
+  CCPTN_PC(ccptn_t, P, ccstructs_pathname_self(I));
+  return ccname_iface_new(ccstructs_deserialiser_I, ccptn_t)(P);
+}
+
+
+/** --------------------------------------------------------------------
  ** Pathnames guarded constructors: embedded instances, pointer input.
  ** ----------------------------------------------------------------- */
 
