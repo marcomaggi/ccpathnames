@@ -10,8 +10,6 @@ AM_CPPFLAGS		= -I$(srcdir)/src
 
 ## --------------------------------------------------------------------
 
-EXTRA_DIST		+= meta/scripts/ccpathnames.pc.in
-pkgconfigdir		= $(libdir)/pkgconfig
 nodist_pkgconfig_DATA	= meta/scripts/ccpathnames.pc
 
 
@@ -69,8 +67,8 @@ TESTS				= $(check_PROGRAMS)
 endif
 
 ccpathnames_tests_cppflags	= $(AM_CPPFLAGS)
-ccpathnames_tests_cflags	= $(AM_CFLAGS)      $(CCEXCEPTIONS_CFLAGS) $(CCMEMORY_CFLAGS) $(CCSTRUCTS_CFLAGS) $(CCTESTS_CFLAGS)
-ccpathnames_tests_ldadd		= libccpathnames.la $(CCEXCEPTIONS_LIBS)   $(CCMEMORY_LIBS)   $(CCSTRUCTS_LIBS)   $(CCTESTS_LIBS)
+ccpathnames_tests_cflags	= $(AM_CFLAGS) $(CCEXCEPTIONS_CFLAGS) $(CCMEMORY_CFLAGS) $(CCSTRUCTS_CFLAGS) $(CCTESTS_CFLAGS)
+ccpathnames_tests_ldadd		= libccpathnames.la $(CCTESTS_LIBS)
 
 ## --------------------------------------------------------------------
 

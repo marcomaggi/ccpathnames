@@ -18,7 +18,7 @@ your option) any later version.
 
 This program  is distributed  in the  hope that it  will be  useful, but
 WITHOUT   ANY   WARRANTY;  without   even   the   implied  warranty   of
-MERCHANTABILITY  or  FITNESS FOR  A  PARTICULAR  PURPOSE.  See  the  GNU
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser
 General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
@@ -72,6 +72,7 @@ AC_CACHE_SAVE
 #### external libraries
 
 MMUX_CHECK_PKG_CONFIG_MACROS
+PKG_INSTALLDIR
 PKG_CHECK_MODULES([CCEXCEPTIONS],[ccexceptions >= 0.8.0])
 PKG_CHECK_MODULES([CCMEMORY],[ccmemory >= 0.2.1])
 PKG_CHECK_MODULES([CCSTRUCTS],[ccstructs >= 0.2.0])
