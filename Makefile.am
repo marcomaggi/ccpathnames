@@ -35,14 +35,14 @@ doc_ccpathnames_TEXINFOS	= \
 ccpathnames_CURRENT		= @ccpathnames_VERSION_INTERFACE_CURRENT@
 ccpathnames_REVISION		= @ccpathnames_VERSION_INTERFACE_REVISION@
 ccpathnames_AGE			= @ccpathnames_VERSION_INTERFACE_AGE@
+ccpathnames_LINKER_VERSION	= -version-info $(ccpathnames_CURRENT):$(ccpathnames_REVISION):$(ccpathnames_AGE)
 
 include_HEADERS			= src/ccpathnames.h
 
 lib_LTLIBRARIES			= libccpathnames.la
 libccpathnames_la_CPPFLAGS	= $(AM_CPPFLAGS)
 libccpathnames_la_CFLAGS	= $(AM_CFLAGS) $(CCEXCEPTIONS_CFLAGS) $(CCMEMORY_CFLAGS) $(CCSTRUCTS_CFLAGS)
-libccpathnames_la_LDFLAGS	= -version-info $(ccpathnames_CURRENT):$(ccpathnames_REVISION):$(ccpathnames_AGE) \
-				  $(AM_LDFLAGS) $(CCEXCEPTIONS_LIBS) $(CCMEMORY_LIBS) $(CCSTRUCTS_LIBS)
+libccpathnames_la_LDFLAGS	= $(ccpathnames_LINKER_VERSION) $(AM_LDFLAGS) $(CCEXCEPTIONS_LIBS) $(CCMEMORY_LIBS) $(CCSTRUCTS_LIBS)
 libccpathnames_la_SOURCES	= \
 	src/ccpathnames.h			\
 	src/ccpathnames-internals.h		\
@@ -73,7 +73,7 @@ endif
 
 ccpathnames_tests_cppflags	= $(AM_CPPFLAGS)
 ccpathnames_tests_cflags	= $(AM_CFLAGS) $(CCEXCEPTIONS_CFLAGS) $(CCMEMORY_CFLAGS) $(CCSTRUCTS_CFLAGS) $(CCTESTS_CFLAGS)
-ccpathnames_tests_ldadd		= $(AM_LDFLAGS) libccpathnames.la $(CCTESTS_LIBS)
+ccpathnames_tests_ldadd		= $(AM_LDFLAGS) libccpathnames.la $(CCEXCEPTIONS_LIBS) $(CCMEMORY_LIBS) $(CCSTRUCTS_LIBS) $(CCTESTS_LIBS)
 
 ## --------------------------------------------------------------------
 
