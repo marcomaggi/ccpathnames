@@ -760,7 +760,7 @@ ccname_init(ccptn_t, realpath, clean) (cce_destination_t L, ccmem_allocator_t co
 				       ccptn_t * dst, ccptn_t const * src)
 {
   ccname_init(ccptn_t, realpath)(L, A, dst, src);
-  ccptn_init_handler(L, H, dst);
+  ccptn_init_and_register_handler(L, H, dst);
 }
 
 void
@@ -768,7 +768,7 @@ ccname_init(ccptn_t, realpath, error) (cce_destination_t L, ccmem_allocator_t co
 				       ccptn_t * dst, ccptn_t const * src)
 {
   ccname_init(ccptn_t, realpath)(L, A, dst, src);
-  ccptn_init_handler(L, H, dst);
+  ccptn_init_and_register_handler(L, H, dst);
 }
 
 /* ------------------------------------------------------------------ */
@@ -778,7 +778,7 @@ ccname_new(ccptn_t, realpath, clean) (cce_destination_t L, ccmem_allocator_t con
 				      ccptn_t const * src)
 {
   ccptn_t const *	dst = ccname_new(ccptn_t, realpath)(L, A, src);
-  ccptn_init_handler(L, H, dst);
+  ccptn_init_and_register_handler(L, H, dst);
   return dst;
 }
 
@@ -787,7 +787,7 @@ ccname_new(ccptn_t, realpath, error) (cce_destination_t L, ccmem_allocator_t con
 				      ccptn_t const * src)
 {
   ccptn_t const *	dst = ccname_new(ccptn_t, realpath)(L, A, src);
-  ccptn_init_handler(L, H, dst);
+  ccptn_init_and_register_handler(L, H, dst);
   return dst;
 }
 
@@ -798,7 +798,7 @@ ccname_init(ccptn_t, normalise, clean) (cce_destination_t L, ccmem_allocator_t c
 					ccptn_t * dst, ccptn_t const * src)
 {
   ccname_init(ccptn_t, normalise)(L, A, dst, src);
-  ccptn_init_handler(L, H, dst);
+  ccptn_init_and_register_handler(L, H, dst);
 }
 
 void
@@ -806,7 +806,7 @@ ccname_init(ccptn_t, normalise, error) (cce_destination_t L, ccmem_allocator_t c
 					ccptn_t * dst, ccptn_t const * src)
 {
   ccname_init(ccptn_t, normalise)(L, A, dst, src);
-  ccptn_init_handler(L, H, dst);
+  ccptn_init_and_register_handler(L, H, dst);
 }
 
 /* ------------------------------------------------------------------ */
@@ -816,7 +816,7 @@ ccname_new(ccptn_t, normalise, clean) (cce_destination_t L, ccmem_allocator_t co
 				       ccptn_t const * src)
 {
   ccptn_t const *	dst = ccname_new(ccptn_t, normalise)(L, A, src);
-  ccptn_init_handler(L, H, dst);
+  ccptn_init_and_register_handler(L, H, dst);
   return dst;
 }
 
@@ -825,7 +825,7 @@ ccname_new(ccptn_t, normalise, error) (cce_destination_t L, ccmem_allocator_t co
 				       ccptn_t const * src)
 {
   ccptn_t const *	dst = ccname_new(ccptn_t, normalise)(L, A, src);
-  ccptn_init_handler(L, H, dst);
+  ccptn_init_and_register_handler(L, H, dst);
   return dst;
 }
 
@@ -836,7 +836,7 @@ ccname_init(ccptn_t, concat, clean) (cce_destination_t L, ccmem_allocator_t cons
 				     ccptn_t * dst, ccptn_t const * prefix, ccptn_t const * suffix)
 {
   ccname_init(ccptn_t, concat)(L, A, dst, prefix, suffix);
-  ccptn_init_handler(L, H, dst);
+  ccptn_init_and_register_handler(L, H, dst);
 }
 
 void
@@ -844,7 +844,7 @@ ccname_init(ccptn_t, concat, error) (cce_destination_t L, ccmem_allocator_t cons
 				     ccptn_t * dst, ccptn_t const * prefix, ccptn_t const * suffix)
 {
   ccname_init(ccptn_t, concat)(L, A, dst, prefix, suffix);
-  ccptn_init_handler(L, H, dst);
+  ccptn_init_and_register_handler(L, H, dst);
 }
 
 /* ------------------------------------------------------------------ */
@@ -854,7 +854,7 @@ ccname_new(ccptn_t, concat, clean) (cce_destination_t L, ccmem_allocator_t const
 				    ccptn_t const * prefix, ccptn_t const * suffix)
 {
   ccptn_t const *	dst = ccname_new(ccptn_t, concat)(L, A, prefix, suffix);
-  ccptn_init_handler(L, H, dst);
+  ccptn_init_and_register_handler(L, H, dst);
   return dst;
 }
 
@@ -863,7 +863,7 @@ ccname_new(ccptn_t, concat, error) (cce_destination_t L, ccmem_allocator_t const
 				    ccptn_t const * prefix, ccptn_t const * suffix)
 {
   ccptn_t const *	dst = ccname_new(ccptn_t, concat)(L, A, prefix, suffix);
-  ccptn_init_handler(L, H, dst);
+  ccptn_init_and_register_handler(L, H, dst);
   return dst;
 }
 

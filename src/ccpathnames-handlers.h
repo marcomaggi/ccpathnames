@@ -64,24 +64,16 @@ ccptn_handler_error_handler (ccptn_error_handler_t * H)
 
 /* ------------------------------------------------------------------ */
 
-__attribute__((__nonnull__(1,2,3),__always_inline__))
-static inline void
-ccptn_init_clean_handler (cce_destination_t L, ccptn_clean_handler_t * H, ccptn_t const * P)
-{
-  ccstructs_init_and_register_handler(L, ccptn_handler_handler(H), ccname_trait_new(ccstructs_dtor_T, ccptn_t)(P));
-}
+ccptn_decl void ccptn_init_and_register_clean_handler (cce_destination_t L, ccptn_clean_handler_t * H, ccptn_t const * P)
+  __attribute__((__nonnull__(1,2,3)));
 
-__attribute__((__nonnull__(1,2,3),__always_inline__))
-static inline void
-ccptn_init_error_handler (cce_destination_t L, ccptn_error_handler_t * H, ccptn_t const * P)
-{
-  ccstructs_init_and_register_handler(L, ccptn_handler_handler(H), ccname_trait_new(ccstructs_dtor_T, ccptn_t)(P));
-}
+ccptn_decl void ccptn_init_and_register_error_handler (cce_destination_t L, ccptn_error_handler_t * H, ccptn_t const * P)
+  __attribute__((__nonnull__(1,2,3)));
 
-#define ccptn_init_handler(L,H,P)					\
+#define ccptn_init_and_register_handler(L,H,P)				\
   _Generic((H),								\
-	   ccptn_clean_handler_t *: ccptn_init_clean_handler,		\
-	   ccptn_error_handler_t *: ccptn_init_error_handler)(L,H,P)
+	   ccptn_clean_handler_t *: ccptn_init_and_register_clean_handler, \
+	   ccptn_error_handler_t *: ccptn_init_and_register_error_handler)(L,H,P)
 
 
 /** --------------------------------------------------------------------

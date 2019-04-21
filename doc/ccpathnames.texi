@@ -826,7 +826,7 @@ use exception handlers to release @objtype{ccptn_t} instances upon exiting a loc
 @ccexceptionsref{handlers, The location handlers @api{}}.
 
 @value{PACKAGE} implements some ``guarded'' constructors that internally use the macro
-@cfunc{ccptn_init_handler} to appropriately register a pathname instance for destruction.
+@cfunc{ccptn_init_and_register_handler} to appropriately register a pathname instance for destruction.
 
 
 @deftp {Struct Typedef} ccptn_clean_handler_t
@@ -836,23 +836,23 @@ of the library CCExceptions.
 @end deftp
 
 
-@deftypefun void ccptn_init_clean_handler (cce_destination_t @var{L}, ccptn_clean_handler_t * @var{H}, ccptn_t * @var{P})
-@deftypefunx void ccptn_init_error_handler (cce_destination_t @var{L}, ccptn_error_handler_t * @var{H}, ccptn_t * @var{P})
+@deftypefun void ccptn_init_and_register_clean_handler (cce_destination_t @var{L}, ccptn_clean_handler_t * @var{H}, ccptn_t * @var{P})
+@deftypefunx void ccptn_init_and_register_error_handler (cce_destination_t @var{L}, ccptn_error_handler_t * @var{H}, ccptn_t * @var{P})
 Initialise the handler @var{H} to destroy the pathname @var{P} in the context of the location
 @var{L}.
 @end deftypefun
 
 
-@deftypefn {Preprocessor Macro} void ccptn_init_handler (cce_destination_t @var{L}, @var{H}, ccptn_t * @var{P})
+@deftypefn {Preprocessor Macro} void ccptn_init_and_register_handler (cce_destination_t @var{L}, @var{H}, ccptn_t * @var{P})
 Initialise the handler @var{H} to destroy the pathname @var{P} in the context of the location
 @var{L}.  The expansion of this macro depends upon the type of @var{H}, if the type is:
 
 @table @code
 @item ccptn_clean_handler_t *
-The macro expands into a call to @cfunc{ccptn_init_clean_handler}.
+The macro expands into a call to @cfunc{ccptn_init_and_register_clean_handler}.
 
 @item ccptn_error_handler_t *
-The macro expands into a call to @cfunc{ccptn_init_error_handler}.
+The macro expands into a call to @cfunc{ccptn_init_and_register_error_handler}.
 @end table
 @end deftypefn
 
@@ -913,7 +913,7 @@ if (cce_location(L)) @{
   ccptn_t       P[1];
 
   ccname_init(ccptn_t, pointer)(L, A, P, input);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
 
   cce_run_body_handlers(L);
 @}
@@ -936,7 +936,7 @@ if (cce_location(L)) @{
   ccptn_t       P[1];
 
   ccname_init(ccptn_t, pointer, dup)(L, A, P, input);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
 
   cce_run_body_handlers(L);
 @}
@@ -1017,7 +1017,7 @@ if (cce_location(L)) @{
   ccptn_t         P[1];
 
   ccname_init(ccptn_t, asciiz)(L, A, P, input);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
 
   cce_run_body_handlers(L);
 @}
@@ -1042,7 +1042,7 @@ if (cce_location(L)) @{
   ccptn_t       P[1];
 
   ccname_init(ccptn_t, asciiz, dup)(L, A, P, input);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
 
   cce_run_body_handlers(L);
 @}
@@ -1126,7 +1126,7 @@ if (cce_location(L)) @{
   ccptn_t         P[1];
 
   ccname_init(ccptn_t, ascii)(L, A, P, input);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
 
   cce_run_body_handlers(L);
 @}
@@ -1190,7 +1190,7 @@ if (cce_location(L)) @{
   ccptn_t  P[1];
 
   ccname_init(ccptn_t, deserialisable)(L, A, P);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
 
   cce_run_body_handlers(L);
 @}
@@ -1243,7 +1243,7 @@ if (cce_location(L)) @{
 
   ccname_init(ccptn_t, pointer, clean)(L, A, src_H, src, input);
   ccname_init(ccptn_t, clone)(L, A, dst, src);
-  ccptn_init_handler(L, dst_H, dst);
+  ccptn_init_and_register_handler(L, dst_H, dst);
 
   cce_run_body_handlers(L);
 @}
@@ -1321,7 +1321,7 @@ if (cce_location(L)) @{
   ccptn_t const *  P;
 
   P = ccname_new(ccptn_t, pointer)(L, A, input);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
 
   cce_run_body_handlers(L);
 @}
@@ -1344,7 +1344,7 @@ if (cce_location(L)) @{
   ccptn_t const *  P;
 
   P = ccname_new(ccptn_t, pointer, dup)(L, A, input);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
 
   cce_run_body_handlers(L);
 @}
@@ -1425,7 +1425,7 @@ if (cce_location(L)) @{
   ccptn_t const * P;
 
   P = ccname_new(ccptn_t, asciiz)(L, A, input);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
 
   cce_run_body_handlers(L);
 @}
@@ -1450,7 +1450,7 @@ if (cce_location(L)) @{
   ccptn_t const * P;
 
   P = ccname_new(ccptn_t, asciiz, dup)(L, A, input);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
 
   cce_run_body_handlers(L);
 @}
@@ -1534,7 +1534,7 @@ if (cce_location(L)) @{
   ccptn_t const * P;
 
   P = ccname_new(ccptn_t, ascii)(L, A, input);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
 
   cce_run_body_handlers(L);
 @}
@@ -1598,7 +1598,7 @@ if (cce_location(L)) @{
   ccptn_t const  *P;
 
   P = ccname_new(ccptn_t, deserialisable)(L, A);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
 
   cce_run_body_handlers(L);
 @}
@@ -1651,7 +1651,7 @@ if (cce_location(L)) @{
 
   src = ccname_new(ccptn_t, pointer, clean)(L, A, src_H, input);
   dst = ccname_new(ccptn_t, clone)(L, A, src);
-  ccptn_init_handler(L, dst_H, dst);
+  ccptn_init_and_register_handler(L, dst_H, dst);
 
   cce_run_body_handlers(L);
 @}
@@ -1803,7 +1803,7 @@ if (cce_location(L)) @{
 
   ccname_init(ccptn_t, pointer, clean)(L, A, P_H, P, input);
   ccname_init(ccptn_t, realpath)(L, A, R, P);
-  ccptn_init_handler(L, R_H, R);
+  ccptn_init_and_register_handler(L, R_H, R);
 
   cce_run_body_handlers(L);
 @}
@@ -1865,7 +1865,7 @@ if (cce_location(L)) @{
 
   P = ccname_new(ccptn_t, pointer, clean)(L, A, P_H, input);
   Q = ccname_new(ccptn_t, realpath)(L, A, P);
-  ccptn_init_handler(L, Q_H, Q);
+  ccptn_init_and_register_handler(L, Q_H, Q);
 
   cce_run_body_handlers(L);
 @}
@@ -1982,7 +1982,7 @@ if (cce_location(L)) @{
 
   ccname_init(ccptn_t, pointer, clean)(L, A, P_H, P, input);
   ccname_init(ccptn_t, normalise)(L, A, R, P);
-  ccptn_init_handler(L, R_H, R);
+  ccptn_init_and_register_handler(L, R_H, R);
 
   cce_run_body_handlers(L);
 @}
@@ -2044,7 +2044,7 @@ if (cce_location(L)) @{
 
   P = ccname_new(ccptn_t, pointer, clean)(L, A, P_H, input);
   Q = ccname_new(ccptn_t, normalise)(L, A, P);
-  ccptn_init_handler(L, Q_H, Q);
+  ccptn_init_and_register_handler(L, Q_H, Q);
 
   cce_run_body_handlers(L);
 @}
@@ -2119,7 +2119,7 @@ if (cce_location(L)) @{
   ccname_init(ccptn_t, pointer, clean)(L, A, P_H, P, input_prefix);
   ccname_init(ccptn_t, pointer, clean)(L, A, S_H, S, input_suffix);
   ccname_init(ccptn_t, concat)(L, A, R, P, S);
-  ccptn_init_handler(L, R_H, R);
+  ccptn_init_and_register_handler(L, R_H, R);
 
   cce_run_body_handlers(L);
 @}
@@ -2368,7 +2368,7 @@ if (cce_location(L)) @{
 
   ccname_init(ccptn_t, pointer, clean)(L, A, P_H, P, input);
   ccname_init(ccptn_t, rootname)(L, A, R, P);
-  ccptn_init_handler(L, R_H, R);
+  ccptn_init_and_register_handler(L, R_H, R);
 
   cce_run_body_handlers(L);
 @}
@@ -2428,7 +2428,7 @@ if (cce_location(L)) @{
 
   P = ccname_new(ccptn_t, pointer, clean)(L, A, P_H, input);
   Q = ccname_new(ccptn_t, rootname)(L, A, P);
-  ccptn_init_handler(L, Q_H, Q);
+  ccptn_init_and_register_handler(L, Q_H, Q);
 
   cce_run_body_handlers(L);
 @}
@@ -2520,7 +2520,7 @@ if (cce_location(L)) @{
 
   ccname_init(ccptn_t, pointer, clean)(L, A, P_H, P, input);
   ccname_init(ccptn_t, dirname)(L, A, R, P);
-  ccptn_init_handler(L, R_H, R);
+  ccptn_init_and_register_handler(L, R_H, R);
 
   cce_run_body_handlers(L);
 @}
@@ -2580,7 +2580,7 @@ if (cce_location(L)) @{
 
   P = ccname_new(ccptn_t, pointer, clean)(L, A, P_H, input);
   Q = ccname_new(ccptn_t, dirname)(L, A, P);
-  ccptn_init_handler(L, Q_H, Q);
+  ccptn_init_and_register_handler(L, Q_H, Q);
 
   cce_run_body_handlers(L);
 @}
@@ -2674,7 +2674,7 @@ if (cce_location(L)) @{
 
   ccname_init(ccptn_t, pointer, clean)(L, A, P_H, P, input);
   ccname_init(ccptn_t, tailname)(L, A, R, P);
-  ccptn_init_handler(L, R_H, R);
+  ccptn_init_and_register_handler(L, R_H, R);
 
   cce_run_body_handlers(L);
 @}
@@ -2734,7 +2734,7 @@ if (cce_location(L)) @{
 
   P = ccname_new(ccptn_t, pointer, clean)(L, A, P_H, input);
   Q = ccname_new(ccptn_t, tailname)(L, A, P);
-  ccptn_init_handler(L, Q_H, Q);
+  ccptn_init_and_register_handler(L, Q_H, Q);
 
   cce_run_body_handlers(L);
 @}
@@ -2826,7 +2826,7 @@ if (cce_location(L)) @{
 
   ccname_init(ccptn_t, pointer, clean)(L, A, P_H, P, input);
   ccname_init(ccptn_t, filename)(L, A, R, P);
-  ccptn_init_handler(L, R_H, R);
+  ccptn_init_and_register_handler(L, R_H, R);
 
   cce_run_body_handlers(L);
 @}
@@ -2886,7 +2886,7 @@ if (cce_location(L)) @{
 
   P = ccname_new(ccptn_t, pointer, clean)(L, A, P_H, input);
   Q = ccname_new(ccptn_t, filename)(L, A, P);
-  ccptn_init_handler(L, Q_H, Q);
+  ccptn_init_and_register_handler(L, Q_H, Q);
 
   cce_run_body_handlers(L);
 @}

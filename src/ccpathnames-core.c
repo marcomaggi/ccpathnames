@@ -645,6 +645,23 @@ ccname_trait_method(ccstructs_pathname_T, ccptn_t, deserialiser) (cce_destinatio
 
 
 /** --------------------------------------------------------------------
+ ** Pathnames: exception handlers.
+ ** ----------------------------------------------------------------- */
+
+void
+ccptn_init_and_register_clean_handler (cce_destination_t L, ccptn_clean_handler_t * H, ccptn_t const * P)
+{
+  ccstructs_init_and_register_handler(L, ccptn_handler_handler(H), ccname_trait_new(ccstructs_dtor_T, ccptn_t)(P));
+}
+
+ void
+ccptn_init_and_register_error_handler (cce_destination_t L, ccptn_error_handler_t * H, ccptn_t const * P)
+{
+  ccstructs_init_and_register_handler(L, ccptn_handler_handler(H), ccname_trait_new(ccstructs_dtor_T, ccptn_t)(P));
+}
+
+
+/** --------------------------------------------------------------------
  ** Pathnames guarded constructors: embedded instances, pointer input.
  ** ----------------------------------------------------------------- */
 
@@ -654,7 +671,7 @@ ccname_init(ccptn_t, pointer, clean) (cce_destination_t L, ccmem_allocator_t con
 				      char const * input_rep)
 {
   ccname_init(ccptn_t, pointer)(L, A, P, input_rep);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
 }
 
 void
@@ -663,7 +680,7 @@ ccname_init(ccptn_t, pointer, error) (cce_destination_t L, ccmem_allocator_t con
 				      char const * input_rep)
 {
   ccname_init(ccptn_t, pointer)(L, A, P, input_rep);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
 }
 
 /* ------------------------------------------------------------------ */
@@ -674,7 +691,7 @@ ccname_init(ccptn_t, pointer, dup, clean) (cce_destination_t L, ccmem_allocator_
 					  char const * input_rep)
 {
   ccname_init(ccptn_t, pointer)(L, A, P, input_rep);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
 }
 
 void
@@ -683,7 +700,7 @@ ccname_init(ccptn_t, pointer, dup, error) (cce_destination_t L, ccmem_allocator_
 					  char const * input_rep)
 {
   ccname_init(ccptn_t, pointer)(L, A, P, input_rep);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
 }
 
 
@@ -697,7 +714,7 @@ ccname_init(ccptn_t, asciiz, clean) (cce_destination_t L, ccmem_allocator_t cons
 				     ccmem_asciiz_t input_rep)
 {
   ccname_init(ccptn_t, asciiz)(L, A, P, input_rep);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
 }
 
 void
@@ -706,7 +723,7 @@ ccname_init(ccptn_t, asciiz, error) (cce_destination_t L, ccmem_allocator_t cons
 				     ccmem_asciiz_t input_rep)
 {
   ccname_init(ccptn_t, asciiz)(L, A, P, input_rep);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
 }
 
 /* ------------------------------------------------------------------ */
@@ -717,7 +734,7 @@ ccname_init(ccptn_t, asciiz, dup, clean) (cce_destination_t L, ccmem_allocator_t
 					 ccmem_asciiz_t input_rep)
 {
   ccname_init(ccptn_t, asciiz)(L, A, P, input_rep);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
 }
 
 void
@@ -726,7 +743,7 @@ ccname_init(ccptn_t, asciiz, dup, error) (cce_destination_t L, ccmem_allocator_t
 					 ccmem_asciiz_t input_rep)
 {
   ccname_init(ccptn_t, asciiz)(L, A, P, input_rep);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
 }
 
 
@@ -740,7 +757,7 @@ ccname_init(ccptn_t, ascii, clean) (cce_destination_t L, ccmem_allocator_t const
 				    ccmem_ascii_t input_rep)
 {
   ccname_init(ccptn_t, ascii)(L, A, P, input_rep);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
 }
 
 void
@@ -749,7 +766,7 @@ ccname_init(ccptn_t, ascii, error) (cce_destination_t L, ccmem_allocator_t const
 				    ccmem_ascii_t input_rep)
 {
   ccname_init(ccptn_t, ascii)(L, A, P, input_rep);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
 }
 
 
@@ -762,7 +779,7 @@ ccname_init(ccptn_t, deserialisable, clean) (cce_destination_t L, ccmem_allocato
 					     ccptn_clean_handler_t * H, ccptn_t * P)
 {
   ccname_init(ccptn_t, deserialisable)(L, A, P);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
 }
 
 void
@@ -770,7 +787,7 @@ ccname_init(ccptn_t, deserialisable, error) (cce_destination_t L, ccmem_allocato
 					     ccptn_error_handler_t * H, ccptn_t * P)
 {
   ccname_init(ccptn_t, deserialisable)(L, A, P);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
 }
 
 
@@ -783,7 +800,7 @@ ccname_init(ccptn_t, clone, clean) (cce_destination_t L, ccmem_allocator_t const
 				    ccptn_t * dst, ccptn_t const * src)
 {
   ccname_init(ccptn_t, clone)(L, A, dst, src);
-  ccptn_init_handler(L, H, dst);
+  ccptn_init_and_register_handler(L, H, dst);
 }
 
 void
@@ -791,7 +808,7 @@ ccname_init(ccptn_t, clone, error) (cce_destination_t L, ccmem_allocator_t const
 				    ccptn_t * dst, ccptn_t const * src)
 {
   ccname_init(ccptn_t, clone)(L, A, dst, src);
-  ccptn_init_handler(L, H, dst);
+  ccptn_init_and_register_handler(L, H, dst);
 }
 
 
@@ -804,7 +821,7 @@ ccname_new(ccptn_t, pointer, clean) (cce_destination_t L, ccmem_allocator_t cons
 				     ccptn_clean_handler_t * H, char const * input_rep)
 {
   ccptn_t const *	P = ccname_new(ccptn_t, pointer)(L, A, input_rep);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
   return P;
 }
 
@@ -813,7 +830,7 @@ ccname_new(ccptn_t, pointer, error) (cce_destination_t L, ccmem_allocator_t cons
 				     ccptn_error_handler_t * H, char const * input_rep)
 {
   ccptn_t const *	P = ccname_new(ccptn_t, pointer)(L, A, input_rep);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
   return P;
 }
 
@@ -824,7 +841,7 @@ ccname_new(ccptn_t, pointer, dup, clean) (cce_destination_t L, ccmem_allocator_t
 					 ccptn_clean_handler_t * H, char const * input_rep)
 {
   ccptn_t const *	P = ccname_new(ccptn_t, pointer)(L, A, input_rep);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
   return P;
 }
 
@@ -833,7 +850,7 @@ ccname_new(ccptn_t, pointer, dup, error) (cce_destination_t L, ccmem_allocator_t
 					 ccptn_error_handler_t * H, char const * input_rep)
 {
   ccptn_t const *	P = ccname_new(ccptn_t, pointer)(L, A, input_rep);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
   return P;
 }
 
@@ -847,7 +864,7 @@ ccname_new(ccptn_t, asciiz, clean) (cce_destination_t L, ccmem_allocator_t const
 				    ccptn_clean_handler_t * H, ccmem_asciiz_t input_rep)
 {
   ccptn_t const *	P = ccname_new(ccptn_t, asciiz)(L, A, input_rep);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
   return P;
 }
 
@@ -856,7 +873,7 @@ ccname_new(ccptn_t, asciiz, error) (cce_destination_t L, ccmem_allocator_t const
 				    ccptn_error_handler_t * H, ccmem_asciiz_t input_rep)
 {
   ccptn_t const *	P = ccname_new(ccptn_t, asciiz)(L, A, input_rep);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
   return P;
 }
 
@@ -867,7 +884,7 @@ ccname_new(ccptn_t, asciiz, dup, clean) (cce_destination_t L, ccmem_allocator_t 
 					ccptn_clean_handler_t * H, ccmem_asciiz_t input_rep)
 {
   ccptn_t const *	P = ccname_new(ccptn_t, asciiz)(L, A, input_rep);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
   return P;
 }
 
@@ -876,7 +893,7 @@ ccname_new(ccptn_t, asciiz, dup, error) (cce_destination_t L, ccmem_allocator_t 
 					ccptn_error_handler_t * H, ccmem_asciiz_t input_rep)
 {
   ccptn_t const *	P = ccname_new(ccptn_t, asciiz)(L, A, input_rep);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
   return P;
 }
 
@@ -890,7 +907,7 @@ ccname_new(ccptn_t, ascii, clean) (cce_destination_t L, ccmem_allocator_t const 
 				   ccptn_clean_handler_t * H, ccmem_ascii_t input_rep)
 {
   ccptn_t const *	P = ccname_new(ccptn_t, ascii)(L, A, input_rep);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
   return P;
 }
 
@@ -899,7 +916,7 @@ ccname_new(ccptn_t, ascii, error) (cce_destination_t L, ccmem_allocator_t const 
 				   ccptn_error_handler_t * H, ccmem_ascii_t input_rep)
 {
   ccptn_t const *	P = ccname_new(ccptn_t, ascii)(L, A, input_rep);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
   return P;
 }
 
@@ -912,7 +929,7 @@ ccptn_t *
 ccname_new(ccptn_t, deserialisable, clean) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H)
 {
   ccptn_t *	P = ccname_new(ccptn_t, deserialisable)(L, A);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
   return P;
 }
 
@@ -920,7 +937,7 @@ ccptn_t *
 ccname_new(ccptn_t, deserialisable, error) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H)
 {
   ccptn_t *	P = ccname_new(ccptn_t, deserialisable)(L, A);
-  ccptn_init_handler(L, H, P);
+  ccptn_init_and_register_handler(L, H, P);
   return P;
 }
 
@@ -933,7 +950,7 @@ ccptn_t const *
 ccname_new(ccptn_t, clone, clean) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_clean_handler_t * H, ccptn_t const * src)
 {
   ccptn_t const	*dst = ccname_new(ccptn_t, clone)(L, A, src);
-  ccptn_init_handler(L, H, dst);
+  ccptn_init_and_register_handler(L, H, dst);
   return dst;
 }
 
@@ -941,7 +958,7 @@ ccptn_t const *
 ccname_new(ccptn_t, clone, error) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_error_handler_t * H, ccptn_t const * src)
 {
   ccptn_t const	*dst = ccname_new(ccptn_t, clone)(L, A, src);
-  ccptn_init_handler(L, H, dst);
+  ccptn_init_and_register_handler(L, H, dst);
   return dst;
 }
 
