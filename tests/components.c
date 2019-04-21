@@ -269,7 +269,7 @@ test_2_4_1 (cce_destination_t upper_L)
 	cce_run_body_handlers(inner_L);
       }
     }
-    ccptn_init_handler(L, S_H, S);
+    ccptn_init_and_register_handler(L, S_H, S);
     cctests_assert_asciiz(L, "/path/to/file", ccptn_ptr(S));
     cce_run_body_handlers(L);
   }
@@ -421,7 +421,7 @@ test_3_4_1 (cce_destination_t upper_L)
 	cce_run_body_handlers(inner_L);
       }
     }
-    ccptn_init_handler(L, S_H, S);
+    ccptn_init_and_register_handler(L, S_H, S);
     cctests_assert_asciiz(L, "dir/", ccptn_ptr(S));
     cce_run_body_handlers(L);
   }
@@ -566,7 +566,7 @@ test_4_4_1 (cce_destination_t upper_L)
 	cce_run_body_handlers(inner_L);
       }
     }
-    ccptn_init_handler(L, S_H, S);
+    ccptn_init_and_register_handler(L, S_H, S);
     cctests_assert_asciiz(L, "/path/to/", ccptn_ptr(S));
     cce_run_body_handlers(L);
   }
@@ -722,7 +722,7 @@ test_5_4_1 (cce_destination_t upper_L)
 	cce_run_body_handlers(inner_L);
       }
     }
-    ccptn_init_handler(L, S_H, S);
+    ccptn_init_and_register_handler(L, S_H, S);
     cctests_assert_asciiz(L, "file.ext", ccptn_ptr(S));
     cce_run_body_handlers(L);
   }
