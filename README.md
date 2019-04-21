@@ -9,15 +9,15 @@
 This package installs a C11 language library implementing Unix pathnames
 manipulation functions.
 
-  This package  supports POSIX platforms.   This package depends  on the
-packages:  CCExceptions,  at least  version  0.8.0;  CCMemory, at  least
-version  0.2.1; CCStructs,  at least  version  0.2.0.  To  run the  test
+The  library  targets  POSIX  systems.   This  package  depends  on  the
+packages:  CCExceptions,  at least  version  0.9.0;  CCMemory, at  least
+version  0.2.2; CCStructs,  at least  version  0.3.0.  To  run the  test
 suite: this package  depends upon the package CCTests,  at least version
-0.3.0.
+0.4.1.
 
-  The package  makes use of  the GNU Autotools  and it is  tested, using
-Travis CI, on both Ubuntu GNU+Linux systems and OS X systems.
-
+The package uses the GNU Autotools and it is tested, using Travis CI, on
+both Ubuntu GNU+Linux  systems and OS X systems.  The  package relies on
+`pkg-config` to find the dependencies installed on the system.
 
 ## License
 
@@ -36,7 +36,6 @@ General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
 
 ## Install
 
@@ -128,12 +127,10 @@ $ make html
 $ make install-html
 ```
 
-
 ## Credits
 
 The  stuff was  written by  Marco Maggi.   If this  package exists  it's
 because of the great GNU software tools that he uses all the time.
-
 
 ## Bugs, vulnerabilities and contributions
 
@@ -141,7 +138,6 @@ Bug  and vulnerability  reports are  appreciated, all  the vulnerability
 reports  are  public; register  them  using  the  Issue Tracker  at  the
 project's GitHub  site.  For  contributions and  patches please  use the
 Pull Requests feature at the project's GitHub site.
-
 
 ## Resources
 
@@ -181,7 +177,6 @@ the package CCTests is available at:
 
 [https://github.com/marcomaggi/cctests/](https://github.com/marcomaggi/cctests/)
 
-
 ## Badges and static analysis
 
 ### Travis CI
@@ -195,7 +190,6 @@ project's dashboard at:
 Usage of this  service is configured through the  file `.travis.yml` and
 additional scripts are under the directory `meta/travis-ci`.
 
-
 ### Clang's Static Analyzer
 
 The Clang Static Analyzer is a source code analysis tool that finds bugs
@@ -206,7 +200,6 @@ and we can find it at:
 
 Usage of this  service is implemented with make rules;  see the relevant
 section in the file `Makefile.am`.
-
 
 ### Codecov
 

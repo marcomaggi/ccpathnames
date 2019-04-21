@@ -111,7 +111,7 @@ ptn_realpath (cce_destination_t upper_L, ccmem_allocator_t const * const A, ccpt
     if (NULL == rv) {
       cce_raise(L, cce_condition_new_errno_clear());
     } else {
-      cce_init_handler_malloc(L, rv_H, (void *)rv);
+      cce_init_and_register_handler_malloc(L, rv_H, (void *)rv);
       {
 	/* Using an  ASCII representation  will force  the "ccptn_t"  constructors to
 	   duplicate  the  internal  pathname   representation  using  a  dynamically

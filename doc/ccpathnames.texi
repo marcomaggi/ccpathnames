@@ -6,6 +6,7 @@
 
 @include version.texi
 @include macros.texi
+@include ccexceptions-macros.texi
 
 @c page
 @c ------------------------------------------------------------
@@ -37,10 +38,10 @@
 
 @c ------------------------------------------------------------
 
-@set CCExceptionsVersion       0.8.0
+@set CCExceptionsVersion       0.9.0
 @set CCMemoryVersion           0.2.1
-@set CCStructsVersion          0.2.0
-@set CCTestsVersion            0.3.0
+@set CCStructsVersion          0.3.0
+@set CCTestsVersion            0.4.1
 
 @c ------------------------------------------------------------
 
@@ -155,7 +156,7 @@ included in the section entitled ``@gnu{} Free Documentation License''.
 * manipulations::               Pathname manipulations.
 * components::                  Pathname components.
 * io::                          Pathname input/output.
-* ifaces::                      Implemented interfaces.
+* traits::                      Implemented traits.
 * segments::                    Manipulating segments.
 * utils::                       Utility definitions.
 
@@ -189,9 +190,10 @@ upon the package CCTests, at least version @value{CCTestsVersion}.
 
 @cindex @value{PackageHeaderFile}, header file
 @cindex Header file @value{PackageHeaderFile}
-@value{PACKAGE} installs the single header file @value{PackageHeaderFile}.  All the function names
-in the @api{} are prefixed with @code{@value{PackageApiPrefixLower}}; all the preprocessor symbol
-names are prefixed with @code{@value{PackageApiPrefixUpper}}; all the type names are prefixed with
+@value{PACKAGE} installs the multiple header files; the whole @api{} is available by including the
+single file @value{PackageHeaderFile}.  All the function names in the @api{} are prefixed with
+@code{@value{PackageApiPrefixLower}}; all the preprocessor symbol names are prefixed with
+@code{@value{PackageApiPrefixUpper}}; all the type names are prefixed with
 @code{@value{PackageApiPrefixLower}} and suffixed with @code{_t}.
 
 @strong{Notice that, before using the library, we need to call the global initialisation function
@@ -1163,19 +1165,19 @@ if (cce_location(L)) @{
 @subsection Constructors for embedded instances from deserialisation
 
 
-The @iface{deserialiser} interface allows us to construct an instance of @objtype{ccptn_t} by
-reading the internal representation from storage memory.  @ref{ifaces deserialiser, The
-@iface{deserialiser} interface}.
+The @trait{deserialiser} trait allows us to construct an instance of @objtype{ccptn_t} by
+reading the internal representation from storage memory.  @ref{traits deserialiser, The
+@trait{deserialiser} trait}.
 
 
 @deftypefun void {ccname_init(ccptn_t, deserialisable)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A}, ccptn_t * @var{P})
 Initialise an already allocated @objtype{ccptn_t}, referenced by @var{P}, in such a way that it can
-be used as target for deserialisation using the @iface{deserialiser} interface; use the allocator
+be used as target for deserialisation using the @trait{deserialiser} trait; use the allocator
 @var{A}.  When successful just return.  If an error occurs: raise an exception by performing a
 non--local exit to @var{L}.
 
 Whether the initialised instance is used for deserialisation or not: we can always finalise it using
-a @iface{destructor} interface or a destruction handler.
+a @trait{destructor} trait or a destruction handler.
 
 @example
 cce_location_t             L[1];
@@ -1571,19 +1573,19 @@ if (cce_location(L)) @{
 @subsection Constructors for standalone instances from deserialisation
 
 
-The @iface{deserialiser} interface allows us to construct an instance of @objtype{ccptn_t} by
-reading the internal representation from storage memory.  @ref{ifaces deserialiser, The
-@iface{deserialiser} interface}.
+The @trait{deserialiser} trait allows us to construct an instance of @objtype{ccptn_t} by
+reading the internal representation from storage memory.  @ref{traits deserialiser, The
+@trait{deserialiser} trait}.
 
 
 @deftypefun {ccptn_t const *} {ccname_new(ccptn_t, deserialisable)} (cce_destination_t @var{L}, ccmem_allocator_t const * @var{A})
 Build a newly allocated instance of @objtype{ccptn_t}, in such a way that it can be used as target
-for deserialisation using the @iface{deserialiser} interface; use the allocator @var{A}.  When
+for deserialisation using the @trait{deserialiser} trait; use the allocator @var{A}.  When
 successful return a pointer to the new instance.  If an error occurs: raise an exception by
 performing a non--local exit to @var{L}.
 
 Whether the initialised instance is used for deserialisation or not: we can always finalise it using
-a @iface{destructor} interface or a destruction handler.
+a @trait{destructor} trait or a destruction handler.
 
 @example
 cce_location_t             L[1];
@@ -2927,34 +2929,34 @@ by performing a non--local exit to @var{L}.
 @end deftypefun
 
 @c page
-@node ifaces
-@chapter Implemented interfaces
+@node traits
+@chapter Implemented traits
 
 
-The type @objtype{ccptn_t}  implements some interfaces defined by the package CCStructs;
+The type @objtype{ccptn_t}  implements some traits defined by the package CCStructs;
 @ccstructsref{Top, CCStructs}.
 
 
 @menu
-* ifaces pathname::             The @iface{pathname} interface.
-* ifaces destructor::           The @iface{destructor} interface.
-* ifaces dumpable::             The @iface{dumpable} interface.
-* ifaces serialiser::           The @iface{serialiser} interface.
-* ifaces deserialiser::         The @iface{deserialiser} interface.
+* traits pathname::             The @trait{pathname} trait.
+* traits destructor::           The @trait{destructor} trait.
+* traits dumpable::             The @trait{dumpable} trait.
+* traits serialiser::           The @trait{serialiser} trait.
+* traits deserialiser::         The @trait{deserialiser} trait.
 @end menu
 
 @c page
-@node ifaces pathname
-@section The @iface{pathname} interface
+@node traits pathname
+@section The @trait{pathname} trait
 
 
-The @iface{pathname} interface offers a common @api{} for the manipulation of @struct{} types
-implementing file system pathname representations; @ccstructsref{pathname, The @iface{pathname}
-interface}.
+The @trait{pathname} trait offers a common @api{} for the manipulation of @struct{} types
+implementing file system pathname representations; @ccstructsref{pathname, The @trait{pathname}
+trait}.
 
 
-@deftypefun ccstructs_pathname_I ccname_iface_new(ccstructs_pathname_I, ccptn_t) (ccptn_t const * @var{P})
-Build and return an instance of @iface{pathname} interface operating on instances of
+@deftypefun ccstructs_pathname_T {ccname_trait_new(ccstructs_pathname_T, ccptn_t)} (ccptn_t const * @var{P})
+Build and return an instance of @trait{pathname} trait operating on instances of
 @objtype{ccptn_t}.
 @end deftypefun
 
@@ -2970,17 +2972,17 @@ if (cce_location(L)) @{
 @} else @{
   static char const     *input = "/path/to/file.ext";
   ccptn_t const         *P;
-  ccstructs_pathname_I  IPTN;
-  ccstructs_dtor_I      IDTOR;
+  ccstructs_pathname_T  TPTN;
+  ccstructs_dtor_T      TDTOR;
 
   P     = ccname_new(ccptn_t, pointer)(L, A, input);
-  IPTN  = ccname_iface_new(ccstructs_pathname_I, ccptn_t)(P);
-  IDTOR = ccname_iface_new(ccstructs_dtor_I, ccstructs_pathname_I)(IPTN);
-  ccstructs_handler_init(L, H, IDTOR);
+  TPTN  = ccname_trait_new(ccstructs_pathname_T, ccptn_t)(P);
+  TDTOR = ccname_trait_new(ccstructs_dtor_T, ccstructs_pathname_T)(TPTN);
+  ccstructs_handler_init(L, H, TDTOR);
 
   @{
-    ccstructs_dumpable_I  IDUMP =
-      ccname_iface_new(ccstructs_dumpable_I, ccstructs_pathname_I)(L, IPTN);
+    ccstructs_dumpable_T  IDUMP =
+      ccname_trait_new(ccstructs_dumpable_T, ccstructs_pathname_T)(L, TPTN);
 
     ccstructs_dumpable_dump(L, IDUMP);
     fprintf(stderr, "\n");
@@ -2990,22 +2992,22 @@ if (cce_location(L)) @{
 @end smallexample
 
 @c page
-@node ifaces destructor
-@section The @iface{destructor} interface
+@node traits destructor
+@section The @trait{destructor} trait
 
 
-The @iface{destructor} interface offers a common @api{} for the destruction of @struct{} types;
-@ccstructsref{dtor, The @iface{destructor} interface}.
+The @trait{destructor} trait offers a common @api{} for the destruction of @struct{} types;
+@ccstructsref{dtor, The @trait{destructor} trait}.
 
 
-@deftypefun ccstructs_dtor_I ccname_iface_new(ccstructs_dtor_I, ccptn_t) (ccptn_t const * @var{P})
-Build and return an instance of @iface{destructor} interface which we can use to destroy both
+@deftypefun ccstructs_dtor_T {ccname_trait_new(ccstructs_dtor_T, ccptn_t)} (ccptn_t const * @var{P})
+Build and return an instance of @trait{destructor} trait which we can use to destroy both
 embedded and standalone instances of @objtype{ccptn_t}.  It is usually better to use the handlers
 @api{} or, even better, the guarded constructors.
 @end deftypefun
 
 
-We can use the @iface{destructor} interface with the generic handlers @api{} defined by CCStructs,
+We can use the @trait{destructor} trait with the generic handlers @api{} defined by CCStructs,
 @ccstructsref{dtor handlers, Exception handlers}.  Code sample:
 
 @example
@@ -3018,10 +3020,10 @@ if (cce_location(L)) @{
 @} else @{
   char const        *input = "/path/to/file.ext";
   ccptn_t           P[1];
-  ccstructs_dtor_I  ID;
+  ccstructs_dtor_T  ID;
 
   ccname_init(ccptn_t, pointer)(L, A, input);
-  ID = ccname_iface_new(ccstructs_dtor_I, ccptn_t)(P);
+  ID = ccname_trait_new(ccstructs_dtor_T, ccptn_t)(P);
   ccstructs_handler_init(L, H, ID);
 
   cce_run_body_handlers(L);
@@ -3029,17 +3031,17 @@ if (cce_location(L)) @{
 @end example
 
 @c page
-@node ifaces dumpable
-@section The @iface{dumpable} interface
+@node traits dumpable
+@section The @trait{dumpable} trait
 
 
-The @iface{dumpable} interface offers a common @api{} for to print a @struct{} representation for
-debugging purposes; @ccstructsref{dumpable, The @iface{dumpable} interface}.
+The @trait{dumpable} trait offers a common @api{} for to print a @struct{} representation for
+debugging purposes; @ccstructsref{dumpable, The @trait{dumpable} trait}.
 
 
-@deftypefun ccstructs_dumpable_I ccname_iface_new(ccstructs_dumpable_I, ccptn_t) (ccptn_t const * @var{P})
-Build and return an instance of @iface{dumpable} interface which we can use to print on @stderr{} a
-representation of @objtype{ccptn_t}.  This interface does not print an ending newline.
+@deftypefun ccstructs_dumpable_T {ccname_trait_new(ccstructs_dumpable_T, ccptn_t)} (ccptn_t const * @var{P})
+Build and return an instance of @trait{dumpable} trait which we can use to print on @stderr{} a
+representation of @objtype{ccptn_t}.  This trait does not print an ending newline.
 @end deftypefun
 
 
@@ -3054,10 +3056,10 @@ if (cce_location(L)) @{
 @} else @{
   char const            *input = "/path/to/file.ext";
   ccptn_t const         *P;
-  ccstructs_dumpable_I  ID;
+  ccstructs_dumpable_T  ID;
 
   P  = ccname_new(ccptn_t, pointer, clean)(L, A, H, input);
-  ID = ccname_iface_new(ccstructs_dumpable_I, ccptn_t)(P);
+  ID = ccname_trait_new(ccstructs_dumpable_T, ccptn_t)(P);
 
   ccstructs_dumpable_dump(L, ID);
   fprintf(stderr, "\n");
@@ -3067,31 +3069,31 @@ if (cce_location(L)) @{
 @end example
 
 @c page
-@node ifaces serialiser
-@section The @iface{serialiser} interface
+@node traits serialiser
+@section The @trait{serialiser} trait
 
 
-The @iface{serialiser} interface offers a common @api{} to serialise a @struct{} to a memory block
-for storage purposes; @ccstructsref{serialiser, The @iface{serialiser} interface}.
+The @trait{serialiser} trait offers a common @api{} to serialise a @struct{} to a memory block
+for storage purposes; @ccstructsref{serialiser, The @trait{serialiser} trait}.
 
 
-@deftypefun ccstructs_serialiser_I ccname_iface_new(ccstructs_serialiser_I, ccptn_t) (ccptn_t const * @var{P})
-Build and return an instance of @iface{serialiser} interface which we can use to serialise the
+@deftypefun ccstructs_serialiser_T {ccname_trait_new(ccstructs_serialiser_T, ccptn_t)} (ccptn_t const * @var{P})
+Build and return an instance of @trait{serialiser} trait which we can use to serialise the
 instance of @objtype{ccptn_t}.
 @end deftypefun
 
 @c page
-@node ifaces deserialiser
-@section The @iface{deserialiser} interface
+@node traits deserialiser
+@section The @trait{deserialiser} trait
 
 
-The @iface{deserialiser} interface offers a common @api{} to deserialise a @struct{} from a memory
-block for storage retrieval purposes; @ccstructsref{deserialiser, The @iface{deserialiser}
-interface}.
+The @trait{deserialiser} trait offers a common @api{} to deserialise a @struct{} from a memory
+block for storage retrieval purposes; @ccstructsref{deserialiser, The @trait{deserialiser}
+trait}.
 
 
-@deftypefun ccstructs_deserialiser_I ccname_iface_new(ccstructs_deserialiser_I, ccptn_t) (ccptn_t * @var{P})
-Build and return an instance of @iface{deserialiser} interface which we can use to deserialise the
+@deftypefun ccstructs_deserialiser_T {ccname_trait_new(ccstructs_deserialiser_T, ccptn_t)} (ccptn_t * @var{P})
+Build and return an instance of @trait{deserialiser} trait which we can use to deserialise the
 instance of @objtype{ccptn_t}.
 @end deftypefun
 

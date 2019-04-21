@@ -2,12 +2,12 @@
 #
 
 AC_PREREQ([2.69])
-MMUX_PKG_VERSIONS([0],[2],[0],[devel.1])
+MMUX_PKG_VERSIONS([0],[3],[0],[devel.0])
 AC_INIT([CCPathnames],[MMUX_PACKAGE_VERSION],
   [marco.maggi-ipsu@poste.it],
   [ccpathnames],[http://github.com/marcomaggi/ccpathnames])
 MMUX_INIT
-MMUX_LIBTOOL_LIBRARY_VERSIONS([ccpathnames],2,0,0)
+MMUX_LIBTOOL_LIBRARY_VERSIONS([ccpathnames],3,0,0)
 AC_REVISION([0.1])
 AC_COPYRIGHT([Copyright (c) 2018, 2019 Marco Maggi <marco.maggi-ipsu@poste.it>
 
@@ -76,7 +76,7 @@ PKG_INSTALLDIR
 MMUX_CHECK_PKG_CONFIG_MACROS
 PKG_CHECK_MODULES([CCEXCEPTIONS],[ccexceptions >= 0.8.0])
 PKG_CHECK_MODULES([CCMEMORY],[ccmemory >= 0.2.1])
-PKG_CHECK_MODULES([CCSTRUCTS],[ccstructs >= 0.2.0])
+PKG_CHECK_MODULES([CCSTRUCTS],[ccstructs >= 0.3.0])
 PKG_CHECK_MODULES([CCTESTS],[cctests >= 0.3.0],,[AC_MSG_WARN([package CCTests not found])])
 
 AM_CONDITIONAL([MMUX_TESTING_ENABLED],[test -n "$CCTESTS_LIBS"])

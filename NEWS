@@ -3,10 +3,16 @@
 		       News file for CCPathnames
 		       =========================
 
-Revision 0.2.0-devel.1
+Revision 0.3.0-devel.0
 ----------------------
 
-* ...
+* Updated  dependencies   to  CCExceptions,  at  least   version  0.9.0;
+  CCMemory, at least  version 0.2.2; CCStructs, at  least version 0.3.0;
+  CCTests, at least version 0.4.1.
+
+* Total review of exception handlers.
+
+* Bumped library interface version number.
 
 
 Revision 0.2.0-devel.0

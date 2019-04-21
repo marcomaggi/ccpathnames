@@ -409,9 +409,9 @@ test_5_1 (cce_destination_t upper_L)
     ccname_init(ccptn_t, deserialisable, clean)(L, A, H, P);
 
     {
-      ccstructs_dumpable_I	I;
+      ccstructs_dumpable_T	I;
 
-      I = ccname_iface_new(ccstructs_dumpable_I, ccptn_t)(P);
+      I = ccname_trait_new(ccstructs_dumpable_T, ccptn_t)(P);
       ccstructs_dumpable_dump(L, I);
       fprintf(stderr, "\n");
     }
@@ -434,9 +434,9 @@ test_5_2 (cce_destination_t upper_L)
     P = ccname_new(ccptn_t, deserialisable, clean)(L, A, H);
 
     {
-      ccstructs_dumpable_I	I;
+      ccstructs_dumpable_T	I;
 
-      I = ccname_iface_new(ccstructs_dumpable_I, ccptn_t)(P);
+      I = ccname_trait_new(ccstructs_dumpable_T, ccptn_t)(P);
       ccstructs_dumpable_dump(L, I);
       fprintf(stderr, "\n");
     }
@@ -466,9 +466,9 @@ test_6_1 (cce_destination_t upper_L)
     ccname_init(ccptn_t, pointer, clean)(L, A, src_H, src, input);
     ccname_init(ccptn_t, clone,   clean)(L, A, dst_H, dst, src);
     if (0) {
-      ccstructs_dumpable_I	I;
+      ccstructs_dumpable_T	I;
 
-      I = ccname_iface_new(ccstructs_dumpable_I, ccptn_t)(dst);
+      I = ccname_trait_new(ccstructs_dumpable_T, ccptn_t)(dst);
       ccstructs_dumpable_dump(L, I);
       fprintf(stderr, "\n");
     }
@@ -495,9 +495,9 @@ test_6_2 (cce_destination_t upper_L)
     dst = ccname_new(ccptn_t, clone,   clean)(L, A, dst_H, src);
 
     if (0) {
-      ccstructs_dumpable_I	I;
+      ccstructs_dumpable_T	I;
 
-      I = ccname_iface_new(ccstructs_dumpable_I, ccptn_t)(dst);
+      I = ccname_trait_new(ccstructs_dumpable_T, ccptn_t)(dst);
       ccstructs_dumpable_dump(L, I);
       fprintf(stderr, "\n");
     }

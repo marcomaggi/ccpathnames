@@ -22,6 +22,7 @@ AM_MAKEINFOHTMLFLAGS	= --split=node -c WORDS_IN_PAGE=0 \
 info_TEXINFOS		= doc/ccpathnames.texi
 doc_ccpathnames_TEXINFOS	= \
 	doc/macros.texi			\
+	doc/ccexceptions-macros.texi	\
 	doc/overview-linking.texi	\
 	doc/overview-ccnames.texi	\
 	doc/overview-ccexceptions.texi	\
@@ -37,7 +38,11 @@ ccpathnames_REVISION		= @ccpathnames_VERSION_INTERFACE_REVISION@
 ccpathnames_AGE			= @ccpathnames_VERSION_INTERFACE_AGE@
 ccpathnames_LINKER_VERSION	= -version-info $(ccpathnames_CURRENT):$(ccpathnames_REVISION):$(ccpathnames_AGE)
 
-include_HEADERS			= src/ccpathnames.h
+include_HEADERS			= \
+	src/ccpathnames.h		\
+	src/ccpathnames-conditions.h	\
+	src/ccpathnames-core.h		\
+	src/ccpathnames-handlers.h
 
 lib_LTLIBRARIES			= libccpathnames.la
 libccpathnames_la_CPPFLAGS	= $(AM_CPPFLAGS)
@@ -45,6 +50,9 @@ libccpathnames_la_CFLAGS	= $(AM_CFLAGS) $(CCEXCEPTIONS_CFLAGS) $(CCMEMORY_CFLAGS
 libccpathnames_la_LDFLAGS	= $(ccpathnames_LINKER_VERSION) $(AM_LDFLAGS) $(CCEXCEPTIONS_LIBS) $(CCMEMORY_LIBS) $(CCSTRUCTS_LIBS)
 libccpathnames_la_SOURCES	= \
 	src/ccpathnames.h			\
+	src/ccpathnames-conditions.h		\
+	src/ccpathnames-core.h			\
+	src/ccpathnames-handlers.h		\
 	src/ccpathnames-internals.h		\
 	src/ccpathnames-version.c		\
 	src/ccpathnames-conditions.c		\
@@ -62,10 +70,10 @@ check_PROGRAMS	= \
 	tests/core			\
 	tests/manipulations		\
 	tests/components		\
-	tests/iface-destructor		\
-	tests/iface-dumpable		\
-	tests/iface-serialisation	\
-	tests/iface-pathname
+	tests/trait-destructor		\
+	tests/trait-dumpable		\
+	tests/trait-serialisation	\
+	tests/trait-pathname
 
 if MMUX_TESTING_ENABLED
 TESTS				= $(check_PROGRAMS)
@@ -97,21 +105,21 @@ tests_components_CPPFLAGS		= $(ccpathnames_tests_cppflags)
 tests_components_CFLAGS			= $(ccpathnames_tests_cflags)
 tests_components_LDADD			= $(ccpathnames_tests_ldadd)
 
-tests_iface_destructor_CPPFLAGS		= $(ccpathnames_tests_cppflags)
-tests_iface_destructor_CFLAGS		= $(ccpathnames_tests_cflags)
-tests_iface_destructor_LDADD		= $(ccpathnames_tests_ldadd)
+tests_trait_destructor_CPPFLAGS		= $(ccpathnames_tests_cppflags)
+tests_trait_destructor_CFLAGS		= $(ccpathnames_tests_cflags)
+tests_trait_destructor_LDADD		= $(ccpathnames_tests_ldadd)
 
-tests_iface_dumpable_CPPFLAGS		= $(ccpathnames_tests_cppflags)
-tests_iface_dumpable_CFLAGS		= $(ccpathnames_tests_cflags)
-tests_iface_dumpable_LDADD		= $(ccpathnames_tests_ldadd)
+tests_trait_dumpable_CPPFLAGS		= $(ccpathnames_tests_cppflags)
+tests_trait_dumpable_CFLAGS		= $(ccpathnames_tests_cflags)
+tests_trait_dumpable_LDADD		= $(ccpathnames_tests_ldadd)
 
-tests_iface_serialisation_CPPFLAGS	= $(ccpathnames_tests_cppflags)
-tests_iface_serialisation_CFLAGS	= $(ccpathnames_tests_cflags)
-tests_iface_serialisation_LDADD		= $(ccpathnames_tests_ldadd)
+tests_trait_serialisation_CPPFLAGS	= $(ccpathnames_tests_cppflags)
+tests_trait_serialisation_CFLAGS	= $(ccpathnames_tests_cflags)
+tests_trait_serialisation_LDADD		= $(ccpathnames_tests_ldadd)
 
-tests_iface_pathname_CPPFLAGS		= $(ccpathnames_tests_cppflags)
-tests_iface_pathname_CFLAGS		= $(ccpathnames_tests_cflags)
-tests_iface_pathname_LDADD		= $(ccpathnames_tests_ldadd)
+tests_trait_pathname_CPPFLAGS		= $(ccpathnames_tests_cppflags)
+tests_trait_pathname_CFLAGS		= $(ccpathnames_tests_cflags)
+tests_trait_pathname_LDADD		= $(ccpathnames_tests_ldadd)
 
 ## --------------------------------------------------------------------
 

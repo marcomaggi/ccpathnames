@@ -1,11 +1,11 @@
 /*
   Part of: CCPathnames
-  Contents: test for interfaces "serialiser" and  "deserialiser"
+  Contents: test for traits "serialiser" and  "deserialiser"
   Date: Jan 29, 2019
 
   Abstract
 
-	Test file for interfaces "serialiser" and "deserialiser".
+	Test file for traits "serialiser" and "deserialiser".
 
   Copyright (C) 2019 Marco Maggi <marco.maggi-ipsu@poste.it>
 
@@ -45,20 +45,20 @@ test_1_1 (cce_destination_t upper_L)
 
     {
       ccptn_t const		*P;
-      ccstructs_serialiser_I	IS;
+      ccstructs_serialiser_T	IS;
 
       P  = ccname_new(ccptn_t, pointer, clean)(L, A, P_H, input);
-      IS = ccname_iface_new(ccstructs_serialiser_I, ccptn_t)(P);
+      IS = ccname_trait_new(ccstructs_serialiser_T, ccptn_t)(P);
       B  = ccmem_block_malloc_guarded(L, B_H, A, ccstructs_serialiser_required_size(IS));
       ccstructs_serialiser_write(L, IS, B);
     }
 
     {
       ccptn_t			*Q;
-      ccstructs_deserialiser_I	ID;
+      ccstructs_deserialiser_T	ID;
 
       Q  = ccname_new(ccptn_t, deserialisable, clean)(L, A, Q_H);
-      ID = ccname_iface_new(ccstructs_deserialiser_I, ccptn_t)(Q);
+      ID = ccname_trait_new(ccstructs_deserialiser_T, ccptn_t)(Q);
       ccstructs_deserialiser_read(L, ID, B);
 
       cctests_assert_asciiz(L, input, ccptn_ptr(Q));
@@ -76,7 +76,7 @@ main (void)
 
   A = ccmem_standard_allocator;
 
-  cctests_init("serialiser/deserialiser interfaces");
+  cctests_init("serialiser/deserialiser traits");
   {
     cctests_begin_group("serialisation and deserialisation");
     {
