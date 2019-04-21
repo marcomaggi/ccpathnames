@@ -1177,7 +1177,7 @@ be used as target for deserialisation using the @trait{deserialiser} trait; use 
 non--local exit to @var{L}.
 
 Whether the initialised instance is used for deserialisation or not: we can always finalise it using
-a @trait{destructor} trait or a destruction handler.
+a @trait{dtor} trait or a destruction handler.
 
 @example
 cce_location_t             L[1];
@@ -1585,7 +1585,7 @@ successful return a pointer to the new instance.  If an error occurs: raise an e
 performing a non--local exit to @var{L}.
 
 Whether the initialised instance is used for deserialisation or not: we can always finalise it using
-a @trait{destructor} trait or a destruction handler.
+a @trait{dtor} trait or a destruction handler.
 
 @example
 cce_location_t             L[1];
@@ -2939,7 +2939,7 @@ The type @objtype{ccptn_t}  implements some traits defined by the package CCStru
 
 @menu
 * traits pathname::             The @trait{pathname} trait.
-* traits destructor::           The @trait{destructor} trait.
+* traits dtor::                 The @trait{dtor} trait.
 * traits dumpable::             The @trait{dumpable} trait.
 * traits serialiser::           The @trait{serialiser} trait.
 * traits deserialiser::         The @trait{deserialiser} trait.
@@ -2978,7 +2978,7 @@ if (cce_location(L)) @{
   P     = ccname_new(ccptn_t, pointer)(L, A, input);
   TPTN  = ccname_trait_new(ccstructs_pathname_T, ccptn_t)(P);
   TDTOR = ccname_trait_new(ccstructs_dtor_T, ccstructs_pathname_T)(TPTN);
-  ccstructs_handler_init(L, H, TDTOR);
+  ccstructs_init_and_register_handler(L, H, TDTOR);
 
   @{
     ccstructs_dumpable_T  IDUMP =
@@ -2992,22 +2992,22 @@ if (cce_location(L)) @{
 @end smallexample
 
 @c page
-@node traits destructor
-@section The @trait{destructor} trait
+@node traits dtor
+@section The @trait{dtor} trait
 
 
-The @trait{destructor} trait offers a common @api{} for the destruction of @struct{} types;
-@ccstructsref{dtor, The @trait{destructor} trait}.
+The @trait{dtor} trait offers a common @api{} for the destruction of @struct{} types;
+@ccstructsref{dtor, The @trait{dtor} trait}.
 
 
 @deftypefun ccstructs_dtor_T {ccname_trait_new(ccstructs_dtor_T, ccptn_t)} (ccptn_t const * @var{P})
-Build and return an instance of @trait{destructor} trait which we can use to destroy both
+Build and return an instance of @trait{dtor} trait which we can use to destroy both
 embedded and standalone instances of @objtype{ccptn_t}.  It is usually better to use the handlers
 @api{} or, even better, the guarded constructors.
 @end deftypefun
 
 
-We can use the @trait{destructor} trait with the generic handlers @api{} defined by CCStructs,
+We can use the @trait{dtor} trait with the generic handlers @api{} defined by CCStructs,
 @ccstructsref{dtor handlers, Exception handlers}.  Code sample:
 
 @example
@@ -3016,7 +3016,7 @@ ccstructs_clean_handler_t  H[1];
 ccmem_allocator_t const *  A = ccmem_standard_allocator;
 
 if (cce_location(L)) @{
-  cce_run_catch_handlers_raise(L, upper_L);
+  cce_run_catch_handlers_final(L);
 @} else @{
   char const        *input = "/path/to/file.ext";
   ccptn_t           P[1];
@@ -3024,7 +3024,7 @@ if (cce_location(L)) @{
 
   ccname_init(ccptn_t, pointer)(L, A, input);
   ID = ccname_trait_new(ccstructs_dtor_T, ccptn_t)(P);
-  ccstructs_handler_init(L, H, ID);
+  ccstructs_init_and_register_handler(L, H, ID);
 
   cce_run_body_handlers(L);
 @}

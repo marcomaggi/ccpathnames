@@ -37,6 +37,38 @@
 
 
 /** --------------------------------------------------------------------
+ ** Data struct "ccptn_t": methods table.
+ ** ----------------------------------------------------------------- */
+
+/* Type of trait  constructor functions.  Functions of this  type build instances
+   of "ccstructs_dtor_T" as implemented by "ccptn_t". */
+typedef ccstructs_dtor_T ccname_trait_new_type(ccstructs_dtor_T, ccptn_t) (ccptn_t const * self);
+
+/* Function  prototype:   constructor  for   "ccstructs_dtor_T"  as   implemented  by
+   "ccptn_t".  This variant destroys embedded instances. */
+static ccname_trait_new_type(ccstructs_dtor_T, ccptn_t) ccname_trait_new(ccstructs_dtor_T, ccptn_t, embedded);
+
+/* Function  prototype:   constructor  for   "ccstructs_dtor_T"  as   implemented  by
+   "ccptn_t".  This variant destroys standalone instances. */
+static ccname_trait_new_type(ccstructs_dtor_T, ccptn_t) ccname_trait_new(ccstructs_dtor_T, ccptn_t, standalone);
+
+/* Table of methods for "ccptn_t". */
+struct ccname_table_type(ccptn_t) {
+  ccname_trait_new_type(ccstructs_dtor_T, ccptn_t) *	new_dtor;
+};
+
+/* Methods table for "ccptn_t": this variant is for embedded instances. */
+static ccname_table_type(ccptn_t) const ccname_table(ccptn_t, embedded) = {
+  .new_dtor	= ccname_trait_new(ccstructs_dtor_T, ccptn_t, embedded)
+};
+
+/* Methods table for "ccptn_t": this variant is for standalone instances. */
+static ccname_table_type(ccptn_t) const ccname_table(ccptn_t, standalone) = {
+  .new_dtor	= ccname_trait_new(ccstructs_dtor_T, ccptn_t, standalone)
+};
+
+
+/** --------------------------------------------------------------------
  ** Data struct "ccptn_t": well known API functions.
  ** ----------------------------------------------------------------- */
 
@@ -97,6 +129,7 @@ ccname_init(ccptn_t, ascii) (cce_destination_t L, ccmem_allocator_t const * cons
     cce_raise(L, ccptn_condition_new_exceeded_length());
   } else if (0 < input_rep.len) {
     scan_for_non_terminating_zeros(L, input_rep.ptr, input_rep.len);
+    P->methods				= &ccname_table(ccptn_t, embedded);
     P->allocator			= A;
     P->len				= input_rep.len;
     P->dynamically_allocated_base	= 0;
@@ -123,6 +156,7 @@ ccname_init(ccptn_t, asciiz) (cce_destination_t L, ccmem_allocator_t const * con
   if (CCPTN_PATH_MAX < input_rep.len) {
     cce_raise(L, ccptn_condition_new_exceeded_length());
   } else if (0 < input_rep.len) {
+    P->methods				= &ccname_table(ccptn_t, embedded);
     P->allocator			= A;
     P->len				= input_rep.len;
     P->dynamically_allocated_base	= 0;
@@ -175,6 +209,7 @@ ccname_init(ccptn_t, deserialisable) (cce_destination_t L CCPTN_UNUSED, ccmem_al
 /* Initialise an already allocated  instance which is meant to be  used as target for
    deserialisation from an instance of "ccstructs_deserialiser_T". */
 {
+  P->methods				= &ccname_table(ccptn_t, embedded);
   P->allocator				= A;
   P->dynamically_allocated_base		= 0;
   P->dynamically_allocated_buffer	= 0;
@@ -190,6 +225,7 @@ ccname_init(ccptn_t, deserialisable) (cce_destination_t L CCPTN_UNUSED, ccmem_al
 void
 ccname_init(ccptn_t, clone) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * dst, ccptn_t const * src)
 {
+  dst->methods				= &ccname_table(ccptn_t, embedded);
   dst->allocator			= A;
   dst->dynamically_allocated_base	= 0;
   dst->dynamically_allocated_buffer	= 1;
@@ -220,6 +256,7 @@ ccname_new(ccptn_t, ascii) (cce_destination_t L, ccmem_allocator_t const * const
     ccptn_t *	P = ccmem_malloc(L, A, sizeof(ccptn_t) + input_rep.len + 1);
 
     scan_for_non_terminating_zeros(L, input_rep.ptr, input_rep.len);
+    P->methods				= &ccname_table(ccptn_t, standalone);
     P->allocator			= A;
     P->len				= input_rep.len;
     P->dynamically_allocated_base	= 1;
@@ -248,6 +285,7 @@ ccname_new(ccptn_t, asciiz) (cce_destination_t L, ccmem_allocator_t const * cons
   } else if (0 < input_rep.len) {
     ccptn_t *	P = ccmem_malloc(L, A, sizeof(ccptn_t));
 
+    P->methods				= &ccname_table(ccptn_t, standalone);
     P->allocator			= A;
     P->len				= input_rep.len;
     P->dynamically_allocated_base	= 1;
@@ -300,6 +338,7 @@ ccname_new(ccptn_t, deserialisable) (cce_destination_t L, ccmem_allocator_t cons
 {
   ccptn_t *	P = ccmem_malloc(L, A, sizeof(ccptn_t));
 
+  P->methods				= &ccname_table(ccptn_t, standalone);
   P->allocator				= A;
   P->dynamically_allocated_base		= 1;
   P->dynamically_allocated_buffer	= 0;
@@ -320,6 +359,7 @@ ccname_new(ccptn_t, clone) (cce_destination_t L, ccmem_allocator_t const * A, cc
      memory block. */
   ccptn_t *	dst = ccmem_malloc(L, A, sizeof(ccptn_t) + ccptn_len(src) + 1);
 
+  dst->methods				= &ccname_table(ccptn_t, standalone);
   dst->allocator			= A;
   dst->dynamically_allocated_base	= 1;
   dst->dynamically_allocated_buffer	= 0;
@@ -378,6 +418,18 @@ ccptn_standalone_destructor (ccstructs_core_t * S)
 
   ccname_delete(ccptn_t)(self);
   if (CCPTN_DEBUGGING) { fprintf(stderr, "%-35s: deleted by dtor\n", __func__); }
+}
+
+
+/** --------------------------------------------------------------------
+ ** Trait "ccstructs_dtor_T": public constructor for "ccptn_t".
+ ** ----------------------------------------------------------------- */
+
+ccstructs_dtor_T
+ccname_trait_new(ccstructs_dtor_T, ccptn_t) (ccptn_t const * const self)
+/* Trait constructor for "ccstructs_dtor_T" implemented by "ccptn_t". */
+{
+  return self->methods->new_dtor(self);
 }
 
 

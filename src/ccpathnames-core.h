@@ -30,9 +30,12 @@
  ** Pathname type definitions.
  ** ----------------------------------------------------------------- */
 
+typedef struct ccname_table_type(ccptn_t)	ccname_table_type(ccptn_t);
 typedef struct ccptn_t				ccptn_t;
 
 struct ccptn_t {
+  ccname_table_type(ccptn_t) const *	methods;
+
   /* Memory allocator used for this struct and its fields. */
   ccmem_allocator_t const *	allocator;
 
@@ -332,12 +335,6 @@ ccptn_decl void ccptn_fwrite (cce_destination_t L, FILE * stream, ccptn_t const 
  ** ----------------------------------------------------------------- */
 
 ccptn_decl ccstructs_dtor_T ccname_trait_new(ccstructs_dtor_T, ccptn_t) (ccptn_t const * self)
-  __attribute__((__nonnull__(1)));
-
-ccptn_decl ccstructs_dtor_T ccname_trait_new(ccstructs_dtor_T, ccptn_t, embedded) (ccptn_t const * self)
-  __attribute__((__nonnull__(1)));
-
-ccptn_decl ccstructs_dtor_T ccname_trait_new(ccstructs_dtor_T, ccptn_t, standalone) (ccptn_t const * self)
   __attribute__((__nonnull__(1)));
 
 ccptn_decl ccstructs_dumpable_T ccname_trait_new(ccstructs_dumpable_T, ccptn_t) (ccptn_t const * self)
