@@ -7,7 +7,7 @@
 
 
 
-  Copyright (C) 2018 Marco Maggi <marco.maggi-ipsu@poste.it>
+  Copyright (C) 2018, 2019 Marco Maggi <marco.maggi-ipsu@poste.it>
 
   This is free software; you can  redistribute it and/or modify it under
   the terms of the GNU Lesser General Public License as published by the
@@ -53,7 +53,7 @@ test_1_1 (cce_destination_t upper_L)
       cce_run_body_handlers_raise(L, upper_L);
     }
   } else {
-    cce_raise(L, cce_condition(ccptn_condition_new_invalid_pathname()));
+    cce_raise(L, cce_condition(ccptn_condition_new_invalid_pathname(L)));
     cce_run_body_handlers(L);
   }
 }
@@ -73,7 +73,7 @@ test_1_2 (cce_destination_t upper_L)
       cce_run_body_handlers_raise(L, upper_L);
     }
   } else {
-    cce_raise(L, cce_condition(ccptn_condition_new_normalised_pathname()));
+    cce_raise(L, cce_condition(ccptn_condition_new_normalised_pathname(L)));
     cce_run_body_handlers(L);
   }
 }
@@ -98,7 +98,7 @@ test_2_1 (cce_destination_t upper_L)
       cce_run_body_handlers_raise(L, upper_L);
     }
   } else {
-    cce_raise(L, cce_condition(ccptn_condition_new_exceeded_length()));
+    cce_raise(L, cce_condition(ccptn_condition_new_exceeded_length(L)));
     cce_run_body_handlers(L);
   }
 }

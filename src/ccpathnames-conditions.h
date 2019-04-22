@@ -41,10 +41,15 @@ struct ccptn_condition_invalid_pathname_t {
   cce_condition_runtime_error_t	runtime_error;
 };
 
-ccptn_decl void ccptn_condition_init_invalid_pathname (ccptn_condition_invalid_pathname_t * C)
+ccptn_decl void cce_descriptor_set_parent_to(ccptn_descriptor_invalid_pathname_t) (cce_descriptor_t * D)
   __attribute__((__nonnull__(1)));
 
-ccptn_decl cce_condition_t const * ccptn_condition_new_invalid_pathname (void)
+/* ------------------------------------------------------------------ */
+
+ccptn_decl void ccptn_condition_init_invalid_pathname (cce_destination_t L, ccptn_condition_invalid_pathname_t * C)
+  __attribute__((__nonnull__(1)));
+
+ccptn_decl cce_condition_t const * ccptn_condition_new_invalid_pathname (cce_destination_t L)
   __attribute__((__returns_nonnull__));
 
 ccptn_decl bool ccptn_condition_is_invalid_pathname (cce_condition_t const * C)
@@ -66,10 +71,15 @@ struct ccptn_condition_exceeded_length_t {
   cce_condition_runtime_error_t	runtime_error;
 };
 
-ccptn_decl void ccptn_condition_init_exceeded_length (ccptn_condition_exceeded_length_t * C)
+ccptn_decl void cce_descriptor_set_parent_to(ccptn_descriptor_exceeded_length_t) (cce_descriptor_t * D)
   __attribute__((__nonnull__(1)));
 
-ccptn_decl cce_condition_t const * ccptn_condition_new_exceeded_length (void)
+/* ------------------------------------------------------------------ */
+
+ccptn_decl void ccptn_condition_init_exceeded_length (cce_destination_t L, ccptn_condition_exceeded_length_t * C)
+  __attribute__((__nonnull__(1)));
+
+ccptn_decl cce_condition_t const * ccptn_condition_new_exceeded_length (cce_destination_t L)
   __attribute__((__returns_nonnull__));
 
 ccptn_decl bool ccptn_condition_is_exceeded_length (cce_condition_t const * C)
@@ -91,10 +101,15 @@ struct ccptn_condition_zero_length_t {
   cce_condition_runtime_error_t	runtime_error;
 };
 
-ccptn_decl void ccptn_condition_init_zero_length (ccptn_condition_zero_length_t * C)
+ccptn_decl void cce_descriptor_set_parent_to(ccptn_descriptor_zero_length_t) (cce_descriptor_t * D)
   __attribute__((__nonnull__(1)));
 
-ccptn_decl cce_condition_t const * ccptn_condition_new_zero_length (void)
+/* ------------------------------------------------------------------ */
+
+ccptn_decl void ccptn_condition_init_zero_length (cce_destination_t L, ccptn_condition_zero_length_t * C)
+  __attribute__((__nonnull__(1)));
+
+ccptn_decl cce_condition_t const * ccptn_condition_new_zero_length (cce_destination_t L)
   __attribute__((__returns_nonnull__));
 
 ccptn_decl bool ccptn_condition_is_zero_length (cce_condition_t const * C)
@@ -116,10 +131,15 @@ struct ccptn_condition_invalid_length_t {
   cce_condition_runtime_error_t	runtime_error;
 };
 
-ccptn_decl void ccptn_condition_init_invalid_length (ccptn_condition_invalid_length_t * C)
+ccptn_decl void cce_descriptor_set_parent_to(ccptn_descriptor_invalid_length_t) (cce_descriptor_t * D)
   __attribute__((__nonnull__(1)));
 
-ccptn_decl cce_condition_t const * ccptn_condition_new_invalid_length (void)
+/* ------------------------------------------------------------------ */
+
+ccptn_decl void ccptn_condition_init_invalid_length (cce_destination_t L, ccptn_condition_invalid_length_t * C)
+  __attribute__((__nonnull__(1)));
+
+ccptn_decl cce_condition_t const * ccptn_condition_new_invalid_length (cce_destination_t L)
   __attribute__((__returns_nonnull__));
 
 ccptn_decl bool ccptn_condition_is_invalid_length (cce_condition_t const * C)
@@ -141,10 +161,15 @@ struct ccptn_condition_normalised_pathname_t {
   ccptn_condition_invalid_pathname_t	invalid_pathname;
 };
 
-ccptn_decl void ccptn_condition_init_normalised_pathname (ccptn_condition_normalised_pathname_t * C)
+ccptn_decl void cce_descriptor_set_parent_to(ccptn_descriptor_normalised_pathname_t) (cce_descriptor_t * D)
   __attribute__((__nonnull__(1)));
 
-ccptn_decl cce_condition_t const * ccptn_condition_new_normalised_pathname (void)
+/* ------------------------------------------------------------------ */
+
+ccptn_decl void ccptn_condition_init_normalised_pathname (cce_destination_t L, ccptn_condition_normalised_pathname_t * C)
+  __attribute__((__nonnull__(1)));
+
+ccptn_decl cce_condition_t const * ccptn_condition_new_normalised_pathname (cce_destination_t L)
   __attribute__((__returns_nonnull__));
 
 ccptn_decl bool ccptn_condition_is_normalised_pathname (cce_condition_t const * C)
@@ -166,10 +191,15 @@ struct ccptn_condition_no_dirname_t {
   ccptn_condition_invalid_pathname_t	invalid_pathname;
 };
 
-ccptn_decl void ccptn_condition_init_no_dirname (ccptn_condition_no_dirname_t * C)
+ccptn_decl void cce_descriptor_set_parent_to(ccptn_descriptor_no_dirname_t) (cce_descriptor_t * D)
   __attribute__((__nonnull__(1)));
 
-ccptn_decl cce_condition_t const * ccptn_condition_new_no_dirname (void)
+/* ------------------------------------------------------------------ */
+
+ccptn_decl void ccptn_condition_init_no_dirname (cce_destination_t L, ccptn_condition_no_dirname_t * C)
+  __attribute__((__nonnull__(1)));
+
+ccptn_decl cce_condition_t const * ccptn_condition_new_no_dirname (cce_destination_t L)
   __attribute__((__returns_nonnull__));
 
 ccptn_decl bool ccptn_condition_is_no_dirname (cce_condition_t const * C)
@@ -191,10 +221,15 @@ struct ccptn_condition_no_filename_t {
   ccptn_condition_invalid_pathname_t	invalid_pathname;
 };
 
-ccptn_decl void ccptn_condition_init_no_filename (ccptn_condition_no_filename_t * C)
+ccptn_decl void cce_descriptor_set_parent_to(ccptn_descriptor_no_filename_t) (cce_descriptor_t * D)
   __attribute__((__nonnull__(1)));
 
-ccptn_decl cce_condition_t const * ccptn_condition_new_no_filename (void)
+/* ------------------------------------------------------------------ */
+
+ccptn_decl void ccptn_condition_init_no_filename (cce_destination_t L, ccptn_condition_no_filename_t * C)
+  __attribute__((__nonnull__(1)));
+
+ccptn_decl cce_condition_t const * ccptn_condition_new_no_filename (cce_destination_t L)
   __attribute__((__returns_nonnull__));
 
 ccptn_decl bool ccptn_condition_is_no_filename (cce_condition_t const * C)
@@ -216,10 +251,15 @@ struct ccptn_condition_no_tailname_t {
   ccptn_condition_invalid_pathname_t	invalid_pathname;
 };
 
-ccptn_decl void ccptn_condition_init_no_tailname (ccptn_condition_no_tailname_t * C)
+ccptn_decl void cce_descriptor_set_parent_to(ccptn_descriptor_no_tailname_t) (cce_descriptor_t * D)
   __attribute__((__nonnull__(1)));
 
-ccptn_decl cce_condition_t const * ccptn_condition_new_no_tailname (void)
+/* ------------------------------------------------------------------ */
+
+ccptn_decl void ccptn_condition_init_no_tailname (cce_destination_t L, ccptn_condition_no_tailname_t * C)
+  __attribute__((__nonnull__(1)));
+
+ccptn_decl cce_condition_t const * ccptn_condition_new_no_tailname (cce_destination_t L)
   __attribute__((__returns_nonnull__));
 
 ccptn_decl bool ccptn_condition_is_no_tailname (cce_condition_t const * C)
@@ -241,10 +281,15 @@ struct ccptn_condition_no_rootname_t {
   ccptn_condition_invalid_pathname_t	invalid_pathname;
 };
 
-ccptn_decl void ccptn_condition_init_no_rootname (ccptn_condition_no_rootname_t * C)
+ccptn_decl void cce_descriptor_set_parent_to(ccptn_descriptor_no_rootname_t) (cce_descriptor_t * D)
   __attribute__((__nonnull__(1)));
 
-ccptn_decl cce_condition_t const * ccptn_condition_new_no_rootname (void)
+/* ------------------------------------------------------------------ */
+
+ccptn_decl void ccptn_condition_init_no_rootname (cce_destination_t L, ccptn_condition_no_rootname_t * C)
+  __attribute__((__nonnull__(1)));
+
+ccptn_decl cce_condition_t const * ccptn_condition_new_no_rootname (cce_destination_t L)
   __attribute__((__returns_nonnull__));
 
 ccptn_decl bool ccptn_condition_is_no_rootname (cce_condition_t const * C)

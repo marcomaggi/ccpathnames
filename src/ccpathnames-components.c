@@ -229,7 +229,7 @@ ccptn_extension (cce_destination_t L, ccptn_t const * const P)
       }
     }
   } else {
-    cce_raise(L, ccptn_condition_new_normalised_pathname());
+    cce_raise(L, ccptn_condition_new_normalised_pathname(L));
   }
 }
 
@@ -257,7 +257,7 @@ ptn_rootname (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * R, ccp
 
       if (IS_STANDALONE_SLASH(P->ptr, P->ptr + ccptn_len(P)) ||
 	  ccptn_segment_is_dot(S) || ccptn_segment_is_double_dot(S)) {
-	cce_raise(L, ccptn_condition_new_no_rootname());
+	cce_raise(L, ccptn_condition_new_no_rootname(L));
       } else {
 	char const *	beg = P->ptr;
 	size_t		len = ccptn_len(P);
@@ -295,7 +295,7 @@ ptn_rootname (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * R, ccp
       return R;
     }
   } else {
-    cce_raise(L, ccptn_condition_new_normalised_pathname());
+    cce_raise(L, ccptn_condition_new_normalised_pathname(L));
   }
 }
 
@@ -366,7 +366,7 @@ ptn_dirname (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * R, ccpt
     }
     /* If the pathname is "..", it has no dirname. */
     else if (IS_STANDALONE_DOUBLE_DOT(beg, end)) {
-      cce_raise(L, ccptn_condition_new_no_dirname());
+      cce_raise(L, ccptn_condition_new_no_dirname(L));
     }
     /* If the pathname is "/": the directory part is "/". */
     else if (IS_STANDALONE_SLASH(beg, end)) {
@@ -407,11 +407,11 @@ ptn_dirname (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * R, ccpt
 	return R;
       } else {
 	/* There is no slash: the input pathname has no dirname. */
-	cce_raise(L, ccptn_condition_new_no_dirname());
+	cce_raise(L, ccptn_condition_new_no_dirname(L));
       }
     }
   } else {
-    cce_raise(L, ccptn_condition_new_normalised_pathname());
+    cce_raise(L, ccptn_condition_new_normalised_pathname(L));
   }
 }
 
@@ -466,7 +466,7 @@ ptn_tailname (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * R, ccp
     char const * const	beg = P->ptr;
 
     if (IS_STANDALONE_SLASH(beg, beg + len)) {
-      cce_raise(L, ccptn_condition_new_no_tailname());
+      cce_raise(L, ccptn_condition_new_no_tailname(L));
     } else {
       char const *	ptr = beg + len - 1;
 
@@ -501,7 +501,7 @@ ptn_tailname (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * R, ccp
       }
     }
   } else {
-    cce_raise(L, ccptn_condition_new_normalised_pathname());
+    cce_raise(L, ccptn_condition_new_normalised_pathname(L));
   }
 }
 
@@ -555,13 +555,13 @@ ptn_filename (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * R, ccp
     char const * const	end = beg + len;
 
     if (IS_STANDALONE_SLASH(beg, end) || IS_STANDALONE_SINGLE_DOT(beg, end) || IS_STANDALONE_DOUBLE_DOT(beg, end)) {
-      cce_raise(L, ccptn_condition_new_no_filename());
+      cce_raise(L, ccptn_condition_new_no_filename(L));
     } else {
       char const *	ptr = end - 1;
 
       /* There is a trailing slash: it represents a directory. */
       if ('/' == *ptr) {
-	cce_raise(L, ccptn_condition_new_no_filename());
+	cce_raise(L, ccptn_condition_new_no_filename(L));
       }
 
       /* Find the latest slash. */
@@ -590,7 +590,7 @@ ptn_filename (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * R, ccp
       }
     }
   } else {
-    cce_raise(L, ccptn_condition_new_normalised_pathname());
+    cce_raise(L, ccptn_condition_new_normalised_pathname(L));
   }
 }
 

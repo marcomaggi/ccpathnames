@@ -280,27 +280,15 @@ library is built with @gcc{}: it will be called automatically by the library ini
 The @dfn{invalid pathname exceptional--condition object--type} has the purpose of describing an
 exceptional condition caused by attempting to use an invalid pathname.
 
-There should be only one @emph{invalid pathname} exceptional--condition object: the one predefined
-by @value{PACKAGE}.  Subtyping from this object--type is allowed.
-
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
-@deftp {Struct Typedef} ccptn_descriptor_invalid_pathname_t
-Structure type representing the descriptor for @emph{invalid pathname} exceptional--condition
-objects.  This descriptor has @objtype{cce_descriptor_runtime_error_t} as parent descriptor.  It has
-the following public fields:
-
-@table @code
-@item cce_descriptor_t descriptor
-Core values for the exceptional--condition object--type.
-@end table
-@end deftp
+@CCEDescriptorTypedef{ccptn,invalid_pathname,cce_descriptor_runtime_error_t}
 
 
-@deftp {Struct Typedef} ccptn_condition_invalid_pathname_t
-Structure type representing an @emph{invalid pathname} exceptional--condition object.  It has the
-following public fields:
+@deftp {Struct Typedef} @CCEConditionObjectType{ccptn,invalid_pathname}
+Type of data structure representing an exceptional--condition object.  It has the following public
+fields:
 
 @table @code
 @item cce_condition_runtime_error_t runtime_error
@@ -309,22 +297,13 @@ Core values for the exceptional--condition object.
 @end deftp
 
 
-@deftypefun void ccptn_condition_init_invalid_pathname (ccptn_condition_invalid_pathname_t * @var{C})
-Initialise an already allocated exceptional--condition object.  This function exists to allow
-sub--typing from @objtype{ccptn_condition_invalid_pathname_t}.
-@end deftypefun
+@CCEConditionObjectNewNoArgs{ccptn,invalid_pathname}
 
 
-@deftypefun {cce_condition_t const *} ccptn_condition_new_invalid_pathname (void)
-Return a pointer to the statically allocated structure representing the single @emph{invalid
-pathname} exceptional--condition object.
-@end deftypefun
+@CCEConditionObjectPredicate{ccptn,invalid_pathname}
 
 
-@deftypefun bool ccptn_condition_is_invalid_pathname (cce_condition_t const * @var{C})
-Return @ctrue{} if @var{C} is an @emph{invalid pathname} exceptional--condition object; otherwise
-return @cfalse{}.
-@end deftypefun
+@CCEConditionSubtypingFacilitiesNoArgsFailing{ccptn,invalid_pathname}
 
 @c page
 @node conditions length
@@ -334,27 +313,15 @@ return @cfalse{}.
 The @dfn{exceeded length exceptional--condition object--type} has the purpose of describing an
 exceptional condition caused by attempting an operation that would generate a too long pathname.
 
-There should be only one @emph{exceeded length} exceptional--condition object: the one predefined by
-@value{PACKAGE}.  Subtyping from this object--type is allowed.
-
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
-@deftp {Struct Typedef} ccptn_descriptor_exceeded_length_t
-Structure type representing the descriptor for @emph{exceeded length} exceptional--condition
-objects.  This descriptor has @objtype{cce_descriptor_runtime_error_t} as parent descriptor.  It has
-the following public fields:
-
-@table @code
-@item cce_descriptor_t descriptor
-Core values for the exceptional--condition object--type.
-@end table
-@end deftp
+@CCEDescriptorTypedef{ccptn,exceeded_length,cce_descriptor_runtime_error_t}
 
 
-@deftp {Struct Typedef} ccptn_condition_exceeded_length_t
-Structure type representing an @emph{exceeded length} exceptional--condition object.  It has the
-following public fields:
+@deftp {Struct Typedef} @CCEConditionObjectType{ccptn,exceeded_length}
+Type of data structure representing an exceptional--condition object.  It has the following public
+fields:
 
 @table @code
 @item cce_condition_runtime_error_t runtime_error
@@ -363,22 +330,13 @@ Core values for the exceptional--condition object.
 @end deftp
 
 
-@deftypefun void ccptn_condition_init_exceeded_length (ccptn_condition_exceeded_length_t * @var{C})
-Initialise an already allocated exceptional--condition object.  This function exists to allow
-sub--typing from @objtype{ccptn_condition_exceeded_length_t}.
-@end deftypefun
+@CCEConditionObjectNewNoArgs{ccptn,exceeded_length}
 
 
-@deftypefun {cce_condition_t const *} ccptn_condition_new_exceeded_length (void)
-Return a pointer to the statically allocated structure representing the single @emph{exceeded
-length} exceptional--condition object.
-@end deftypefun
+@CCEConditionObjectPredicate{ccptn,exceeded_length}
 
 
-@deftypefun bool ccptn_condition_is_exceeded_length (cce_condition_t const * @var{C})
-Return @ctrue{} if @var{C} is an @emph{exceeded length} exceptional--condition object; otherwise
-return @cfalse{}.
-@end deftypefun
+@CCEConditionSubtypingFacilitiesNoArgsFailing{ccptn,exceeded_length}
 
 @c page
 @node conditions zero length
@@ -388,27 +346,15 @@ return @cfalse{}.
 The @dfn{zero--length exceptional--condition object--type} has the purpose of describing an exceptional
 condition caused by attempting an operation that would generate zero--length pathname.
 
-There should be only one @emph{zero length} exceptional--condition object: the one predefined by
-@value{PACKAGE}.  Subtyping from this object--type is allowed.
-
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
-@deftp {Struct Typedef} ccptn_descriptor_zero_length_t
-Structure type representing the descriptor for @emph{zero length} exceptional--condition objects.
-This descriptor has @objtype{cce_descriptor_runtime_error_t} as parent descriptor.  It has
-the following public fields:
-
-@table @code
-@item cce_descriptor_t descriptor
-Core values for the exceptional--condition object--type.
-@end table
-@end deftp
+@CCEDescriptorTypedef{ccptn,zero_length,cce_descriptor_runtime_error_t}
 
 
-@deftp {Struct Typedef} ccptn_condition_zero_length_t
-Structure type representing an @emph{zero length} exceptional--condition object.  It has the
-following public fields:
+@deftp {Struct Typedef} @CCEConditionObjectType{ccptn,zero_length}
+Type of data structure representing an exceptional--condition object.  It has the following public
+fields:
 
 @table @code
 @item cce_condition_runtime_error_t runtime_error
@@ -417,22 +363,13 @@ Core values for the exceptional--condition object.
 @end deftp
 
 
-@deftypefun void ccptn_condition_init_zero_length (ccptn_condition_zero_length_t * @var{C})
-Initialise an already allocated exceptional--condition object.  This function exists to allow
-sub--typing from @objtype{ccptn_condition_zero_length_t}.
-@end deftypefun
+@CCEConditionObjectNewNoArgs{ccptn,zero_length}
 
 
-@deftypefun {cce_condition_t const *} ccptn_condition_new_zero_length (void)
-Return a pointer to the statically allocated structure representing the single @emph{zero length}
-exceptional--condition object.
-@end deftypefun
+@CCEConditionObjectPredicate{ccptn,zero_length}
 
 
-@deftypefun bool ccptn_condition_is_zero_length (cce_condition_t const * @var{C})
-Return @ctrue{} if @var{C} is a @emph{zero length} exceptional--condition object; otherwise return
-@cfalse{}.
-@end deftypefun
+@CCEConditionSubtypingFacilitiesNoArgsFailing{ccptn,zero_length}
 
 @c page
 @node conditions invalid length
@@ -443,27 +380,15 @@ The @dfn{invalid length exceptional--condition object--type} has the purpose of 
 exceptional condition caused by attempting an operation on a pathname string that contains a
 non--terminating zero octet.
 
-There should be only one @emph{invalid length} exceptional--condition object: the one predefined by
-@value{PACKAGE}.  Subtyping from this object--type is allowed.
-
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
-@deftp {Struct Typedef} ccptn_descriptor_invalid_length_t
-Structure type representing the descriptor for @emph{invalid length} exceptional--condition objects.
-This descriptor has @objtype{cce_descriptor_runtime_error_t} as parent descriptor.  It has
-the following public fields:
-
-@table @code
-@item cce_descriptor_t descriptor
-Core values for the exceptional--condition object--type.
-@end table
-@end deftp
+@CCEDescriptorTypedef{ccptn,invalid_length,cce_descriptor_runtime_error_t}
 
 
-@deftp {Struct Typedef} ccptn_condition_invalid_length_t
-Structure type representing an @emph{invalid length} exceptional--condition object.  It has the
-following public fields:
+@deftp {Struct Typedef} @CCEConditionObjectType{ccptn,invalid_length}
+Type of data structure representing an exceptional--condition object.  It has the following public
+fields:
 
 @table @code
 @item cce_condition_runtime_error_t runtime_error
@@ -472,22 +397,13 @@ Core values for the exceptional--condition object.
 @end deftp
 
 
-@deftypefun void ccptn_condition_init_invalid_length (ccptn_condition_invalid_length_t * @var{C})
-Initialise an already allocated exceptional--condition object.  This function exists to allow
-sub--typing from @objtype{ccptn_condition_invalid_length_t}.
-@end deftypefun
+@CCEConditionObjectNewNoArgs{ccptn,invalid_length}
 
 
-@deftypefun {cce_condition_t const *} ccptn_condition_new_invalid_length (void)
-Return a pointer to the statically allocated structure representing the single @emph{invalid length}
-exceptional--condition object.
-@end deftypefun
+@CCEConditionObjectPredicate{ccptn,invalid_length}
 
 
-@deftypefun bool ccptn_condition_is_invalid_length (cce_condition_t const * @var{C})
-Return @ctrue{} if @var{C} is an @emph{invalid length} exceptional--condition object; otherwise
-return @cfalse{}.
-@end deftypefun
+@CCEConditionSubtypingFacilitiesNoArgsFailing{ccptn,invalid_length}
 
 @c page
 @node conditions normalised
@@ -498,51 +414,30 @@ The @dfn{normalised pathname exceptional--condition object--type} has the purpos
 exceptional condition caused by attempting an operation on a pathname that is @strong{not}
 normalised, while the operation requires that it is.
 
-There should be only one @emph{normalised pathname} exceptional--condition object: the one
-predefined by @value{PACKAGE}.  Subtyping from this object--type is allowed.
-
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
-@deftp {Struct Typedef} ccptn_descriptor_normalised_pathname_t
-Structure type representing the descriptor for @emph{normalised pathname} exceptional--condition
-objects.  This descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.  It has
-the following public fields:
+@CCEDescriptorTypedef{ccptn,normalised_pathname,ccptn_descriptor_invalid_pathname_t}
+
+
+@deftp {Struct Typedef} @CCEConditionObjectType{ccptn,normalised_pathname}
+Type of data structure representing an exceptional--condition object.  It has the following public
+fields:
 
 @table @code
-@item cce_descriptor_t descriptor
-Core values for the exceptional--condition object--type.
-@end table
-@end deftp
-
-
-@deftp {Struct Typedef} ccptn_condition_normalised_pathname_t
-Structure type representing an @emph{normalised pathname} exceptional--condition object.  It has the
-following public fields:
-
-@table @code
-@item ccptn_descriptor_invalid_pathname_t invalid_pathname
+@item ccptn_condition_invalid_pathname_t invalid_pathname
 Core values for the exceptional--condition object.
 @end table
 @end deftp
 
 
-@deftypefun void ccptn_condition_init_normalised_pathname (ccptn_condition_normalised_pathname_t * @var{C})
-Initialise an already allocated exceptional--condition object.  This function exists to allow
-sub--typing from @objtype{ccptn_condition_normalised_pathname_t}.
-@end deftypefun
+@CCEConditionObjectNewNoArgs{ccptn,normalised_pathname}
 
 
-@deftypefun {cce_condition_t const *} ccptn_condition_new_normalised_pathname (void)
-Return a pointer to the statically allocated structure representing the single @emph{normalised
-pathname} exceptional--condition object.
-@end deftypefun
+@CCEConditionObjectPredicate{ccptn,normalised_pathname}
 
 
-@deftypefun bool ccptn_condition_is_normalised_pathname (cce_condition_t const * @var{C})
-Return @ctrue{} if @var{C} is a @emph{normalised pathname} exceptional--condition object; otherwise
-return @cfalse{}.
-@end deftypefun
+@CCEConditionSubtypingFacilitiesNoArgsFailing{ccptn,normalised_pathname}
 
 @c page
 @node conditions no dirname
@@ -562,51 +457,30 @@ stripped.  Examples:
 ".."                    @error{} no dirname
 @end example
 
-There should be only one @emph{no dirname} exceptional--condition object: the one predefined by
-@value{PACKAGE}.  Subtyping from this object--type is allowed.
-
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
-@deftp {Struct Typedef} ccptn_descriptor_no_dirname_t
-Structure type representing the descriptor for @emph{no dirname} exceptional--condition objects.
-This descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.  It has
-the following public fields:
+@CCEDescriptorTypedef{ccptn,no_dirname,ccptn_descriptor_invalid_pathname_t}
+
+
+@deftp {Struct Typedef} @CCEConditionObjectType{ccptn,no_dirname}
+Type of data structure representing an exceptional--condition object.  It has the following public
+fields:
 
 @table @code
-@item cce_descriptor_t descriptor
-Core values for the exceptional--condition object--type.
-@end table
-@end deftp
-
-
-@deftp {Struct Typedef} ccptn_condition_no_dirname_t
-Structure type representing an @emph{no dirname} exceptional--condition object.  It has the
-following public fields:
-
-@table @code
-@item ccptn_descriptor_invalid_pathname_t invalid_pathname
+@item ccptn_condition_invalid_pathname_t invalid_pathname
 Core values for the exceptional--condition object.
 @end table
 @end deftp
 
 
-@deftypefun void ccptn_condition_init_no_dirname (ccptn_condition_no_dirname_t * @var{C})
-Initialise an already allocated exceptional--condition object.  This function exists to allow
-sub--typing from @objtype{ccptn_condition_no_dirname_t}.
-@end deftypefun
+@CCEConditionObjectNewNoArgs{ccptn,no_dirname}
 
 
-@deftypefun {cce_condition_t const *} ccptn_condition_new_no_dirname (void)
-Return a pointer to the statically allocated structure representing the single @emph{no dirname}
-exceptional--condition object.
-@end deftypefun
+@CCEConditionObjectPredicate{ccptn,no_dirname}
 
 
-@deftypefun bool ccptn_condition_is_no_dirname (cce_condition_t const * @var{C})
-Return @ctrue{} if @var{C} is a @emph{no dirname} exceptional--condition object; otherwise return
-@cfalse{}.
-@end deftypefun
+@CCEConditionSubtypingFacilitiesNoArgsFailing{ccptn,no_dirname}
 
 @c page
 @node conditions no filename
@@ -626,51 +500,30 @@ does not represent a directory.  Examples:
 ".."                    @error{} no filename
 @end example
 
-There should be only one @emph{no filename} exceptional--condition object: the one predefined by
-@value{PACKAGE}.  Subtyping from this object--type is allowed.
-
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
-@deftp {Struct Typedef} ccptn_descriptor_no_filename_t
-Structure type representing the descriptor for @emph{no filename} exceptional--condition objects.
-This descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.  It has
-the following public fields:
+@CCEDescriptorTypedef{ccptn,no_filename,ccptn_descriptor_invalid_pathname_t}
+
+
+@deftp {Struct Typedef} @CCEConditionObjectType{ccptn,no_filename}
+Type of data structure representing an exceptional--condition object.  It has the following public
+fields:
 
 @table @code
-@item cce_descriptor_t descriptor
-Core values for the exceptional--condition object--type.
-@end table
-@end deftp
-
-
-@deftp {Struct Typedef} ccptn_condition_no_filename_t
-Structure type representing an @emph{no filename} exceptional--condition object.  It has the
-following public fields:
-
-@table @code
-@item ccptn_descriptor_invalid_pathname_t invalid_pathname
+@item ccptn_condition_invalid_pathname_t invalid_pathname
 Core values for the exceptional--condition object.
 @end table
 @end deftp
 
 
-@deftypefun void ccptn_condition_init_no_filename (ccptn_condition_no_filename_t * @var{C})
-Initialise an already allocated exceptional--condition object.  This function exists to allow
-sub--typing from @objtype{ccptn_condition_no_filename_t}.
-@end deftypefun
+@CCEConditionObjectNewNoArgs{ccptn,no_filename}
 
 
-@deftypefun {cce_condition_t const *} ccptn_condition_new_no_filename (void)
-Return a pointer to the statically allocated structure representing the single @emph{no filename}
-exceptional--condition object.
-@end deftypefun
+@CCEConditionObjectPredicate{ccptn,no_filename}
 
 
-@deftypefun bool ccptn_condition_is_no_filename (cce_condition_t const * @var{C})
-Return @ctrue{} if @var{C} is a @emph{no filename} exceptional--condition object; otherwise return
-@cfalse{}.
-@end deftypefun
+@CCEConditionSubtypingFacilitiesNoArgsFailing{ccptn,no_filename}
 
 @c page
 @node conditions no tailname
@@ -690,51 +543,30 @@ required.  The tailname is the relative pathname representing the last segment. 
 "/"                     @error{} no tailname
 @end example
 
-There should be only one @emph{no tailname} exceptional--condition object: the one predefined by
-@value{PACKAGE}.  Subtyping from this object--type is allowed.
-
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
-@deftp {Struct Typedef} ccptn_descriptor_no_tailname_t
-Structure type representing the descriptor for @emph{no tailname} exceptional--condition objects.
-This descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.  It has
-the following public fields:
+@CCEDescriptorTypedef{ccptn,no_tailname,ccptn_descriptor_invalid_pathname_t}
+
+
+@deftp {Struct Typedef} @CCEConditionObjectType{ccptn,no_tailname}
+Type of data structure representing an exceptional--condition object.  It has the following public
+fields:
 
 @table @code
-@item cce_descriptor_t descriptor
-Core values for the exceptional--condition object--type.
-@end table
-@end deftp
-
-
-@deftp {Struct Typedef} ccptn_condition_no_tailname_t
-Structure type representing an @emph{no tailname} exceptional--condition object.  It has the
-following public fields:
-
-@table @code
-@item ccptn_descriptor_invalid_pathname_t invalid_pathname
+@item ccptn_condition_invalid_pathname_t invalid_pathname
 Core values for the exceptional--condition object.
 @end table
 @end deftp
 
 
-@deftypefun void ccptn_condition_init_no_tailname (ccptn_condition_no_tailname_t * @var{C})
-Initialise an already allocated exceptional--condition object.  This function exists to allow
-sub--typing from @objtype{ccptn_condition_no_tailname_t}.
-@end deftypefun
+@CCEConditionObjectNewNoArgs{ccptn,no_tailname}
 
 
-@deftypefun {cce_condition_t const *} ccptn_condition_new_no_tailname (void)
-Return a pointer to the statically allocated structure representing the single @emph{no tailname}
-exceptional--condition object.
-@end deftypefun
+@CCEConditionObjectPredicate{ccptn,no_tailname}
 
 
-@deftypefun bool ccptn_condition_is_no_tailname (cce_condition_t const * @var{C})
-Return @ctrue{} if @var{C} is a @emph{no tailname} exceptional--condition object; otherwise return
-@cfalse{}.
-@end deftypefun
+@CCEConditionSubtypingFacilitiesNoArgsFailing{ccptn,no_tailname}
 
 @c page
 @node conditions no rootname
@@ -756,51 +588,30 @@ Examples:
 ".."                    @error{} missing rootname
 @end example
 
-There should be only one @emph{no rootname} exceptional--condition object: the one predefined by
-@value{PACKAGE}.  Subtyping from this object--type is allowed.
-
 All the following definitions are accessible from the header file @file{ccpathnames.h}.
 
 
-@deftp {Struct Typedef} ccptn_descriptor_no_rootname_t
-Structure type representing the descriptor for @emph{no rootname} exceptional--condition objects.
-This descriptor has @objtype{ccptn_descriptor_invalid_pathname_t} as parent descriptor.  It has
-the following public fields:
+@CCEDescriptorTypedef{ccptn,no_rootname,ccptn_descriptor_invalid_pathname_t}
+
+
+@deftp {Struct Typedef} @CCEConditionObjectType{ccptn,no_rootname}
+Type of data structure representing an exceptional--condition object.  It has the following public
+fields:
 
 @table @code
-@item cce_descriptor_t descriptor
-Core values for the exceptional--condition object--type.
-@end table
-@end deftp
-
-
-@deftp {Struct Typedef} ccptn_condition_no_rootname_t
-Structure type representing an @emph{no rootname} exceptional--condition object.  It has the
-following public fields:
-
-@table @code
-@item ccptn_descriptor_invalid_pathname_t invalid_pathname
+@item ccptn_condition_invalid_pathname_t invalid_pathname
 Core values for the exceptional--condition object.
 @end table
 @end deftp
 
 
-@deftypefun void ccptn_condition_init_no_rootname (ccptn_condition_no_rootname_t * @var{C})
-Initialise an already allocated exceptional--condition object.  This function exists to allow
-sub--typing from @objtype{ccptn_condition_no_rootname_t}.
-@end deftypefun
+@CCEConditionObjectNewNoArgs{ccptn,no_rootname}
 
 
-@deftypefun {cce_condition_t const *} ccptn_condition_new_no_rootname (void)
-Return a pointer to the statically allocated structure representing the single @emph{no rootname}
-exceptional--condition object.
-@end deftypefun
+@CCEConditionObjectPredicate{ccptn,no_rootname}
 
 
-@deftypefun bool ccptn_condition_is_no_rootname (cce_condition_t const * @var{C})
-Return @ctrue{} if @var{C} is a @emph{no rootname} exceptional--condition object; otherwise return
-@cfalse{}.
-@end deftypefun
+@CCEConditionSubtypingFacilitiesNoArgsFailing{ccptn,no_rootname}
 
 @c page
 @node typedefs

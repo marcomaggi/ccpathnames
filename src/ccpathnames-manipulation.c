@@ -121,7 +121,7 @@ ptn_realpath (cce_destination_t upper_L, ccmem_allocator_t const * const A, ccpt
 	  .ptr	= (char *)rv
 	};
 	if (CCPTN_PATH_MAX < R_block.len) {
-	  cce_raise(L, ccptn_condition_new_exceeded_length());
+	  cce_raise(L, ccptn_condition_new_exceeded_length(L));
 	} else {
 	  if (R) {
 	    ccname_init(ccptn_t, ascii)(L, A, R, R_block);
@@ -597,7 +597,7 @@ ccptn_normal_pass_remove_double_dot_segments (cce_destination_t L, char * output
 	   *
 	   * raise an exception, there is no way to normalise the input.
 	   */
-	  cce_raise(L, ccptn_condition_new_invalid_pathname());
+	  cce_raise(L, ccptn_condition_new_invalid_pathname(L));
 	}
       }
     }
@@ -686,7 +686,7 @@ ptn_concat (cce_destination_t L, ccmem_allocator_t const * const A, ccptn_t * R,
   }
 
   if (CCPTN_PATH_MAX < R_len) {
-    cce_raise(L, ccptn_condition_new_exceeded_length());
+    cce_raise(L, ccptn_condition_new_exceeded_length(L));
   } else {
     /* This array must hold the whole pathname plus the terminating zero
        octet. */

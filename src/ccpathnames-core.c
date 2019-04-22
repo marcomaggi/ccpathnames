@@ -109,7 +109,7 @@ scan_for_non_terminating_zeros (cce_destination_t L, char const * const ptr, siz
 {
   for (size_t i=0; i<len; ++i) {
     if ('\0' == ptr[i]) {
-      cce_raise(L, ccptn_condition_new_invalid_length());
+      cce_raise(L, ccptn_condition_new_invalid_length(L));
     }
   }
 }
@@ -126,7 +126,7 @@ ccname_init(ccptn_t, ascii) (cce_destination_t L, ccmem_allocator_t const * cons
    duplicate the data to add a terminating zero. */
 {
   if (CCPTN_PATH_MAX < input_rep.len) {
-    cce_raise(L, ccptn_condition_new_exceeded_length());
+    cce_raise(L, ccptn_condition_new_exceeded_length(L));
   } else if (0 < input_rep.len) {
     scan_for_non_terminating_zeros(L, input_rep.ptr, input_rep.len);
     P->methods				= &ccname_table(ccptn_t, embedded);
@@ -141,7 +141,7 @@ ccname_init(ccptn_t, ascii) (cce_destination_t L, ccmem_allocator_t const * cons
     memcpy((void *)(P->ptr), input_rep.ptr, input_rep.len);
     ((char *)(P->ptr))[input_rep.len] = '\0';
   } else {
-    cce_raise(L, ccptn_condition_new_zero_length());
+    cce_raise(L, ccptn_condition_new_zero_length(L));
   }
 }
 
@@ -154,7 +154,7 @@ ccname_init(ccptn_t, asciiz) (cce_destination_t L, ccmem_allocator_t const * con
    itself. */
 {
   if (CCPTN_PATH_MAX < input_rep.len) {
-    cce_raise(L, ccptn_condition_new_exceeded_length());
+    cce_raise(L, ccptn_condition_new_exceeded_length(L));
   } else if (0 < input_rep.len) {
     P->methods				= &ccname_table(ccptn_t, embedded);
     P->allocator			= A;
@@ -166,7 +166,7 @@ ccname_init(ccptn_t, asciiz) (cce_destination_t L, ccmem_allocator_t const * con
     P->realpath				= 0;
     P->ptr				= input_rep.ptr;
   } else {
-    cce_raise(L, ccptn_condition_new_zero_length());
+    cce_raise(L, ccptn_condition_new_zero_length(L));
   }
 }
 
@@ -249,7 +249,7 @@ ccname_new(ccptn_t, ascii) (cce_destination_t L, ccmem_allocator_t const * const
    to add a terminating zero. */
 {
   if (CCPTN_PATH_MAX < input_rep.len) {
-    cce_raise(L, ccptn_condition_new_exceeded_length());
+    cce_raise(L, ccptn_condition_new_exceeded_length(L));
   } else if (0 < input_rep.len) {
     /* We store both the base struct and the buffer in the same dynamically allocated
        memory block. */
@@ -269,7 +269,7 @@ ccname_new(ccptn_t, ascii) (cce_destination_t L, ccmem_allocator_t const * const
     ((char *)(P->ptr))[input_rep.len] = '\0';
     return P;
   } else {
-    cce_raise(L, ccptn_condition_new_zero_length());
+    cce_raise(L, ccptn_condition_new_zero_length(L));
   }
 }
 
@@ -281,7 +281,7 @@ ccname_new(ccptn_t, asciiz) (cce_destination_t L, ccmem_allocator_t const * cons
    The data is *not* duplicated: the instance references "input_rep" itself. */
 {
   if (CCPTN_PATH_MAX < input_rep.len) {
-    cce_raise(L, ccptn_condition_new_exceeded_length());
+    cce_raise(L, ccptn_condition_new_exceeded_length(L));
   } else if (0 < input_rep.len) {
     ccptn_t *	P = ccmem_malloc(L, A, sizeof(ccptn_t));
 
@@ -296,7 +296,7 @@ ccname_new(ccptn_t, asciiz) (cce_destination_t L, ccmem_allocator_t const * cons
     P->ptr				= input_rep.ptr;
     return P;
   } else {
-    cce_raise(L, ccptn_condition_new_zero_length());
+    cce_raise(L, ccptn_condition_new_zero_length(L));
   }
 }
 
@@ -571,7 +571,7 @@ ccname_trait_method(ccstructs_deserialiser_T, ccptn_t,
   if (0) { fprintf(stderr, "%s: len=%lu\n", __func__, len); }
 
   if (CCPTN_PATH_MAX < P_block.len) {
-    cce_raise(L, ccptn_condition_new_exceeded_length());
+    cce_raise(L, ccptn_condition_new_exceeded_length(L));
   } else if (0 < P_block.len) {
     scan_for_non_terminating_zeros(L, P_block.ptr, P_block.len);
     P->len				= P_block.len;
@@ -581,7 +581,7 @@ ccname_trait_method(ccstructs_deserialiser_T, ccptn_t,
     memcpy((void *)(P->ptr), P_block.ptr, P_block.len);
     ((char *)(P->ptr))[P_block.len] = '\0';
   } else {
-    cce_raise(L, ccptn_condition_new_zero_length());
+    cce_raise(L, ccptn_condition_new_zero_length(L));
   }
   return N;
 }
