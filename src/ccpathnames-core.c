@@ -44,23 +44,27 @@
    of "ccstructs_dtor_T" as implemented by "ccptn_t". */
 typedef ccstructs_dtor_T ccname_trait_new_type(ccstructs_dtor_T, ccptn_t) (ccptn_t const * self);
 
-/* Function  prototype:   constructor  for   "ccstructs_dtor_T"  as   implemented  by
-   "ccptn_t".  This variant destroys embedded instances. */
-static ccname_trait_new_type(ccstructs_dtor_T, ccptn_t) ccname_trait_new(ccstructs_dtor_T, ccptn_t, embedded);
-
-/* Function  prototype:   constructor  for   "ccstructs_dtor_T"  as   implemented  by
-   "ccptn_t".  This variant destroys standalone instances. */
-static ccname_trait_new_type(ccstructs_dtor_T, ccptn_t) ccname_trait_new(ccstructs_dtor_T, ccptn_t, standalone);
-
 /* Table of methods for "ccptn_t". */
 struct ccname_table_type(ccptn_t) {
   ccname_trait_new_type(ccstructs_dtor_T, ccptn_t) *	new_dtor;
 };
 
+/* ------------------------------------------------------------------ */
+
+/* Function  prototype:   constructor  for   "ccstructs_dtor_T"  as   implemented  by
+   "ccptn_t".  This variant destroys embedded instances. */
+static ccname_trait_new_type(ccstructs_dtor_T, ccptn_t) ccname_trait_new(ccstructs_dtor_T, ccptn_t, embedded);
+
 /* Methods table for "ccptn_t": this variant is for embedded instances. */
 static ccname_table_type(ccptn_t) const ccname_table(ccptn_t, embedded) = {
   .new_dtor	= ccname_trait_new(ccstructs_dtor_T, ccptn_t, embedded)
 };
+
+/* ------------------------------------------------------------------ */
+
+/* Function  prototype:   constructor  for   "ccstructs_dtor_T"  as   implemented  by
+   "ccptn_t".  This variant destroys standalone instances. */
+static ccname_trait_new_type(ccstructs_dtor_T, ccptn_t) ccname_trait_new(ccstructs_dtor_T, ccptn_t, standalone);
 
 /* Methods table for "ccptn_t": this variant is for standalone instances. */
 static ccname_table_type(ccptn_t) const ccname_table(ccptn_t, standalone) = {
@@ -437,18 +441,23 @@ ccname_trait_new(ccstructs_dtor_T, ccptn_t) (ccptn_t const * const self)
  ** Trait "ccstructs_dumpable_T": implementation for "ccptn_t".
  ** ----------------------------------------------------------------- */
 
+/* Function prototype for the method "dump" of trait "ccstructs_dumpable_T". */
 static ccname_trait_method_type(ccstructs_dumpable_T, dump)  ccname_trait_method(ccstructs_dumpable_T, ccptn_t, dump);
 
+/* Methods table for trait "ccstructs_dumpable_T". */
 static ccname_trait_table_type(ccstructs_dumpable_T) const ccname_trait_table(ccstructs_dumpable_T, ccptn_t) = {
   .dump	= ccname_trait_method(ccstructs_dumpable_T, ccptn_t, dump)
 };
 
+/* Constructor for trait "ccstructs_dumpable_T" implemented for struct "ccptn_t". */
 ccstructs_dumpable_T
 ccname_trait_new(ccstructs_dumpable_T, ccptn_t) (ccptn_t const * S)
 {
   return ccname_new(ccstructs_dumpable_T)(ccstructs_core(S), &ccname_trait_table(ccstructs_dumpable_T, ccptn_t));
 }
 
+/* Implementation for  method "dump" of trait  "ccstructs_dumpable_T", as implemented
+   by "ccptn_t". */
 void
 ccname_trait_method(ccstructs_dumpable_T, ccptn_t, dump) (cce_destination_t L, ccstructs_dumpable_T I)
 {
@@ -467,10 +476,8 @@ ccname_trait_method(ccstructs_dumpable_T, ccptn_t, dump) (cce_destination_t L, c
  ** Trait "ccstructs_serialiser_T": implementation for "ccptn_t".
  ** ----------------------------------------------------------------- */
 
-static ccname_trait_method_type(ccstructs_serialiser_T, required_size)
-  ccname_trait_method(ccstructs_serialiser_T, ccptn_t, required_size);
-static ccname_trait_method_type(ccstructs_serialiser_T, write)
-  ccname_trait_method(ccstructs_serialiser_T, ccptn_t, write);
+static ccname_trait_method_type(ccstructs_serialiser_T, required_size) ccname_trait_method(ccstructs_serialiser_T, ccptn_t, required_size);
+static ccname_trait_method_type(ccstructs_serialiser_T, write)         ccname_trait_method(ccstructs_serialiser_T, ccptn_t, write);
 
 /* Trait  table  of  methods.   Implementation  of  "ccstructs_serialiser_T"  for
    "ccptn_t". */
@@ -500,9 +507,9 @@ ccname_trait_method(ccstructs_serialiser_T, ccptn_t, required_size) (ccstructs_s
 }
 
 ccmem_block_t
-ccname_trait_method(ccstructs_serialiser_T, ccptn_t,
-		    write) (cce_destination_t L CCPTN_UNUSED, ccstructs_serialiser_T I, ccmem_block_t B)
-/* Trait method implementation.  Serialise an instance of "ccptn_t" in the memory
+ccname_trait_method(ccstructs_serialiser_T, ccptn_t, write)
+  (cce_destination_t L CCPTN_UNUSED, ccstructs_serialiser_T I, ccmem_block_t B)
+/* Trait method  implementation.  Serialise  an instance of  "ccptn_t" in  the memory
    block "B". */
 {
   CCSTRUCTS_PC(ccptn_t const, P, ccstructs_serialiser_self(I));
