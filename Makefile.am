@@ -59,7 +59,8 @@ libccpathnames_la_SOURCES	= \
 	src/ccpathnames-core.c			\
 	src/ccpathnames-manipulation.c		\
 	src/ccpathnames-components.c		\
-	src/ccpathnames-input-output.c
+	src/ccpathnames-input-output.c		\
+	src/ccpathnames-endianness.c
 
 
 #### tests

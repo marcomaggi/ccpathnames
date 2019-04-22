@@ -78,6 +78,14 @@
  ** Inline functions and function prototypes.
  ** ----------------------------------------------------------------- */
 
+ccptn_private_decl void store_uint32_in_network_byte_order (uint8_t * network_byte_order_store, uint32_t the_uint)
+  __attribute__((__nonnull__(1)));
+
+ccptn_private_decl void retrieve_uint32_in_network_byte_order (uint32_t * the_uint_ptr, uint8_t const * network_byte_order_store)
+  __attribute__((__nonnull__(1,2)));
+
+/* ------------------------------------------------------------------ */
+
 #define INLINE1	__attribute__((__always_inline__,__nonnull__(1))) static inline
 #define INLINE2	__attribute__((__always_inline__,__nonnull__(1,2))) static inline
 

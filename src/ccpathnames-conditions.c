@@ -230,7 +230,7 @@ cce_descriptor_set_parent_to(ccptn_descriptor_invalid_length_t) (cce_descriptor_
 char const *
 ccptn_condition_static_message_invalid_length (cce_condition_t const * C CCPTN_UNUSED)
 {
-  return "the operation would generate a invalid length pathname";
+  return "the operation would generate an invalid length pathname";
 }
 
 /* ------------------------------------------------------------------ */

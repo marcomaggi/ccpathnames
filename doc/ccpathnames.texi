@@ -2768,8 +2768,8 @@ trait}.
 
 
 @deftypefun ccstructs_pathname_T {ccname_trait_new(ccstructs_pathname_T, ccptn_t)} (ccptn_t const * @var{P})
-Build and return an instance of @trait{pathname} trait operating on instances of
-@objtype{ccptn_t}.
+Build and return an instance of @trait{pathname} trait operating on instances of @objtype{ccptn_t}
+referenced by @var{P}.
 @end deftypefun
 
 
@@ -2813,9 +2813,9 @@ The @trait{dtor} trait offers a common @api{} for the destruction of @struct{} t
 
 
 @deftypefun ccstructs_dtor_T {ccname_trait_new(ccstructs_dtor_T, ccptn_t)} (ccptn_t const * @var{P})
-Build and return an instance of @trait{dtor} trait which we can use to destroy both
-embedded and standalone instances of @objtype{ccptn_t}.  It is usually better to use the handlers
-@api{} or, even better, the guarded constructors.
+Build and return an instance of @trait{dtor} trait which we can use to destroy both embedded and
+standalone instances of @objtype{ccptn_t} referenced by @var{P}.  It is usually better to use the
+handlers @api{} or, even better, the guarded constructors.
 @end deftypefun
 
 
@@ -2853,7 +2853,8 @@ debugging purposes; @ccstructsref{dumpable, The @trait{dumpable} trait}.
 
 @deftypefun ccstructs_dumpable_T {ccname_trait_new(ccstructs_dumpable_T, ccptn_t)} (ccptn_t const * @var{P})
 Build and return an instance of @trait{dumpable} trait which we can use to print on @stderr{} a
-representation of @objtype{ccptn_t}.  This trait does not print an ending newline.
+representation of @objtype{ccptn_t} referenced by @var{P}.  This trait does not print an ending
+newline.
 @end deftypefun
 
 
@@ -2890,8 +2891,8 @@ for storage purposes; @ccstructsref{serialiser, The @trait{serialiser} trait}.
 
 
 @deftypefun ccstructs_serialiser_T {ccname_trait_new(ccstructs_serialiser_T, ccptn_t)} (ccptn_t const * @var{P})
-Build and return an instance of @trait{serialiser} trait which we can use to serialise the
-instance of @objtype{ccptn_t}.
+Build and return an instance of @trait{serialiser} trait which we can use to serialise the instance
+of @objtype{ccptn_t} referenced by @var{P}.
 @end deftypefun
 
 @c page
@@ -2905,8 +2906,8 @@ trait}.
 
 
 @deftypefun ccstructs_deserialiser_T {ccname_trait_new(ccstructs_deserialiser_T, ccptn_t)} (ccptn_t * @var{P})
-Build and return an instance of @trait{deserialiser} trait which we can use to deserialise the
-instance of @objtype{ccptn_t}.
+Build and return an instance of @trait{deserialiser} trait which we can use to deserialise an
+instance of @objtype{ccptn_t} into the @struct{} referenced by @var{P}.
 @end deftypefun
 
 @c page

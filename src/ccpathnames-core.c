@@ -108,7 +108,7 @@ ccname_delete(ccptn_t) (ccptn_t const * P)
  ** ----------------------------------------------------------------- */
 
 static void
-scan_for_non_terminating_zeros (cce_destination_t L, char const * const ptr, size_t const len)
+scan_for_non_terminating_zeros (cce_destination_t L, uint8_t const * const ptr, size_t const len)
 /* Scan for zero octets inside the pathname: raise an exception if one is found. */
 {
   for (size_t i=0; i<len; ++i) {
@@ -132,7 +132,7 @@ ccname_init(ccptn_t, ascii) (cce_destination_t L, ccmem_allocator_t const * cons
   if (CCPTN_PATH_MAX < input_rep.len) {
     cce_raise(L, ccptn_condition_new_exceeded_length(L));
   } else if (0 < input_rep.len) {
-    scan_for_non_terminating_zeros(L, input_rep.ptr, input_rep.len);
+    scan_for_non_terminating_zeros(L, (uint8_t const *)input_rep.ptr, input_rep.len);
     P->methods				= &ccname_table(ccptn_t, embedded);
     P->allocator			= A;
     P->len				= input_rep.len;
@@ -259,7 +259,7 @@ ccname_new(ccptn_t, ascii) (cce_destination_t L, ccmem_allocator_t const * const
        memory block. */
     ccptn_t *	P = ccmem_malloc(L, A, sizeof(ccptn_t) + input_rep.len + 1);
 
-    scan_for_non_terminating_zeros(L, input_rep.ptr, input_rep.len);
+    scan_for_non_terminating_zeros(L, (uint8_t const *)input_rep.ptr, input_rep.len);
     P->methods				= &ccname_table(ccptn_t, standalone);
     P->allocator			= A;
     P->len				= input_rep.len;
@@ -476,6 +476,19 @@ ccname_trait_method(ccstructs_dumpable_T, ccptn_t, dump) (cce_destination_t L, c
  ** Trait "ccstructs_serialiser_T": implementation for "ccptn_t".
  ** ----------------------------------------------------------------- */
 
+/* The  serialisation  of a  "ccptn_t"  into  a block  of  memory  has the  following
+ * format:
+ *
+ *    |------|--------------------------|
+ *     length       pathname data
+ *
+ * where: "length"  is a 32-bit unsigned  integer in network byte  order representing
+ * the number  of bytes in  the ASCII representation  of the pathname,  excluding the
+ * terminating zero; "pathname  data" is the ASCII representation of  the pathname, a
+ * number  of  "length"  characters  not  containing  a  zero  and  not  including  a
+ * terminating zero.
+ */
+
 static ccname_trait_method_type(ccstructs_serialiser_T, required_size) ccname_trait_method(ccstructs_serialiser_T, ccptn_t, required_size);
 static ccname_trait_method_type(ccstructs_serialiser_T, write)         ccname_trait_method(ccstructs_serialiser_T, ccptn_t, write);
 
@@ -503,24 +516,37 @@ ccname_trait_method(ccstructs_serialiser_T, ccptn_t, required_size) (ccstructs_s
 {
   CCSTRUCTS_PC(ccptn_t const, P, ccstructs_serialiser_self(I));
 
-  return (1 + ccptn_len(P));
+  return (sizeof(size_t) + ccptn_len(P));
 }
 
 ccmem_block_t
 ccname_trait_method(ccstructs_serialiser_T, ccptn_t, write)
-  (cce_destination_t L CCPTN_UNUSED, ccstructs_serialiser_T I, ccmem_block_t B)
+  (cce_destination_t L CCPTN_UNUSED, ccstructs_serialiser_T I, ccmem_block_t storage_block)
 /* Trait method  implementation.  Serialise  an instance of  "ccptn_t" in  the memory
-   block "B". */
+   block "storage_block". */
 {
   CCSTRUCTS_PC(ccptn_t const, P, ccstructs_serialiser_self(I));
-  ccmem_block_t	N = {
-    .ptr	= B.ptr + (1 + ccptn_len(P)),
-    .len	= B.len - (1 + ccptn_len(P))
+  size_t	required_length = sizeof(size_t) + ccptn_len(P);
+  uint8_t * const storage_block_pathname_length_ptr = storage_block.ptr;
+  uint8_t * const storage_block_pathname_data_ptr   = storage_block_pathname_length_ptr + sizeof(size_t);
+  ccmem_block_t	leftovers_block = {
+    .ptr	= storage_block.ptr + required_length,
+    .len	= storage_block.len - required_length
   };
 
-  if (0) { fprintf(stderr, "%s: writing %lu bytes\n", __func__, (1 + ccptn_len(P))); }
-  memcpy(B.ptr, ccptn_ptr(P), (1 + ccptn_len(P)));
-  return N;
+  if (0) {
+    fprintf(stderr, "%s: serialising a pathname of %lu bytes, whole serialisation length %lu bytes\n", __func__,
+	    ccptn_len(P), (unsigned long)required_length);
+  }
+
+  /* Store the pathname length in network byte order. */
+  store_uint32_in_network_byte_order(storage_block_pathname_length_ptr, (uint32_t)ccptn_len(P));
+
+  /* Store the pathname itself as ASCII string. */
+  memcpy(storage_block_pathname_data_ptr, ccptn_ptr(P), ccptn_len(P));
+
+  /* Return a block describing the used portion of storage_block. */
+  return leftovers_block;
 }
 
 
@@ -555,42 +581,57 @@ ccname_trait_method(ccstructs_deserialiser_T, ccptn_t, required_size) (ccstructs
 /* Return the minimum number of bytes  required to hold the serialised representation
    of "ccptn_t".*/
 {
-  return (1 + CCPTN_PATH_MAX);
+  return (sizeof(size_t) + CCPTN_PATH_MAX);
 }
 
 ccmem_block_t
-ccname_trait_method(ccstructs_deserialiser_T, ccptn_t,
-		    read) (cce_destination_t L CCSTRUCTS_UNUSED, ccstructs_deserialiser_T I, ccmem_block_t B)
-/* Trait method implementation.  Dedeserialise an  instance of "ccptn_t" from the
-   memory block "B". */
+ccname_trait_method(ccstructs_deserialiser_T, ccptn_t, read)
+  (cce_destination_t L CCSTRUCTS_UNUSED, ccstructs_deserialiser_T const the_trait, ccmem_block_t const storage_block)
+/* Trait  method implementation.   Dedeserialise an  instance of  "ccptn_t" from  the
+   memory block "storage_block". */
 {
-  CCSTRUCTS_PC(ccptn_t, P, ccstructs_deserialiser_self(I));
-  size_t	len = ((uint8_t *)strchr((char *)B.ptr, 0)) - B.ptr;
-  ccmem_block_t	N = {
-    .ptr	= B.ptr + (1 + len),
-    .len	= B.len - (1 + len)
-  };
-  ccmem_ascii_t	P_block = {
-    .ptr	= (char *)B.ptr,
-    .len	= len
-  };
+  CCSTRUCTS_PC(ccptn_t, P, ccstructs_deserialiser_self(the_trait));
+  /* This is the pathname length without terminating zero. */
+  size_t	pathname_length;
+  uint8_t const	* const storage_block_pathname_length_ptr = storage_block.ptr;
 
-  if (0) { fprintf(stderr, "%s: len=%lu\n", __func__, len); }
+  {
+    uint32_t	siz;
+    retrieve_uint32_in_network_byte_order(&siz, storage_block_pathname_length_ptr);
+    pathname_length = (size_t)siz;
+  }
+  if (0) {
+    fprintf(stderr, "%s: deserialising a pathname of %lu bytes, whole serialisation length %lu bytes\n", __func__,
+	    (unsigned long)pathname_length, (unsigned long)(pathname_length + sizeof(size_t)));
+  }
 
-  if (CCPTN_PATH_MAX < P_block.len) {
+  if (CCPTN_PATH_MAX < pathname_length) {
     cce_raise(L, ccptn_condition_new_exceeded_length(L));
-  } else if (0 < P_block.len) {
-    scan_for_non_terminating_zeros(L, P_block.ptr, P_block.len);
-    P->len				= P_block.len;
+  } else if (0 < pathname_length) {
+    uint8_t const * const storage_block_pathname_data_ptr = storage_block_pathname_length_ptr + sizeof(size_t);
+
+    scan_for_non_terminating_zeros(L, storage_block_pathname_data_ptr, pathname_length);
+    P->len				= pathname_length;
     P->dynamically_allocated_buffer	= 1;
-    P->absolute				= ('/' == P_block.ptr[0])? 1 : 0;
-    P->ptr				= ccmem_malloc(L, P->allocator, 1+P_block.len);
-    memcpy((void *)(P->ptr), P_block.ptr, P_block.len);
-    ((char *)(P->ptr))[P_block.len] = '\0';
+    P->absolute				= ('/' == storage_block_pathname_data_ptr[0])? 1 : 0;
+    P->normalised			= 0;
+    P->realpath				= 0;
+    P->ptr				= ccmem_malloc(L, P->allocator, 1+pathname_length);
+    memcpy((void *)P->ptr, storage_block_pathname_data_ptr, pathname_length);
+    ((char *)(P->ptr))[pathname_length] = '\0';
   } else {
     cce_raise(L, ccptn_condition_new_zero_length(L));
   }
-  return N;
+
+  /* Return a block describing the leftover portion of storage_block. */
+  {
+    size_t const	consumed_length = sizeof(size_t) + pathname_length;
+    ccmem_block_t	leftovers_block = {
+      .ptr	= storage_block.ptr + consumed_length,
+      .len	= storage_block.len - consumed_length
+    };
+    return leftovers_block;
+  }
 }
 
 

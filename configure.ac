@@ -59,6 +59,8 @@ AC_CHECK_HEADERS([assert.h stddef.h string.h limits.h errno.h unistd.h])
 MMUX_DETERMINE_SIZEOF([SIZE_T],[size_t],[MMUX_INCLUDE_STDDEF_H])
 MMUX_DETERMINE_SIZEOF([SSIZE_T],[ssize_t],[MMUX_INCLUDE_UNISTD_H])
 
+MMUX_CHECK_ENDIANNESS
+
 AC_CACHE_SAVE
 
 
