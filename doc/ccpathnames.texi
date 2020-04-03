@@ -30,18 +30,18 @@
 
 @c To be used as @value{AUTHOR_EMAIL} whenever we need to include the
 @c email of the *single* author of this document.
-@set AUTHOR_EMAIL               @email{marco.maggi-ipsu@@poste.it}
+@set AUTHOR_EMAIL               @email{mrc.mgg@@gmail.com}
 
 @c To be used as @value{COPYRIGHT_YEARS} whenever we need to include the
 @c list of copyright years.
-@set COPYRIGHT_YEARS            2018-2019
+@set COPYRIGHT_YEARS            2018-2020
 
 @c ------------------------------------------------------------
 
-@set CCExceptionsVersion       0.9.0
-@set CCMemoryVersion           0.2.1
-@set CCStructsVersion          0.3.0
-@set CCTestsVersion            0.4.1
+@set CCExceptionsVersion       0.10.0
+@set CCMemoryVersion           0.3.0
+@set CCStructsVersion          0.4.0
+@set CCTestsVersion            0.5.1
 
 @c ------------------------------------------------------------
 
@@ -158,7 +158,6 @@ included in the section entitled ``@gnu{} Free Documentation License''.
 * io::                          Pathname input/output.
 * traits::                      Implemented traits.
 * segments::                    Manipulating segments.
-* utils::                       Utility definitions.
 
 Appendices
 
@@ -2979,47 +2978,6 @@ return @var{len} itself if no slash is found.
 Print the segment to @var{stream}; do not flush the stream.  If an error occurs: raise an exception
 by performing a non--local exit to @var{L}.
 @end deftypefun
-
-@c page
-@node utils
-@chapter Utility definitions
-
-
-@defmac CCPTN_PC (@var{POINTER_TYPE}, @var{POINTER_NAME}, @var{EXPRESSION})
-Preprocessor macro used to define pointer variables initialised with a cast expression.  It expands
-to:
-
-@example
-POINTER_TYPE * POINTER_NAME = (POINTER_TYPE *) (EXPRESSION)
-@end example
-
-For example, the macro use:
-
-@example
-CCPTN_PC(ccpathnames_descriptor_test_failure_t, C, _C);
-@end example
-
-@noindent
-expands into:
-
-@example
-ccpathnames_descriptor_test_failure_t * C = \
-   (ccpathnames_descriptor_test_failure_t *) (_C);
-@end example
-@end defmac
-
-
-@defmac CCPTN_UNUSED
-Preprocessor macro that is meant to expand into an attribute declaration.  If the symbol
-@code{__GNUC__} is defined, the expansion is:
-
-@example
-__attribute__((__unused__))
-@end example
-
-@noindent
-otherwise the expansion is the empty string.
-@end defmac
 
 @c page
 @c ------------------------------------------------------------

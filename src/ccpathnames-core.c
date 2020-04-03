@@ -7,7 +7,7 @@
 
 	This source file implements core functions for pathnames manipulation.
 
-  Copyright (C) 2018, 2019 Marco Maggi <marco.maggi-ipsu@poste.it>
+  Copyright (C) 2018, 2019, 2020 Marco Maggi <marco.maggi-ipsu@poste.it>
 
   This is free software; you can redistribute  it and/or modify it under the terms of
   the GNU Lesser General Public License as published by the Free Software Foundation;
@@ -394,7 +394,7 @@ ccname_trait_new(ccstructs_dtor_T, ccptn_t, embedded) (ccptn_t const * const sel
 void
 ccptn_embedded_destructor (ccstructs_core_t * S)
 {
-  CCSTRUCTS_PC(ccptn_t, self, S);
+  CCLIB_PC(ccptn_t, self, S);
 
   ccname_final(ccptn_t)(self);
   if (CCPTN_DEBUGGING) { fprintf(stderr, "%-35s: finalised by dtor\n", __func__); }
@@ -418,7 +418,7 @@ ccname_trait_new(ccstructs_dtor_T, ccptn_t, standalone) (ccptn_t const * const s
 void
 ccptn_standalone_destructor (ccstructs_core_t * S)
 {
-  CCSTRUCTS_PC(ccptn_t, self, S);
+  CCLIB_PC(ccptn_t, self, S);
 
   ccname_delete(ccptn_t)(self);
   if (CCPTN_DEBUGGING) { fprintf(stderr, "%-35s: deleted by dtor\n", __func__); }
@@ -461,7 +461,7 @@ ccname_trait_new(ccstructs_dumpable_T, ccptn_t) (ccptn_t const * S)
 void
 ccname_trait_method(ccstructs_dumpable_T, ccptn_t, dump) (cce_destination_t L, ccstructs_dumpable_T I)
 {
-  CCSTRUCTS_PC(ccptn_t, P, ccstructs_dumpable_self(I));
+  CCLIB_PC(ccptn_t, P, ccstructs_dumpable_self(I));
   int	rv;
 
   errno = 0;
@@ -514,7 +514,7 @@ ccname_trait_method(ccstructs_serialiser_T, ccptn_t, required_size) (ccstructs_s
 /* Return the minimum number of bytes  required to hold the serialised representation
    of "ccptn_t".*/
 {
-  CCSTRUCTS_PC(ccptn_t const, P, ccstructs_serialiser_self(I));
+  CCLIB_PC(ccptn_t const, P, ccstructs_serialiser_self(I));
 
   return (sizeof(size_t) + ccptn_len(P));
 }
@@ -525,7 +525,7 @@ ccname_trait_method(ccstructs_serialiser_T, ccptn_t, write)
 /* Trait method  implementation.  Serialise  an instance of  "ccptn_t" in  the memory
    block "storage_block". */
 {
-  CCSTRUCTS_PC(ccptn_t const, P, ccstructs_serialiser_self(I));
+  CCLIB_PC(ccptn_t const, P, ccstructs_serialiser_self(I));
   size_t	required_length = sizeof(size_t) + ccptn_len(P);
   uint8_t * const storage_block_pathname_length_ptr = storage_block.ptr;
   uint8_t * const storage_block_pathname_data_ptr   = storage_block_pathname_length_ptr + sizeof(size_t);
@@ -586,11 +586,11 @@ ccname_trait_method(ccstructs_deserialiser_T, ccptn_t, required_size) (ccstructs
 
 ccmem_block_t
 ccname_trait_method(ccstructs_deserialiser_T, ccptn_t, read)
-  (cce_destination_t L CCSTRUCTS_UNUSED, ccstructs_deserialiser_T const the_trait, ccmem_block_t const storage_block)
+  (cce_destination_t L CCLIB_UNUSED, ccstructs_deserialiser_T const the_trait, ccmem_block_t const storage_block)
 /* Trait  method implementation.   Dedeserialise an  instance of  "ccptn_t" from  the
    memory block "storage_block". */
 {
-  CCSTRUCTS_PC(ccptn_t, P, ccstructs_deserialiser_self(the_trait));
+  CCLIB_PC(ccptn_t, P, ccstructs_deserialiser_self(the_trait));
   /* This is the pathname length without terminating zero. */
   size_t	pathname_length;
   uint8_t const	* const storage_block_pathname_length_ptr = storage_block.ptr;
