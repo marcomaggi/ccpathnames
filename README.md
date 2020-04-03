@@ -21,7 +21,7 @@ both Ubuntu GNU+Linux  systems and OS X systems.  The  package relies on
 
 ## License
 
-Copyright (c) 2018, 2019, 2020 Marco Maggi <marco.maggi-ipsu@poste.it><br/>
+Copyright (c) 2018, 2019, 2020 Marco Maggi <mrc.mgg@gmail.com><br/>
 All rights reserved.
 
 This program is free software: you  can redistribute it and/or modify it

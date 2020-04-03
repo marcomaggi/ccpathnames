@@ -8,7 +8,7 @@
 	This  header  file is  for  internal  definitions.  It  must  be
 	included by all the source files in this package.
 
-  Copyright (C) 2018, 2019 Marco Maggi <marco.maggi-ipsu@poste.it>
+  Copyright (C) 2018, 2019, 2020 Marco Maggi <mrc.mgg@gmail.com>
 
   This program is free  software: you can redistribute it and/or  modify it under the
   terms of the  GNU Lesser General Public  License as published by  the Free Software
@@ -78,11 +78,11 @@
  ** Inline functions and function prototypes.
  ** ----------------------------------------------------------------- */
 
-ccptn_private_decl void store_uint32_in_network_byte_order (uint8_t * network_byte_order_store, uint32_t the_uint)
-  __attribute__((__nonnull__(1)));
+cclib_private_decl void store_uint32_in_network_byte_order (uint8_t * network_byte_order_store, uint32_t the_uint)
+  CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
-ccptn_private_decl void retrieve_uint32_in_network_byte_order (uint32_t * the_uint_ptr, uint8_t const * network_byte_order_store)
-  __attribute__((__nonnull__(1,2)));
+cclib_private_decl void retrieve_uint32_in_network_byte_order (uint32_t * the_uint_ptr, uint8_t const * network_byte_order_store)
+  CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2);
 
 /* ------------------------------------------------------------------ */
 
@@ -214,10 +214,6 @@ BEGINS_WITH_SLASH_DOUBLE_DOT (char const * const in, char const * const end)
 /** --------------------------------------------------------------------
  ** Done.
  ** ----------------------------------------------------------------- */
-
-#ifdef __cplusplus
-} // extern "C"
-#endif
 
 #endif /* CCPATHNAMES_INTERNALS_H */
 

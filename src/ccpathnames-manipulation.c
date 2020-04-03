@@ -7,7 +7,7 @@
 
 
 
-  Copyright (C) 2018, 2019 Marco Maggi <marco.maggi-ipsu@poste.it>
+  Copyright (C) 2018, 2019, 2020 Marco Maggi <mrc.mgg@gmail.com>
 
   This program is free  software: you can redistribute it and/or  modify it under the
   terms of the  GNU Lesser General Public  License as published by  the Free Software
@@ -94,7 +94,8 @@ skip_repeated_slashes_or_end (char const * in, char const * const end)
  ** ----------------------------------------------------------------- */
 
 #ifdef HAVE_REALPATH
-__attribute__((__nonnull__(1,2,4),__returns_nonnull__))
+CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,4)
+  CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL
 static ccptn_t const *
 ptn_realpath (cce_destination_t upper_L, ccmem_allocator_t const * const A, ccptn_t * volatile R, ccptn_t const * const P)
 {
@@ -618,7 +619,8 @@ done:
  ** Normalisation: pathname normalisation.
  ** ----------------------------------------------------------------- */
 
-__attribute__((__nonnull__(1,2,4),__returns_nonnull__))
+CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,4)
+  CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL
 static ccptn_t *
 ptn_normalise (cce_destination_t L, ccmem_allocator_t const * const A, ccptn_t * R, ccptn_t const * const P)
 {
@@ -666,7 +668,8 @@ ccname_new(ccptn_t, normalise) (cce_destination_t L, ccmem_allocator_t const * c
  ** Composition.
  ** ----------------------------------------------------------------- */
 
-__attribute__((__nonnull__(1,2,4,5),__returns_nonnull__))
+CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,4,5)
+  CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL
 static ccptn_t *
 ptn_concat (cce_destination_t L, ccmem_allocator_t const * const A, ccptn_t * R,
 	    ccptn_t const * const prefix, ccptn_t const * const suffix)

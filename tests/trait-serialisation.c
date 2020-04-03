@@ -7,7 +7,7 @@
 
 	Test file for traits "serialiser" and "deserialiser".
 
-  Copyright (C) 2019 Marco Maggi <marco.maggi-ipsu@poste.it>
+  Copyright (C) 2019, 2020 Marco Maggi <mrc.mgg@gmail.com>
 
   See the COPYING file.
 */

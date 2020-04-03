@@ -8,7 +8,7 @@
 	This  is the  public header  file  of the  package CCPathnames.   It must  be
 	included in all the source files that use the library.
 
-  Copyright (C) 2018-2019 Marco Maggi <marco.maggi-ipsu@poste.it>
+  Copyright (C) 2018-2020 Marco Maggi <mrc.mgg@gmail.com>
 
   This program is free  software: you can redistribute it and/or  modify it under the
   terms of the  GNU Lesser General Public  License as published by  the Free Software
@@ -117,7 +117,7 @@ ccptn_decl int		ccptn_version_interface_age	(void);
  ** ----------------------------------------------------------------- */
 
 ccptn_decl void ccptn_library_init (void)
-  __attribute__((__constructor__));
+  CCLIB_FUNC_ATTRIBUTE_CONSTRUCTOR;
 
 
 /** --------------------------------------------------------------------
@@ -158,7 +158,7 @@ struct ccptn_extension_t {
 };
 
 ccptn_decl ccptn_extension_t ccptn_extension (cce_destination_t L, ccptn_t const * P)
-  __attribute__((__nonnull__(1,2)));
+  CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2);
 
 __attribute__((__always_inline__,__pure__))
 static inline bool
@@ -172,7 +172,7 @@ ccptn_decl bool ccptn_extension_equal (ccptn_extension_t E1, ccptn_extension_t E
   __attribute__((__pure__));
 
 ccptn_decl void ccptn_extension_fwrite (cce_destination_t L, FILE * stream, ccptn_extension_t E)
-  __attribute__((__nonnull__(1,2)));
+  CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2);
 
 
 /** --------------------------------------------------------------------
@@ -240,16 +240,16 @@ ccptn_segment_is_double_dot (ccptn_segment_t S)
 }
 
 ccptn_decl ccptn_segment_t ccptn_segment_next (char const * ptr, size_t len)
-  __attribute__((__nonnull__(1)));
+  CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
 ccptn_decl size_t ccptn_segment_size_of_next (char const * in, size_t len)
-  __attribute__((__nonnull__(1)));
+  CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
 ccptn_decl void ccptn_segment_fwrite (cce_destination_t L, FILE * stream, ccptn_segment_t S)
-  __attribute__((__nonnull__(1,2)));
+  CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2);
 
 ccptn_decl ccptn_segment_t ccptn_asciiz_find_last_segment (char const * beg, size_t const len)
-  __attribute__((__nonnull__(1)));
+  CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
 
 /** --------------------------------------------------------------------
