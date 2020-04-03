@@ -7,6 +7,7 @@ EXTRA_DIST		= INSTALL			\
 dist_doc_DATA		= README COPYING
 AM_CPPFLAGS		= -I$(srcdir)/src
 AM_CFLAGS		= $(MMUX_CFLAGS)
+CLEANFILES		=
 
 ## --------------------------------------------------------------------
 
@@ -15,8 +16,11 @@ nodist_pkgconfig_DATA	= meta/scripts/ccpathnames.pc
 
 #### documentation
 
+EXTRA_DIST		+= doc/cclibraries.style.css
+CLEANFILES		+= doc/cclibraries.css
+
 AM_MAKEINFOFLAGS	= --no-split
-AM_MAKEINFOHTMLFLAGS	= --split=node -c WORDS_IN_PAGE=0 \
+AM_MAKEINFOHTMLFLAGS	= --split=node -c WORDS_IN_PAGE=0 --css-ref=cclibraries.css \
 	-c PRE_BODY_CLOSE="<p>This document describes version <tt>$(PACKAGE_VERSION)</tt> of <em>$(PACKAGE_NAME)</em>.</p>"
 
 info_TEXINFOS		= doc/ccpathnames.texi
@@ -29,6 +33,23 @@ doc_ccpathnames_TEXINFOS	= \
 	doc/overview-ccmemory.texi	\
 	doc/lgpl-3.0.texi		\
 	doc/fdl-1.3.texi
+
+## --------------------------------------------------------------------
+
+doc/ccpathnames.html/$(am__dirstamp): doc/$(am__dirstamp)
+	@$(MKDIR_P) doc/ccpathnames.html/
+	@: > doc/ccpathnames.html/$(am__dirstamp)
+
+doc/ccpathnames.html/cclibraries.css: doc/cclibraries.style.css doc/ccpathnames.html/$(am__dirstamp)
+	$(INSTALL) -m 0444 "$(top_srcdir)/doc/cclibraries.style.css" "$(builddir)/doc/ccpathnames.html/cclibraries.css"
+
+## --------------------------------------------------------------------
+
+html-local: doc/ccpathnames.html/cclibraries.css
+
+install-html-local:
+	$(MKDIR_P) "$(DESTDIR)$(htmldir)/ccpathnames.html/"
+	$(INSTALL) -m 0444 $(builddir)/doc/ccpathnames.html/cclibraries.css "$(DESTDIR)$(htmldir)/ccpathnames.html/"
 
 
 #### libraries
