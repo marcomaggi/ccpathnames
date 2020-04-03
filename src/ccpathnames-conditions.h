@@ -41,18 +41,19 @@ struct ccptn_condition_invalid_pathname_t {
   cce_condition_runtime_error_t	runtime_error;
 };
 
-ccptn_decl void cce_descriptor_set_parent_to(ccptn_descriptor_invalid_pathname_t) (cce_descriptor_t * D)
+cclib_decl void cce_descriptor_set_parent_to(ccptn_descriptor_invalid_pathname_t) (cce_descriptor_t * D)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl void ccptn_condition_init_invalid_pathname (cce_destination_t L, ccptn_condition_invalid_pathname_t * C)
+cclib_decl void ccptn_condition_init_invalid_pathname (cce_destination_t L, ccptn_condition_invalid_pathname_t * C)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
-ccptn_decl cce_condition_t const * ccptn_condition_new_invalid_pathname (cce_destination_t L)
-  __attribute__((__returns_nonnull__));
+cclib_decl cce_condition_t const * ccptn_condition_new_invalid_pathname (cce_destination_t L)
+  CCLIB_FUNC_ATTRIBUTE_NONNULL(1)
+  CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL;
 
-ccptn_decl bool ccptn_condition_is_invalid_pathname (cce_condition_t const * C)
+cclib_decl bool ccptn_condition_is_invalid_pathname (cce_condition_t const * C)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
 
@@ -71,18 +72,19 @@ struct ccptn_condition_exceeded_length_t {
   cce_condition_runtime_error_t	runtime_error;
 };
 
-ccptn_decl void cce_descriptor_set_parent_to(ccptn_descriptor_exceeded_length_t) (cce_descriptor_t * D)
+cclib_decl void cce_descriptor_set_parent_to(ccptn_descriptor_exceeded_length_t) (cce_descriptor_t * D)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl void ccptn_condition_init_exceeded_length (cce_destination_t L, ccptn_condition_exceeded_length_t * C)
+cclib_decl void ccptn_condition_init_exceeded_length (cce_destination_t L, ccptn_condition_exceeded_length_t * C)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
-ccptn_decl cce_condition_t const * ccptn_condition_new_exceeded_length (cce_destination_t L)
-  __attribute__((__returns_nonnull__));
+cclib_decl cce_condition_t const * ccptn_condition_new_exceeded_length (cce_destination_t L)
+  CCLIB_FUNC_ATTRIBUTE_NONNULL(1)
+  CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL;
 
-ccptn_decl bool ccptn_condition_is_exceeded_length (cce_condition_t const * C)
+cclib_decl bool ccptn_condition_is_exceeded_length (cce_condition_t const * C)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
 
@@ -101,18 +103,19 @@ struct ccptn_condition_zero_length_t {
   cce_condition_runtime_error_t	runtime_error;
 };
 
-ccptn_decl void cce_descriptor_set_parent_to(ccptn_descriptor_zero_length_t) (cce_descriptor_t * D)
+cclib_decl void cce_descriptor_set_parent_to(ccptn_descriptor_zero_length_t) (cce_descriptor_t * D)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl void ccptn_condition_init_zero_length (cce_destination_t L, ccptn_condition_zero_length_t * C)
+cclib_decl void ccptn_condition_init_zero_length (cce_destination_t L, ccptn_condition_zero_length_t * C)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
-ccptn_decl cce_condition_t const * ccptn_condition_new_zero_length (cce_destination_t L)
-  __attribute__((__returns_nonnull__));
+cclib_decl cce_condition_t const * ccptn_condition_new_zero_length (cce_destination_t L)
+  CCLIB_FUNC_ATTRIBUTE_NONNULL(1)
+  CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL;
 
-ccptn_decl bool ccptn_condition_is_zero_length (cce_condition_t const * C)
+cclib_decl bool ccptn_condition_is_zero_length (cce_condition_t const * C)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
 
@@ -131,18 +134,19 @@ struct ccptn_condition_invalid_length_t {
   cce_condition_runtime_error_t	runtime_error;
 };
 
-ccptn_decl void cce_descriptor_set_parent_to(ccptn_descriptor_invalid_length_t) (cce_descriptor_t * D)
+cclib_decl void cce_descriptor_set_parent_to(ccptn_descriptor_invalid_length_t) (cce_descriptor_t * D)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl void ccptn_condition_init_invalid_length (cce_destination_t L, ccptn_condition_invalid_length_t * C)
+cclib_decl void ccptn_condition_init_invalid_length (cce_destination_t L, ccptn_condition_invalid_length_t * C)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
-ccptn_decl cce_condition_t const * ccptn_condition_new_invalid_length (cce_destination_t L)
-  __attribute__((__returns_nonnull__));
+cclib_decl cce_condition_t const * ccptn_condition_new_invalid_length (cce_destination_t L)
+  CCLIB_FUNC_ATTRIBUTE_NONNULL(1)
+  CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL;
 
-ccptn_decl bool ccptn_condition_is_invalid_length (cce_condition_t const * C)
+cclib_decl bool ccptn_condition_is_invalid_length (cce_condition_t const * C)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
 
@@ -161,18 +165,19 @@ struct ccptn_condition_normalised_pathname_t {
   ccptn_condition_invalid_pathname_t	invalid_pathname;
 };
 
-ccptn_decl void cce_descriptor_set_parent_to(ccptn_descriptor_normalised_pathname_t) (cce_descriptor_t * D)
+cclib_decl void cce_descriptor_set_parent_to(ccptn_descriptor_normalised_pathname_t) (cce_descriptor_t * D)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl void ccptn_condition_init_normalised_pathname (cce_destination_t L, ccptn_condition_normalised_pathname_t * C)
+cclib_decl void ccptn_condition_init_normalised_pathname (cce_destination_t L, ccptn_condition_normalised_pathname_t * C)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
-ccptn_decl cce_condition_t const * ccptn_condition_new_normalised_pathname (cce_destination_t L)
-  __attribute__((__returns_nonnull__));
+cclib_decl cce_condition_t const * ccptn_condition_new_normalised_pathname (cce_destination_t L)
+  CCLIB_FUNC_ATTRIBUTE_NONNULL(1)
+  CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL;
 
-ccptn_decl bool ccptn_condition_is_normalised_pathname (cce_condition_t const * C)
+cclib_decl bool ccptn_condition_is_normalised_pathname (cce_condition_t const * C)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
 
@@ -191,18 +196,19 @@ struct ccptn_condition_no_dirname_t {
   ccptn_condition_invalid_pathname_t	invalid_pathname;
 };
 
-ccptn_decl void cce_descriptor_set_parent_to(ccptn_descriptor_no_dirname_t) (cce_descriptor_t * D)
+cclib_decl void cce_descriptor_set_parent_to(ccptn_descriptor_no_dirname_t) (cce_descriptor_t * D)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl void ccptn_condition_init_no_dirname (cce_destination_t L, ccptn_condition_no_dirname_t * C)
+cclib_decl void ccptn_condition_init_no_dirname (cce_destination_t L, ccptn_condition_no_dirname_t * C)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
-ccptn_decl cce_condition_t const * ccptn_condition_new_no_dirname (cce_destination_t L)
-  __attribute__((__returns_nonnull__));
+cclib_decl cce_condition_t const * ccptn_condition_new_no_dirname (cce_destination_t L)
+  CCLIB_FUNC_ATTRIBUTE_NONNULL(1)
+  CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL;
 
-ccptn_decl bool ccptn_condition_is_no_dirname (cce_condition_t const * C)
+cclib_decl bool ccptn_condition_is_no_dirname (cce_condition_t const * C)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
 
@@ -221,18 +227,19 @@ struct ccptn_condition_no_filename_t {
   ccptn_condition_invalid_pathname_t	invalid_pathname;
 };
 
-ccptn_decl void cce_descriptor_set_parent_to(ccptn_descriptor_no_filename_t) (cce_descriptor_t * D)
+cclib_decl void cce_descriptor_set_parent_to(ccptn_descriptor_no_filename_t) (cce_descriptor_t * D)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl void ccptn_condition_init_no_filename (cce_destination_t L, ccptn_condition_no_filename_t * C)
+cclib_decl void ccptn_condition_init_no_filename (cce_destination_t L, ccptn_condition_no_filename_t * C)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
-ccptn_decl cce_condition_t const * ccptn_condition_new_no_filename (cce_destination_t L)
-  __attribute__((__returns_nonnull__));
+cclib_decl cce_condition_t const * ccptn_condition_new_no_filename (cce_destination_t L)
+  CCLIB_FUNC_ATTRIBUTE_NONNULL(1)
+  CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL;
 
-ccptn_decl bool ccptn_condition_is_no_filename (cce_condition_t const * C)
+cclib_decl bool ccptn_condition_is_no_filename (cce_condition_t const * C)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
 
@@ -251,18 +258,19 @@ struct ccptn_condition_no_tailname_t {
   ccptn_condition_invalid_pathname_t	invalid_pathname;
 };
 
-ccptn_decl void cce_descriptor_set_parent_to(ccptn_descriptor_no_tailname_t) (cce_descriptor_t * D)
+cclib_decl void cce_descriptor_set_parent_to(ccptn_descriptor_no_tailname_t) (cce_descriptor_t * D)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl void ccptn_condition_init_no_tailname (cce_destination_t L, ccptn_condition_no_tailname_t * C)
+cclib_decl void ccptn_condition_init_no_tailname (cce_destination_t L, ccptn_condition_no_tailname_t * C)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
-ccptn_decl cce_condition_t const * ccptn_condition_new_no_tailname (cce_destination_t L)
-  __attribute__((__returns_nonnull__));
+cclib_decl cce_condition_t const * ccptn_condition_new_no_tailname (cce_destination_t L)
+  CCLIB_FUNC_ATTRIBUTE_NONNULL(1)
+  CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL;
 
-ccptn_decl bool ccptn_condition_is_no_tailname (cce_condition_t const * C)
+cclib_decl bool ccptn_condition_is_no_tailname (cce_condition_t const * C)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
 
@@ -281,18 +289,19 @@ struct ccptn_condition_no_rootname_t {
   ccptn_condition_invalid_pathname_t	invalid_pathname;
 };
 
-ccptn_decl void cce_descriptor_set_parent_to(ccptn_descriptor_no_rootname_t) (cce_descriptor_t * D)
+cclib_decl void cce_descriptor_set_parent_to(ccptn_descriptor_no_rootname_t) (cce_descriptor_t * D)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl void ccptn_condition_init_no_rootname (cce_destination_t L, ccptn_condition_no_rootname_t * C)
+cclib_decl void ccptn_condition_init_no_rootname (cce_destination_t L, ccptn_condition_no_rootname_t * C)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
-ccptn_decl cce_condition_t const * ccptn_condition_new_no_rootname (cce_destination_t L)
-  __attribute__((__returns_nonnull__));
+cclib_decl cce_condition_t const * ccptn_condition_new_no_rootname (cce_destination_t L)
+  CCLIB_FUNC_ATTRIBUTE_NONNULL(1)
+  CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL;
 
-ccptn_decl bool ccptn_condition_is_no_rootname (cce_condition_t const * C)
+cclib_decl bool ccptn_condition_is_no_rootname (cce_condition_t const * C)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
 

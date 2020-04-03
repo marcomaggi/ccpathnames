@@ -40,7 +40,7 @@ test_1_1 (cce_destination_t upper_L)
   } else {
     char const		*input = "/path/to/file.ext";
     ccmem_block_t	storage_block;
-    ccmem_block_t	leftovers_block CCPTN_UNUSED;
+    ccmem_block_t	leftovers_block CCLIB_UNUSED;
 
     {
       ccptn_t const		*P;
@@ -81,7 +81,7 @@ test_1_2 (cce_destination_t upper_L)
   } else {
     char const		*input = "/";
     ccmem_block_t	storage_block;
-    ccmem_block_t	leftovers_block CCPTN_UNUSED;
+    ccmem_block_t	leftovers_block CCLIB_UNUSED;
 
     {
       ccptn_t const		*P;

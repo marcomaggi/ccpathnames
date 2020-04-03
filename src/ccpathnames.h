@@ -25,56 +25,8 @@
 #ifndef CCPATHNAMES_H
 #define CCPATHNAMES_H 1
 
-
-/** --------------------------------------------------------------------
- ** Preliminary definitions.
- ** ----------------------------------------------------------------- */
-
 #ifdef __cplusplus
 extern "C" {
-#endif
-
-/* The macro  CCPTN_UNUSED indicates that  a function, function argument  or variable
-   may potentially be unused. Usage examples:
-
-   static int unused_function (char arg) CCPTN_UNUSED;
-   int foo (char unused_argument CCPTN_UNUSED);
-   int unused_variable CCPTN_UNUSED;
-*/
-#ifdef __GNUC__
-#  define CCPTN_UNUSED		__attribute__((__unused__))
-#else
-#  define CCPTN_UNUSED		/* empty */
-#endif
-
-#ifndef __GNUC__
-#  define __attribute__(...)	/* empty */
-#endif
-
-/* I found the following chunk on the Net.  (Marco Maggi; Sun Feb 26, 2012) */
-#if defined _WIN32 || defined __CYGWIN__
-#  ifdef BUILDING_DLL
-#    ifdef __GNUC__
-#      define ccptn_decl	__attribute__((__dllexport__)) extern
-#    else
-#      define ccptn_decl	__declspec(dllexport) extern
-#    endif
-#  else
-#    ifdef __GNUC__
-#      define ccptn_decl	__attribute__((__dllimport__)) extern
-#    else
-#      define ccptn_decl	__declspec(dllimport) extern
-#    endif
-#  endif
-#  define ccptn_private_decl	extern
-#else
-#  if __GNUC__ >= 4
-#    define ccptn_decl		__attribute__((__visibility__("default"))) extern
-#    define ccptn_private_decl	__attribute__((__visibility__("hidden")))  extern
-#  else
-#    define ccptn_decl		extern
-#    define ccptn_private_decl	extern
-#  endif
 #endif
 
 
@@ -92,31 +44,20 @@ extern "C" {
 
 
 /** --------------------------------------------------------------------
- ** Constants and preprocessor macros.
- ** ----------------------------------------------------------------- */
-
-#define CCPTN_PC(POINTER_TYPE, POINTER_NAME, EXPRESSION)	\
-  POINTER_TYPE * POINTER_NAME = (POINTER_TYPE *) (EXPRESSION)
-
-#define CCPTN_CASTVAR(VAR_TYPE, VAR_NAME, EXPRESSION)		\
-  VAR_TYPE VAR_NAME = (VAR_TYPE) (EXPRESSION)
-
-
-/** --------------------------------------------------------------------
  ** Version functions.
  ** ----------------------------------------------------------------- */
 
-ccptn_decl char const *	ccptn_version_string		(void);
-ccptn_decl int		ccptn_version_interface_current	(void);
-ccptn_decl int		ccptn_version_interface_revision(void);
-ccptn_decl int		ccptn_version_interface_age	(void);
+cclib_decl char const *	ccptn_version_string		(void);
+cclib_decl int		ccptn_version_interface_current	(void);
+cclib_decl int		ccptn_version_interface_revision(void);
+cclib_decl int		ccptn_version_interface_age	(void);
 
 
 /** --------------------------------------------------------------------
  ** Initialisation.
  ** ----------------------------------------------------------------- */
 
-ccptn_decl void ccptn_library_init (void)
+cclib_decl void ccptn_library_init (void)
   CCLIB_FUNC_ATTRIBUTE_CONSTRUCTOR;
 
 
@@ -157,10 +98,11 @@ struct ccptn_extension_t {
   char const *		ptr;
 };
 
-ccptn_decl ccptn_extension_t ccptn_extension (cce_destination_t L, ccptn_t const * P)
+cclib_decl ccptn_extension_t ccptn_extension (cce_destination_t L, ccptn_t const * P)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2);
 
-__attribute__((__always_inline__,__pure__))
+CCLIB_FUNC_ATTRIBUTE_ALWAYS_INLINE
+CCLIB_FUNC_ATTRIBUTE_PURE
 static inline bool
 ccptn_extension_is_empty (ccptn_extension_t E)
 /* Return true if the extension is an empty string. */
@@ -168,10 +110,10 @@ ccptn_extension_is_empty (ccptn_extension_t E)
   return (0 == E.len);
 }
 
-ccptn_decl bool ccptn_extension_equal (ccptn_extension_t E1, ccptn_extension_t E2)
-  __attribute__((__pure__));
+cclib_decl bool ccptn_extension_equal (ccptn_extension_t E1, ccptn_extension_t E2)
+  CCLIB_FUNC_ATTRIBUTE_PURE;
 
-ccptn_decl void ccptn_extension_fwrite (cce_destination_t L, FILE * stream, ccptn_extension_t E)
+cclib_decl void ccptn_extension_fwrite (cce_destination_t L, FILE * stream, ccptn_extension_t E)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2);
 
 
@@ -207,7 +149,8 @@ struct ccptn_segment_t {
 
 /* ------------------------------------------------------------------ */
 
-__attribute__((__always_inline__,__pure__))
+CCLIB_FUNC_ATTRIBUTE_ALWAYS_INLINE
+CCLIB_FUNC_ATTRIBUTE_PURE
 static inline bool
 ccptn_segment_is_empty (ccptn_segment_t S)
 /* Return true if the segment is an empty string. */
@@ -215,7 +158,8 @@ ccptn_segment_is_empty (ccptn_segment_t S)
   return (0 == S.len)? true : false;
 }
 
-__attribute__((__always_inline__,__pure__))
+CCLIB_FUNC_ATTRIBUTE_ALWAYS_INLINE
+CCLIB_FUNC_ATTRIBUTE_PURE
 static inline bool
 ccptn_segment_is_slash (ccptn_segment_t S)
 /* Return true if the segment is a single dot: "/". */
@@ -223,7 +167,8 @@ ccptn_segment_is_slash (ccptn_segment_t S)
   return ((1 == S.len) && ('7' == *(S.ptr)));
 }
 
-__attribute__((__always_inline__,__pure__))
+CCLIB_FUNC_ATTRIBUTE_ALWAYS_INLINE
+CCLIB_FUNC_ATTRIBUTE_PURE
 static inline bool
 ccptn_segment_is_dot (ccptn_segment_t S)
 /* Return true if the segment is a single dot: ".". */
@@ -231,7 +176,8 @@ ccptn_segment_is_dot (ccptn_segment_t S)
   return ((1 == S.len) && ('.' == *(S.ptr)));
 }
 
-__attribute__((__always_inline__,__pure__))
+CCLIB_FUNC_ATTRIBUTE_ALWAYS_INLINE
+CCLIB_FUNC_ATTRIBUTE_PURE
 static inline bool
 ccptn_segment_is_double_dot (ccptn_segment_t S)
 /* Return true if the segment is a double dot: "..". */
@@ -239,16 +185,16 @@ ccptn_segment_is_double_dot (ccptn_segment_t S)
   return ((2 == S.len) && ('.' == S.ptr[0]) && ('.' == S.ptr[1]));
 }
 
-ccptn_decl ccptn_segment_t ccptn_segment_next (char const * ptr, size_t len)
+cclib_decl ccptn_segment_t ccptn_segment_next (char const * ptr, size_t len)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
-ccptn_decl size_t ccptn_segment_size_of_next (char const * in, size_t len)
+cclib_decl size_t ccptn_segment_size_of_next (char const * in, size_t len)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
-ccptn_decl void ccptn_segment_fwrite (cce_destination_t L, FILE * stream, ccptn_segment_t S)
+cclib_decl void ccptn_segment_fwrite (cce_destination_t L, FILE * stream, ccptn_segment_t S)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2);
 
-ccptn_decl ccptn_segment_t ccptn_asciiz_find_last_segment (char const * beg, size_t const len)
+cclib_decl ccptn_segment_t ccptn_asciiz_find_last_segment (char const * beg, size_t const len)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
 

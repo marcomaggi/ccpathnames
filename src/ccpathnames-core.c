@@ -209,7 +209,7 @@ ccname_init(ccptn_t, pointer, dup) (cce_destination_t L, ccmem_allocator_t const
 /* ------------------------------------------------------------------ */
 
 void
-ccname_init(ccptn_t, deserialisable) (cce_destination_t L CCPTN_UNUSED, ccmem_allocator_t const * A, ccptn_t * P)
+ccname_init(ccptn_t, deserialisable) (cce_destination_t L CCLIB_UNUSED, ccmem_allocator_t const * A, ccptn_t * P)
 /* Initialise an already allocated  instance which is meant to be  used as target for
    deserialisation from an instance of "ccstructs_deserialiser_T". */
 {
@@ -521,7 +521,7 @@ ccname_trait_method(ccstructs_serialiser_T, ccptn_t, required_size) (ccstructs_s
 
 ccmem_block_t
 ccname_trait_method(ccstructs_serialiser_T, ccptn_t, write)
-  (cce_destination_t L CCPTN_UNUSED, ccstructs_serialiser_T I, ccmem_block_t storage_block)
+  (cce_destination_t L CCLIB_UNUSED, ccstructs_serialiser_T I, ccmem_block_t storage_block)
 /* Trait method  implementation.  Serialise  an instance of  "ccptn_t" in  the memory
    block "storage_block". */
 {
@@ -577,7 +577,7 @@ ccname_trait_new(ccstructs_deserialiser_T, ccptn_t) (ccptn_t * S)
 /* ------------------------------------------------------------------ */
 
 size_t
-ccname_trait_method(ccstructs_deserialiser_T, ccptn_t, required_size) (ccstructs_deserialiser_T I CCPTN_UNUSED)
+ccname_trait_method(ccstructs_deserialiser_T, ccptn_t, required_size) (ccstructs_deserialiser_T I CCLIB_UNUSED)
 /* Return the minimum number of bytes  required to hold the serialised representation
    of "ccptn_t".*/
 {
@@ -675,71 +675,71 @@ ccname_trait_new(ccstructs_pathname_T, ccptn_t) (ccptn_t const * self)
 /* ------------------------------------------------------------------ */
 
 static ccmem_asciiz_t
-ccname_trait_method(ccstructs_pathname_T, ccptn_t, asciiz) (cce_destination_t L CCPTN_UNUSED, ccstructs_pathname_T I)
+ccname_trait_method(ccstructs_pathname_T, ccptn_t, asciiz) (cce_destination_t L CCLIB_UNUSED, ccstructs_pathname_T I)
 {
-  CCPTN_PC(ccptn_t const, P, ccstructs_pathname_self(I));
+  CCLIB_PC(ccptn_t const, P, ccstructs_pathname_self(I));
   return ccptn_asciiz(P);
 }
 
 static bool
-ccname_trait_method(ccstructs_pathname_T, ccptn_t, is_static) (ccstructs_pathname_T I CCPTN_UNUSED)
+ccname_trait_method(ccstructs_pathname_T, ccptn_t, is_static) (ccstructs_pathname_T I CCLIB_UNUSED)
 {
   return false;
 }
 
 static bool
-ccname_trait_method(ccstructs_pathname_T, ccptn_t, is_absolute)   (cce_destination_t L CCPTN_UNUSED, ccstructs_pathname_T I)
+ccname_trait_method(ccstructs_pathname_T, ccptn_t, is_absolute)   (cce_destination_t L CCLIB_UNUSED, ccstructs_pathname_T I)
 {
-  CCPTN_PC(ccptn_t const, P, ccstructs_pathname_self(I));
+  CCLIB_PC(ccptn_t const, P, ccstructs_pathname_self(I));
   return ccptn_is_absolute(P);
 }
 
 static bool
-ccname_trait_method(ccstructs_pathname_T, ccptn_t, is_relative) (cce_destination_t L CCPTN_UNUSED, ccstructs_pathname_T I)
+ccname_trait_method(ccstructs_pathname_T, ccptn_t, is_relative) (cce_destination_t L CCLIB_UNUSED, ccstructs_pathname_T I)
 {
-  CCPTN_PC(ccptn_t const, P, ccstructs_pathname_self(I));
+  CCLIB_PC(ccptn_t const, P, ccstructs_pathname_self(I));
   return ccptn_is_relative(P);
 }
 
 static bool
-ccname_trait_method(ccstructs_pathname_T, ccptn_t, is_normalised) (cce_destination_t L CCPTN_UNUSED, ccstructs_pathname_T I)
+ccname_trait_method(ccstructs_pathname_T, ccptn_t, is_normalised) (cce_destination_t L CCLIB_UNUSED, ccstructs_pathname_T I)
 {
-  CCPTN_PC(ccptn_t const, P, ccstructs_pathname_self(I));
+  CCLIB_PC(ccptn_t const, P, ccstructs_pathname_self(I));
   return ccptn_is_normalised(P);
 }
 
 static bool
-ccname_trait_method(ccstructs_pathname_T, ccptn_t, is_realpath) (cce_destination_t L CCPTN_UNUSED, ccstructs_pathname_T I)
+ccname_trait_method(ccstructs_pathname_T, ccptn_t, is_realpath) (cce_destination_t L CCLIB_UNUSED, ccstructs_pathname_T I)
 {
-  CCPTN_PC(ccptn_t const, P, ccstructs_pathname_self(I));
+  CCLIB_PC(ccptn_t const, P, ccstructs_pathname_self(I));
   return ccptn_is_realpath(P);
 }
 
 static ccstructs_dtor_T
 ccname_trait_method(ccstructs_pathname_T, ccptn_t, dtor) (ccstructs_pathname_T I)
 {
-  CCPTN_PC(ccptn_t const, P, ccstructs_pathname_self(I));
+  CCLIB_PC(ccptn_t const, P, ccstructs_pathname_self(I));
   return ccname_trait_new(ccstructs_dtor_T, ccptn_t)(P);
 }
 
 static ccstructs_dumpable_T
-ccname_trait_method(ccstructs_pathname_T, ccptn_t, dumpable) (cce_destination_t L CCPTN_UNUSED, ccstructs_pathname_T I)
+ccname_trait_method(ccstructs_pathname_T, ccptn_t, dumpable) (cce_destination_t L CCLIB_UNUSED, ccstructs_pathname_T I)
 {
-  CCPTN_PC(ccptn_t const, P, ccstructs_pathname_self(I));
+  CCLIB_PC(ccptn_t const, P, ccstructs_pathname_self(I));
   return ccname_trait_new(ccstructs_dumpable_T, ccptn_t)(P);
 }
 
 static ccstructs_serialiser_T
-ccname_trait_method(ccstructs_pathname_T, ccptn_t, serialiser) (cce_destination_t L CCPTN_UNUSED, ccstructs_pathname_T I)
+ccname_trait_method(ccstructs_pathname_T, ccptn_t, serialiser) (cce_destination_t L CCLIB_UNUSED, ccstructs_pathname_T I)
 {
-  CCPTN_PC(ccptn_t const, P, ccstructs_pathname_self(I));
+  CCLIB_PC(ccptn_t const, P, ccstructs_pathname_self(I));
   return ccname_trait_new(ccstructs_serialiser_T, ccptn_t)(P);
 }
 
 static ccstructs_deserialiser_T
-ccname_trait_method(ccstructs_pathname_T, ccptn_t, deserialiser) (cce_destination_t L CCPTN_UNUSED, ccstructs_pathname_T I)
+ccname_trait_method(ccstructs_pathname_T, ccptn_t, deserialiser) (cce_destination_t L CCLIB_UNUSED, ccstructs_pathname_T I)
 {
-  CCPTN_PC(ccptn_t, P, ccstructs_pathname_self(I));
+  CCLIB_PC(ccptn_t, P, ccstructs_pathname_self(I));
   return ccname_trait_new(ccstructs_deserialiser_T, ccptn_t)(P);
 }
 

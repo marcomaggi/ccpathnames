@@ -71,31 +71,32 @@ struct ccptn_t {
  ** Pathname constructors for embedded instances.
  ** ----------------------------------------------------------------- */
 
-ccptn_decl void ccname_init(ccptn_t, pointer)
+cclib_decl void ccname_init(ccptn_t, pointer)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * P, char const * input_rep)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,3,4);
 
-ccptn_decl void ccname_init(ccptn_t, pointer, dup)
+cclib_decl void ccname_init(ccptn_t, pointer, dup)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * P, char const * input_rep)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,3,4);
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl void ccname_init(ccptn_t, asciiz)
+cclib_decl void ccname_init(ccptn_t, asciiz)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * P, ccmem_asciiz_t input_rep)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,3);
 
-ccptn_decl void ccname_init(ccptn_t, asciiz, dup)
+cclib_decl void ccname_init(ccptn_t, asciiz, dup)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * P, ccmem_asciiz_t input_rep)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,3);
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl void ccname_init(ccptn_t, ascii)
+cclib_decl void ccname_init(ccptn_t, ascii)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * P, ccmem_ascii_t input_rep)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,3);
 
-__attribute__((__nonnull__(1,2,3),__always_inline__))
+CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,3)
+CCLIB_FUNC_ATTRIBUTE_ALWAYS_INLINE
 static inline void
 ccname_init(ccptn_t, ascii, dup) (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * P, ccmem_ascii_t input_rep)
 {
@@ -104,13 +105,13 @@ ccname_init(ccptn_t, ascii, dup) (cce_destination_t L, ccmem_allocator_t const *
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl void ccname_init(ccptn_t, deserialisable)
+cclib_decl void ccname_init(ccptn_t, deserialisable)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * P)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,3);
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl void ccname_init(ccptn_t, clone)
+cclib_decl void ccname_init(ccptn_t, clone)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * dst, ccptn_t const * src)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,3,4);
 
@@ -119,73 +120,89 @@ ccptn_decl void ccname_init(ccptn_t, clone)
  ** Pathname constructors for standalone instances.
  ** ----------------------------------------------------------------- */
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, pointer)
+cclib_decl ccptn_t const * ccname_new(ccptn_t, pointer)
   (cce_destination_t L, ccmem_allocator_t const * A, char const * input_rep)
-  __attribute__((__returns_nonnull__,__nonnull__(1,2,3)));
+  CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,3)
+  CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL;
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, pointer, dup)
+cclib_decl ccptn_t const * ccname_new(ccptn_t, pointer, dup)
   (cce_destination_t L, ccmem_allocator_t const * A, char const * input_rep)
-  __attribute__((__returns_nonnull__,__nonnull__(1,2,3)));
+  CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,3)
+  CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL;
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, asciiz)
+cclib_decl ccptn_t const * ccname_new(ccptn_t, asciiz)
   (cce_destination_t L, ccmem_allocator_t const * A, ccmem_asciiz_t input_rep)
-  __attribute__((__returns_nonnull__,__nonnull__(1,2)));
+  CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2)
+  CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL;
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, asciiz, dup)
+cclib_decl ccptn_t const * ccname_new(ccptn_t, asciiz, dup)
   (cce_destination_t L, ccmem_allocator_t const * A, ccmem_asciiz_t input_rep)
-  __attribute__((__returns_nonnull__,__nonnull__(1,2)));
+  CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2)
+  CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL;
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, ascii)
+cclib_decl ccptn_t const * ccname_new(ccptn_t, ascii)
   (cce_destination_t L, ccmem_allocator_t const * A, ccmem_ascii_t input_rep)
-  __attribute__((__returns_nonnull__,__nonnull__(1,2)));
+  CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2)
+  CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL;
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, ascii, dup)
+cclib_decl ccptn_t const * ccname_new(ccptn_t, ascii, dup)
   (cce_destination_t L, ccmem_allocator_t const * A, ccmem_ascii_t input_rep)
-  __attribute__((__returns_nonnull__,__nonnull__(1,2)));
+  CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2)
+  CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL;
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl ccptn_t * ccname_new(ccptn_t, deserialisable)
+cclib_decl ccptn_t * ccname_new(ccptn_t, deserialisable)
   (cce_destination_t L, ccmem_allocator_t const * A)
-  __attribute__((__returns_nonnull__,__nonnull__(1,2)));
+  CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2)
+  CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL;
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, clone)
+cclib_decl ccptn_t const * ccname_new(ccptn_t, clone)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t const * src)
-  __attribute__((__returns_nonnull__,__nonnull__(1,2,3)));
+  CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,3)
+  CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL;
 
 
 /** --------------------------------------------------------------------
  ** Pathnames: predicates.
  ** ----------------------------------------------------------------- */
 
-__attribute__((__nonnull__(1),__always_inline__,__pure__))
+CCLIB_FUNC_ATTRIBUTE_NONNULL(1)
+CCLIB_FUNC_ATTRIBUTE_ALWAYS_INLINE
+CCLIB_FUNC_ATTRIBUTE_PURE
 static inline bool
 ccptn_is_absolute (ccptn_t const * const P)
 {
   return (P->absolute)? true : false;
 }
 
-__attribute__((__nonnull__(1),__always_inline__,__pure__))
+CCLIB_FUNC_ATTRIBUTE_NONNULL(1)
+CCLIB_FUNC_ATTRIBUTE_ALWAYS_INLINE
+CCLIB_FUNC_ATTRIBUTE_PURE
 static inline bool
 ccptn_is_relative (ccptn_t const * const P)
 {
   return (P->absolute)? false : true;
 }
 
-__attribute__((__nonnull__(1),__always_inline__,__pure__))
+CCLIB_FUNC_ATTRIBUTE_NONNULL(1)
+CCLIB_FUNC_ATTRIBUTE_ALWAYS_INLINE
+CCLIB_FUNC_ATTRIBUTE_PURE
 static inline bool
 ccptn_is_normalised (ccptn_t const * const P)
 {
   return (P->normalised)? true : false;
 }
 
-__attribute__((__nonnull__(1),__always_inline__,__pure__))
+CCLIB_FUNC_ATTRIBUTE_NONNULL(1)
+CCLIB_FUNC_ATTRIBUTE_ALWAYS_INLINE
+CCLIB_FUNC_ATTRIBUTE_PURE
 static inline bool
 ccptn_is_realpath (ccptn_t const * const P)
 {
@@ -197,7 +214,9 @@ ccptn_is_realpath (ccptn_t const * const P)
  ** Pathnames: accessors.
  ** ----------------------------------------------------------------- */
 
-__attribute__((__nonnull__(1),__always_inline__,__pure__))
+CCLIB_FUNC_ATTRIBUTE_NONNULL(1)
+CCLIB_FUNC_ATTRIBUTE_ALWAYS_INLINE
+CCLIB_FUNC_ATTRIBUTE_PURE
 static inline ccmem_ascii_t
 ccptn_ascii (ccptn_t const * const P)
 {
@@ -208,7 +227,9 @@ ccptn_ascii (ccptn_t const * const P)
   return A;
 }
 
-__attribute__((__nonnull__(1),__always_inline__,__pure__))
+CCLIB_FUNC_ATTRIBUTE_NONNULL(1)
+CCLIB_FUNC_ATTRIBUTE_ALWAYS_INLINE
+CCLIB_FUNC_ATTRIBUTE_PURE
 static inline ccmem_asciiz_t
 ccptn_asciiz (ccptn_t const * const P)
 {
@@ -219,7 +240,9 @@ ccptn_asciiz (ccptn_t const * const P)
   return A;
 }
 
-__attribute__((__nonnull__(1),__always_inline__,__pure__))
+CCLIB_FUNC_ATTRIBUTE_NONNULL(1)
+CCLIB_FUNC_ATTRIBUTE_ALWAYS_INLINE
+CCLIB_FUNC_ATTRIBUTE_PURE
 static inline ccmem_block_t
 ccptn_block (ccptn_t const * const P)
 {
@@ -230,21 +253,29 @@ ccptn_block (ccptn_t const * const P)
   return A;
 }
 
-__attribute__((__nonnull__(1),__always_inline__,__pure__))
+CCLIB_FUNC_ATTRIBUTE_NONNULL(1)
+CCLIB_FUNC_ATTRIBUTE_ALWAYS_INLINE
+CCLIB_FUNC_ATTRIBUTE_PURE
 static inline size_t
 ccptn_len (ccptn_t const * const P)
 {
   return (P->len);
 }
 
-__attribute__((__nonnull__(1),__always_inline__,__pure__,__returns_nonnull__))
+CCLIB_FUNC_ATTRIBUTE_NONNULL(1)
+CCLIB_FUNC_ATTRIBUTE_ALWAYS_INLINE
+CCLIB_FUNC_ATTRIBUTE_PURE
+CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL
 static inline char const *
 ccptn_ptr (ccptn_t const * const P)
 {
   return (P->ptr);
 }
 
-__attribute__((__nonnull__(1),__always_inline__,__pure__,__returns_nonnull__))
+CCLIB_FUNC_ATTRIBUTE_NONNULL(1)
+CCLIB_FUNC_ATTRIBUTE_ALWAYS_INLINE
+CCLIB_FUNC_ATTRIBUTE_PURE
+CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL
 static inline ccmem_allocator_t const *
 ccptn_allocator (ccptn_t const * const P)
 {
@@ -256,31 +287,31 @@ ccptn_allocator (ccptn_t const * const P)
  ** Pathnames manipulation.
  ** ----------------------------------------------------------------- */
 
-ccptn_decl void ccname_init(ccptn_t, realpath)
+cclib_decl void ccname_init(ccptn_t, realpath)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * dst, ccptn_t const * src)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,3,4);
 
-ccptn_decl void ccname_init(ccptn_t, normalise)
+cclib_decl void ccname_init(ccptn_t, normalise)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * dst, ccptn_t const * src)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,3,4);
 
-ccptn_decl void ccname_init(ccptn_t, concat)
+cclib_decl void ccname_init(ccptn_t, concat)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * result, ccptn_t const * prefix, ccptn_t const * suffix)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,3,4,5);
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, realpath)
+cclib_decl ccptn_t const * ccname_new(ccptn_t, realpath)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t const * src)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,3)
   CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL;
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, normalise)
+cclib_decl ccptn_t const * ccname_new(ccptn_t, normalise)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t const * src)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,3)
   CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL;
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, concat)
+cclib_decl ccptn_t const * ccname_new(ccptn_t, concat)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t const * prefix, ccptn_t const * suffix)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,3,4)
   CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL;
@@ -290,40 +321,40 @@ ccptn_decl ccptn_t const * ccname_new(ccptn_t, concat)
  ** Pathname components.
  ** ----------------------------------------------------------------- */
 
-ccptn_decl void ccname_init(ccptn_t, rootname)
+cclib_decl void ccname_init(ccptn_t, rootname)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * dst, ccptn_t const * src)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,3,4);
 
-ccptn_decl void ccname_init(ccptn_t, dirname)
+cclib_decl void ccname_init(ccptn_t, dirname)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * dst, ccptn_t const * src)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,3,4);
 
-ccptn_decl void ccname_init(ccptn_t, tailname)
+cclib_decl void ccname_init(ccptn_t, tailname)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * dst, ccptn_t const * src)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,3,4);
 
-ccptn_decl void ccname_init(ccptn_t, filename)
+cclib_decl void ccname_init(ccptn_t, filename)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t * dst, ccptn_t const * src)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,3,4);
 
 /* ------------------------------------------------------------------ */
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, rootname)
+cclib_decl ccptn_t const * ccname_new(ccptn_t, rootname)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t const * src)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,3)
   CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL;
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, dirname)
+cclib_decl ccptn_t const * ccname_new(ccptn_t, dirname)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t const * src)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,3)
   CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL;
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, tailname)
+cclib_decl ccptn_t const * ccname_new(ccptn_t, tailname)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t const * src)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,3)
   CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL;
 
-ccptn_decl ccptn_t const * ccname_new(ccptn_t, filename)
+cclib_decl ccptn_t const * ccname_new(ccptn_t, filename)
   (cce_destination_t L, ccmem_allocator_t const * A, ccptn_t const * src)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,3)
   CCLIB_FUNC_ATTRIBUTE_RETURNS_NONNULL;
@@ -333,7 +364,7 @@ ccptn_decl ccptn_t const * ccname_new(ccptn_t, filename)
  ** Pathnames: input/output.
  ** ----------------------------------------------------------------- */
 
-ccptn_decl void ccptn_fwrite (cce_destination_t L, FILE * stream, ccptn_t const * P)
+cclib_decl void ccptn_fwrite (cce_destination_t L, FILE * stream, ccptn_t const * P)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1,2,3);
 
 
@@ -341,19 +372,19 @@ ccptn_decl void ccptn_fwrite (cce_destination_t L, FILE * stream, ccptn_t const 
  ** Constructors for traits implemented by pathname.
  ** ----------------------------------------------------------------- */
 
-ccptn_decl ccstructs_dtor_T ccname_trait_new(ccstructs_dtor_T, ccptn_t) (ccptn_t const * self)
+cclib_decl ccstructs_dtor_T ccname_trait_new(ccstructs_dtor_T, ccptn_t) (ccptn_t const * self)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
-ccptn_decl ccstructs_dumpable_T ccname_trait_new(ccstructs_dumpable_T, ccptn_t) (ccptn_t const * self)
+cclib_decl ccstructs_dumpable_T ccname_trait_new(ccstructs_dumpable_T, ccptn_t) (ccptn_t const * self)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
-ccptn_decl ccstructs_serialiser_T ccname_trait_new(ccstructs_serialiser_T, ccptn_t) (ccptn_t const * self)
+cclib_decl ccstructs_serialiser_T ccname_trait_new(ccstructs_serialiser_T, ccptn_t) (ccptn_t const * self)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
-ccptn_decl ccstructs_deserialiser_T ccname_trait_new(ccstructs_deserialiser_T, ccptn_t) (ccptn_t * self)
+cclib_decl ccstructs_deserialiser_T ccname_trait_new(ccstructs_deserialiser_T, ccptn_t) (ccptn_t * self)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
-ccptn_decl ccstructs_pathname_T ccname_trait_new(ccstructs_pathname_T, ccptn_t) (ccptn_t const * self)
+cclib_decl ccstructs_pathname_T ccname_trait_new(ccstructs_pathname_T, ccptn_t) (ccptn_t const * self)
   CCLIB_FUNC_ATTRIBUTE_NONNULL(1);
 
 

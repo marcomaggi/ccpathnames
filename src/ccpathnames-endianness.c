@@ -67,7 +67,7 @@ store_uint32_in_network_byte_order (uint8_t * const network_byte_order_store, ui
 void
 retrieve_uint32_in_network_byte_order (uint32_t * const _the_val_ptr, uint8_t const * const network_byte_order_store)
 {
-  CCPTN_PC(uint8_t, the_val_ptr, _the_val_ptr);
+  CCLIB_PC(uint8_t, the_val_ptr, _the_val_ptr);
 
   if (MMUX_NETWORK_BYTE_ORDER) {
     /* The underlying  platform uses  "network byte order"  endianness, it  uses "big

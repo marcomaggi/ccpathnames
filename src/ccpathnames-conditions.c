@@ -60,7 +60,7 @@ cce_descriptor_set_parent_to(ccptn_descriptor_invalid_pathname_t) (cce_descripto
 /* ------------------------------------------------------------------ */
 
 char const *
-ccptn_condition_static_message_invalid_pathname (cce_condition_t const * C CCPTN_UNUSED)
+ccptn_condition_static_message_invalid_pathname (cce_condition_t const * C CCLIB_UNUSED)
 {
   return "invalid file system pathname";
 }
@@ -68,13 +68,13 @@ ccptn_condition_static_message_invalid_pathname (cce_condition_t const * C CCPTN
 /* ------------------------------------------------------------------ */
 
 void
-ccptn_condition_init_invalid_pathname (cce_destination_t L CCPTN_UNUSED, ccptn_condition_invalid_pathname_t * C)
+ccptn_condition_init_invalid_pathname (cce_destination_t L CCLIB_UNUSED, ccptn_condition_invalid_pathname_t * C)
 {
   cce_condition_init_runtime_error(&(C->runtime_error));
 }
 
 cce_condition_t const *
-ccptn_condition_new_invalid_pathname (cce_destination_t L CCPTN_UNUSED)
+ccptn_condition_new_invalid_pathname (cce_destination_t L CCLIB_UNUSED)
 {
   return (cce_condition_t const *) &ccptn_condition_invalid_pathname;
 }
@@ -116,7 +116,7 @@ cce_descriptor_set_parent_to(ccptn_descriptor_exceeded_length_t) (cce_descriptor
 /* ------------------------------------------------------------------ */
 
 char const *
-ccptn_condition_static_message_exceeded_length (cce_condition_t const * C CCPTN_UNUSED)
+ccptn_condition_static_message_exceeded_length (cce_condition_t const * C CCLIB_UNUSED)
 {
   return "the operation would exceed maximum pathname length";
 }
@@ -124,13 +124,13 @@ ccptn_condition_static_message_exceeded_length (cce_condition_t const * C CCPTN_
 /* ------------------------------------------------------------------ */
 
 void
-ccptn_condition_init_exceeded_length (cce_destination_t L CCPTN_UNUSED, ccptn_condition_exceeded_length_t * C)
+ccptn_condition_init_exceeded_length (cce_destination_t L CCLIB_UNUSED, ccptn_condition_exceeded_length_t * C)
 {
   cce_condition_init_runtime_error(&(C->runtime_error));
 }
 
 cce_condition_t const *
-ccptn_condition_new_exceeded_length (cce_destination_t L CCPTN_UNUSED)
+ccptn_condition_new_exceeded_length (cce_destination_t L CCLIB_UNUSED)
 {
   return (cce_condition_t const *) &ccptn_condition_exceeded_length;
 }
@@ -172,7 +172,7 @@ cce_descriptor_set_parent_to(ccptn_descriptor_zero_length_t) (cce_descriptor_t *
 /* ------------------------------------------------------------------ */
 
 char const *
-ccptn_condition_static_message_zero_length (cce_condition_t const * C CCPTN_UNUSED)
+ccptn_condition_static_message_zero_length (cce_condition_t const * C CCLIB_UNUSED)
 {
   return "the operation would generate a zero length pathname";
 }
@@ -180,13 +180,13 @@ ccptn_condition_static_message_zero_length (cce_condition_t const * C CCPTN_UNUS
 /* ------------------------------------------------------------------ */
 
 void
-ccptn_condition_init_zero_length (cce_destination_t L CCPTN_UNUSED, ccptn_condition_zero_length_t * C)
+ccptn_condition_init_zero_length (cce_destination_t L CCLIB_UNUSED, ccptn_condition_zero_length_t * C)
 {
   cce_condition_init_runtime_error(&(C->runtime_error));
 }
 
 cce_condition_t const *
-ccptn_condition_new_zero_length (cce_destination_t L CCPTN_UNUSED)
+ccptn_condition_new_zero_length (cce_destination_t L CCLIB_UNUSED)
 {
   return (cce_condition_t const *) &ccptn_condition_zero_length;
 }
@@ -228,7 +228,7 @@ cce_descriptor_set_parent_to(ccptn_descriptor_invalid_length_t) (cce_descriptor_
 /* ------------------------------------------------------------------ */
 
 char const *
-ccptn_condition_static_message_invalid_length (cce_condition_t const * C CCPTN_UNUSED)
+ccptn_condition_static_message_invalid_length (cce_condition_t const * C CCLIB_UNUSED)
 {
   return "the operation would generate an invalid length pathname";
 }
@@ -236,13 +236,13 @@ ccptn_condition_static_message_invalid_length (cce_condition_t const * C CCPTN_U
 /* ------------------------------------------------------------------ */
 
 void
-ccptn_condition_init_invalid_length (cce_destination_t L CCPTN_UNUSED, ccptn_condition_invalid_length_t * C)
+ccptn_condition_init_invalid_length (cce_destination_t L CCLIB_UNUSED, ccptn_condition_invalid_length_t * C)
 {
   cce_condition_init_runtime_error(&(C->runtime_error));
 }
 
 cce_condition_t const *
-ccptn_condition_new_invalid_length (cce_destination_t L CCPTN_UNUSED)
+ccptn_condition_new_invalid_length (cce_destination_t L CCLIB_UNUSED)
 {
   return (cce_condition_t const *) &ccptn_condition_invalid_length;
 }
@@ -284,7 +284,7 @@ cce_descriptor_set_parent_to(ccptn_descriptor_normalised_pathname_t) (cce_descri
 /* ------------------------------------------------------------------ */
 
 char const *
-ccptn_condition_static_message_normalised_pathname (cce_condition_t const * C CCPTN_UNUSED)
+ccptn_condition_static_message_normalised_pathname (cce_condition_t const * C CCLIB_UNUSED)
 {
   return "normalised file system pathname is required";
 }
@@ -292,13 +292,13 @@ ccptn_condition_static_message_normalised_pathname (cce_condition_t const * C CC
 /* ------------------------------------------------------------------ */
 
 void
-ccptn_condition_init_normalised_pathname (cce_destination_t L CCPTN_UNUSED, ccptn_condition_normalised_pathname_t * C)
+ccptn_condition_init_normalised_pathname (cce_destination_t L CCLIB_UNUSED, ccptn_condition_normalised_pathname_t * C)
 {
   ccptn_condition_init_invalid_pathname(L, &(C->invalid_pathname));
 }
 
 cce_condition_t const *
-ccptn_condition_new_normalised_pathname (cce_destination_t L CCPTN_UNUSED)
+ccptn_condition_new_normalised_pathname (cce_destination_t L CCLIB_UNUSED)
 {
   return (cce_condition_t const *) &ccptn_condition_normalised_pathname;
 }
@@ -340,7 +340,7 @@ cce_descriptor_set_parent_to(ccptn_descriptor_no_dirname_t) (cce_descriptor_t * 
 /* ------------------------------------------------------------------ */
 
 char const *
-ccptn_condition_static_message_no_dirname (cce_condition_t const * C CCPTN_UNUSED)
+ccptn_condition_static_message_no_dirname (cce_condition_t const * C CCLIB_UNUSED)
 {
   return "input pathname has no directory part";
 }
@@ -348,13 +348,13 @@ ccptn_condition_static_message_no_dirname (cce_condition_t const * C CCPTN_UNUSE
 /* ------------------------------------------------------------------ */
 
 void
-ccptn_condition_init_no_dirname (cce_destination_t L CCPTN_UNUSED, ccptn_condition_no_dirname_t * C)
+ccptn_condition_init_no_dirname (cce_destination_t L CCLIB_UNUSED, ccptn_condition_no_dirname_t * C)
 {
   ccptn_condition_init_invalid_pathname(L, &(C->invalid_pathname));
 }
 
 cce_condition_t const *
-ccptn_condition_new_no_dirname (cce_destination_t L CCPTN_UNUSED)
+ccptn_condition_new_no_dirname (cce_destination_t L CCLIB_UNUSED)
 {
   return (cce_condition_t const *) &ccptn_condition_no_dirname;
 }
@@ -396,7 +396,7 @@ cce_descriptor_set_parent_to(ccptn_descriptor_no_filename_t) (cce_descriptor_t *
 /* ------------------------------------------------------------------ */
 
 char const *
-ccptn_condition_static_message_no_filename (cce_condition_t const * C CCPTN_UNUSED)
+ccptn_condition_static_message_no_filename (cce_condition_t const * C CCLIB_UNUSED)
 {
   return "input pathname has no filename part";
 }
@@ -404,13 +404,13 @@ ccptn_condition_static_message_no_filename (cce_condition_t const * C CCPTN_UNUS
 /* ------------------------------------------------------------------ */
 
 void
-ccptn_condition_init_no_filename (cce_destination_t L CCPTN_UNUSED, ccptn_condition_no_filename_t * C)
+ccptn_condition_init_no_filename (cce_destination_t L CCLIB_UNUSED, ccptn_condition_no_filename_t * C)
 {
   ccptn_condition_init_invalid_pathname(L, &(C->invalid_pathname));
 }
 
 cce_condition_t const *
-ccptn_condition_new_no_filename (cce_destination_t L CCPTN_UNUSED)
+ccptn_condition_new_no_filename (cce_destination_t L CCLIB_UNUSED)
 {
   return (cce_condition_t const *) &ccptn_condition_no_filename;
 }
@@ -452,7 +452,7 @@ cce_descriptor_set_parent_to(ccptn_descriptor_no_tailname_t) (cce_descriptor_t *
 /* ------------------------------------------------------------------ */
 
 char const *
-ccptn_condition_static_message_no_tailname (cce_condition_t const * C CCPTN_UNUSED)
+ccptn_condition_static_message_no_tailname (cce_condition_t const * C CCLIB_UNUSED)
 {
   return "input pathname has no tailname part";
 }
@@ -460,13 +460,13 @@ ccptn_condition_static_message_no_tailname (cce_condition_t const * C CCPTN_UNUS
 /* ------------------------------------------------------------------ */
 
 void
-ccptn_condition_init_no_tailname (cce_destination_t L CCPTN_UNUSED, ccptn_condition_no_tailname_t * C)
+ccptn_condition_init_no_tailname (cce_destination_t L CCLIB_UNUSED, ccptn_condition_no_tailname_t * C)
 {
   ccptn_condition_init_invalid_pathname(L, &(C->invalid_pathname));
 }
 
 cce_condition_t const *
-ccptn_condition_new_no_tailname (cce_destination_t L CCPTN_UNUSED)
+ccptn_condition_new_no_tailname (cce_destination_t L CCLIB_UNUSED)
 {
   return (cce_condition_t const *) &ccptn_condition_no_tailname;
 }
@@ -508,7 +508,7 @@ cce_descriptor_set_parent_to(ccptn_descriptor_no_rootname_t) (cce_descriptor_t *
 /* ------------------------------------------------------------------ */
 
 char const *
-ccptn_condition_static_message_no_rootname (cce_condition_t const * C CCPTN_UNUSED)
+ccptn_condition_static_message_no_rootname (cce_condition_t const * C CCLIB_UNUSED)
 {
   return "input pathname has no rootname part";
 }
@@ -516,13 +516,13 @@ ccptn_condition_static_message_no_rootname (cce_condition_t const * C CCPTN_UNUS
 /* ------------------------------------------------------------------ */
 
 void
-ccptn_condition_init_no_rootname (cce_destination_t L CCPTN_UNUSED, ccptn_condition_no_rootname_t * C)
+ccptn_condition_init_no_rootname (cce_destination_t L CCLIB_UNUSED, ccptn_condition_no_rootname_t * C)
 {
   ccptn_condition_init_invalid_pathname(L, &(C->invalid_pathname));
 }
 
 cce_condition_t const *
-ccptn_condition_new_no_rootname (cce_destination_t L CCPTN_UNUSED)
+ccptn_condition_new_no_rootname (cce_destination_t L CCLIB_UNUSED)
 {
   return (cce_condition_t const *) &ccptn_condition_no_rootname;
 }

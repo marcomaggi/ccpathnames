@@ -419,7 +419,7 @@ test_3_2_9_2 (cce_destination_t upper_L)
 
 
 int
-main (int argc CCPTN_UNUSED, const char *const argv[])
+main (int argc CCLIB_UNUSED, const char *const argv[])
 {
   progname = argv[0];
   A = ccmem_standard_allocator;
